@@ -101,11 +101,11 @@ table.sheet{border-collapse:separate;border-spacing:0;font-size:14px;width:max-c
 
  <section class="card" id="gridCard" hidden>
   <div class="row" style="justify-content:space-between;margin-bottom:10px">
-   <div class="row"><button class="btn" id="gAdd">＋ Thêm dòng</button><input id="gq" type="search" placeholder="Lọc nhanh…" style="width:200px"><span class="muted" id="gInfo"></span></div>
+   <div class="row"><button class="btn" id="gAdd">＋ Thêm dòng</button><button class="btn" id="gClean" title="Xóa các dòng mới chưa nhập xã/khu/link">Xóa dòng trống</button><input id="gq" type="search" placeholder="Lọc nhanh…" style="width:200px"><span class="muted" id="gInfo"></span></div>
    <div class="row"><button class="btn" id="gUndo">Hủy thay đổi</button><button class="btn pri" id="gSave">Lưu tất cả lên GitHub</button></div>
   </div>
   <div class="gwrap"><table class="sheet"><thead id="gh"></thead><tbody id="gb"></tbody></table></div>
-  <p class="muted">Gõ thẳng vào ô như Excel. <b>Enter</b> xuống dòng dưới, <b>Tab</b> sang ô bên phải. Có thể <b>sao chép nhiều ô từ Excel/Google Sheets rồi dán</b>: dán vào một <b>dòng mới</b> (nút ＋ Thêm dòng) thì mỗi dòng dán thành một phiên mới; dán vào dòng có sẵn thì ghi đè các ô bên dưới như Excel. Dòng vàng = đã sửa, xanh = mới, đỏ = sẽ xóa. Chỉ khi bấm <b>Lưu tất cả</b> mới ghi lên GitHub.</p>
+  <p class="muted"><b>Dán cả bảng từ Google Sheets:</b> chọn từ ô A1 (có hàng tiêu đề id, ngay, tinh…) → Ctrl+C → bấm vào ô bất kỳ ở đây → Ctrl+V. Cột được khớp theo tên; dòng trùng mã thì cập nhật, mã mới thì thêm.<br>Gõ thẳng vào ô như Excel. <b>Enter</b> xuống dòng dưới, <b>Tab</b> sang ô bên phải. Có thể <b>sao chép nhiều ô từ Excel/Google Sheets rồi dán</b>: dán vào một <b>dòng mới</b> (nút ＋ Thêm dòng) thì mỗi dòng dán thành một phiên mới; dán vào dòng có sẵn thì ghi đè các ô bên dưới như Excel. Dòng vàng = đã sửa, xanh = mới, đỏ = sẽ xóa. Chỉ khi bấm <b>Lưu tất cả</b> mới ghi lên GitHub.</p>
  </section>
 
  <div class="two" id="work" hidden>
@@ -406,6 +406,7 @@ function gAddRow(focus) {
 }
 $("#gAdd").addEventListener("click", () => gAddRow(true));
 $("#gq").addEventListener("input", renderGrid);
+$("#gClean").addEventListener("click", () => { const n = GRID.length; GRID = GRID.filter(g => !(g.orig < 0 && !g.r.xa && !g.r.khu && !g.r.link)); renderGrid(); say(`Đã xóa ${n - GRID.length} dòng trống.`, "ok"); });
 $("#gUndo").addEventListener("click", () => { gridFromRows(); renderGrid(); say("Đã hủy các thay đổi chưa lưu.", "ok"); });
 $("#gb").addEventListener("input", e => { const el = e.target; if (el.dataset.g == null) return; const gi = +el.dataset.g; GRID[gi].r[el.dataset.h] = el.value; markRow(gi); });
 $("#gb").addEventListener("click", e => { const b = e.target.closest("[data-x]"); if (!b) return; const gi = +b.dataset.x;
@@ -418,6 +419,22 @@ $("#gb").addEventListener("paste", e => {
   const txt = (e.clipboardData || window.clipboardData).getData("text"); if (!/[\t\n]/.test(txt.replace(/\n$/, ""))) return;
   e.preventDefault();
   const lines = txt.replace(/\r/g, "").replace(/\n$/, "").split("\n").map(l => l.split("\t"));
+  /* có hàng tiêu đề (id, ngay, tinh…) → khớp cột theo tên, cập nhật dòng trùng mã, thêm dòng mới */
+  const hdr = lines[0].map(s => s.trim());
+  if (hdr.filter(h => HEAD.includes(h)).length >= 3) {
+    let add = 0, upd = 0;
+    // bỏ các dòng mới chưa nhập gì trước khi dán
+    GRID = GRID.filter(g => !(g.orig < 0 && !g.r.xa && !g.r.khu && !g.r.link));
+    lines.slice(1).forEach(cells => {
+      if (!cells.some(v => v.trim())) return;
+      const o = {}; hdr.forEach((h, j) => { if (HEAD.includes(h)) o[h] = (cells[j] || "").trim(); });
+      if (o.ngay && /^\d{1,2}\/\d{1,2}\/\d{4}$/.test(o.ngay)) { const [d, m, y] = o.ngay.split("/"); o.ngay = `${y}-${m.padStart(2, "0")}-${d.padStart(2, "0")}`; }
+      const ex = o.id && GRID.find(g => g.r.id === o.id);
+      if (ex) { Object.assign(ex.r, o); upd++; }
+      else { const r = newRowObj(); Object.assign(r, Object.fromEntries(Object.entries(o).filter(([, v]) => v !== ""))); if (o.id) r.id = o.id; GRID.unshift({r, orig: -1, del: false}); add++; }
+    });
+    renderGrid(); say(`Đã nhận bảng có tiêu đề: thêm ${add} dòng, cập nhật ${upd} dòng (khớp theo mã). Kiểm tra rồi bấm “Lưu tất cả lên GitHub”.`, "ok"); return;
+  }
   const cols = gCols(); const c0 = cols.indexOf(el.dataset.h);
   const vis = [...$("#gb").querySelectorAll("tr[data-g]")].map(tr => +tr.dataset.g); const start = vis.indexOf(+el.dataset.g);
   const intoNew = GRID[vis[start]] && GRID[vis[start]].orig < 0;   // dán vào dòng mới → tạo thêm dòng mới, không đè dòng cũ
