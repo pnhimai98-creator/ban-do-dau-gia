@@ -56,6 +56,40 @@ footer{padding:16px max(3vw,14px);font-size:13px;color:var(--mute);border-top:1p
 .lang{display:inline-flex;border:1px solid var(--line);border-radius:99px;overflow:hidden;flex:none}
 .lang button{border:0;background:none;padding:0 12px;height:32px;font-size:13px;font-weight:600;cursor:pointer;min-width:44px}
 .lang button.on{background:var(--ink);color:var(--bg)}
+/* ---- Phân tích giá / price analysis ---- */
+.ana{padding:22px max(3vw,14px) 8px;border-top:1px solid var(--line);
+ --s1:light-dark(#2a78d6,#3987e5);--s2:light-dark(#eb6834,#d95926);--s3:light-dark(#1baf7a,#199e70);--s4:light-dark(#eda100,#c98500);--s5:light-dark(#e87ba4,#d55181);--s6:light-dark(#008300,#0ca30c);--s7:light-dark(#6250d6,#9085e9);--s8:light-dark(#e34948,#e66767)}
+.ana h2{font-size:20px;margin:0}.ana h3{font-size:16px;margin:0 0 8px}
+.ana .sub{margin:2px 0 12px}
+.anabar{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;margin-bottom:10px}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:99px;overflow:hidden}
+.seg button{border:0;background:none;padding:0 12px;height:32px;font-size:13px;cursor:pointer}
+.seg button.on{background:var(--ink);color:var(--bg)}
+.achips{display:flex;flex-wrap:wrap;gap:6px}
+.achip{border:1px solid var(--line);background:none;border-radius:99px;padding:3px 10px 3px 8px;font-size:12.5px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;min-height:30px}
+.achip i{width:10px;height:10px;border-radius:50%;background:var(--line);flex:none}
+.achip.on{border-color:var(--ink);font-weight:600}
+.achip small{color:var(--mute);font-weight:400}
+.chartbox{position:relative;border:1px solid var(--line);border-radius:12px;padding:8px 8px 4px;background:var(--card)}
+.chartbox svg{display:block;width:100%;height:auto;overflow:visible}
+.chartbox .grid line{stroke:var(--line);stroke-width:1}
+.chartbox .ax text{fill:var(--mute);font-size:11px}
+.chartbox .lbl{font-size:11.5px;fill:var(--ink);font-weight:600}
+.chartbox .pt{stroke:var(--card);stroke-width:2;cursor:pointer}
+.chartbox .pt:hover{stroke:var(--ink)}
+.ctip{position:absolute;pointer-events:none;background:var(--ink);color:var(--bg);font-size:12px;line-height:1.45;padding:6px 9px;border-radius:8px;max-width:260px;z-index:5;box-shadow:0 4px 14px #0003}
+.anagrid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
+.rank{border:1px solid var(--line);border-radius:12px;padding:12px;background:var(--card);overflow:auto}
+.rank table{border-collapse:collapse;width:100%;font-size:13px}
+.rank th{font-size:11.5px;color:var(--mute);font-weight:600;text-align:left;padding:4px 6px;border-bottom:1px solid var(--line);white-space:nowrap}
+.rank td{padding:6px;border-bottom:1px solid var(--line);vertical-align:top}
+.rank td.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.rank th.n{text-align:right}
+.rank tr[data-id]{cursor:pointer}.rank tr[data-id]:hover td{background:var(--bg2)}
+.rank .k{color:var(--mute);font-size:12px}
+.bar{display:inline-block;height:6px;border-radius:0 3px 3px 0;background:var(--acc);opacity:.55;vertical-align:middle;margin-right:6px}
+.noda{color:var(--mute);font-size:13px;padding:18px 4px}
+@media(max-width:860px){.anagrid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -80,6 +114,18 @@ footer{padding:16px max(3vw,14px);font-size:13px;color:var(--mute);border-top:1p
   <div class="list" id="list" aria-live="polite"></div>
  </aside>
 </div>
+<section class="ana" id="ana" aria-labelledby="anaT">
+ <h2 id="anaT" data-t="anaTitle"></h2><p class="sub" data-t="anaSub"></p>
+ <div class="anabar">
+  <span class="seg" id="anaBy" role="group"><button data-by="xa" data-t="byXa"></button><button data-by="huyen" data-t="byHuyen"></button></span>
+  <span class="achips" id="anaChips"></span>
+ </div>
+ <div class="chartbox" id="chartbox"><div id="chart"></div><div class="ctip" id="ctip" hidden></div></div>
+ <div class="anagrid">
+  <div class="rank"><h3 data-t="rk1"></h3><div id="rk1"></div></div>
+  <div class="rank"><h3 data-t="rk2"></h3><div id="rk2"></div></div>
+ </div>
+</section>
 <footer>
  <p data-t="footer"></p>
  <p id="rateinfo" hidden></p>
@@ -88,31 +134,53 @@ footer{padding:16px max(3vw,14px);font-size:13px;color:var(--mute);border-top:1p
 
 <script type="text/csv" id="seed">
 id,ngay,tinh,xa,dia_danh_cu,khu,loai_dat,so_thua,so_thua_trung,gia_khoi_diem,gia_trung_min,gia_trung_max,tong_tien_ty,nguoi_tham_gia,trang_thai,lat,lng,vi_tri,nguon,link,ghi_chu
-HN-2026-001,2026-11-03,Hà Nội,Thanh Oai,"xã Đỗ Động, huyện Thanh Oai","Khu Man Cá, Man Cổng, Mạ Man Trong, thôn Văn Quán",Đất ở,20,20,14.08,44,56.08,,47,Đã đấu giá,20.8200,105.7420,gần đúng,VnExpress,https://vnexpress.net/dat-trung-dau-gia-xa-ven-ha-noi-giam-gan-40-so-voi-dinh-5140712.html,Giá trúng cao nhất giảm gần 40% so với đỉnh cuối 2024
-HN-2026-002,2026-10-31,Hà Nội,Thiên Lộc,huyện Đông Anh,Khu đấu giá Đông thôn Nhuế,Đất ở,28,22,,,122.35,157.6,,Đã đấu giá,21.1350,105.7800,gần đúng,Báo Công lý,https://congly.vn/dau-gia-dat-ngoai-thanh-ha-noi-giam-suc-nong-547336.html,28 thửa đủ điều kiện đấu giá; 22 thửa trúng
-HN-2026-003,2026-10-25,Hà Nội,Phúc Thịnh,"xã Nam Hồng, huyện Đông Anh","Khu X1, thôn Đìa",Đất ở,29,29,,58.42,82.42,197,57,Đã đấu giá,21.1600,105.7950,gần đúng,Báo Công lý,https://congly.vn/dau-gia-dat-ngoai-thanh-ha-noi-giam-suc-nong-547336.html,Tổng tiền dự kiến khoảng 197 tỷ
-HN-2026-004,2026-10-10,Hà Nội,Thiên Lộc,huyện Đông Anh,Khu tái định cư và đấu giá Mạch Lũng,Đất ở,13,10,,,70.6,,,Đã đấu giá,21.1250,105.7700,gần đúng,Báo Công lý,https://congly.vn/dau-gia-dat-ngoai-thanh-ha-noi-giam-suc-nong-547336.html,
-HN-2026-005,2026-09-13,Hà Nội,Ô Diên,"xã Hạ Mỗ, huyện Đan Phượng","Khu Đồng Phung, thôn Duyên Thành",Đất ở,71,71,24.73,,117.4,,207,Đã đấu giá,21.1000,105.6900,gần đúng,Dân trí,https://dantri.com.vn/bat-dong-san/dat-vung-ven-ha-noi-trung-dau-gia-toi-117-trieu-dongm2-20260915101912480.htm,Giá khởi điểm 24.7–42.4 tr/m²; phần lớn thửa trúng 64–78 tr/m²
-HN-2026-006,2026-11-14,Hà Nội,Ô Diên,huyện Đan Phượng,Hội trường UBND xã Ô Diên,Đất ở,,,,,,,,Chờ kết quả,21.1050,105.6950,gần đúng,Báo Đấu thầu,https://baodauthau.vn/ngay-14112026-dau-gia-quyen-su-dung-dat-tai-xa-o-dien-thanh-pho-ha-noi-post211328.html,
-HN-2026-007,2026-11-14,Hà Nội,Đa Phúc,"xã Kim Lũ, huyện Sóc Sơn","Khu đất đấu giá ven đê thôn Kim Hạ",Đất ở,,,19.17,,,,,Chờ kết quả,21.2900,105.8700,gần đúng,Báo Đấu thầu,https://baodauthau.vn/ngay-14112026-dau-gia-quyen-su-dung-dat-tai-xa-da-phuc-thanh-pho-ha-noi-post211337.html,
-HN-2026-008,2026-11-15,Hà Nội,Thường Tín,huyện Thường Tín,9 lô đất tại xã Thường Tín,Đất ở,9,,16.94,,,,,Chờ kết quả,20.8700,105.8600,gần đúng,Báo Đấu thầu,https://baodauthau.vn/ngay-15112026-dau-gia-quyen-su-dung-dat-tai-xa-thuong-tin-thanh-pho-ha-noi-post211447.html,Giá khởi điểm 16.9–26.1 tr/m²
-HN-2026-009,2026-11-20,Hà Nội,Hát Môn,huyện Phúc Thọ,,Đất ở,,,,,,,,Sắp đấu giá,21.1250,105.6000,gần đúng,Báo Đấu thầu,https://baodauthau.vn/ngay-20112026-dau-gia-quyen-su-dung-dat-tai-xa-hat-mon-thanh-pho-ha-noi-post212181.html,Hạn nộp hồ sơ 17/11
-HN-2026-010,2026-11-22,Hà Nội,Kim Anh,huyện Sóc Sơn,,Đất ở,,,,,,,,Sắp đấu giá,21.2500,105.7900,gần đúng,Báo Đấu thầu,https://baodauthau.vn/ngay-22112026-dau-gia-quyen-su-dung-dat-tai-xa-kim-anh-thanh-pho-ha-noi-post212055.html,Hạn nộp hồ sơ 18/11
 HN-2026-011,2026-11-29,Hà Nội,Thường Tín,huyện Thường Tín,Các thửa đất tại xã Thường Tín (đấu giá trực tuyến),Đất ở,,,,,,,,Sắp đấu giá,20.8750,105.8650,gần đúng,Báo Đấu thầu,https://baodauthau.vn/ngay-29112026-dau-gia-quyen-su-dung-dat-tai-xa-thuong-tin-thanh-pho-ha-noi-post212428.html,Hạn nộp tiền đặt trước 25/11
+HN-2026-010,2026-11-22,Hà Nội,Kim Anh,huyện Sóc Sơn,,Đất ở,,,,,,,,Sắp đấu giá,21.2500,105.7900,gần đúng,Báo Đấu thầu,https://baodauthau.vn/ngay-22112026-dau-gia-quyen-su-dung-dat-tai-xa-kim-anh-thanh-pho-ha-noi-post212055.html,Hạn nộp hồ sơ 18/11
+HN-2026-027,2026-11-21,Hà Nội,Thiên Lộc,"xã Kim Nỗ, huyện Đông Anh","Khu xen kẹt X1, thôn Thọ Đa",Đất ở,23,,14.35,,,,,Sắp đấu giá,21.1450,105.7900,gần đúng,Báo Đấu thầu,https://baodauthau.vn/ngay-21112026-dau-gia-quyen-su-dung-23-thua-dat-tai-xa-thien-loc-thanh-pho-ha-noi-post211942.html,"Tổng diện tích 2.024,2 m²; 8h30"
+HN-2026-028,2026-11-21,Hà Nội,Thiên Lộc,"xã Kim Nỗ, huyện Đông Anh","Điểm X5, thôn Bắc",Đất ở,10,,14.35,,,,,Sắp đấu giá,21.1420,105.7820,gần đúng,Báo Đấu thầu,https://baodauthau.vn/ngay-21112026-dau-gia-quyen-su-dung-10-thua-dat-tai-xa-thien-loc-thanh-pho-ha-noi-post211944.html,"Tổng diện tích 879,63 m²; 14h30"
+HN-2026-029,2026-11-21,Hà Nội,Thiên Lộc,huyện Đông Anh,46 thửa đất,Đất ở,46,,,,,,,Sắp đấu giá,21.1380,105.7780,gần đúng,Báo Đấu thầu,https://baodauthau.vn/ngay-21112026-dau-gia-quyen-su-dung-46-thua-dat-tai-xa-thien-loc-thanh-pho-ha-noi-post211941.html,
+HN-2026-009,2026-11-20,Hà Nội,Hát Môn,huyện Phúc Thọ,"Khu Cầu Lọc Giáo Hạ, Cát Hạ, Hoành Thổ",Đất ở,24,,11.315,,,,,Sắp đấu giá,21.1250,105.6000,gần đúng,Báo Đấu thầu,https://baodauthau.vn/ngay-20112026-dau-gia-quyen-su-dung-dat-tai-xa-hat-mon-thanh-pho-ha-noi-post212181.html,"10 thửa Cầu Lọc Giáo Hạ + 6 thửa Cát Hạ + 8 lô Hoành Thổ; KĐ 11,315–12,49 tr/m²"
+HN-2026-008,2026-11-15,Hà Nội,Thường Tín,huyện Thường Tín,9 lô đất tại xã Thường Tín,Đất ở,9,,16.94,,,,,Chờ kết quả,20.8700,105.8600,gần đúng,Báo Đấu thầu,https://baodauthau.vn/ngay-15112026-dau-gia-quyen-su-dung-dat-tai-xa-thuong-tin-thanh-pho-ha-noi-post211447.html,Giá khởi điểm 16.9–26.1 tr/m²
+HN-2026-006,2026-11-14,Hà Nội,Ô Diên,huyện Đan Phượng,Hội trường UBND xã Ô Diên,Đất ở,,,,,,,,Chờ kết quả,21.1050,105.6950,gần đúng,Báo Đấu thầu,https://baodauthau.vn/ngay-14112026-dau-gia-quyen-su-dung-dat-tai-xa-o-dien-thanh-pho-ha-noi-post211328.html,
+HN-2026-007,2026-11-14,Hà Nội,Đa Phúc,"xã Kim Lũ, huyện Sóc Sơn",Khu đất đấu giá ven đê thôn Kim Hạ,Đất ở,,,19.17,,,,,Chờ kết quả,21.2900,105.8700,gần đúng,Báo Đấu thầu,https://baodauthau.vn/ngay-14112026-dau-gia-quyen-su-dung-dat-tai-xa-da-phuc-thanh-pho-ha-noi-post211337.html,
+HN-2026-014,2026-11-14,Hà Nội,Thư Lâm,huyện Đông Anh,"Khu X5, thôn Châu Phong",Đất ở,26,26,,,,,,Đã đấu giá,21.1600,105.8900,gần đúng,Hanoionline,https://hanoionline.vn/xa-thu-lam-dau-gia-thanh-cong-26-thua-dat-khu-x5-246261114163945337.htm,Bài chưa nêu giá trúng
+HN-2026-001,2026-11-03,Hà Nội,Thanh Oai,"xã Đỗ Động, huyện Thanh Oai","Khu Man Cá, Man Cổng, Mạ Man Trong, thôn Văn Quán",Đất ở,20,20,14.08,44.08,56.08,,47,Đã đấu giá,20.8200,105.7420,gần đúng,VnExpress,https://vnexpress.net/dat-trung-dau-gia-xa-ven-ha-noi-giam-gan-40-so-voi-dinh-5140712.html,"Giá trúng cao nhất giảm gần 38–40% so với đỉnh cuối 2024 (90,3 tr/m²)"
+HN-2026-002,2026-10-31,Hà Nội,Thiên Lộc,huyện Đông Anh,Khu đấu giá Đông thôn Nhuế,Đất ở,28,22,,,122.35,157.6,,Đã đấu giá,21.1350,105.7800,gần đúng,Báo Công lý,https://congly.vn/dau-gia-dat-ngoai-thanh-ha-noi-giam-suc-nong-547336.html,28 thửa đủ điều kiện đấu giá; 22 thửa trúng
+HN-2026-013,2026-10-31,Hà Nội,Cổ Đô,huyện Ba Vì,Khu Dộc Kỷ,Đất ở,14,14,,,,35.499,,Đã đấu giá,21.2000,105.4200,gần đúng,Hà Nội Mới,https://hanoimoi.vn/dau-gia-quyen-su-dung-dat-khoi-thong-nguon-luc-phat-trien-1763913.html,Ngày chính xác chưa rõ (cuối tháng 10); bài không nêu giá/m²
+HN-2026-003,2026-10-25,Hà Nội,Phúc Thịnh,"xã Nam Hồng, huyện Đông Anh","Khu X1, thôn Đìa",Đất ở,29,29,,58.42,82.42,197,57,Đã đấu giá,21.1600,105.7950,gần đúng,Báo Công lý,https://congly.vn/dau-gia-dat-ngoai-thanh-ha-noi-giam-suc-nong-547336.html,Tổng tiền dự kiến khoảng 197 tỷ
+HN-2026-026,2026-10-25,Hà Nội,Nội Bài,huyện Sóc Sơn,Thôn Thạch Lỗi,Đất ở,12,,21.958,,,,,Chờ kết quả,21.2210,105.8320,gần đúng,Báo Đấu thầu,https://baodauthau.vn/ngay-25102026-dau-gia-quyen-su-dung-dat-tai-xa-noi-bai-thanh-pho-ha-noi-post209553.html,Chưa thấy công bố kết quả
+HN-2026-025,2026-10-18,Hà Nội,Hà Đông,quận Hà Đông,6 lô còn lại khu đấu giá Vạn Phúc,Đất ở,6,,37.193,,,,,Chờ kết quả,20.9800,105.7700,gần đúng,Báo Đấu thầu,https://baodauthau.vn/ngay-18102026-dau-gia-quyen-su-dung-dat-tai-phuong-ha-dong-thanh-pho-ha-noi-post208868.html,"Tổng diện tích 523,11 m²; chưa thấy công bố kết quả"
+BN-2026-002,2026-10-18,Bắc Ninh,Việt Yên,xã Hồng Thái và các khu khác,48 lô tại các khu dân cư phường Việt Yên,Đất ở,48,,15,,,,,Chờ kết quả,21.2700,106.1000,gần đúng,Báo Đấu thầu,https://baodauthau.vn/bac-ninh-dau-gia-48-lo-dat-tai-phuong-viet-yen-tong-gia-khoi-diem-hon-92-ty-dong-post209054.html,"Tổng diện tích 6.785,1 m², tổng KĐ hơn 92,3 tỷ; KĐ khu Như Thiết 15–17,25 tr/m²; chưa thấy công bố kết quả"
+HY-2026-002,2026-10-17,Hưng Yên,Khoái Châu,huyện Khoái Châu,29 suất đất ở (đợt 3),Đất ở,29,,,23,28.6,,,Đã đấu giá,20.8300,105.9700,gần đúng,VOV,https://vov.vn/kinh-te/dia-phuong-tung-dau-gia-dat-sot-nhat-mien-bac-gio-ra-sao-post1344970.vov,Giá thấp nhất khoảng 23–24 tr/m²
+HN-2026-024,2026-10-16,Hà Nội,Hòa Xá,"xã Vạn Thái, huyện Ứng Hòa","Khu Rau Xanh Vườn Kẹ, thôn Nội Xá",Đất ở,20,,11.786,,,,,Chờ kết quả,20.7000,105.7800,gần đúng,Báo Đấu thầu,https://baodauthau.vn/ngay-16102026-dau-gia-20-quyen-su-dung-dat-tai-xa-hoa-xa-thanh-pho-ha-noi-post208467.html,Chưa thấy công bố kết quả
+HN-2026-004,2026-10-10,Hà Nội,Thiên Lộc,huyện Đông Anh,Khu tái định cư và đấu giá Mạch Lũng,Đất ở,13,10,,,70.6,,,Đã đấu giá,21.1250,105.7700,gần đúng,Báo Công lý,https://congly.vn/dau-gia-dat-ngoai-thanh-ha-noi-giam-suc-nong-547336.html,
+HN-2026-022,2026-10-10,Hà Nội,Đa Phúc,"xã Việt Long, huyện Sóc Sơn",Khu đấu giá thôn Tăng Long,Đất ở,37,,11.175,,,,,Chờ kết quả,21.2650,105.9250,gần đúng,Báo Đấu thầu,https://baodauthau.vn/ngay-10102026-dau-gia-quyen-su-dung-dat-tai-xa-da-phuc-thanh-pho-ha-noi-post208006.html,"Tổng diện tích 3.141,6 m²; chưa thấy công bố kết quả"
+HN-2026-023,2026-10-10,Hà Nội,Đại Xuyên,huyện Phú Xuyên,"Khu ao ông Ngợi, Cống Đầm, Thùng Lò Gạch, ông Chắp",Đất ở,28,,3.577,,,,,Chờ kết quả,20.6600,105.9200,gần đúng,Báo Đấu thầu,https://baodauthau.vn/ngay-10102026-dau-gia-quyen-su-dung-dat-tai-xa-dai-xuyen-thanh-pho-ha-noi-post208118.html,"KĐ 3,577–4,916 tr/m²; chưa thấy công bố kết quả"
+BN-2026-001,2026-10-10,Bắc Ninh,Nam Sơn,"phường Vân Dương, xã Nam Sơn, TP Bắc Ninh",36 lô dự án Khu nhà ở DCDV khu Sơn Nam,Đất ở,36,,,,,,,Chờ kết quả,21.1500,106.1000,gần đúng,Báo Đấu thầu,https://baodauthau.vn/ngay-10102026-dau-gia-quyen-su-dung-dat-tai-phuong-nam-son-tp-bac-ninh-post208783.html,"Tổng diện tích 3.688,23 m², tổng KĐ 54,79 tỷ; chưa thấy công bố kết quả"
+HN-2026-021,2026-10-09,Hà Nội,Hát Môn,huyện Phúc Thọ,Khu Cầu Lọc – Giáo Hạ và khu khác (26 thửa),Đất ở,26,,11.315,,,,,Chờ kết quả,21.1270,105.6020,gần đúng,Báo Đấu thầu,https://baodauthau.vn/ha-noi-dau-gia-26-thua-dat-nen-tai-xa-hat-mon-voi-gia-khoi-diem-11315-trieu-dongm2-post208024.html,"KĐ 11,315–12,49 tr/m²; chưa thấy công bố kết quả"
+HN-2026-020,2026-10-03,Hà Nội,Phúc Thịnh,"xã Nam Hồng, huyện Đông Anh","Ô đất LK20, khu đấu giá thôn Đoài 2",Đất ở,12,,17.42,,,,,Chờ kết quả,21.1650,105.8000,gần đúng,Báo Đấu thầu,https://baodauthau.vn/ngay-3102026-dau-gia-quyen-su-dung-dat-tai-xa-phuc-thinh-thanh-pho-ha-noi-post207256.html,"Tổng diện tích 1.053,14 m²; chưa thấy công bố kết quả"
+HN-2026-012,2026-09-30,Hà Nội,Ứng Hòa,huyện Ứng Hòa,36 thửa đất phục vụ sản xuất nông nghiệp,Đất nông nghiệp,36,36,,,,,50,Đã đấu giá,20.6700,105.7600,gần đúng,Hanoionline,https://hanoionline.vn/xa-ung-hoa-dau-gia-thanh-cong-36-thua-dat-246420135.htm,Đất nông nghiệp; bài không nêu giá trúng
+HY-2026-001,2026-09-30,Hưng Yên,Mỹ Hào,"phường Bần Yên Nhân, thị xã Mỹ Hào",41 lô đất ở,Đất ở,41,,20,29,79,,,Đã đấu giá,20.9300,106.1000,gần đúng,VOV,https://vov.vn/kinh-te/dia-phuong-tung-dau-gia-dat-sot-nhat-mien-bac-gio-ra-sao-post1344970.vov,"Ngày chính xác chưa rõ (cuối tháng 9); KĐ 20–34,5 tr/m²"
+HN-2026-019,2026-09-27,Hà Nội,Nội Bài,huyện Sóc Sơn,Thôn Thạch Lỗi,Đất ở,10,,21.958,,,,,Chờ kết quả,21.2200,105.8300,gần đúng,Báo Đấu thầu,https://baodauthau.vn/ngay-2792026-dau-gia-quyen-su-dung-dat-tai-xa-noi-bai-thanh-pho-ha-noi-post206872.html,Chưa thấy công bố kết quả
+HN-2026-018,2026-09-26,Hà Nội,Thiên Lộc,"xã Kim Chung, Kim Nỗ, huyện Đông Anh","Đông thôn Nhuế, X5 thôn Bắc, X1 thôn Thọ Đa (105 thửa, 26–27/9)",Đất ở,105,,11.05,,,,,Chờ kết quả,21.1400,105.7850,gần đúng,CafeF,https://cafef.vn/xa-thien-loc-dau-gia-105-thua-dat-o-tai-3-khu-dat-188260912164607502.chn,"KĐ 11,05–14,35 tr/m². Theo tổng hợp, đến 31/10 qua 4 phiên Thiên Lộc bán 56 thửa, 375,63 tỷ; nhiều thửa đưa lại đấu giá 31/10 và 21/11"
+HN-2026-016,2026-09-25,Hà Nội,Cầu Giấy,quận Cầu Giấy,"Lô F (F1–F8), ô đất D23, KĐT mới Cầu Giấy",Đất ở,8,,85.9,,,,,Chờ kết quả,21.0280,105.7930,gần đúng,Tiền Phong,https://tienphong.vn/sap-dau-gia-8-thua-dat-o-tai-kdt-moi-cau-giay-gia-khoi-diem-gan-200-ty-dong-post1872207.tpo,"KĐ 85,9–176,6 tr/m², tổng KĐ gần 200 tỷ; chưa thấy công bố kết quả"
+HN-2026-017,2026-09-25,Hà Nội,Hòa Xá,huyện Ứng Hòa,35 thửa đất,Đất ở,35,,,,,,,Chờ kết quả,20.7050,105.7850,gần đúng,Báo Đấu thầu,https://baodauthau.vn/ngay-2592026-dau-gia-quyen-su-dung-35-thua-dat-tai-xa-hoa-xa-thanh-pho-ha-noi-post206754.html,Chưa thấy công bố kết quả
+HN-2026-015,2026-09-18,Hà Nội,Hát Môn,"xã Ngọc Tảo, Tam Hiệp, Tam Thuấn, huyện Phúc Thọ","Khu Cầu Lọc Giáo Hạ, Cổng Nội, Gạc Chợ, Cát Hạ",Đất ở,16,,9.23,,,,,Chờ kết quả,21.1300,105.5950,gần đúng,VietnamFinance,https://vietnamfinance.vn/ha-noi-dau-gia-16-thua-dat-vung-ven-gia-khoi-diem-hon-9-trieu-dong-m2-d150166.html,"KĐ 9,23–12,49 tr/m²; chưa thấy công bố kết quả"
+HN-2026-005,2026-09-13,Hà Nội,Ô Diên,"xã Hạ Mỗ, huyện Đan Phượng","Khu Đồng Phung, thôn Duyên Thành",Đất ở,107,71,24.73,,117.4,374,207,Đã đấu giá,21.1000,105.6900,gần đúng,VnExpress,https://vnexpress.net/dat-xa-ven-ha-noi-trung-dau-gia-binh-quan-hon-5-ty-dong-moi-lo-5120106.html,"107 thửa đưa ra (VNF ghi 103), 71 thửa trúng, tổng hơn 374 tỷ; phần lớn trúng 64–78 tr/m²; KĐ 24,7–42,4 tr/m²"
 </script>
 <script type="application/json" id="rateSeed">
 {
-  "usd_vnd": 25570,
+  "usd_vnd": 26141,
   "type": "transfer",
   "buy": null,
-  "transfer": 25570,
-  "sell": null,
-  "bank_time": "11/16/2026 2:32:38 PM",
-  "date": "2026-11-16",
+  "transfer": 26141,
+  "sell": 26381,
+  "bank_time": "",
+  "date": "2026-11-13",
   "fetched_at": "",
   "source": "Vietcombank",
   "source_url": "https://portal.vietcombank.com.vn/UserControls/TVPortal.TyGia/pXML.aspx",
-  "note": "Giá trị gắn sẵn trong trang (chỉ dùng khi mở file trên máy). Trên web, trang đọc rate.json do GitHub Actions cập nhật."
+  "note": "Giá trị khởi đầu theo tin VNA ngày 13/11/2026; sẽ được GitHub Actions ghi đè bằng số liệu Vietcombank hằng ngày."
 }
 </script>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -120,7 +188,7 @@ HN-2026-011,2026-11-29,Hà Nội,Thường Tín,huyện Thường Tín,Các th�
 {
 /* ======== CẤU HÌNH / SETTINGS — chỉ cần sửa phần này ======== */
 const CONFIG = {
-  // Để trống = đọc file data.csv trong repo (sửa bằng trang admin.html). Muốn dùng lại Google Sheets thì dán link CSV vào đây.
+  // Link CSV khi "Công bố lên web" Google Sheets (để trống nếu dùng file data.csv)
   SHEET_CSV_URL: "",
   // Link Google Form góp tin (để trống nếu chưa có)
   FORM_URL: "",
@@ -130,8 +198,14 @@ const CONFIG = {
   THEME_URL: "theme.json",
   // Ngôn ngữ mặc định: "vi" hoặc "en"
   DEFAULT_LANG: "vi",
-  CENTER: [21.03, 105.80], ZOOM: 10
+  CENTER: [21.03, 105.80], ZOOM: 10,
+  // Thống kê lượt xem GoatCounter (miễn phí): điền mã trang, VD "daugiadat" (để trống = tắt)
+  GOATCOUNTER: ""
 };
+if (CONFIG.GOATCOUNTER && !CONFIG.GOATCOUNTER.startsWith("__") && location.protocol.startsWith("http")) {
+  const gs = document.createElement("script"); gs.async = true; gs.src = "https://gc.zgo.at/count.js";
+  gs.dataset.goatcounter = `https://${CONFIG.GOATCOUNTER}.goatcounter.com/count`; document.head.appendChild(gs);
+}
 /* ============================================================ */
 
 /* ---------- Từ điển giao diện / UI dictionary ---------- */
@@ -151,7 +225,12 @@ const T = {
   approx: "gần đúng (trung tâm xã)", exact: "chính xác",
   baseOSM: "OpenStreetMap", baseHOT: "OSM Nhân đạo (HOT)", baseEsri: "Bản đồ đường (Esri)", baseSat: "Ảnh vệ tinh (Esri)",
   footer: "<b>Nguồn & lưu ý.</b> Dữ liệu tổng hợp từ thông báo đấu giá và báo chí công khai; mỗi phiên có link nguồn để đối chiếu. Giá tính bằng <b>triệu đồng/m²</b>. “Đã đấu giá” là kết quả tại phiên; người trúng có thể chưa nộp tiền hoặc bỏ cọc. Vị trí “gần đúng” đặt tại trung tâm xã. Trang chỉ để tham khảo, không phải lời khuyên đầu tư và không đăng thông tin cá nhân người trúng đấu giá.",
-  report: "Phát hiện sai sót hoặc có phiên mới?", formLink: "Gửi qua form góp tin ↗", formNone: "Gửi qua form góp tin."
+  report: "Phát hiện sai sót hoặc có phiên mới?", formLink: "Gửi qua form góp tin ↗", formNone: "Gửi qua form góp tin.",
+  anaTitle: "Phân tích giá", anaSub: "Theo bộ lọc tỉnh, loại đất, ngày và ô tìm kiếm ở trên; chỉ tính các phiên đã có giá trúng. Bấm vào tên khu vực để thêm/bớt đường trên biểu đồ (tối đa 8).",
+  byXa: "Theo xã/phường mới", byHuyen: "Theo huyện/quận cũ", chartY: "Giá trúng cao nhất", noData: "Chưa có phiên nào có giá trúng trong bộ lọc này.",
+  rk1: "Top khu vực giá trúng cao nhất", rk2: "Top phiên trúng cao gấp nhiều lần giá khởi điểm",
+  cArea: "Khu vực", cTop: "Cao nhất", cN: "Số phiên", cLast: "Gần nhất", cSess: "Phiên", cStart: "Khởi điểm", cWin: "Trúng cao nhất", cX: "Gấp", times: "lần",
+  noRatio: "Chưa có phiên nào có đủ cả giá khởi điểm và giá trúng.", other: "(khác)", sessN: "phiên"
  },
  en: {
   title: "Hanoi & Surrounding Areas Land Auction Map", docTitle: "Hanoi Land Auction Map",
@@ -168,7 +247,12 @@ const T = {
   approx: "approximate (commune centre)", exact: "exact",
   baseOSM: "OpenStreetMap", baseHOT: "OSM Humanitarian (HOT)", baseEsri: "Street map (Esri)", baseSat: "Satellite (Esri)",
   footer: "<b>Sources & notes.</b> Data compiled from official auction notices and public news reports; every auction links to its source. Prices are shown in <b>US dollars per m²</b>, converted from the original <b>million VND per m²</b> at the Vietcombank rate below. “Auctioned” means the result at the session; winners may not yet have paid or may forfeit their deposit. “Approximate” locations are placed at the commune centre. For reference only — not investment advice. No personal data of winning bidders is published.",
-  rateLine: (r, d) => `1 USD = ${r} VND (Vietcombank transfer buying rate, ${d}; updated daily). USD figures are indicative conversions.`, noRate: "USD conversion unavailable — prices shown in VND.", report: "Spotted an error or a new auction?", formLink: "Send it via the submission form ↗", formNone: "Send it via the submission form."
+  rateLine: (r, d) => `1 USD = ${r} VND (Vietcombank transfer buying rate, ${d}; updated daily). USD figures are indicative conversions.`, noRate: "USD conversion unavailable — prices shown in VND.", report: "Spotted an error or a new auction?", formLink: "Send it via the submission form ↗", formNone: "Send it via the submission form.",
+  anaTitle: "Price analysis", anaSub: "Follows the province, land type, date and search filters above; only auctions with a winning bid are counted. Click an area to add/remove its line (up to 8).",
+  byXa: "By new commune/ward", byHuyen: "By former district", chartY: "Highest winning bid", noData: "No auctions with a winning bid match these filters.",
+  rk1: "Areas with the highest winning bids", rk2: "Auctions with the biggest jump over the starting price",
+  cArea: "Area", cTop: "Highest", cN: "Auctions", cLast: "Latest", cSess: "Auction", cStart: "Start", cWin: "Top bid", cX: "Multiple", times: "×",
+  noRatio: "No auction has both a starting price and a winning bid yet.", other: "(other)", sessN: "auctions"
  }
 };
 /* Giá trị dữ liệu có bản dịch / Data values with translations (lọc vẫn dùng giá trị tiếng Việt) */
@@ -323,6 +407,94 @@ function render() {
     <div class="m">${esc(pick(d, "khu") || "")}${d.lots != null ? ` · ${d.won != null ? d.won + "/" : ""}${d.lots} ${t("plots")}` : ""}</div></div>
     <div class="price">${d.max != null ? P(d.max) : d.start != null ? P(d.start) : "—"}<small>${d.max != null ? t("topWin") : d.start != null ? t("startP") : ""}${d.max != null || d.start != null ? " · " + UN() : ""}</small></div></div>`).join("")
     : `<div class="empty">${t("empty")}</div>`;
+  renderAna();
+}
+
+
+/* ======== PHÂN TÍCH GIÁ / PRICE ANALYSIS ======== */
+const ana = {by: "xa", sel: [], slot: {}, touched: false};
+const SLOTS = 8;
+const huyenOf = d => { const s = d.dia_danh_cu || ""; const m = [...s.matchAll(/(huyện|quận|thị xã|thành phố|TP\.?)\s+([^,;()]+)/gi)].pop();
+  return m ? (m[1].toLowerCase().startsWith("tp") ? "thành phố" : m[1].toLowerCase()) + " " + m[2].trim() : (s.trim() || t("other")); };
+const areaOf = d => ana.by === "xa" ? (d.xa || t("other")) : huyenOf(d);
+const pv = v => useUSD() ? usdM2(v) : v;          // giá trị vẽ (tr/m² hoặc USD/m²)
+function anaBase() {
+  const tn = $("#fTinh").value, l = $("#fLoai").value, f = $("#fFrom").value, to = $("#fTo").value, q = $("#fQ").value.trim().toLowerCase();
+  return DATA.filter(d => d.max != null && d.ngay && (!tn || d.tinh === tn) && (!l || d.loai_dat === l) && (!f || d.ngay >= f) && (!to || d.ngay <= to)
+    && (!q || [d.xa, d.khu, d.khu_en, d.dia_danh_cu, d.tinh, tv("prov", d.tinh)].join(" ").toLowerCase().includes(q)));
+}
+function niceTicks(lo, hi, n) { const span = hi - lo || 1, raw = span / n, mag = Math.pow(10, Math.floor(Math.log10(raw)));
+  const step = [1, 2, 2.5, 5, 10].map(k => k * mag).find(s => span / s <= n) || 10 * mag; const out = []; const top = Math.ceil(hi / step) * step; for (let v = Math.floor(lo / step) * step; v <= top + 1e-9; v += step) out.push(+v.toFixed(6)); return out; }
+const dnum = s => Date.parse(s + "T00:00:00Z");
+function renderAna() {
+  if (!$("#ana")) return;
+  document.querySelectorAll("#anaBy button").forEach(b => b.classList.toggle("on", b.dataset.by === ana.by));
+  const base = anaBase();
+  /* gom theo khu vực */
+  const groups = {}; base.forEach(d => { const a = areaOf(d); (groups[a] = groups[a] || []).push(d); });
+  const areas = Object.keys(groups).sort((a, b) => groups[b].length - groups[a].length || Math.max(...groups[b].map(x => x.max)) - Math.max(...groups[a].map(x => x.max)));
+  ana.sel = ana.sel.filter(a => groups[a]);
+  if (!ana.touched && !ana.sel.length) ana.sel = areas.filter(a => groups[a].length >= 2).slice(0, 5).concat(areas.filter(a => groups[a].length < 2)).slice(0, 5);
+  /* màu đi theo khu vực, không theo thứ hạng: giữ ô màu đã cấp */
+  Object.keys(ana.slot).forEach(a => { if (!ana.sel.includes(a)) delete ana.slot[a]; });
+  ana.sel.forEach(a => { if (ana.slot[a] == null) { const used = Object.values(ana.slot); ana.slot[a] = [...Array(SLOTS).keys()].find(i => !used.includes(i)); } });
+  const col = a => `var(--s${ana.slot[a] + 1})`;
+  $("#anaChips").innerHTML = areas.map(a => `<button class="achip ${ana.sel.includes(a) ? "on" : ""}" data-a="${esc(a)}" aria-pressed="${ana.sel.includes(a)}"><i style="${ana.sel.includes(a) ? "background:" + col(a) : ""}"></i>${esc(a)} <small>${groups[a].length}</small></button>`).join("");
+  /* biểu đồ đường */
+  const box = $("#chart"); $("#ctip").hidden = true;
+  if (!base.length) { box.innerHTML = `<p class="noda">${t("noData")}</p>`; }
+  else {
+    const W = 900, H = 330, L0 = 56, R0 = 150, T0 = 14, B0 = 34;
+    const pts = ana.sel.flatMap(a => groups[a]);
+    const xs = (pts.length ? pts : base).map(d => dnum(d.ngay)), ys = (pts.length ? pts : base).map(d => pv(d.max));
+    let x0 = Math.min(...xs), x1 = Math.max(...xs); if (x1 - x0 < 864e5 * 20) { x0 -= 864e5 * 10; x1 += 864e5 * 10; }
+    const yt = niceTicks(0, Math.max(...ys) * 1.05, 5), y1 = yt[yt.length - 1];
+    const X = v => L0 + (v - x0) / (x1 - x0) * (W - L0 - R0), Y = v => T0 + (1 - v / y1) * (H - T0 - B0);
+    /* vạch tháng */
+    const months = []; const dd = new Date(x0); dd.setUTCDate(1); dd.setUTCHours(0, 0, 0, 0); if (+dd < x0) dd.setUTCMonth(dd.getUTCMonth() + 1);
+    for (; +dd <= x1; dd.setUTCMonth(dd.getUTCMonth() + 1)) months.push(+dd);
+    const mlab = v => { const z = new Date(v); return lang === "en" ? MON[z.getUTCMonth()] + " " + z.getUTCFullYear() : "T" + (z.getUTCMonth() + 1) + "/" + z.getUTCFullYear(); };
+    let svg = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(t("chartY"))}"><g class="grid">${yt.map(v => `<line x1="${L0}" x2="${W - R0}" y1="${Y(v)}" y2="${Y(v)}"/>`).join("")}</g>
+      <g class="ax">${yt.map(v => `<text x="${L0 - 8}" y="${Y(v) + 4}" text-anchor="end">${useUSD() ? "$" + v.toLocaleString("en-US") : fmt(v)}</text>`).join("")}
+      ${months.map(v => `<text x="${X(v)}" y="${H - 10}" text-anchor="middle">${mlab(v)}</text>`).join("")}
+      <text x="${L0}" y="${T0 - 2}" class="ax" style="font-size:11px">${esc(t("chartY"))} (${UN()})</text></g>`;
+    const ends = [];
+    ana.sel.forEach(a => { const g = groups[a].slice().sort((p, q) => p.ngay.localeCompare(q.ngay));
+      if (g.length > 1) svg += `<polyline fill="none" stroke="${col(a)}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" points="${g.map(d => X(dnum(d.ngay)) + "," + Y(pv(d.max))).join(" ")}"/>`;
+      const last = g[g.length - 1]; ends.push({a, y: Y(pv(last.max)), x: X(dnum(last.ngay))}); });
+    ana.sel.forEach(a => groups[a].forEach(d => { svg += `<circle class="pt" r="5" cx="${X(dnum(d.ngay))}" cy="${Y(pv(d.max))}" fill="${col(a)}" data-id="${esc(d.id)}" data-a="${esc(a)}"/>`; }));
+    /* nhãn trực tiếp ở cuối đường (chỉ khi ≤ 4 đường), tránh chồng chữ */
+    if (ana.sel.length <= 4) { ends.sort((p, q) => p.y - q.y); for (let i = 1; i < ends.length; i++) if (ends[i].y - ends[i - 1].y < 14) ends[i].y = ends[i - 1].y + 14;
+      ends.forEach(e => { svg += `<text class="lbl" x="${W - R0 + 10}" y="${e.y + 4}">${esc(e.a.length > 20 ? e.a.slice(0, 19) + "…" : e.a)}</text><line x1="${e.x + 6}" x2="${W - R0 + 6}" y1="${e.y}" y2="${e.y}" stroke="var(--line)" stroke-dasharray="2 3"/>`; }); }
+    box.innerHTML = svg + "</svg>" + (ana.sel.length ? "" : `<p class="noda">${t("anaSub")}</p>`);
+  }
+  /* bảng xếp hạng 1: khu vực giá cao nhất */
+  const rk = areas.map(a => { const g = groups[a]; const top = g.reduce((m, d) => d.max > m.max ? d : m, g[0]);
+    return {a, top, n: g.length, last: g.map(d => d.ngay).sort().pop()}; }).sort((p, q) => q.top.max - p.top.max).slice(0, 10);
+  const mx = rk.length ? rk[0].top.max : 1;
+  $("#rk1").innerHTML = rk.length ? `<table><tr><th>#</th><th>${t("cArea")}</th><th class="n">${t("cTop")} (${UN()})</th><th class="n">${t("cN")}</th><th class="n">${t("cLast")}</th></tr>
+    ${rk.map((r, i) => `<tr data-id="${esc(r.top.id)}"><td>${i + 1}</td><td><b>${esc(r.a)}</b><div class="k">${esc(ana.by === "xa" ? huyenOf(r.top) : r.top.xa)}</div></td>
+    <td class="n"><span class="bar" style="width:${Math.round(r.top.max / mx * 60)}px"></span>${P(r.top.max)}</td><td class="n">${r.n}</td><td class="n">${fdate(r.last)}</td></tr>`).join("")}</table>` : `<p class="noda">${t("noData")}</p>`;
+  /* bảng xếp hạng 2: gấp bao nhiêu lần giá khởi điểm */
+  const rx = base.filter(d => d.start > 0).map(d => ({d, x: d.max / d.start})).sort((p, q) => q.x - p.x).slice(0, 10);
+  $("#rk2").innerHTML = rx.length ? `<table><tr><th>#</th><th>${t("cSess")}</th><th class="n">${t("cStart")}</th><th class="n">${t("cWin")}</th><th class="n">${t("cX")}</th></tr>
+    ${rx.map((r, i) => `<tr data-id="${esc(r.d.id)}"><td>${i + 1}</td><td><b>${esc(r.d.xa)}</b> <span class="k">${fdate(r.d.ngay)}</span><div class="k">${esc(pick(r.d, "khu") || "")}</div></td>
+    <td class="n">${P(r.d.start)}</td><td class="n">${P(r.d.max)}</td><td class="n"><b>${lang === "en" ? r.x.toFixed(1) + "×" : fmt(+r.x.toFixed(1)) + " " + t("times")}</b></td></tr>`).join("")}</table>` : `<p class="noda">${t("noRatio")}</p>`;
+}
+function goTo(id) { const m = markers[id]; highlight(id); if (m && map) { $("#map").scrollIntoView({behavior: "smooth", block: "center"}); map.setView(m.getLatLng(), Math.max(map.getZoom(), 13)); m.openPopup(); } }
+function initAna() {
+  $("#anaBy").addEventListener("click", e => { const b = e.target.closest("[data-by]"); if (!b || b.dataset.by === ana.by) return; ana.by = b.dataset.by; ana.sel = []; ana.slot = {}; ana.touched = false; renderAna(); });
+  $("#anaChips").addEventListener("click", e => { const b = e.target.closest("[data-a]"); if (!b) return; const a = b.dataset.a; ana.touched = true;
+    if (ana.sel.includes(a)) ana.sel = ana.sel.filter(x => x !== a); else if (ana.sel.length < SLOTS) ana.sel.push(a); renderAna(); });
+  ["#rk1", "#rk2"].forEach(s => $(s).addEventListener("click", e => { const tr = e.target.closest("tr[data-id]"); if (tr) goTo(tr.dataset.id); }));
+  const box = $("#chartbox"), tip = $("#ctip");
+  box.addEventListener("mousemove", e => { const c = e.target.closest(".pt"); if (!c) { tip.hidden = true; return; }
+    const d = DATA.find(x => x.id === c.dataset.id); if (!d) return;
+    tip.innerHTML = `<b>${esc(c.dataset.a)}</b><br>${fdate(d.ngay)} · ${esc(d.xa)}<br>${t("cWin")}: <b>${PU(d.max)}</b>${d.start ? `<br>${t("cStart")}: ${PU(d.start)}` : ""}${pick(d, "khu") ? `<br>${esc(pick(d, "khu"))}` : ""}`;
+    tip.hidden = false; const r = box.getBoundingClientRect(); let x = e.clientX - r.left + 14, y = e.clientY - r.top + 14;
+    if (x + 270 > r.width) x = e.clientX - r.left - 270; tip.style.left = x + "px"; tip.style.top = y + "px"; });
+  box.addEventListener("mouseleave", () => { tip.hidden = true; });
+  box.addEventListener("click", e => { const c = e.target.closest(".pt"); if (c) goTo(c.dataset.id); });
 }
 
 function highlight(id) {
@@ -403,6 +575,7 @@ async function init() {
     const m = markers[it.dataset.id]; if (m) { map.setView(m.getLatLng(), Math.max(map.getZoom(), 13)); m.openPopup(); } });
   $("#list").addEventListener("keydown", e => { if (e.key === "Enter" && e.target.matches(".item")) e.target.click(); });
 }
+initAna();
 init();
 }
 </script>
