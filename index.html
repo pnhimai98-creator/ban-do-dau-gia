@@ -101,17 +101,17 @@ HN-2026-011,2026-11-29,Hà Nội,Thường Tín,huyện Thường Tín,Các th�
 </script>
 <script type="application/json" id="rateSeed">
 {
-  "usd_vnd": 26141,
+  "usd_vnd": 25570,
   "type": "transfer",
   "buy": null,
-  "transfer": 26141,
-  "sell": 26381,
-  "bank_time": "",
-  "date": "2026-11-13",
+  "transfer": 25570,
+  "sell": null,
+  "bank_time": "11/16/2026 2:32:38 PM",
+  "date": "2026-11-16",
   "fetched_at": "",
   "source": "Vietcombank",
   "source_url": "https://portal.vietcombank.com.vn/UserControls/TVPortal.TyGia/pXML.aspx",
-  "note": "Giá trị khởi đầu theo tin VNA ngày 13/11/2026; sẽ được GitHub Actions ghi đè bằng số liệu Vietcombank hằng ngày."
+  "note": "Giá trị gắn sẵn trong trang (chỉ dùng khi mở file trên máy). Trên web, trang đọc rate.json do GitHub Actions cập nhật."
 }
 </script>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -119,8 +119,8 @@ HN-2026-011,2026-11-29,Hà Nội,Thường Tín,huyện Thường Tín,Các th�
 {
 /* ======== CẤU HÌNH / SETTINGS — chỉ cần sửa phần này ======== */
 const CONFIG = {
-  // Link CSV khi "Công bố lên web" Google Sheets (để trống nếu dùng file data.csv)
-  SHEET_CSV_URL: "https://docs.google.com/spreadsheets/d/e/2PACX-1vSEycLLvRmYswiIWiHr6T_8bZ6ukkeMzO59nwjaz9QirObOHZ7Yqx0QHmuGeK2XdyZN_qgoCTu85sTN/pub?output=csv",
+  // Để trống = đọc file data.csv trong repo (sửa bằng trang admin.html). Muốn dùng lại Google Sheets thì dán link CSV vào đây.
+  SHEET_CSV_URL: "",
   // Link Google Form góp tin (để trống nếu chưa có)
   FORM_URL: "",
   // File tỷ giá do GitHub Actions cập nhật hằng ngày (bản tiếng Anh hiển thị giá USD)

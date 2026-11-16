@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Quản trị dữ liệu – Bản đồ đấu giá đất</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:light dark;--bg:light-dark(#fff,#121417);--bg2:light-dark(#f3f4f2,#1a1d21);--ink:light-dark(#161a1d,#e9ecef);--mute:light-dark(#5c6670,#9aa3ad);--line:light-dark(#dde1e0,#2b3137);--acc:light-dark(#1f5f4a,#7fd1b0);--bad:light-dark(#b42318,#ff8a7a);--ok:light-dark(#1f7a3f,#6fd39a)}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 "Be Vietnam Pro",system-ui,sans-serif}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+header{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;padding:14px max(3vw,14px);border-bottom:1px solid var(--line)}
+h1{font-size:22px;margin:0}h2{font-size:17px;margin:0 0 10px}
+main{padding:16px max(3vw,14px) 60px;max-width:1300px;margin:0 auto}
+.card{border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:16px;background:var(--bg)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,200px),1fr));gap:10px}
+label{display:grid;gap:3px;font-size:12px;color:var(--mute)}
+label b{color:var(--bad)}
+input,select,textarea{height:40px;border:1px solid var(--line);border-radius:8px;background:var(--bg2);padding:0 10px;font-size:16px;width:100%}
+textarea{height:64px;padding:8px 10px;resize:vertical}
+.wide{grid-column:span 2}.full{grid-column:1/-1}
+@media(max-width:520px){.wide{grid-column:1/-1}}
+.btn{height:40px;padding:0 14px;border-radius:8px;border:1px solid var(--line);background:var(--bg);cursor:pointer;font-weight:500;white-space:nowrap}
+.btn.pri{background:var(--acc);color:var(--bg);border-color:var(--acc)}
+.btn.danger{color:var(--bad)}
+.btn:disabled{opacity:.5;cursor:default}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.status{font-size:14px;padding:8px 12px;border-radius:8px;background:var(--bg2)}
+.status.ok{color:var(--ok)}.status.err{color:var(--bad)}
+.two{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:16px;align-items:start}
+@media(max-width:900px){.two{grid-template-columns:1fr}}
+#pick{height:320px;border-radius:10px;border:1px solid var(--line)}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{border-bottom:1px solid var(--line);padding:7px 8px;text-align:left;vertical-align:top}
+th{background:var(--bg2);position:sticky;top:0}
+td.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.scroll{overflow:auto;max-height:520px}
+.tag{font-size:12px;border:1px solid var(--line);border-radius:99px;padding:1px 8px;white-space:nowrap}
+.muted{color:var(--mute);font-size:13px}
+.dirty{background:light-dark(#fff7e6,#2e2615)}
+details summary{cursor:pointer;font-weight:600}
+</style>
+</head>
+<body>
+<header>
+ <div><h1>Quản trị dữ liệu đấu giá</h1><div class="muted">Thêm / sửa phiên đấu giá và lưu thẳng vào <code>data.csv</code> trên GitHub</div></div>
+ <div class="row"><a class="btn" href="./" target="_blank" rel="noopener">Mở bản đồ ↗</a></div>
+</header>
+<main>
+ <!-- Kết nối -->
+ <section class="card" id="connCard">
+  <details id="connBox" open>
+   <summary>Kết nối GitHub <span id="connState" class="muted"></span></summary>
+   <div class="grid" style="margin-top:12px">
+    <label>Tài khoản (owner)<input id="cOwner" value="pnhimai98-creator"></label>
+    <label>Repo<input id="cRepo" value="ban-do-dau-gia"></label>
+    <label>Nhánh<input id="cBranch" value="main"></label>
+    <label>File dữ liệu<input id="cPath" value="data.csv"></label>
+    <label class="wide">Mã truy cập (token)<input id="cToken" type="password" autocomplete="off" placeholder="github_pat_…"></label>
+    <label style="align-self:end;display:flex;gap:6px;align-items:center;color:var(--ink)"><input id="cRemember" type="checkbox" style="width:20px;height:20px"> Nhớ trên máy này</label>
+   </div>
+   <div class="row" style="margin-top:12px"><button class="btn pri" id="btnLoad">Kết nối & tải dữ liệu</button><button class="btn" id="btnForget">Xóa token khỏi máy</button></div>
+   <p class="muted">Token chỉ lưu trong trình duyệt của bạn (nếu chọn “Nhớ”), không gửi đi đâu ngoài GitHub. Tạo token: GitHub → Settings → Developer settings → Fine-grained tokens → chỉ chọn repo <b>ban-do-dau-gia</b>, quyền <b>Contents: Read and write</b>.</p>
+  </details>
+ </section>
+ <div id="msg" class="status" hidden></div>
+
+ <div class="two" id="work" hidden>
+  <!-- Form -->
+  <section class="card">
+   <h2 id="formTitle">Thêm phiên mới</h2>
+   <form id="f" autocomplete="off">
+    <div class="grid">
+     <label>Mã (tự sinh)<input name="id" readonly></label>
+     <label>Ngày đấu giá <b>*</b><input name="ngay" type="date" required></label>
+     <label>Trạng thái <b>*</b><select name="trang_thai" required>
+      <option>Sắp đấu giá</option><option>Chờ kết quả</option><option>Đã đấu giá</option><option>Đã nộp tiền</option><option>Hủy/bỏ cọc</option></select></label>
+     <label>Tỉnh/thành <b>*</b><input name="tinh" list="dlTinh" required value="Hà Nội"></label>
+     <label>Xã/phường (tên mới) <b>*</b><input name="xa" required placeholder="VD: Thiên Lộc"></label>
+     <label class="wide">Địa danh cũ<input name="dia_danh_cu" placeholder="VD: xã Kim Nỗ, huyện Đông Anh"></label>
+     <label class="full">Khu đấu giá<input name="khu" placeholder="VD: Khu X1, thôn Đìa"></label>
+     <label>Loại đất<input name="loai_dat" list="dlLoai" value="Đất ở"></label>
+     <label>Số thửa đưa ra<input name="so_thua" inputmode="numeric"></label>
+     <label>Số thửa trúng<input name="so_thua_trung" inputmode="numeric"></label>
+     <label>Người tham gia<input name="nguoi_tham_gia" inputmode="numeric"></label>
+     <label>Giá khởi điểm (tr/m²)<input name="gia_khoi_diem" inputmode="decimal" placeholder="14.08"></label>
+     <label>Giá trúng thấp nhất (tr/m²)<input name="gia_trung_min" inputmode="decimal"></label>
+     <label>Giá trúng cao nhất (tr/m²)<input name="gia_trung_max" inputmode="decimal"></label>
+     <label>Tổng tiền (tỷ đồng)<input name="tong_tien_ty" inputmode="decimal"></label>
+     <label>Vĩ độ (lat)<input name="lat" inputmode="decimal"></label>
+     <label>Kinh độ (lng)<input name="lng" inputmode="decimal"></label>
+     <label>Độ chính xác vị trí<select name="vi_tri"><option>gần đúng</option><option>chính xác</option></select></label>
+     <label>Tên nguồn<input name="nguon" list="dlNguon" placeholder="VD: VnExpress"></label>
+     <label class="full">Link nguồn<input name="link" type="url" placeholder="https://…"></label>
+     <label class="full">Ghi chú<textarea name="ghi_chu"></textarea></label>
+     <div class="full" id="extra"></div>
+    </div>
+    <p class="muted">Giá dùng dấu chấm thập phân (56.08). Bấm lên bản đồ bên phải để lấy tọa độ.</p>
+    <div class="row"><button class="btn pri" type="submit" id="btnSave">Lưu lên GitHub</button><button class="btn" type="button" id="btnNew">Phiên mới</button><button class="btn danger" type="button" id="btnDel" hidden>Xóa phiên này</button></div>
+   </form>
+  </section>
+  <!-- Bản đồ chọn vị trí -->
+  <section class="card">
+   <h2>Chọn vị trí</h2>
+   <div id="pick"></div>
+   <p class="muted">Bấm vào bản đồ để đặt điểm; kéo điểm để chỉnh. Chuyển sang “Ảnh vệ tinh” để tìm khu đất.</p>
+  </section>
+ </div>
+
+ <section class="card" id="listCard" hidden>
+  <div class="row" style="justify-content:space-between;margin-bottom:10px"><h2 style="margin:0">Danh sách phiên (<span id="cnt">0</span>)</h2>
+   <div class="row"><select id="lf"><option value="">Tất cả trạng thái</option><option>Sắp đấu giá</option><option>Chờ kết quả</option><option>Đã đấu giá</option><option>Đã nộp tiền</option><option>Hủy/bỏ cọc</option></select>
+   <input id="lq" type="search" placeholder="Tìm xã, khu…" style="width:200px"><button class="btn" id="btnCsv">Sao lưu CSV</button></div></div>
+  <div class="scroll"><table><thead><tr><th>Ngày</th><th>Xã/phường</th><th>Tỉnh</th><th>Trạng thái</th><th>Thửa</th><th>Giá trúng (tr/m²)</th><th>Nguồn</th><th></th></tr></thead><tbody id="tb"></tbody></table></div>
+ </section>
+</main>
+<datalist id="dlTinh"><option>Hà Nội</option><option>Bắc Ninh</option><option>Hưng Yên</option><option>Phú Thọ</option><option>Thái Nguyên</option><option>Ninh Bình</option></datalist>
+<datalist id="dlLoai"><option>Đất ở</option><option>Đất thương mại dịch vụ</option><option>Đất sản xuất kinh doanh</option><option>Đất nông nghiệp công ích</option></datalist>
+<datalist id="dlNguon"><option>Báo Đấu thầu</option><option>VnExpress</option><option>Dân trí</option><option>Báo Công lý</option><option>CafeF</option><option>Cổng ĐGTS quốc gia</option><option>Trang UBND xã</option></datalist>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+{
+const STD = ["id","ngay","tinh","xa","dia_danh_cu","khu","loai_dat","so_thua","so_thua_trung","gia_khoi_diem","gia_trung_min","gia_trung_max","tong_tien_ty","nguoi_tham_gia","trang_thai","lat","lng","vi_tri","nguon","link","ghi_chu"];
+const PREFIX = {"Hà Nội":"HN","Bắc Ninh":"BN","Hưng Yên":"HY","Phú Thọ":"PT","Thái Nguyên":"TN","Ninh Bình":"NB"};
+const NUMS = ["so_thua","so_thua_trung","gia_khoi_diem","gia_trung_min","gia_trung_max","tong_tien_ty","nguoi_tham_gia","lat","lng"];
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const fdate = d => d ? d.split("-").reverse().join("/") : "";
+const store = {get(k){try{return localStorage.getItem(k)}catch(e){return null}}, set(k,v){try{localStorage.setItem(k,v)}catch(e){}}, del(k){try{localStorage.removeItem(k)}catch(e){}}};
+
+let HEAD = STD.slice(), ROWS = [], SHA = null, editIdx = -1, map, marker;
+
+/* ---------- CSV ---------- */
+function parseCSV(t){const rows=[];let row=[],cell="",q=false;t=t.replace(/^﻿/,"");
+ for(let i=0;i<t.length;i++){const c=t[i];
+  if(q){if(c==='"'){if(t[i+1]==='"'){cell+='"';i++}else q=false}else cell+=c}
+  else if(c==='"')q=true;else if(c===","){row.push(cell);cell=""}
+  else if(c==="\n"||c==="\r"){if(c==="\r"&&t[i+1]==="\n")i++;row.push(cell);cell="";if(row.some(x=>x.trim()!==""))rows.push(row);row=[]}
+  else cell+=c}
+ row.push(cell);if(row.some(x=>x.trim()!==""))rows.push(row);
+ const head=(rows.shift()||STD).map(h=>h.trim());
+ return {head, rows: rows.map(r=>Object.fromEntries(head.map((h,i)=>[h,(r[i]??"").trim()])))};}
+const q = v => { v = String(v ?? ""); return /[",\n\r]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; };
+const toCSV = () => [HEAD.join(",")].concat(ROWS.map(r => HEAD.map(h => q(r[h])).join(","))).join("\n") + "\n";
+
+/* ---------- base64 UTF-8 ---------- */
+const b64dec = s => new TextDecoder().decode(Uint8Array.from(atob(s.replace(/\s/g, "")), c => c.charCodeAt(0)));
+const b64enc = s => { const b = new TextEncoder().encode(s); let bin = ""; for (let i = 0; i < b.length; i += 0x8000) bin += String.fromCharCode.apply(null, b.subarray(i, i + 0x8000)); return btoa(bin); };
+
+/* ---------- GitHub API ---------- */
+const cfg = () => ({owner: $("#cOwner").value.trim(), repo: $("#cRepo").value.trim(), branch: $("#cBranch").value.trim() || "main", path: $("#cPath").value.trim() || "data.csv", token: $("#cToken").value.trim()});
+async function gh(method, body) {
+  const c = cfg();
+  const url = `https://api.github.com/repos/${encodeURIComponent(c.owner)}/${encodeURIComponent(c.repo)}/contents/${c.path.split("/").map(encodeURIComponent).join("/")}` + (method === "GET" ? `?ref=${encodeURIComponent(c.branch)}&t=${Date.now()}` : "");
+  const r = await fetch(url, {method, headers: {"Authorization": "Bearer " + c.token, "Accept": "application/vnd.github+json", "X-GitHub-Api-Version": "2022-11-28", ...(body ? {"Content-Type": "application/json"} : {})}, body: body ? JSON.stringify(body) : undefined, cache: "no-store"});
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok) { const e = new Error(j.message || ("HTTP " + r.status)); e.status = r.status; throw e; }
+  return j;
+}
+const explain = e => e.status === 401 ? "Token sai hoặc đã hết hạn." : e.status === 403 ? "Token không có quyền ghi (cần Contents: Read and write cho repo này)." : e.status === 404 ? "Không tìm thấy repo/file. Kiểm tra tên tài khoản, repo, nhánh và quyền của token." : e.status === 409 ? "Dữ liệu trên GitHub vừa thay đổi. Đã tải lại — hãy bấm Lưu lần nữa." : e.status === 422 ? "GitHub từ chối nội dung (422). Tải lại rồi thử lần nữa." : (e.message || "Lỗi không xác định") + (e.message === "Failed to fetch" ? " — kiểm tra kết nối mạng." : "");
+
+function say(t, kind) { const m = $("#msg"); m.hidden = false; m.className = "status " + (kind || ""); m.textContent = t; }
+
+async function load() {
+  if (!cfg().token) { say("Hãy dán token để kết nối.", "err"); return; }
+  say("Đang tải dữ liệu từ GitHub…");
+  try {
+    const j = await gh("GET");
+    const p = parseCSV(b64dec(j.content));
+    HEAD = p.head.slice(); STD.forEach(h => { if (!HEAD.includes(h)) HEAD.push(h); });
+    ROWS = p.rows; SHA = j.sha;
+    if ($("#cRemember").checked) { store.set("dgAdminToken", cfg().token); }
+    store.set("dgAdminCfg", JSON.stringify({...cfg(), token: undefined}));
+    $("#connState").textContent = `· đã kết nối (${ROWS.length} phiên)`; $("#connBox").open = false;
+    $("#work").hidden = false; $("#listCard").hidden = false;
+    buildExtra(); newForm(); renderList(); initMap();
+    say(`Đã tải ${ROWS.length} phiên từ ${cfg().path}.`, "ok");
+  } catch (e) { say("Không tải được: " + explain(e), "err"); }
+}
+
+async function commit(message) {
+  const btns = [$("#btnSave"), $("#btnDel")]; btns.forEach(b => b.disabled = true);
+  say("Đang lưu lên GitHub…");
+  try {
+    const j = await gh("PUT", {message, content: b64enc(toCSV()), sha: SHA, branch: cfg().branch});
+    SHA = j.content.sha;
+    say(`Đã lưu: ${message}. Bản đồ sẽ cập nhật sau khoảng 1 phút.`, "ok");
+    return true;
+  } catch (e) {
+    say("Chưa lưu được: " + explain(e), "err");
+    if (e.status === 409 || e.status === 422) { const keep = ROWS; try { const j = await gh("GET"); SHA = j.sha; ROWS = parseCSV(b64dec(j.content)).rows; } catch (er) { ROWS = keep; } renderList(); }
+    return false;
+  } finally { btns.forEach(b => b.disabled = false); }
+}
+
+/* ---------- Form ---------- */
+function buildExtra() {
+  const extra = HEAD.filter(h => !STD.includes(h));
+  $("#extra").innerHTML = extra.length ? `<div class="grid">${extra.map(h => `<label>${esc(h)}<input name="${esc(h)}"></label>`).join("")}</div>` : "";
+}
+function nextId(tinh, ngay) {
+  const pre = (PREFIX[tinh] || "XX") + "-" + ((ngay || "").slice(0, 4) || new Date().getFullYear()) + "-";
+  const n = ROWS.map(r => r.id || "").filter(id => id.startsWith(pre)).map(id => parseInt(id.slice(pre.length), 10) || 0);
+  return pre + String((n.length ? Math.max(...n) : 0) + 1).padStart(3, "0");
+}
+function fillForm(r) { const f = $("#f"); HEAD.forEach(h => { if (f.elements[h]) f.elements[h].value = r[h] ?? ""; }); setMarker(); }
+function newForm() {
+  editIdx = -1; const f = $("#f"); f.reset();
+  f.elements.tinh.value = "Hà Nội"; f.elements.loai_dat.value = "Đất ở"; f.elements.trang_thai.value = "Sắp đấu giá";
+  f.elements.id.value = nextId("Hà Nội", new Date().toISOString().slice(0, 10));
+  $("#formTitle").textContent = "Thêm phiên mới"; $("#btnDel").hidden = true; $("#btnSave").textContent = "Lưu lên GitHub";
+  if (marker) { marker.remove(); marker = null; }
+  document.querySelectorAll("#tb tr").forEach(t => t.classList.remove("dirty"));
+}
+function editRow(i) {
+  editIdx = i; fillForm(ROWS[i]);
+  $("#formTitle").textContent = `Sửa phiên ${ROWS[i].id || ""}`; $("#btnDel").hidden = false; $("#btnSave").textContent = "Lưu thay đổi";
+  document.querySelectorAll("#tb tr").forEach(t => t.classList.toggle("dirty", +t.dataset.i === i));
+  $("#formTitle").scrollIntoView({block: "start"});
+}
+function readForm() {
+  const f = $("#f"), r = {};
+  HEAD.forEach(h => { if (f.elements[h]) r[h] = f.elements[h].value.trim(); else r[h] = editIdx >= 0 ? (ROWS[editIdx][h] ?? "") : ""; });
+  NUMS.forEach(k => { if (r[k]) r[k] = r[k].replace(/\s/g, "").replace(",", "."); });
+  return r;
+}
+function validate(r) {
+  for (const k of ["ngay", "xa", "tinh", "trang_thai"]) if (!r[k]) return "Thiếu thông tin bắt buộc (ngày, tỉnh, xã, trạng thái).";
+  for (const k of NUMS) if (r[k] && isNaN(+r[k])) return `Ô “${k}” phải là số (dùng dấu chấm thập phân).`;
+  if (r.lat && (+r.lat < 8 || +r.lat > 24)) return "Vĩ độ không nằm trong Việt Nam (8–24).";
+  if (r.lng && (+r.lng < 102 || +r.lng > 110)) return "Kinh độ không nằm trong Việt Nam (102–110).";
+  if (r.gia_trung_min && r.gia_trung_max && +r.gia_trung_min > +r.gia_trung_max) return "Giá trúng thấp nhất lớn hơn giá cao nhất.";
+  if (r.trang_thai === "Đã đấu giá" && !r.gia_trung_max) return "Trạng thái “Đã đấu giá” cần có giá trúng cao nhất.";
+  if (r.link && !/^https?:\/\//.test(r.link)) return "Link nguồn phải bắt đầu bằng http:// hoặc https://";
+  return "";
+}
+
+/* ---------- Danh sách ---------- */
+function renderList() {
+  const fs = $("#lf").value, qq = $("#lq").value.trim().toLowerCase();
+  const idx = ROWS.map((r, i) => i).filter(i => (!fs || ROWS[i].trang_thai === fs) && (!qq || [ROWS[i].xa, ROWS[i].khu, ROWS[i].dia_danh_cu, ROWS[i].id].join(" ").toLowerCase().includes(qq)))
+    .sort((a, b) => (ROWS[b].ngay || "").localeCompare(ROWS[a].ngay || ""));
+  $("#cnt").textContent = ROWS.length;
+  $("#tb").innerHTML = idx.map(i => { const r = ROWS[i];
+    return `<tr data-i="${i}" class="${i === editIdx ? "dirty" : ""}"><td>${fdate(r.ngay)}</td><td><b>${esc(r.xa)}</b><div class="muted">${esc(r.khu || "")}</div></td><td>${esc(r.tinh)}</td><td><span class="tag">${esc(r.trang_thai)}</span></td>
+     <td class="n">${r.so_thua_trung ? esc(r.so_thua_trung) + "/" : ""}${esc(r.so_thua || "")}</td><td class="n">${r.gia_trung_max ? (r.gia_trung_min ? esc(r.gia_trung_min) + " – " : "") + esc(r.gia_trung_max) : r.gia_khoi_diem ? "KĐ " + esc(r.gia_khoi_diem) : "—"}</td>
+     <td>${r.link ? `<a href="${esc(r.link)}" target="_blank" rel="noopener">${esc(r.nguon || "link")}</a>` : ""}</td><td><button class="btn" data-edit="${i}">${r.trang_thai === "Chờ kết quả" ? "Nhập kết quả" : "Sửa"}</button></td></tr>`; }).join("")
+    || `<tr><td colspan="8" class="muted">Không có phiên nào.</td></tr>`;
+}
+
+/* ---------- Bản đồ chọn vị trí ---------- */
+function initMap() {
+  if (map || !window.L) return;
+  map = L.map("pick").setView([21.03, 105.8], 9);
+  const web = location.protocol.startsWith("http");
+  const bases = {
+    "OpenStreetMap": L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {maxZoom: 19, attribution: "&copy; OpenStreetMap contributors"}),
+    "Bản đồ đường (Esri)": L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}", {maxZoom: 19, attribution: "Tiles &copy; Esri"}),
+    "Ảnh vệ tinh (Esri)": L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}", {maxZoom: 19, attribution: "Tiles &copy; Esri"})
+  };
+  (web ? bases["OpenStreetMap"] : bases["Bản đồ đường (Esri)"]).addTo(map);
+  L.control.layers(bases).addTo(map);
+  map.on("click", e => { const f = $("#f"); f.elements.lat.value = e.latlng.lat.toFixed(5); f.elements.lng.value = e.latlng.lng.toFixed(5); setMarker(); });
+  setMarker();
+}
+function setMarker() {
+  if (!map) return; const f = $("#f"), la = parseFloat(f.elements.lat.value), ln = parseFloat(f.elements.lng.value);
+  if (isNaN(la) || isNaN(ln)) { if (marker) { marker.remove(); marker = null; } return; }
+  if (!marker) { marker = L.marker([la, ln], {draggable: true}).addTo(map); marker.on("dragend", () => { const p = marker.getLatLng(); f.elements.lat.value = p.lat.toFixed(5); f.elements.lng.value = p.lng.toFixed(5); }); }
+  else marker.setLatLng([la, ln]);
+  map.setView([la, ln], Math.max(map.getZoom(), 13));
+}
+
+/* ---------- Sự kiện ---------- */
+$("#btnLoad").addEventListener("click", load);
+$("#btnForget").addEventListener("click", () => { store.del("dgAdminToken"); $("#cToken").value = ""; $("#cRemember").checked = false; say("Đã xóa token khỏi máy này.", "ok"); });
+$("#btnNew").addEventListener("click", newForm);
+$("#f").addEventListener("input", e => { const f = $("#f");
+  if (editIdx < 0 && (e.target.name === "tinh" || e.target.name === "ngay")) f.elements.id.value = nextId(f.elements.tinh.value, f.elements.ngay.value);
+  if (e.target.name === "lat" || e.target.name === "lng") setMarker(); });
+$("#f").addEventListener("submit", async e => {
+  e.preventDefault();
+  const r = readForm(), err = validate(r); if (err) { say(err, "err"); return; }
+  const isNew = editIdx < 0; const before = isNew ? null : ROWS[editIdx];
+  if (isNew) { if (ROWS.some(x => x.id === r.id)) r.id = nextId(r.tinh, r.ngay); ROWS.push(r); } else ROWS[editIdx] = r;
+  const ok = await commit(`${isNew ? "Thêm" : "Cập nhật"} phiên ${r.id}: ${r.xa} ${fdate(r.ngay)} (${r.trang_thai})`);
+  if (!ok) { if (isNew) ROWS = ROWS.filter(x => x !== r); else if (ROWS[editIdx] === r) ROWS[editIdx] = before; }
+  renderList(); if (ok && isNew) newForm(); else if (ok) editRow(ROWS.indexOf(r));
+});
+let delArm = 0;
+$("#btnDel").addEventListener("click", async () => {
+  if (editIdx < 0) return;
+  if (Date.now() - delArm > 4000) { delArm = Date.now(); say("Bấm “Xóa phiên này” thêm một lần nữa trong 4 giây để xác nhận xóa.", "err"); return; }
+  delArm = 0; const r = ROWS[editIdx], keep = ROWS.slice(); ROWS.splice(editIdx, 1);
+  const ok = await commit(`Xóa phiên ${r.id}: ${r.xa} ${fdate(r.ngay)}`);
+  if (!ok) ROWS = keep; else newForm(); renderList();
+});
+$("#tb").addEventListener("click", e => { const b = e.target.closest("[data-edit]"); if (b) editRow(+b.dataset.edit); });
+$("#lf").addEventListener("input", renderList); $("#lq").addEventListener("input", renderList);
+$("#btnCsv").addEventListener("click", () => { const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob(["﻿" + toCSV()], {type: "text/csv"})); a.download = `data-backup-${new Date().toISOString().slice(0, 10)}.csv`; a.click(); });
+
+/* khôi phục cấu hình đã lưu */
+try { const c = JSON.parse(store.get("dgAdminCfg") || "null"); if (c) ["owner", "repo", "branch", "path"].forEach(k => { if (c[k]) $("#c" + k[0].toUpperCase() + k.slice(1)).value = c[k]; }); } catch (e) {}
+const tk = store.get("dgAdminToken"); if (tk) { $("#cToken").value = tk; $("#cRemember").checked = true; load(); }
+}
+</script>
+</body>
+</html>
