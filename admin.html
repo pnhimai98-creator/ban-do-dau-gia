@@ -101,10 +101,14 @@ table.sheet{border-collapse:separate;border-spacing:0;font-size:14px;width:max-c
 
  <section class="card" id="gridCard" hidden>
   <div class="row" style="justify-content:space-between;margin-bottom:10px">
-   <div class="row"><button class="btn" id="gAdd">＋ Thêm dòng</button><button class="btn" id="gClean" title="Xóa các dòng mới chưa nhập xã/khu/link">Xóa dòng trống</button><input id="gq" type="search" placeholder="Lọc nhanh…" style="width:200px"><span class="muted" id="gInfo"></span></div>
+   <div class="row"><button class="btn" id="gAdd">＋ Thêm dòng</button><button class="btn pri" id="gImpBtn">📋 Dán từ Google Sheets</button><button class="btn" id="gClean" title="Xóa các dòng mới chưa nhập xã/khu/link">Xóa dòng trống</button><input id="gq" type="search" placeholder="Lọc nhanh…" style="width:200px"><span class="muted" id="gInfo"></span></div>
    <div class="row"><button class="btn" id="gUndo">Hủy thay đổi</button><button class="btn pri" id="gSave">Lưu tất cả lên GitHub</button></div>
   </div>
   <div class="gwrap"><table class="sheet"><thead id="gh"></thead><tbody id="gb"></tbody></table></div>
+  <div id="gImp" hidden style="margin:10px 0;padding:12px;border:1px dashed var(--line,#ccc);border-radius:10px">
+   <b>Dán dữ liệu từ Google Sheets vào ô dưới</b> (Google Sheet → bấm ô A1 → Ctrl+A → Ctrl+C → bấm vào ô dưới → Ctrl+V):
+   <textarea id="gImpTxt" rows="7" style="width:100%;margin:8px 0;font:12px monospace" placeholder="id	ngay	tinh	xa	…"></textarea>
+   <button class="btn pri" id="gImpGo">Nhập vào bảng</button> <span class="muted">Phải có hàng tiêu đề. Dòng trùng mã → cập nhật, mã mới → thêm.</span></div>
   <p class="muted"><b>Dán cả bảng từ Google Sheets:</b> chọn từ ô A1 (có hàng tiêu đề id, ngay, tinh…) → Ctrl+C → bấm vào ô bất kỳ ở đây → Ctrl+V. Cột được khớp theo tên; dòng trùng mã thì cập nhật, mã mới thì thêm.<br>Gõ thẳng vào ô như Excel. <b>Enter</b> xuống dòng dưới, <b>Tab</b> sang ô bên phải. Có thể <b>sao chép nhiều ô từ Excel/Google Sheets rồi dán</b>: dán vào một <b>dòng mới</b> (nút ＋ Thêm dòng) thì mỗi dòng dán thành một phiên mới; dán vào dòng có sẵn thì ghi đè các ô bên dưới như Excel. Dòng vàng = đã sửa, xanh = mới, đỏ = sẽ xóa. Chỉ khi bấm <b>Lưu tất cả</b> mới ghi lên GitHub.</p>
  </section>
 
@@ -413,28 +417,48 @@ $("#gb").addEventListener("click", e => { const b = e.target.closest("[data-x]")
   if (GRID[gi].orig < 0) GRID.splice(gi, 1); else GRID[gi].del = !GRID[gi].del; renderGrid(); });
 $("#gb").addEventListener("keydown", e => { if (e.key !== "Enter" || e.target.dataset.g == null) return; e.preventDefault();
   const tr = e.target.closest("tr").nextElementSibling; const nx = tr && tr.querySelector(`[data-h="${e.target.dataset.h}"]`); if (nx) nx.focus(); });
+/* nhập cả bảng có hàng tiêu đề: khớp cột theo tên, trùng mã thì cập nhật, mã mới thì thêm */
+function importTable(lines) {
+  const hdr = (lines[0] || []).map(s => s.trim().replace(/^\uFEFF/, ""));
+  if (hdr.filter(h => HEAD.includes(h)).length < 3) return false;
+  let add = 0, upd = 0;
+  GRID = GRID.filter(g => !(g.orig < 0 && !g.r.xa && !g.r.khu && !g.r.link));
+  lines.slice(1).forEach(cells => {
+    if (!cells.some(v => String(v).trim())) return;
+    const o = {}; hdr.forEach((h, j) => { if (HEAD.includes(h)) o[h] = String(cells[j] ?? "").trim(); });
+    if (o.ngay && /^\d{1,2}\/\d{1,2}\/\d{4}$/.test(o.ngay)) { const [d, m, y] = o.ngay.split("/"); o.ngay = `${y}-${m.padStart(2, "0")}-${d.padStart(2, "0")}`; }
+    const ex = o.id && GRID.find(g => g.r.id === o.id);
+    if (ex) { Object.assign(ex.r, o); upd++; }
+    else { const r = newRowObj(); Object.assign(r, Object.fromEntries(Object.entries(o).filter(([, v]) => v !== ""))); if (o.id) r.id = o.id; GRID.unshift({r, orig: -1, del: false}); add++; }
+  });
+  renderGrid(); say(`Đã nhập bảng: thêm ${add} dòng, cập nhật ${upd} dòng (khớp theo mã). Kiểm tra rồi bấm “Lưu tất cả lên GitHub”.`, "ok");
+  return true;
+}
+function tsvLines(txt) {   // TSV từ Google Sheets/Excel (ô có xuống dòng được bọc "…")
+  txt = txt.replace(/\r/g, "").replace(/\n+$/, "");
+  if (!txt.includes("\t") && txt.includes(",")) return parseCSV(txt);
+  const rows = []; let row = [], cell = "", q = false;
+  for (let i = 0; i < txt.length; i++) { const c = txt[i];
+    if (q) { if (c === '"') { if (txt[i + 1] === '"') { cell += '"'; i++; } else q = false; } else cell += c; }
+    else if (c === '"' && cell === "") q = true;
+    else if (c === "\t") { row.push(cell); cell = ""; }
+    else if (c === "\n") { row.push(cell); rows.push(row); row = []; cell = ""; }
+    else cell += c; }
+  row.push(cell); rows.push(row); return rows;
+}
+$("#gImpBtn").addEventListener("click", () => { const p = $("#gImp"); p.hidden = !p.hidden; if (!p.hidden) $("#gImpTxt").focus(); });
+$("#gImpGo").addEventListener("click", () => {
+  const t = $("#gImpTxt").value; if (!t.trim()) { say("Chưa có gì để nhập — dán dữ liệu vào ô trước.", "err"); return; }
+  if (importTable(tsvLines(t))) { $("#gImpTxt").value = ""; $("#gImp").hidden = true; }
+  else say("Không thấy hàng tiêu đề (id, ngay, tinh, xa…). Hãy chọn từ ô A1 của Google Sheet để lấy cả hàng tiêu đề.", "err");
+});
 /* dán nhiều ô từ Excel / Google Sheets */
 $("#gb").addEventListener("paste", e => {
   const el = e.target; if (el.dataset.g == null) return;
   const txt = (e.clipboardData || window.clipboardData).getData("text"); if (!/[\t\n]/.test(txt.replace(/\n$/, ""))) return;
   e.preventDefault();
-  const lines = txt.replace(/\r/g, "").replace(/\n$/, "").split("\n").map(l => l.split("\t"));
-  /* có hàng tiêu đề (id, ngay, tinh…) → khớp cột theo tên, cập nhật dòng trùng mã, thêm dòng mới */
-  const hdr = lines[0].map(s => s.trim());
-  if (hdr.filter(h => HEAD.includes(h)).length >= 3) {
-    let add = 0, upd = 0;
-    // bỏ các dòng mới chưa nhập gì trước khi dán
-    GRID = GRID.filter(g => !(g.orig < 0 && !g.r.xa && !g.r.khu && !g.r.link));
-    lines.slice(1).forEach(cells => {
-      if (!cells.some(v => v.trim())) return;
-      const o = {}; hdr.forEach((h, j) => { if (HEAD.includes(h)) o[h] = (cells[j] || "").trim(); });
-      if (o.ngay && /^\d{1,2}\/\d{1,2}\/\d{4}$/.test(o.ngay)) { const [d, m, y] = o.ngay.split("/"); o.ngay = `${y}-${m.padStart(2, "0")}-${d.padStart(2, "0")}`; }
-      const ex = o.id && GRID.find(g => g.r.id === o.id);
-      if (ex) { Object.assign(ex.r, o); upd++; }
-      else { const r = newRowObj(); Object.assign(r, Object.fromEntries(Object.entries(o).filter(([, v]) => v !== ""))); if (o.id) r.id = o.id; GRID.unshift({r, orig: -1, del: false}); add++; }
-    });
-    renderGrid(); say(`Đã nhận bảng có tiêu đề: thêm ${add} dòng, cập nhật ${upd} dòng (khớp theo mã). Kiểm tra rồi bấm “Lưu tất cả lên GitHub”.`, "ok"); return;
-  }
+  const lines = tsvLines(txt);
+  if (importTable(lines)) return;
   const cols = gCols(); const c0 = cols.indexOf(el.dataset.h);
   const vis = [...$("#gb").querySelectorAll("tr[data-g]")].map(tr => +tr.dataset.g); const start = vis.indexOf(+el.dataset.g);
   const intoNew = GRID[vis[start]] && GRID[vis[start]].orig < 0;   // dán vào dòng mới → tạo thêm dòng mới, không đè dòng cũ
