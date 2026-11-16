@@ -63,6 +63,15 @@ table.sheet{border-collapse:separate;border-spacing:0;font-size:14px;width:max-c
 .sheet td{padding:0;border-bottom:1px solid var(--line);border-right:1px solid var(--line);background:var(--bg)}
 .sheet td.rn{position:sticky;left:0;z-index:1;background:var(--bg2);text-align:center;font-size:12px;color:var(--mute);width:44px;min-width:44px}
 .sheet th.rn{left:0;z-index:3}
+.fbtn{margin-left:6px;border:1px solid var(--line);background:var(--bg);border-radius:5px;font-size:10px;line-height:1;padding:3px 5px;cursor:pointer;color:var(--mute);vertical-align:middle}
+.fbtn.on{background:var(--acc);color:var(--bg);border-color:var(--acc)}
+#fpop{position:fixed;z-index:9999;width:260px;background:var(--bg);border:1px solid var(--line);border-radius:10px;box-shadow:0 8px 30px #0003;padding:10px;font-size:13px}
+#fpop .fl{max-height:240px;overflow:auto;border:1px solid var(--line);border-radius:8px;padding:4px 6px;margin:6px 0}
+#fpop label{display:flex;gap:6px;align-items:center;color:var(--ink);font-size:13px;padding:2px 0;cursor:pointer}
+#fpop label input{width:auto;height:auto}
+#fpop input[type=search]{height:32px;font-size:13px}
+#fpop .srt{display:flex;gap:6px;margin-bottom:6px}#fpop .srt button,#fpop .act button{flex:1;height:30px;padding:0 8px;font-size:12px}
+#fpop .act{display:flex;gap:6px}
 .sheet input,.sheet select{border:0;border-radius:0;background:transparent;height:34px;font-size:14px;padding:0 8px;width:var(--w,110px)}
 .sheet input:focus,.sheet select:focus{outline:2px solid var(--acc);outline-offset:-2px;background:var(--bg)}
 .sheet tr.chg td{background:light-dark(#fff7e6,#2e2615)}
@@ -101,7 +110,7 @@ table.sheet{border-collapse:separate;border-spacing:0;font-size:14px;width:max-c
 
  <section class="card" id="gridCard" hidden>
   <div class="row" style="justify-content:space-between;margin-bottom:10px">
-   <div class="row"><button class="btn" id="gAdd">＋ Thêm dòng</button><button class="btn pri" id="gImpBtn">📋 Dán từ Google Sheets</button><button class="btn" id="gClean" title="Xóa các dòng mới chưa nhập xã/khu/link">Xóa dòng trống</button><input id="gq" type="search" placeholder="Lọc nhanh…" style="width:200px"><span class="muted" id="gInfo"></span></div>
+   <div class="row"><button class="btn" id="gAdd">＋ Thêm dòng</button><button class="btn pri" id="gImpBtn">📋 Dán từ Google Sheets</button><button class="btn" id="gClean" title="Xóa các dòng mới chưa nhập xã/khu/link">Xóa dòng trống</button><button class="btn" id="gFclr" hidden>✕ Bỏ tất cả bộ lọc</button><input id="gq" type="search" placeholder="Lọc nhanh…" style="width:200px"><span class="muted" id="gInfo"></span></div>
    <div class="row"><button class="btn" id="gUndo">Hủy thay đổi</button><button class="btn pri" id="gSave">Lưu tất cả lên GitHub</button></div>
   </div>
   <div class="gwrap"><table class="sheet"><thead id="gh"></thead><tbody id="gb"></tbody></table></div>
@@ -119,11 +128,11 @@ table.sheet{border-collapse:separate;border-spacing:0;font-size:14px;width:max-c
    <form id="f" autocomplete="off">
     <div class="grid">
      <label>Mã (tự sinh)<input name="id" readonly></label>
-     <label>Ngày đấu giá <b>*</b><input name="ngay" type="date" required></label>
-     <label>Trạng thái <b>*</b><select name="trang_thai" required>
+     <label>Ngày đấu giá<input name="ngay" type="date"></label>
+     <label>Trạng thái<select name="trang_thai">
       <option>Sắp đấu giá</option><option>Chờ kết quả</option><option>Đã đấu giá</option><option>Đã nộp tiền</option><option>Hủy/bỏ cọc</option></select></label>
-     <label>Tỉnh/thành <b>*</b><input name="tinh" list="dlTinh" required value="Hà Nội"></label>
-     <label>Xã/phường (tên mới) <b>*</b><input name="xa" required placeholder="VD: Thiên Lộc"></label>
+     <label>Tỉnh/thành<input name="tinh" list="dlTinh" value="Hà Nội"></label>
+     <label>Xã/phường (tên mới)<input name="xa" placeholder="VD: Thiên Lộc"></label>
      <label class="wide">Địa danh cũ<input name="dia_danh_cu" placeholder="VD: xã Kim Nỗ, huyện Đông Anh"></label>
      <label class="full">Khu đấu giá<input name="khu" placeholder="VD: Khu X1, thôn Đìa"></label>
      <label>Loại đất<input name="loai_dat" list="dlLoai" value="Đất ở"></label>
@@ -294,12 +303,11 @@ function readForm() {
   return r;
 }
 function validate(r) {
-  for (const k of ["ngay", "xa", "tinh", "trang_thai"]) if (!r[k]) return "Thiếu thông tin bắt buộc (ngày, tỉnh, xã, trạng thái).";
   for (const k of NUMS) if (r[k] && isNaN(+r[k])) return `Ô “${k}” phải là số (dùng dấu chấm thập phân).`;
   if (r.lat && (+r.lat < 8 || +r.lat > 24)) return "Vĩ độ không nằm trong Việt Nam (8–24).";
   if (r.lng && (+r.lng < 102 || +r.lng > 110)) return "Kinh độ không nằm trong Việt Nam (102–110).";
   if (r.gia_trung_min && r.gia_trung_max && +r.gia_trung_min > +r.gia_trung_max) return "Giá trúng thấp nhất lớn hơn giá cao nhất.";
-  if (r.trang_thai === "Đã đấu giá" && !r.gia_trung_max) return "Trạng thái “Đã đấu giá” cần có giá trúng cao nhất.";
+  if (r.ngay && !/^\d{4}-\d{2}-\d{2}$/.test(r.ngay)) return "Ngày phải dạng YYYY-MM-DD hoặc để trống.";
   if (r.link && !/^https?:\/\//.test(r.link)) return "Link nguồn phải bắt đầu bằng http:// hoặc https://";
   return "";
 }
@@ -374,6 +382,7 @@ const COL = {id: ["Mã", 120], ngay: ["Ngày", 140], trang_thai: ["Trạng thái
   tong_tien_ty: ["Tổng (tỷ)", 90], nguoi_tham_gia: ["Người tham gia", 110], lat: ["Vĩ độ", 100], lng: ["Kinh độ", 100], vi_tri: ["Vị trí", 110], nguon: ["Nguồn", 130], link: ["Link nguồn", 260], ghi_chu: ["Ghi chú", 260]};
 const SELECTS = {trang_thai: ["Sắp đấu giá", "Chờ kết quả", "Đã đấu giá", "Đã nộp tiền", "Hủy/bỏ cọc"], vi_tri: ["gần đúng", "chính xác"]};
 const DATALISTS = {tinh: "dlTinh", loai_dat: "dlLoai", nguon: "dlNguon"};
+let FILT = {};   // bộ lọc theo cột: {cột: Set các giá trị được hiện}
 let GRID = [];   // [{r: rowObj, orig: index in ROWS or -1, del: bool}]
 const ORDER = ["id", "ngay", "trang_thai", "xa", "tinh", "khu", "dia_danh_cu", "so_thua", "so_thua_trung", "gia_khoi_diem", "gia_trung_min", "gia_trung_max", "tong_tien_ty", "nguoi_tham_gia", "loai_dat", "nguon", "link", "ghi_chu", "lat", "lng", "vi_tri"];
 const gCols = () => ORDER.filter(h => HEAD.includes(h)).concat(HEAD.filter(h => !ORDER.includes(h)));
@@ -381,14 +390,16 @@ function gridFromRows() { GRID = ROWS.map((r, i) => ({r: {...r}, orig: i, del: f
 const rowChanged = g => g.orig < 0 || g.del || HEAD.some(h => (g.r[h] ?? "") !== (ROWS[g.orig][h] ?? ""));
 function cellHTML(gi, h, v) {
   const w = (COL[h] || [h, 140])[1];
-  if (SELECTS[h]) return `<select data-g="${gi}" data-h="${h}" style="--w:${w}px">${SELECTS[h].map(o => `<option${o === v ? " selected" : ""}>${o}</option>`).join("")}${v && !SELECTS[h].includes(v) ? `<option selected>${esc(v)}</option>` : ""}</select>`;
+  if (SELECTS[h]) return `<select data-g="${gi}" data-h="${h}" style="--w:${w}px"><option value=""${v ? "" : " selected"}></option>${SELECTS[h].map(o => `<option${o === v ? " selected" : ""}>${o}</option>`).join("")}${v && !SELECTS[h].includes(v) ? `<option selected>${esc(v)}</option>` : ""}</select>`;
   return `<input data-g="${gi}" data-h="${h}" value="${esc(v ?? "")}" style="--w:${w}px"${h === "ngay" ? ' placeholder="YYYY-MM-DD"' : ""}${DATALISTS[h] ? ` list="${DATALISTS[h]}"` : ""}${h === "id" ? " readonly" : ""}>`;
 }
 function renderGrid() {
   const qq = $("#gq").value.trim().toLowerCase();
-  $("#gh").innerHTML = `<tr><th class="rn">#</th>${gCols().map(h => `<th title="${h}">${esc((COL[h] || [h])[0])}</th>`).join("")}<th></th></tr>`;
+  $("#gh").innerHTML = `<tr><th class="rn">#</th>${gCols().map(h => `<th title="${h}">${esc((COL[h] || [h])[0])}<button class="fbtn${FILT[h] ? " on" : ""}" data-f="${h}" title="Lọc / sắp xếp">▼</button></th>`).join("")}<th></th></tr>`;
+  $("#gFclr").hidden = !Object.keys(FILT).length;
   $("#gb").innerHTML = GRID.map((g, gi) => {
     if (qq && !gCols().some(h => String(g.r[h] || "").toLowerCase().includes(qq))) return "";
+    if (Object.entries(FILT).some(([h, set]) => !set.has(String(g.r[h] ?? "").trim()))) return "";
     const cls = g.del ? "del" : g.orig < 0 ? "new" : rowChanged(g) ? "chg" : "";
     return `<tr data-g="${gi}" class="${cls}"><td class="rn">${gi + 1}</td>${gCols().map(h => `<td>${cellHTML(gi, h, g.r[h])}</td>`).join("")}<td><button class="xbtn" data-x="${gi}" title="${g.del ? "Bỏ xóa" : "Xóa dòng"}">${g.del ? "↺" : "✕"}</button></td></tr>`;
   }).join("");
@@ -398,7 +409,7 @@ function updInfo() { const n = GRID.filter(rowChanged).length; $("#gInfo").textC
 function markRow(gi) { const tr = $(`#gb tr[data-g="${gi}"]`); if (!tr) return; const g = GRID[gi]; tr.className = g.del ? "del" : g.orig < 0 ? "new" : rowChanged(g) ? "chg" : ""; updInfo(); }
 function newRowObj() {
   const today = new Date().toISOString().slice(0, 10);
-  const r = Object.fromEntries(HEAD.map(h => [h, ""])); Object.assign(r, {ngay: today, tinh: "Hà Nội", trang_thai: "Sắp đấu giá", loai_dat: "Đất ở", vi_tri: "gần đúng"});
+  const r = Object.fromEntries(HEAD.map(h => [h, ""])); 
   const used = ROWS.concat(GRID.map(g => g.r)); const pre = "HN-" + today.slice(0, 4) + "-";
   const n = used.map(x => x.id || "").filter(id => id.startsWith(pre)).map(id => parseInt(id.slice(pre.length), 10) || 0);
   r.id = pre + String((n.length ? Math.max(...n) : 0) + 1).padStart(3, "0");
@@ -429,7 +440,7 @@ function importTable(lines) {
     if (o.ngay && /^\d{1,2}\/\d{1,2}\/\d{4}$/.test(o.ngay)) { const [d, m, y] = o.ngay.split("/"); o.ngay = `${y}-${m.padStart(2, "0")}-${d.padStart(2, "0")}`; }
     const ex = o.id && GRID.find(g => g.r.id === o.id);
     if (ex) { Object.assign(ex.r, o); upd++; }
-    else { const r = newRowObj(); Object.assign(r, Object.fromEntries(Object.entries(o).filter(([, v]) => v !== ""))); if (o.id) r.id = o.id; GRID.unshift({r, orig: -1, del: false}); add++; }
+    else { const r = newRowObj(); Object.assign(r, o); if (!o.id) r.id = newRowObj().id; GRID.unshift({r, orig: -1, del: false}); add++; }
   });
   renderGrid(); say(`Đã nhập bảng: thêm ${add} dòng, cập nhật ${upd} dòng (khớp theo mã). Kiểm tra rồi bấm “Lưu tất cả lên GitHub”.`, "ok");
   return true;
@@ -486,6 +497,41 @@ $("#gSave").addEventListener("click", async () => {
   const ok = await commit(`Bảng tính: ${parts} phiên`);
   if (ok) { gridFromRows(); renderGrid(); renderList(); } else { ROWS = keep; }
 });
+
+
+/* ---------- nút lọc trên hàng tiêu đề (giống Excel) ---------- */
+function closeFpop() { const p = $("#fpop"); if (p) p.remove(); }
+$("#gh").addEventListener("click", e => {
+  const b = e.target.closest("[data-f]"); if (!b) return; e.stopPropagation();
+  const h = b.dataset.f; if ($("#fpop") && $("#fpop").dataset.h === h) { closeFpop(); return; } closeFpop();
+  const isNum = NUMS.includes(h);
+  const vals = [...new Set(GRID.map(g => String(g.r[h] ?? "").trim()))].sort((a, c) => a === "" ? 1 : c === "" ? -1 : isNum ? (+a) - (+c) : a.localeCompare(c, "vi"));
+  const cur = FILT[h];
+  const p = document.createElement("div"); p.id = "fpop"; p.dataset.h = h;
+  p.innerHTML = `<div class="srt"><button class="btn" data-s="1">Sắp xếp A→Z ↑</button><button class="btn" data-s="-1">Z→A ↓</button></div>
+    <input type="search" placeholder="Tìm giá trị…">
+    <div class="fl"><label><input type="checkbox" data-all checked> <b>(Chọn tất cả)</b></label>
+    ${vals.map(v => `<label data-v="${esc(v.toLowerCase())}"><input type="checkbox" value="${esc(v)}"${!cur || cur.has(v) ? " checked" : ""}> ${v === "" ? "<i>(Trống)</i>" : esc(v)}</label>`).join("")}</div>
+    <div class="act"><button class="btn pri" data-ok>Lọc</button><button class="btn" data-clr>Bỏ lọc cột này</button></div>`;
+  document.body.appendChild(p);
+  const r = b.getBoundingClientRect(); p.style.top = Math.min(r.bottom + 4, innerHeight - p.offsetHeight - 8) + "px"; p.style.left = Math.max(8, Math.min(r.left - 120, innerWidth - 270)) + "px";
+  const boxes = () => [...p.querySelectorAll(".fl input:not([data-all])")];
+  const syncAll = () => { p.querySelector("[data-all]").checked = boxes().every(x => x.checked); };
+  syncAll();
+  p.querySelector("[data-all]").addEventListener("change", e2 => boxes().forEach(x => { if (x.closest("label").style.display !== "none") x.checked = e2.target.checked; }));
+  p.querySelector(".fl").addEventListener("change", e2 => { if (!e2.target.dataset.all) syncAll(); });
+  p.querySelector("input[type=search]").addEventListener("input", e2 => { const q = e2.target.value.trim().toLowerCase();
+    p.querySelectorAll(".fl label[data-v]").forEach(l => { const show = !q || l.dataset.v.includes(q); l.style.display = show ? "" : "none"; l.querySelector("input").checked = show; }); syncAll(); });
+  p.querySelectorAll("[data-s]").forEach(x => x.addEventListener("click", () => { const dir = +x.dataset.s;
+    GRID.sort((a, c) => { const A = String(a.r[h] ?? "").trim(), C = String(c.r[h] ?? "").trim(); if (A === C) return 0; if (A === "") return 1; if (C === "") return -1;
+      return dir * (isNum ? (+A) - (+C) : A.localeCompare(C, "vi")); }); closeFpop(); renderGrid(); }));
+  p.querySelector("[data-ok]").addEventListener("click", () => { const on = boxes().filter(x => x.checked).map(x => x.value);
+    if (on.length === vals.length) delete FILT[h]; else FILT[h] = new Set(on); closeFpop(); renderGrid(); });
+  p.querySelector("[data-clr]").addEventListener("click", () => { delete FILT[h]; closeFpop(); renderGrid(); });
+});
+document.addEventListener("click", e => { const p = $("#fpop"); if (p && !p.contains(e.target)) closeFpop(); });
+document.addEventListener("keydown", e => { if (e.key === "Escape") closeFpop(); });
+$("#gFclr").addEventListener("click", () => { FILT = {}; renderGrid(); });
 
 /* ---------- chuyển tab ---------- */
 function showTab(t) {
