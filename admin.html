@@ -299,11 +299,21 @@ function editRow(i) {
 function readForm() {
   const f = $("#f"), r = {};
   HEAD.forEach(h => { if (f.elements[h]) r[h] = f.elements[h].value.trim(); else r[h] = editIdx >= 0 ? (ROWS[editIdx][h] ?? "") : ""; });
-  NUMS.forEach(k => { if (r[k]) r[k] = r[k].replace(/\s/g, "").replace(",", "."); });
+  NUMS.forEach(k => { if (r[k]) r[k] = normNum(r[k]); });
   return r;
 }
+/* chuẩn hóa số kiểu Việt/Anh: "1.234,5" "1,5" "1,234.5" "50 " → 1234.5 / 1.5 / 1234.5 / 50 ; không phải số thì giữ nguyên chữ */
+function normNum(v) {
+  let x = String(v ?? "").replace(/\s|\u00a0/g, ""); if (!x) return "";
+  // chỉ coi là dấu phân cách hàng nghìn khi chắc chắn (≥2 nhóm, hoặc có phần thập phân kiểu kia); "11.315" vẫn là 11,315
+  if (/^-?\d{1,3}(\.\d{3}){2,}(,\d+)?$/.test(x) || /^-?\d{1,3}(\.\d{3})+,\d+$/.test(x)) x = x.replace(/\./g, "").replace(",", ".");
+  else if (/^-?\d{1,3}(,\d{3}){2,}(\.\d+)?$/.test(x) || /^-?\d{1,3}(,\d{3})+\.\d+$/.test(x)) x = x.replace(/,/g, "");
+  else if (/^-?\d+,\d+$/.test(x)) x = x.replace(",", ".");
+  return isNaN(+x) ? String(v).trim() : x;
+}
+/* chỉ CẢNH BÁO, không chặn lưu */
 function validate(r) {
-  for (const k of NUMS) if (r[k] && isNaN(+r[k])) return `Ô “${k}” phải là số (dùng dấu chấm thập phân).`;
+  for (const k of NUMS) if (r[k] && isNaN(+r[k])) return `Ô “${k}” không phải số — đã giữ nguyên chữ, bản đồ sẽ bỏ qua ô này.`;
   if (r.lat && (+r.lat < 8 || +r.lat > 24)) return "Vĩ độ không nằm trong Việt Nam (8–24).";
   if (r.lng && (+r.lng < 102 || +r.lng > 110)) return "Kinh độ không nằm trong Việt Nam (102–110).";
   if (r.gia_trung_min && r.gia_trung_max && +r.gia_trung_min > +r.gia_trung_max) return "Giá trúng thấp nhất lớn hơn giá cao nhất.";
@@ -357,10 +367,11 @@ $("#f").addEventListener("input", e => { const f = $("#f");
   if (e.target.name === "lat" || e.target.name === "lng") setMarker(); });
 $("#f").addEventListener("submit", async e => {
   e.preventDefault();
-  const r = readForm(), err = validate(r); if (err) { say(err, "err"); return; }
+  const r = readForm(), warn = validate(r);
   const isNew = editIdx < 0; const before = isNew ? null : ROWS[editIdx];
   if (isNew) { if (ROWS.some(x => x.id === r.id)) r.id = nextId(r.tinh, r.ngay); ROWS.push(r); } else ROWS[editIdx] = r;
-  const ok = await commit(`${isNew ? "Thêm" : "Cập nhật"} phiên ${r.id}: ${r.xa} ${fdate(r.ngay)} (${r.trang_thai})`);
+  const ok = await commit(`${isNew ? "Thêm" : "Cập nhật"} phiên ${r.id}: ${r.xa || ""} ${r.ngay ? fdate(r.ngay) : ""} (${r.trang_thai || ""})`);
+  if (ok && warn) say($("#msg").textContent + " Lưu ý (không chặn lưu): " + warn, "ok");
   if (!ok) { if (isNew) ROWS = ROWS.filter(x => x !== r); else if (ROWS[editIdx] === r) ROWS[editIdx] = before; }
   renderList(); gridFromRows(); if (ok && isNew) newForm(); else if (ok) editRow(ROWS.indexOf(r));
 });
@@ -485,17 +496,19 @@ $("#gb").addEventListener("paste", e => {
 });
 $("#gSave").addEventListener("click", async () => {
   const errs = [];
-  GRID.forEach((g, gi) => { if (g.del || !rowChanged(g)) return; NUMS.forEach(k => { if (g.r[k]) g.r[k] = String(g.r[k]).replace(/\s/g, "").replace(",", "."); });
+  GRID.forEach((g, gi) => { if (g.del || !rowChanged(g)) return; NUMS.forEach(k => { if (g.r[k]) g.r[k] = normNum(g.r[k]); });
     if (g.r.ngay && /^\d{1,2}\/\d{1,2}\/\d{4}$/.test(g.r.ngay)) { const [d, m, y] = g.r.ngay.split("/"); g.r.ngay = `${y}-${m.padStart(2, "0")}-${d.padStart(2, "0")}`; }
     const er = validate(g.r); if (er) errs.push([gi, er]); });
   document.querySelectorAll("#gb tr").forEach(tr => tr.classList.remove("err"));
-  if (errs.length) { errs.forEach(([gi]) => { const tr = $(`#gb tr[data-g="${gi}"]`); if (tr) tr.classList.add("err"); });
-    say(`Chưa lưu: dòng ${errs.map(e => e[0] + 1).join(", ")} có lỗi — ${errs[0][1]}`, "err"); return; }
+  const warnTxt = errs.length ? ` Lưu ý (không chặn lưu): dòng ${errs.map(e => e[0] + 1).join(", ")} — ${errs[0][1]}` : "";
+  const warnIds = errs.map(([gi]) => GRID[gi].r.id);
   const added = GRID.filter(g => g.orig < 0 && !g.del).length, deleted = GRID.filter(g => g.del).length, edited = GRID.filter(g => g.orig >= 0 && !g.del && rowChanged(g)).length;
   const keep = ROWS; ROWS = GRID.filter(g => !g.del).map(g => g.r);
   const parts = [added && `thêm ${added}`, edited && `sửa ${edited}`, deleted && `xóa ${deleted}`].filter(Boolean).join(", ");
   const ok = await commit(`Bảng tính: ${parts} phiên`);
-  if (ok) { gridFromRows(); renderGrid(); renderList(); } else { ROWS = keep; }
+  if (ok) { gridFromRows(); renderGrid(); renderList();
+    if (warnTxt) { say($("#msg").textContent + warnTxt, "ok"); GRID.forEach((g, gi) => { if (warnIds.includes(g.r.id)) { const tr = $(`#gb tr[data-g="${gi}"]`); if (tr) tr.classList.add("err"); } }); }
+  } else { ROWS = keep; }
 });
 
 
