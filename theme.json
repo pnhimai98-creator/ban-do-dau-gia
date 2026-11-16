@@ -1,0 +1,32 @@
+{
+  "light": {
+    "bg": "#ffffff",
+    "bg2": "#f3f4f2",
+    "ink": "#161a1d",
+    "mute": "#5c6670",
+    "line": "#dde1e0",
+    "acc": "#1f5f4a",
+    "card": "#ffffff"
+  },
+  "dark": {
+    "bg": "#121417",
+    "bg2": "#1a1d21",
+    "ink": "#e9ecef",
+    "mute": "#9aa3ad",
+    "line": "#2b3137",
+    "acc": "#7fd1b0",
+    "card": "#181b1f"
+  },
+  "bins": [
+    "#fde68a",
+    "#fbbf24",
+    "#f97316",
+    "#dc2626",
+    "#7f1d1d"
+  ],
+  "status": {
+    "Sắp đấu giá": "#2563eb",
+    "Chờ kết quả": "#64748b",
+    "Hủy/bỏ cọc": "#111827"
+  }
+}
