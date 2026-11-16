@@ -1,13 +1,12 @@
 {
-  "usd_vnd": 26141,
+  "usd_vnd": 25570.0,
   "type": "transfer",
-  "buy": null,
-  "transfer": 26141,
-  "sell": 26381,
-  "bank_time": "",
-  "date": "2026-11-13",
-  "fetched_at": "",
+  "buy": 25540.0,
+  "transfer": 25570.0,
+  "sell": 25950.0,
+  "bank_time": "11/16/2026 2:32:38 PM",
+  "date": "2026-11-16",
+  "fetched_at": "2026-11-16T14:40:14+07:00",
   "source": "Vietcombank",
-  "source_url": "https://portal.vietcombank.com.vn/UserControls/TVPortal.TyGia/pXML.aspx",
-  "note": "Giá trị khởi đầu theo tin VNA ngày 13/11/2026; sẽ được GitHub Actions ghi đè bằng số liệu Vietcombank hằng ngày."
+  "source_url": "https://portal.vietcombank.com.vn/UserControls/TVPortal.TyGia/pXML.aspx"
 }
