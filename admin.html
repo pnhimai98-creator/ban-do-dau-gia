@@ -43,6 +43,34 @@ td.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
 .muted{color:var(--mute);font-size:13px}
 .dirty{background:light-dark(#fff7e6,#2e2615)}
 details summary{cursor:pointer;font-weight:600}
+.th{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.5fr);gap:16px;align-items:start}
+@media(max-width:980px){.th{grid-template-columns:1fr}}
+.crow{display:grid;grid-template-columns:minmax(0,1fr) 44px 96px;gap:8px;align-items:center;padding:4px 0;font-size:14px}
+.crow input[type=color]{padding:2px;height:36px;width:44px;cursor:pointer}
+.crow input[type=text]{height:36px;font-family:ui-monospace,monospace;font-size:14px;padding:0 6px}
+.crow small{display:block;color:var(--mute);font-size:12px}
+#prev{width:100%;height:720px;border:1px solid var(--line);border-radius:10px;background:#fff}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:99px;overflow:hidden}
+.seg button{border:0;background:none;padding:0 14px;height:34px;cursor:pointer}
+.seg button.on{background:var(--ink);color:var(--bg)}
+h3{font-size:14px;margin:14px 0 4px}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 14px}
+.tabs button{height:40px;padding:0 16px;border-radius:99px;border:1px solid var(--line);background:none;cursor:pointer;font-weight:500}
+.tabs button.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.gwrap{overflow:auto;max-height:70vh;border:1px solid var(--line);border-radius:10px}
+table.sheet{border-collapse:separate;border-spacing:0;font-size:14px;width:max-content}
+.sheet th{position:sticky;top:0;z-index:2;background:var(--bg2);font-size:12px;font-weight:600;padding:6px 8px;border-bottom:1px solid var(--line);border-right:1px solid var(--line);white-space:nowrap}
+.sheet td{padding:0;border-bottom:1px solid var(--line);border-right:1px solid var(--line);background:var(--bg)}
+.sheet td.rn{position:sticky;left:0;z-index:1;background:var(--bg2);text-align:center;font-size:12px;color:var(--mute);width:44px;min-width:44px}
+.sheet th.rn{left:0;z-index:3}
+.sheet input,.sheet select{border:0;border-radius:0;background:transparent;height:34px;font-size:14px;padding:0 8px;width:var(--w,110px)}
+.sheet input:focus,.sheet select:focus{outline:2px solid var(--acc);outline-offset:-2px;background:var(--bg)}
+.sheet tr.chg td{background:light-dark(#fff7e6,#2e2615)}
+.sheet tr.new td{background:light-dark(#ecfdf3,#13291c)}
+.sheet tr.del td{background:light-dark(#fdecec,#33191a);opacity:.6}
+.sheet tr.del input{text-decoration:line-through}
+.sheet tr.err td{box-shadow:inset 0 -2px 0 var(--bad)}
+.xbtn{border:0;background:none;color:var(--bad);cursor:pointer;width:100%;height:34px;font-size:16px}
 </style>
 </head>
 <body>
@@ -63,11 +91,22 @@ details summary{cursor:pointer;font-weight:600}
     <label class="wide">Mã truy cập (token)<input id="cToken" type="password" autocomplete="off" placeholder="github_pat_…"></label>
     <label style="align-self:end;display:flex;gap:6px;align-items:center;color:var(--ink)"><input id="cRemember" type="checkbox" style="width:20px;height:20px"> Nhớ trên máy này</label>
    </div>
-   <div class="row" style="margin-top:12px"><button class="btn pri" id="btnLoad">Kết nối & tải dữ liệu</button><button class="btn" id="btnForget">Xóa token khỏi máy</button></div>
+   <div class="row" style="margin-top:12px"><button class="btn pri" id="btnLoad">Kết nối & tải dữ liệu</button><button class="btn" id="btnForget">Xóa token khỏi máy</button><button class="btn" id="btnThemeOnly">Chỉ xem thử màu (không cần token)</button></div>
    <p class="muted">Token chỉ lưu trong trình duyệt của bạn (nếu chọn “Nhớ”), không gửi đi đâu ngoài GitHub. Tạo token: GitHub → Settings → Developer settings → Fine-grained tokens → chỉ chọn repo <b>ban-do-dau-gia</b>, quyền <b>Contents: Read and write</b>.</p>
   </details>
  </section>
  <div id="msg" class="status" hidden></div>
+
+ <div class="tabs" id="mainTabs" hidden><button class="on" data-tab="grid">Bảng tính dữ liệu</button><button data-tab="form">Form & chọn vị trí trên bản đồ</button><button data-tab="theme">Giao diện – màu sắc</button></div>
+
+ <section class="card" id="gridCard" hidden>
+  <div class="row" style="justify-content:space-between;margin-bottom:10px">
+   <div class="row"><button class="btn" id="gAdd">＋ Thêm dòng</button><input id="gq" type="search" placeholder="Lọc nhanh…" style="width:200px"><span class="muted" id="gInfo"></span></div>
+   <div class="row"><button class="btn" id="gUndo">Hủy thay đổi</button><button class="btn pri" id="gSave">Lưu tất cả lên GitHub</button></div>
+  </div>
+  <div class="gwrap"><table class="sheet"><thead id="gh"></thead><tbody id="gb"></tbody></table></div>
+  <p class="muted">Gõ thẳng vào ô như Excel. <b>Enter</b> xuống dòng dưới, <b>Tab</b> sang ô bên phải. Có thể <b>sao chép nhiều ô từ Excel/Google Sheets rồi dán</b>: dán vào một <b>dòng mới</b> (nút ＋ Thêm dòng) thì mỗi dòng dán thành một phiên mới; dán vào dòng có sẵn thì ghi đè các ô bên dưới như Excel. Dòng vàng = đã sửa, xanh = mới, đỏ = sẽ xóa. Chỉ khi bấm <b>Lưu tất cả</b> mới ghi lên GitHub.</p>
+ </section>
 
  <div class="two" id="work" hidden>
   <!-- Form -->
@@ -110,6 +149,26 @@ details summary{cursor:pointer;font-weight:600}
    <p class="muted">Bấm vào bản đồ để đặt điểm; kéo điểm để chỉnh. Chuyển sang “Ảnh vệ tinh” để tìm khu đất.</p>
   </section>
  </div>
+
+ <section class="card" id="themeCard" hidden>
+  <div class="row" style="justify-content:space-between;margin-bottom:6px"><h2 style="margin:0">Giao diện – màu sắc</h2><span class="muted" id="themeState"></span></div>
+  <p class="muted" style="margin-top:0">Chọn màu và xem trước ngay bên phải. Chỉ khi bấm <b>Lưu giao diện</b> thì bản đồ thật mới đổi (cần kết nối GitHub ở trên).</p>
+  <div class="th">
+   <div>
+    <div class="grid" style="grid-template-columns:1fr 1fr">
+     <label>Bộ màu có sẵn<select id="preset"><option value="">— chọn —</option></select></label>
+     <label>Thang màu giá<select id="binPreset"><option value="">— chọn —</option></select></label>
+    </div>
+    <h3>Màu trang <span class="seg" id="modeSeg" style="margin-left:8px;vertical-align:middle"><button data-m="light" class="on">Chế độ sáng</button><button data-m="dark">Chế độ tối</button></span></h3>
+    <div id="pageColors"></div>
+    <h3>Màu chấm theo giá trúng cao nhất</h3><div id="binColors"></div>
+    <h3>Màu theo trạng thái</h3><div id="stColors"></div>
+    <div class="row" style="margin-top:14px"><button class="btn pri" id="btnTheme">Lưu giao diện lên GitHub</button><button class="btn" id="btnThemeReset">Về màu mặc định</button></div>
+   </div>
+   <div><iframe id="prev" title="Xem trước bản đồ" src="index.html"></iframe>
+    <p class="muted">Bản xem trước dùng dữ liệu và màu đang chọn; người xem có máy để chế độ tối sẽ thấy bộ màu “Chế độ tối”.</p></div>
+  </div>
+ </section>
 
  <section class="card" id="listCard" hidden>
   <div class="row" style="justify-content:space-between;margin-bottom:10px"><h2 style="margin:0">Danh sách phiên (<span id="cnt">0</span>)</h2>
@@ -154,9 +213,9 @@ const b64enc = s => { const b = new TextEncoder().encode(s); let bin = ""; for (
 
 /* ---------- GitHub API ---------- */
 const cfg = () => ({owner: $("#cOwner").value.trim(), repo: $("#cRepo").value.trim(), branch: $("#cBranch").value.trim() || "main", path: $("#cPath").value.trim() || "data.csv", token: $("#cToken").value.trim()});
-async function gh(method, body) {
-  const c = cfg();
-  const url = `https://api.github.com/repos/${encodeURIComponent(c.owner)}/${encodeURIComponent(c.repo)}/contents/${c.path.split("/").map(encodeURIComponent).join("/")}` + (method === "GET" ? `?ref=${encodeURIComponent(c.branch)}&t=${Date.now()}` : "");
+async function gh(method, body, path) {
+  const c = cfg(); path = path || c.path;
+  const url = `https://api.github.com/repos/${encodeURIComponent(c.owner)}/${encodeURIComponent(c.repo)}/contents/${path.split("/").map(encodeURIComponent).join("/")}` + (method === "GET" ? `?ref=${encodeURIComponent(c.branch)}&t=${Date.now()}` : "");
   const r = await fetch(url, {method, headers: {"Authorization": "Bearer " + c.token, "Accept": "application/vnd.github+json", "X-GitHub-Api-Version": "2022-11-28", ...(body ? {"Content-Type": "application/json"} : {})}, body: body ? JSON.stringify(body) : undefined, cache: "no-store"});
   const j = await r.json().catch(() => ({}));
   if (!r.ok) { const e = new Error(j.message || ("HTTP " + r.status)); e.status = r.status; throw e; }
@@ -177,9 +236,10 @@ async function load() {
     if ($("#cRemember").checked) { store.set("dgAdminToken", cfg().token); }
     store.set("dgAdminCfg", JSON.stringify({...cfg(), token: undefined}));
     $("#connState").textContent = `· đã kết nối (${ROWS.length} phiên)`; $("#connBox").open = false;
-    $("#work").hidden = false; $("#listCard").hidden = false;
-    buildExtra(); newForm(); renderList(); initMap();
+    $("#mainTabs").hidden = false;
+    buildExtra(); newForm(); initMap(); gridFromRows(); showTab("grid");
     say(`Đã tải ${ROWS.length} phiên từ ${cfg().path}.`, "ok");
+    loadThemeAdmin();
   } catch (e) { say("Không tải được: " + explain(e), "err"); }
 }
 
@@ -290,7 +350,7 @@ $("#f").addEventListener("submit", async e => {
   if (isNew) { if (ROWS.some(x => x.id === r.id)) r.id = nextId(r.tinh, r.ngay); ROWS.push(r); } else ROWS[editIdx] = r;
   const ok = await commit(`${isNew ? "Thêm" : "Cập nhật"} phiên ${r.id}: ${r.xa} ${fdate(r.ngay)} (${r.trang_thai})`);
   if (!ok) { if (isNew) ROWS = ROWS.filter(x => x !== r); else if (ROWS[editIdx] === r) ROWS[editIdx] = before; }
-  renderList(); if (ok && isNew) newForm(); else if (ok) editRow(ROWS.indexOf(r));
+  renderList(); gridFromRows(); if (ok && isNew) newForm(); else if (ok) editRow(ROWS.indexOf(r));
 });
 let delArm = 0;
 $("#btnDel").addEventListener("click", async () => {
@@ -298,15 +358,189 @@ $("#btnDel").addEventListener("click", async () => {
   if (Date.now() - delArm > 4000) { delArm = Date.now(); say("Bấm “Xóa phiên này” thêm một lần nữa trong 4 giây để xác nhận xóa.", "err"); return; }
   delArm = 0; const r = ROWS[editIdx], keep = ROWS.slice(); ROWS.splice(editIdx, 1);
   const ok = await commit(`Xóa phiên ${r.id}: ${r.xa} ${fdate(r.ngay)}`);
-  if (!ok) ROWS = keep; else newForm(); renderList();
+  if (!ok) ROWS = keep; else newForm(); renderList(); gridFromRows();
 });
 $("#tb").addEventListener("click", e => { const b = e.target.closest("[data-edit]"); if (b) editRow(+b.dataset.edit); });
 $("#lf").addEventListener("input", renderList); $("#lq").addEventListener("input", renderList);
 $("#btnCsv").addEventListener("click", () => { const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob(["﻿" + toCSV()], {type: "text/csv"})); a.download = `data-backup-${new Date().toISOString().slice(0, 10)}.csv`; a.click(); });
 
+/* ================= BẢNG TÍNH / GRID ================= */
+const COL = {id: ["Mã", 120], ngay: ["Ngày", 140], trang_thai: ["Trạng thái", 140], tinh: ["Tỉnh", 110], xa: ["Xã/phường", 130], dia_danh_cu: ["Địa danh cũ", 200], khu: ["Khu đấu giá", 240],
+  loai_dat: ["Loại đất", 140], so_thua: ["Số thửa", 80], so_thua_trung: ["Thửa trúng", 90], gia_khoi_diem: ["Giá KĐ (tr/m²)", 110], gia_trung_min: ["Trúng thấp (tr/m²)", 120], gia_trung_max: ["Trúng cao (tr/m²)", 120],
+  tong_tien_ty: ["Tổng (tỷ)", 90], nguoi_tham_gia: ["Người tham gia", 110], lat: ["Vĩ độ", 100], lng: ["Kinh độ", 100], vi_tri: ["Vị trí", 110], nguon: ["Nguồn", 130], link: ["Link nguồn", 260], ghi_chu: ["Ghi chú", 260]};
+const SELECTS = {trang_thai: ["Sắp đấu giá", "Chờ kết quả", "Đã đấu giá", "Đã nộp tiền", "Hủy/bỏ cọc"], vi_tri: ["gần đúng", "chính xác"]};
+const DATALISTS = {tinh: "dlTinh", loai_dat: "dlLoai", nguon: "dlNguon"};
+let GRID = [];   // [{r: rowObj, orig: index in ROWS or -1, del: bool}]
+const ORDER = ["id", "ngay", "trang_thai", "xa", "tinh", "khu", "dia_danh_cu", "so_thua", "so_thua_trung", "gia_khoi_diem", "gia_trung_min", "gia_trung_max", "tong_tien_ty", "nguoi_tham_gia", "loai_dat", "nguon", "link", "ghi_chu", "lat", "lng", "vi_tri"];
+const gCols = () => ORDER.filter(h => HEAD.includes(h)).concat(HEAD.filter(h => !ORDER.includes(h)));
+function gridFromRows() { GRID = ROWS.map((r, i) => ({r: {...r}, orig: i, del: false})).sort((a, b) => (b.r.ngay || "").localeCompare(a.r.ngay || "")); }
+const rowChanged = g => g.orig < 0 || g.del || HEAD.some(h => (g.r[h] ?? "") !== (ROWS[g.orig][h] ?? ""));
+function cellHTML(gi, h, v) {
+  const w = (COL[h] || [h, 140])[1];
+  if (SELECTS[h]) return `<select data-g="${gi}" data-h="${h}" style="--w:${w}px">${SELECTS[h].map(o => `<option${o === v ? " selected" : ""}>${o}</option>`).join("")}${v && !SELECTS[h].includes(v) ? `<option selected>${esc(v)}</option>` : ""}</select>`;
+  return `<input data-g="${gi}" data-h="${h}" value="${esc(v ?? "")}" style="--w:${w}px"${h === "ngay" ? ' placeholder="YYYY-MM-DD"' : ""}${DATALISTS[h] ? ` list="${DATALISTS[h]}"` : ""}${h === "id" ? " readonly" : ""}>`;
+}
+function renderGrid() {
+  const qq = $("#gq").value.trim().toLowerCase();
+  $("#gh").innerHTML = `<tr><th class="rn">#</th>${gCols().map(h => `<th title="${h}">${esc((COL[h] || [h])[0])}</th>`).join("")}<th></th></tr>`;
+  $("#gb").innerHTML = GRID.map((g, gi) => {
+    if (qq && !gCols().some(h => String(g.r[h] || "").toLowerCase().includes(qq))) return "";
+    const cls = g.del ? "del" : g.orig < 0 ? "new" : rowChanged(g) ? "chg" : "";
+    return `<tr data-g="${gi}" class="${cls}"><td class="rn">${gi + 1}</td>${gCols().map(h => `<td>${cellHTML(gi, h, g.r[h])}</td>`).join("")}<td><button class="xbtn" data-x="${gi}" title="${g.del ? "Bỏ xóa" : "Xóa dòng"}">${g.del ? "↺" : "✕"}</button></td></tr>`;
+  }).join("");
+  updInfo();
+}
+function updInfo() { const n = GRID.filter(rowChanged).length; $("#gInfo").textContent = n ? `${n} dòng chưa lưu` : `${GRID.length} dòng`; $("#gSave").disabled = !n; }
+function markRow(gi) { const tr = $(`#gb tr[data-g="${gi}"]`); if (!tr) return; const g = GRID[gi]; tr.className = g.del ? "del" : g.orig < 0 ? "new" : rowChanged(g) ? "chg" : ""; updInfo(); }
+function newRowObj() {
+  const today = new Date().toISOString().slice(0, 10);
+  const r = Object.fromEntries(HEAD.map(h => [h, ""])); Object.assign(r, {ngay: today, tinh: "Hà Nội", trang_thai: "Sắp đấu giá", loai_dat: "Đất ở", vi_tri: "gần đúng"});
+  const used = ROWS.concat(GRID.map(g => g.r)); const pre = "HN-" + today.slice(0, 4) + "-";
+  const n = used.map(x => x.id || "").filter(id => id.startsWith(pre)).map(id => parseInt(id.slice(pre.length), 10) || 0);
+  r.id = pre + String((n.length ? Math.max(...n) : 0) + 1).padStart(3, "0");
+  return r;
+}
+function gAddRow(focus) {
+  GRID.unshift({r: newRowObj(), orig: -1, del: false}); renderGrid();
+  if (focus) { const el = $(`#gb [data-g="0"][data-h="xa"]`); if (el) el.focus(); }
+}
+$("#gAdd").addEventListener("click", () => gAddRow(true));
+$("#gq").addEventListener("input", renderGrid);
+$("#gUndo").addEventListener("click", () => { gridFromRows(); renderGrid(); say("Đã hủy các thay đổi chưa lưu.", "ok"); });
+$("#gb").addEventListener("input", e => { const el = e.target; if (el.dataset.g == null) return; const gi = +el.dataset.g; GRID[gi].r[el.dataset.h] = el.value; markRow(gi); });
+$("#gb").addEventListener("click", e => { const b = e.target.closest("[data-x]"); if (!b) return; const gi = +b.dataset.x;
+  if (GRID[gi].orig < 0) GRID.splice(gi, 1); else GRID[gi].del = !GRID[gi].del; renderGrid(); });
+$("#gb").addEventListener("keydown", e => { if (e.key !== "Enter" || e.target.dataset.g == null) return; e.preventDefault();
+  const tr = e.target.closest("tr").nextElementSibling; const nx = tr && tr.querySelector(`[data-h="${e.target.dataset.h}"]`); if (nx) nx.focus(); });
+/* dán nhiều ô từ Excel / Google Sheets */
+$("#gb").addEventListener("paste", e => {
+  const el = e.target; if (el.dataset.g == null) return;
+  const txt = (e.clipboardData || window.clipboardData).getData("text"); if (!/[\t\n]/.test(txt.replace(/\n$/, ""))) return;
+  e.preventDefault();
+  const lines = txt.replace(/\r/g, "").replace(/\n$/, "").split("\n").map(l => l.split("\t"));
+  const cols = gCols(); const c0 = cols.indexOf(el.dataset.h);
+  const vis = [...$("#gb").querySelectorAll("tr[data-g]")].map(tr => +tr.dataset.g); const start = vis.indexOf(+el.dataset.g);
+  const intoNew = GRID[vis[start]] && GRID[vis[start]].orig < 0;   // dán vào dòng mới → tạo thêm dòng mới, không đè dòng cũ
+  if (intoNew) { const g0 = vis[start]; for (let i = 1; i < lines.length; i++) GRID.splice(g0 + i, 0, {r: newRowObj(), orig: -1, del: false});
+    lines.forEach((cells, i) => cells.forEach((v, j) => { const h = cols[c0 + j]; if (h && h !== "id") GRID[g0 + i].r[h] = v.trim(); }));
+    renderGrid(); say(`Đã dán ${lines.length} dòng mới. Kiểm tra lại rồi bấm “Lưu tất cả”.`, "ok"); return; }
+  lines.forEach((cells, i) => {
+    let gi = vis[start + i];
+    if (gi == null) { GRID.push({r: newRowObj(), orig: -1, del: false}); gi = GRID.length - 1; vis.push(gi); }
+    cells.forEach((v, j) => { const h = cols[c0 + j]; if (h && h !== "id") GRID[gi].r[h] = v.trim(); });
+  });
+  renderGrid(); say(`Đã dán ${lines.length} dòng × ${lines[0].length} cột. Kiểm tra lại rồi bấm “Lưu tất cả”.`, "ok");
+});
+$("#gSave").addEventListener("click", async () => {
+  const errs = [];
+  GRID.forEach((g, gi) => { if (g.del || !rowChanged(g)) return; NUMS.forEach(k => { if (g.r[k]) g.r[k] = String(g.r[k]).replace(/\s/g, "").replace(",", "."); });
+    if (g.r.ngay && /^\d{1,2}\/\d{1,2}\/\d{4}$/.test(g.r.ngay)) { const [d, m, y] = g.r.ngay.split("/"); g.r.ngay = `${y}-${m.padStart(2, "0")}-${d.padStart(2, "0")}`; }
+    const er = validate(g.r); if (er) errs.push([gi, er]); });
+  document.querySelectorAll("#gb tr").forEach(tr => tr.classList.remove("err"));
+  if (errs.length) { errs.forEach(([gi]) => { const tr = $(`#gb tr[data-g="${gi}"]`); if (tr) tr.classList.add("err"); });
+    say(`Chưa lưu: dòng ${errs.map(e => e[0] + 1).join(", ")} có lỗi — ${errs[0][1]}`, "err"); return; }
+  const added = GRID.filter(g => g.orig < 0 && !g.del).length, deleted = GRID.filter(g => g.del).length, edited = GRID.filter(g => g.orig >= 0 && !g.del && rowChanged(g)).length;
+  const keep = ROWS; ROWS = GRID.filter(g => !g.del).map(g => g.r);
+  const parts = [added && `thêm ${added}`, edited && `sửa ${edited}`, deleted && `xóa ${deleted}`].filter(Boolean).join(", ");
+  const ok = await commit(`Bảng tính: ${parts} phiên`);
+  if (ok) { gridFromRows(); renderGrid(); renderList(); } else { ROWS = keep; }
+});
+
+/* ---------- chuyển tab ---------- */
+function showTab(t) {
+  document.querySelectorAll("#mainTabs button").forEach(b => b.classList.toggle("on", b.dataset.tab === t));
+  $("#gridCard").hidden = t !== "grid"; $("#work").hidden = t !== "form"; $("#listCard").hidden = t !== "form"; $("#themeCard").hidden = t !== "theme";
+  if (t === "form") { renderList(); if (map) setTimeout(() => map.invalidateSize && map.invalidateSize(), 50); }
+  if (t === "grid") renderGrid();
+}
+$("#mainTabs").addEventListener("click", e => { const b = e.target.closest("[data-tab]"); if (!b) return;
+  if (b.dataset.tab !== "grid" && GRID.some(rowChanged)) say("Bảng tính còn thay đổi chưa lưu — bấm “Lưu tất cả” trước khi rời đi nếu muốn giữ.", "err");
+  showTab(b.dataset.tab); });
+
+/* ================= GIAO DIỆN / THEME ================= */
+const DEFAULT_THEME = {
+  light: {bg: "#ffffff", bg2: "#f3f4f2", ink: "#161a1d", mute: "#5c6670", line: "#dde1e0", acc: "#1f5f4a", card: "#ffffff"},
+  dark: {bg: "#121417", bg2: "#1a1d21", ink: "#e9ecef", mute: "#9aa3ad", line: "#2b3137", acc: "#7fd1b0", card: "#181b1f"},
+  bins: ["#fde68a", "#fbbf24", "#f97316", "#dc2626", "#7f1d1d"],
+  status: {"Sắp đấu giá": "#2563eb", "Chờ kết quả": "#64748b", "Hủy/bỏ cọc": "#111827"}
+};
+const PRESETS = {
+  "Mặc định (xanh rêu)": {light: DEFAULT_THEME.light, dark: DEFAULT_THEME.dark},
+  "Xanh navy": {light: {bg: "#ffffff", bg2: "#eef2f7", ink: "#0f172a", mute: "#5b6577", line: "#d7dde7", acc: "#1e3a8a", card: "#ffffff"}, dark: {bg: "#0b1220", bg2: "#111a2e", ink: "#e5ecf6", mute: "#94a3b8", line: "#23304a", acc: "#93c5fd", card: "#0f172a"}},
+  "Đỏ son": {light: {bg: "#ffffff", bg2: "#f8f1f1", ink: "#1f1416", mute: "#6b5a5d", line: "#ead9db", acc: "#9f1239", card: "#ffffff"}, dark: {bg: "#160e10", bg2: "#211518", ink: "#f4e9eb", mute: "#b49aa0", line: "#3a2a2e", acc: "#fda4af", card: "#1c1215"}},
+  "Nâu đất": {light: {bg: "#fffdf9", bg2: "#f4efe7", ink: "#2a2118", mute: "#6f6253", line: "#e5dccf", acc: "#8a5a2b", card: "#ffffff"}, dark: {bg: "#15110c", bg2: "#1f1912", ink: "#f1e9de", mute: "#b3a594", line: "#3a3026", acc: "#e0b07a", card: "#1b160f"}},
+  "Đen trắng tối giản": {light: {bg: "#ffffff", bg2: "#f2f2f2", ink: "#111111", mute: "#666666", line: "#dddddd", acc: "#111111", card: "#ffffff"}, dark: {bg: "#0d0d0d", bg2: "#1a1a1a", ink: "#f2f2f2", mute: "#9a9a9a", line: "#2e2e2e", acc: "#f2f2f2", card: "#141414"}}
+};
+const BIN_PRESETS = {
+  "Vàng → đỏ (mặc định)": DEFAULT_THEME.bins,
+  "Xanh nhạt → xanh đậm": ["#c7e9f1", "#7fcdbb", "#41b6c4", "#225ea8", "#081d58"],
+  "Vàng → tím": ["#fde68a", "#f9a8d4", "#e879f9", "#a21caf", "#4c1d95"],
+  "Xanh lá → đỏ": ["#1a9850", "#91cf60", "#fee08b", "#fc8d59", "#d73027"]
+};
+const PAGE_LABELS = {acc: ["Màu nhấn", "link, viền ô đang chọn"], ink: ["Chữ chính", "chữ, nút đang chọn"], bg: ["Nền trang", ""], bg2: ["Nền phụ", "ô nhập, dòng đang chọn"], card: ["Nền khung", "chú giải, hộp nổi"], mute: ["Chữ phụ", "chữ mờ, chú thích"], line: ["Đường kẻ", "viền, phân cách"]};
+const BIN_LABELS = ["< 40 tr/m²", "40 – 60", "60 – 80", "80 – 100", "≥ 100"];
+const clone = o => JSON.parse(JSON.stringify(o));
+let THEME = clone(DEFAULT_THEME), THEME_SHA = null, editMode = "light";
+const okHex = c => /^#[0-9a-fA-F]{6}$/.test(c);
+const crow = (key, label, sub, val) => `<div class="crow"><span>${esc(label)}${sub ? `<small>${esc(sub)}</small>` : ""}</span><input type="color" data-k="${key}" value="${val}" aria-label="${esc(label)}"><input type="text" data-k="${key}" value="${val}" maxlength="7" aria-label="Mã màu ${esc(label)}"></div>`;
+function renderThemeForm() {
+  $("#pageColors").innerHTML = Object.keys(PAGE_LABELS).map(k => crow("p." + k, PAGE_LABELS[k][0], PAGE_LABELS[k][1], THEME[editMode][k])).join("");
+  $("#binColors").innerHTML = THEME.bins.map((c, i) => crow("b." + i, BIN_LABELS[i], "", c)).join("");
+  $("#stColors").innerHTML = Object.keys(THEME.status).map(k => crow("s." + k, k, "", THEME.status[k])).join("");
+}
+function setColor(key, val) {
+  const [g, k] = [key.slice(0, 1), key.slice(2)];
+  if (g === "p") THEME[editMode][k] = val; else if (g === "b") THEME.bins[+k] = val; else THEME.status[k] = val;
+  document.querySelectorAll(`[data-k="${CSS.escape(key)}"]`).forEach(el => { if (el.value !== val) el.value = val; });
+  preview();
+}
+let pvReady = false;
+function preview() { const w = $("#prev").contentWindow; if (w && pvReady) { w.postMessage({type: "dg-theme", theme: THEME}, "*"); w.postMessage({type: "dg-mode", mode: editMode}, "*"); } }
+$("#prev").addEventListener("load", () => { pvReady = true; setTimeout(preview, 300); setTimeout(preview, 1500); });
+["#pageColors", "#binColors", "#stColors"].forEach(sel => $(sel).addEventListener("input", e => {
+  const el = e.target; if (!el.dataset.k) return;
+  let v = el.value.trim(); if (el.type === "text") { if (!v.startsWith("#")) v = "#" + v; if (!okHex(v)) return; }
+  setColor(el.dataset.k, v.toLowerCase());
+}));
+$("#modeSeg").addEventListener("click", e => { const b = e.target.closest("[data-m]"); if (!b) return; editMode = b.dataset.m;
+  document.querySelectorAll("#modeSeg button").forEach(x => x.classList.toggle("on", x === b)); renderThemeForm(); preview(); });
+$("#preset").innerHTML += Object.keys(PRESETS).map(k => `<option>${esc(k)}</option>`).join("");
+$("#binPreset").innerHTML += Object.keys(BIN_PRESETS).map(k => `<option>${esc(k)}</option>`).join("");
+$("#preset").addEventListener("input", e => { const p = PRESETS[e.target.value]; if (!p) return; THEME.light = clone(p.light); THEME.dark = clone(p.dark); renderThemeForm(); preview(); e.target.value = ""; });
+$("#binPreset").addEventListener("input", e => { const p = BIN_PRESETS[e.target.value]; if (!p) return; THEME.bins = p.slice(); renderThemeForm(); preview(); e.target.value = ""; });
+$("#btnThemeReset").addEventListener("click", () => { THEME = clone(DEFAULT_THEME); renderThemeForm(); preview(); $("#themeState").textContent = "đã về mặc định – chưa lưu"; });
+function mergeTheme(t) { const m = clone(DEFAULT_THEME); if (!t) return m;
+  ["light", "dark"].forEach(md => Object.keys(m[md]).forEach(k => { if (t[md] && okHex(t[md][k])) m[md][k] = t[md][k].toLowerCase(); }));
+  if (Array.isArray(t.bins)) t.bins.forEach((c, i) => { if (i < 5 && okHex(c)) m.bins[i] = c.toLowerCase(); });
+  if (t.status) Object.keys(m.status).forEach(k => { if (okHex(t.status[k])) m.status[k] = t.status[k].toLowerCase(); });
+  return m; }
+async function loadThemeAdmin() {
+  if (cfg().token) {
+    try { const j = await gh("GET", null, "theme.json"); THEME = mergeTheme(JSON.parse(b64dec(j.content))); THEME_SHA = j.sha; $("#themeState").textContent = "đang dùng màu đã lưu trên GitHub"; }
+    catch (e) { THEME_SHA = null; if (e.status === 404) { THEME = clone(DEFAULT_THEME); $("#themeState").textContent = "chưa có theme.json – đang dùng màu mặc định"; } }
+  } else if (location.protocol.startsWith("http")) {
+    try { const r = await fetch("theme.json?t=" + Date.now(), {cache: "no-store"}); if (r.ok) THEME = mergeTheme(await r.json()); } catch (e) {}
+  }
+  renderThemeForm(); preview();
+}
+$("#btnTheme").addEventListener("click", async () => {
+  if (!cfg().token || !SHA) { say("Hãy kết nối GitHub ở phần trên trước khi lưu giao diện.", "err"); $("#connBox").open = true; $("#connCard").scrollIntoView(); return; }
+  const b = $("#btnTheme"); b.disabled = true; say("Đang lưu giao diện…");
+  try {
+    if (THEME_SHA === null) { try { const j = await gh("GET", null, "theme.json"); THEME_SHA = j.sha; } catch (e) { if (e.status !== 404) throw e; } }
+    const body = {message: "Cập nhật màu giao diện (theme.json)", content: b64enc(JSON.stringify(THEME, null, 2) + "\n"), branch: cfg().branch};
+    if (THEME_SHA) body.sha = THEME_SHA;
+    const j = await gh("PUT", body, "theme.json"); THEME_SHA = j.content.sha;
+    $("#themeState").textContent = "đã lưu"; say("Đã lưu giao diện. Bản đồ sẽ đổi màu sau khoảng 1 phút (nhấn Ctrl + F5 để xem).", "ok");
+  } catch (e) { say("Chưa lưu được giao diện: " + explain(e), "err"); if (e.status === 409) THEME_SHA = null; }
+  finally { b.disabled = false; }
+});
+renderThemeForm();
+$("#btnThemeOnly").addEventListener("click", () => { $("#themeCard").hidden = false; $("#themeCard").scrollIntoView(); });
+
 /* khôi phục cấu hình đã lưu */
 try { const c = JSON.parse(store.get("dgAdminCfg") || "null"); if (c) ["owner", "repo", "branch", "path"].forEach(k => { if (c[k]) $("#c" + k[0].toUpperCase() + k.slice(1)).value = c[k]; }); } catch (e) {}
-const tk = store.get("dgAdminToken"); if (tk) { $("#cToken").value = tk; $("#cRemember").checked = true; load(); }
+const tk = store.get("dgAdminToken"); if (tk) { $("#cToken").value = tk; $("#cRemember").checked = true; load(); } else loadThemeAdmin();
 }
 </script>
 </body>

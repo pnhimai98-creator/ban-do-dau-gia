@@ -51,6 +51,7 @@ select,input{height:40px;border:1px solid var(--line);border-radius:8px;backgrou
 footer{padding:16px max(3vw,14px);font-size:13px;color:var(--mute);border-top:1px solid var(--line)}
 .empty{padding:24px 14px;color:var(--mute)}
 @media(max-width:860px){.layout{grid-template-columns:1fr;height:auto}#map{height:58vh}aside{border-left:0}.list{max-height:none;overflow:visible}header{align-items:flex-start}}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
 .htop{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
 .lang{display:inline-flex;border:1px solid var(--line);border-radius:99px;overflow:hidden;flex:none}
 .lang button{border:0;background:none;padding:0 12px;height:32px;font-size:13px;font-weight:600;cursor:pointer;min-width:44px}
@@ -125,6 +126,8 @@ const CONFIG = {
   FORM_URL: "",
   // File tỷ giá do GitHub Actions cập nhật hằng ngày (bản tiếng Anh hiển thị giá USD)
   RATE_URL: "rate.json",
+  // File màu giao diện (chỉnh trực quan trong admin.html → mục Giao diện)
+  THEME_URL: "theme.json",
   // Ngôn ngữ mặc định: "vi" hoặc "en"
   DEFAULT_LANG: "vi",
   CENTER: [21.03, 105.80], ZOOM: 10
@@ -240,6 +243,32 @@ const BINS = [[0,"#fde68a","< 40"],[40,"#fbbf24","40 – 60"],[60,"#f97316","60 
 const colorOf = p => { let c = BINS[0][1]; for (const b of BINS) if (p >= b[0]) c = b[1]; return c; };
 const UPCOMING = ["Sắp đấu giá", "Chờ kết quả"];
 const STATUS_COLOR = {"Sắp đấu giá": "#2563eb", "Chờ kết quả": "#64748b", "Hủy/bỏ cọc": "#111827"};
+/* ---------- Màu giao diện từ theme.json / theme colours ---------- */
+const THEME_KEYS = ["bg", "bg2", "ink", "mute", "line", "acc", "card"];
+const isColor = c => typeof c === "string" && /^#[0-9a-fA-F]{3,8}$/.test(c);
+function applyTheme(th) {
+  if (!th || typeof th !== "object") return;
+  let css = ":root{";
+  THEME_KEYS.forEach(k => { const l = th.light && th.light[k], d = th.dark && th.dark[k];
+    if (isColor(l) && isColor(d)) css += `--${k}:light-dark(${l},${d});`; else if (isColor(l)) css += `--${k}:${l};`; });
+  let st = document.getElementById("themeCss");
+  if (!st) { st = document.createElement("style"); st.id = "themeCss"; document.head.appendChild(st); }
+  st.textContent = css + "}";
+  if (Array.isArray(th.bins)) th.bins.forEach((c, i) => { if (BINS[i] && isColor(c)) BINS[i][1] = c; });
+  if (th.status) Object.keys(STATUS_COLOR).forEach(k => { if (isColor(th.status[k])) STATUS_COLOR[k] = th.status[k]; });
+}
+async function loadTheme() {
+  if (!location.protocol.startsWith("http") || !CONFIG.THEME_URL) return null;
+  try { const r = await fetch(CONFIG.THEME_URL + "?t=" + Date.now(), {cache: "no-store"}); if (r.ok) return await r.json(); } catch (e) {}
+  return null;
+}
+/* xem trước từ trang admin / live preview from admin page */
+window.addEventListener("message", e => {
+  if (e.origin !== location.origin && !(location.protocol === "file:" && (e.origin === "null" || e.origin === "file://"))) return;
+  const m = e.data || {};
+  if (m.type === "dg-theme") { applyTheme(m.theme); applyLang(); }
+  if (m.type === "dg-mode") document.documentElement.dataset.theme = m.mode || "";
+});
 const markColor = d => STATUS_COLOR[d.trang_thai] || (d.max != null ? colorOf(d.max) : "#94a3b8");
 
 let DATA = [], SRC = "srcSeed", map, layer, markers = {}, bases, layerCtl, legendCtl, state = {status: "Tất cả"};
@@ -339,7 +368,7 @@ function applyLang() {
     const binLabel = (b, i) => { if (!useUSD()) return b[2]; const lo = P(b[0]), hi = BINS[i + 1] ? P(BINS[i + 1][0]) : null;
       return i === 0 ? "< " + hi : hi ? lo + " – " + hi : "≥ " + lo; };
     legendCtl.onAdd = () => { const d = L.DomUtil.create("div", "legend"); d.innerHTML = `<b>${U("legendTitle")}</b><br>` + BINS.map((b, i) => `<i style="background:${b[1]}"></i>${binLabel(b, i)}`).join("<br>")
-      + `<br><i style="background:transparent;border:2px dashed #2563eb"></i>${tv("status", "Sắp đấu giá")}<br><i style="background:transparent;border:2px dashed #64748b"></i>${tv("status", "Chờ kết quả")}`; return d; };
+      + `<br><i style="background:transparent;border:2px dashed ${STATUS_COLOR["Sắp đấu giá"]}"></i>${tv("status", "Sắp đấu giá")}<br><i style="background:transparent;border:2px dashed ${STATUS_COLOR["Chờ kết quả"]}"></i>${tv("status", "Chờ kết quả")}`; return d; };
     legendCtl.addTo(map);
   }
   render();
@@ -361,8 +390,8 @@ async function init() {
   } else { $("#map").innerHTML = `<p class="empty">${t("mapErr")}</p>`; }
 
   applyLang();
-  const [{rows, src}, rate] = await Promise.all([loadData(), loadRate()]);
-  DATA = normalize(rows); SRC = src; RATE = rate;
+  const [{rows, src}, rate, theme] = await Promise.all([loadData(), loadRate(), loadTheme()]);
+  DATA = normalize(rows); SRC = src; RATE = rate; applyTheme(theme);
   applyLang();
 
   document.querySelector(".lang").addEventListener("click", e => { const b = e.target.closest("[data-lang]"); if (!b || b.dataset.lang === lang) return;
