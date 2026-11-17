@@ -226,7 +226,7 @@ const CONFIG = {
   // Lớp ranh giới xã/phường & hạ tầng (do GitHub Actions tạo từ OpenStreetMap, xem scripts/build_layers.py)
   BOUNDARY_URL: "layers/ranh-gioi-xa.geojson",
   INFRA_URL: "layers/ha-tang.geojson",
-  // Lớp bật sẵn khi mở trang: "bound" (ranh giới), "vanh_dai", "metro", "cau", "san_bay"
+  // Lớp bật sẵn khi mở trang: "bound" (ranh giới), "vanh_dai" (mọi vành đai) hoặc "vanh_dai:Hà Nội", "cao_toc", "metro", "cau", "cau_xay", "san_bay"
   LAYERS_ON: ["bound"],
   // Sân bay vẽ thêm bằng tay (OSM có thể thiếu). status: "hien_huu" | "dang_xay" | "quy_hoach"; approx: true = vị trí gần đúng
   AIRPORTS: [
@@ -265,7 +265,7 @@ const T = {
   rk3: "Top phiên trúng cao gấp nhiều lần giá đất Nhà nước", cState: "Giá NN", noState: "Chưa có phiên nào có cả giá đất Nhà nước (cột gia_nha_nuoc) và giá trúng.",
   anaClean: "Loại phiên bỏ cọc / hủy kết quả", after: "Sau đấu giá", pAfter: "Sau đấu giá", pState: "Giá đất Nhà nước", xState: "trúng cao nhất gấp {x} lần giá NN",
   updatedOn: "cập nhật", autoSt: "tự chuyển vì đã qua ngày đấu giá", pBound: "Thuộc ranh giới", boundDiff: "khác cột xã trong dữ liệu",
-  lyBound: "Ranh giới xã/phường (2025)", lyRing: "Đường vành đai", lyMetro: "Đường sắt đô thị (metro)", lyBridge: "Cầu sông Hồng – đang vận hành", lyBridgeB: "Cầu sông Hồng – đang xây / quy hoạch", lyAir: "Sân bay",
+  lyBound: "Ranh giới xã/phường (2025)", lyRing: "Vành đai", lyMetro: "Đường sắt đô thị (metro)", lyBridge: "Cầu sông Hồng – đang vận hành", lyBridgeB: "Cầu sông Hồng – đang xây / quy hoạch", lyAir: "Sân bay", lyExp: "Đường cao tốc",
   lineW: "Tuyến", ringW: "VĐ", approxPos: "vị trí gần đúng",
   stBuilt: "hiện hữu", stBuild: "đang xây", stPlan: "quy hoạch", plot1: "thửa",
   cArea: "Khu vực", cTop: "Cao nhất", cN: "Số phiên", cLast: "Gần nhất", cSess: "Phiên", cStart: "Khởi điểm", cWin: "Trúng cao nhất", cX: "Gấp", times: "lần",
@@ -295,7 +295,7 @@ const T = {
   rk3: "Auctions with the biggest multiple of the State land price", cState: "State price", noState: "No auction has both a State land price (gia_nha_nuoc column) and a winning bid yet.",
   anaClean: "Exclude forfeited / cancelled results", after: "After auction", pAfter: "After auction", pState: "State land price", xState: "top bid = {x}× the State price",
   updatedOn: "updated", autoSt: "auto-set: auction date has passed", pBound: "Inside boundary of", boundDiff: "differs from the commune column",
-  lyBound: "Commune/ward boundaries (2025)", lyRing: "Ring roads", lyMetro: "Urban railway (metro)", lyBridge: "Red River bridges – in service", lyBridgeB: "Red River bridges – under construction / planned", lyAir: "Airports",
+  lyBound: "Commune/ward boundaries (2025)", lyRing: "Ring road", lyMetro: "Urban railway (metro)", lyBridge: "Red River bridges – in service", lyBridgeB: "Red River bridges – under construction / planned", lyAir: "Airports", lyExp: "Expressways",
   lineW: "Line", ringW: "RR", approxPos: "approximate position",
   stBuilt: "existing", stBuild: "under construction", stPlan: "planned", plot1: "plot",
   cArea: "Area", cTop: "Highest", cN: "Auctions", cLast: "Latest", cSess: "Auction", cStart: "Start", cWin: "Top bid", cX: "Multiple", times: "×",
@@ -469,9 +469,20 @@ async function loadDecv() {
 let BOUND = null, extraGroups = {};
 /* Màu metro theo sơ đồ quy hoạch đường sắt đô thị Hà Nội */
 const METRO_COLOR = {"1": "#1c4fd6", "2": "#1f9d55", "2A": "#74b816", "3": "#f59f00", "4": "#e03131", "5": "#c2255c", "6": "#7048e8", "7": "#8b5e34", "8": "#d633c4"};
-const INFRA_STYLE = {vanh_dai: {color: "#c2410c", weight: 5}, metro: {color: "#868e96", weight: 5}, cau: {color: "#1971c2", weight: 9}, cau_xay: {color: "#f08c00", weight: 9},
+const INFRA_STYLE = {vanh_dai: {color: "#c2410c", weight: 5}, cao_toc: {color: "#0b7285", weight: 5}, metro: {color: "#868e96", weight: 5}, cau: {color: "#1971c2", weight: 9}, cau_xay: {color: "#f08c00", weight: 9},
   san_bay: {color: "#495057", weight: 2, fillOpacity: 0.2}};
-const INFRA_KEYS = [["vanh_dai", "lyRing"], ["metro", "lyMetro"], ["cau", "lyBridge"], ["cau_xay", "lyBridgeB"], ["san_bay", "lyAir"]];
+/* Thứ tự lớp trong nút chọn lớp; vành đai được tách theo từng địa phương (vanh_dai:Hà Nội, vanh_dai:Vĩnh Yên…) */
+const INFRA_KEYS = [["vanh_dai", "lyRing"], ["cao_toc", "lyExp"], ["metro", "lyMetro"], ["cau", "lyBridge"], ["cau_xay", "lyBridgeB"], ["san_bay", "lyAir"]];
+/* Màu vành đai theo địa phương; địa phương chưa có trong danh sách sẽ tự lấy màu từ bảng dự phòng */
+const REGION_COLOR = {"Hà Nội": "#c2410c", "Vùng Thủ đô": "#a61e4d", "Vĩnh Yên": "#1098ad", "Phúc Yên": "#3bc9db", "Việt Trì": "#0ca678", "Thái Nguyên": "#5c940d",
+  "Bắc Giang": "#364fc7", "Bắc Ninh": "#7950f2", "Hải Dương": "#d6336c", "Hưng Yên": "#e67700", "Phủ Lý": "#9c36b5", "Hòa Bình": "#2b8a3e",
+  "Nam Định": "#5f3dc4", "Ninh Bình": "#087f5b", "Thái Bình": "#c92a2a", "Sơn Tây": "#e8590c"};
+const SPARE = ["#495057", "#1864ab", "#862e9c", "#2f9e44", "#e03131", "#f08c00"];
+const regionOf = p => p.region || "Hà Nội";
+const regionColor = r => REGION_COLOR[r] || SPARE[[...r].reduce((h, c) => h + c.charCodeAt(0), 0) % SPARE.length];
+const noAccent = s => String(s || "").normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/đ/g, "d").replace(/Đ/g, "D");
+const regionName = r => lang === "en" ? (r === "Hà Nội" ? "Hanoi" : r === "Vùng Thủ đô" ? "Capital Region (RR4, RR5)" : noAccent(r)) : (r === "Vùng Thủ đô" ? "Vùng Thủ đô (VĐ4, VĐ5)" : r);
+const REGION_ORDER = r => r === "Hà Nội" ? "0" : r === "Vùng Thủ đô" ? "1" : "2" + r;
 const ST_COLOR = {hien_huu: "#1971c2", dang_xay: "#f08c00", quy_hoach: "#868e96"};
 const ringNo = p => { if (p.ring) return String(p.ring); const m = `${p.name || ""} ${p.ref || ""}`.match(/(?:Vành\s*[đĐ]ai|V[ĐD])\s*(\d+(?:[.,]\d)?)/i); return m ? m[1].replace(",", ".") : null; };
 const metroLine = p => {
@@ -481,10 +492,12 @@ const metroLine = p => {
   if (m) return m[1].toUpperCase();
   if (/Cát Linh|Hà Đông/i.test(s)) return "2A"; if (/Nhổn/i.test(s)) return "3"; if (/Nam Thăng Long|Thượng Đình/i.test(s)) return "2"; if (/Yên Viên|Ngọc Hồi|Như Quỳnh/i.test(s)) return "1";
   return null; };
-const infraKey = p => p.kind === "cau" ? (p.status && p.status !== "hien_huu" ? "cau_xay" : "cau") : p.kind;
+const infraKey = p => p.kind === "cau" ? (p.status && p.status !== "hien_huu" ? "cau_xay" : "cau") : p.kind === "vanh_dai" ? "vanh_dai:" + regionOf(p) : p.kind;
+const baseKey = k => k.split(":")[0];
 function infraStyle(k, p) {
-  const st = INFRA_STYLE[k] || {}, built = !p.status || p.status === "hien_huu";
+  const st = INFRA_STYLE[baseKey(k)] || {}, built = !p.status || p.status === "hien_huu";
   let color = st.color; if (k === "metro") color = METRO_COLOR[metroLine(p)] || p.colour || st.color;
+  if (baseKey(k) === "vanh_dai") color = regionColor(regionOf(p));
   return {...st, color, opacity: 0.92, dashArray: k === "cau_xay" ? "6 4" : !built && k !== "san_bay" ? "10 7" : null};
 }
 /* Chọn vài điểm rải đều trên đường để đặt nhãn (VĐ3, VĐ4…) */
@@ -496,8 +509,10 @@ function labelPoints(feats, maxN, gap) {
   return out;
 }
 let ringLabels = [];
-const ringIcon = n => L.divIcon({className: "rr-lbl", html: `<span>${esc(t("ringW"))}${esc(n)}</span>`, iconSize: null});
-function refreshRingLabels() { ringLabels.forEach(({m, n}) => m.setIcon(ringIcon(n))); }
+/* nhãn trên đường: vành đai "VĐ3" (màu theo địa phương), cao tốc "CT.01" */
+const ringIcon = (n, c, exp) => L.divIcon({className: "rr-lbl", iconSize: null,
+  html: exp ? `<span style="background:${c};color:#fff;border-color:#fff">${esc(n)}</span>` : `<span style="color:${c};border-color:${c}">${esc(t("ringW"))}${esc(n)}</span>`});
+function refreshRingLabels() { ringLabels.forEach(({m, n, c, exp}) => m.setIcon(ringIcon(n, c, exp))); }
 const stLabel = s => s === "dang_xay" ? t("stBuild") : s === "quy_hoach" ? t("stPlan") : t("stBuilt");
 const fold = s => String(s || "").normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/đ/gi, "d").toLowerCase()
   .replace(/^(xa|phuong|thi tran|dac khu)\s+/, "").replace(/\s+/g, " ").trim();
@@ -529,15 +544,25 @@ async function loadExtraLayers() {
   if (inf && inf.features) {
     if (!map.getPane("infra")) { map.createPane("infra"); map.getPane("infra").style.zIndex = 380; }
     if (!map.getPane("infraLbl")) { map.createPane("infraLbl"); map.getPane("infraLbl").style.zIndex = 390; map.getPane("infraLbl").style.pointerEvents = "none"; }
-    INFRA_KEYS.forEach(([k]) => { const fs = inf.features.filter(f => infraKey(f.properties) === k); if (!fs.length) return;
-      const gj = L.geoJSON({type: "FeatureCollection", features: fs}, {pane: "infra", attribution: OSM, style: f => infraStyle(k, f.properties),
-        onEachFeature: (f, l) => { const p = f.properties, ln = k === "metro" ? metroLine(p) : null, rn = k === "vanh_dai" ? ringNo(p) : null;
-          l.bindTooltip(`<b>${ln ? esc(t("lineW")) + " " + esc(ln) + " · " : ""}${esc(p.name || (rn ? t("lyRing") + " " + rn : ""))}</b><br>${esc(stLabel(p.status))}`, {sticky: true}); }});
+    if (!map.getPane("expw")) { map.createPane("expw"); map.getPane("expw").style.zIndex = 370; }   // cao tốc nằm dưới vành đai/metro
+    const keys = [...new Set(inf.features.map(f => infraKey(f.properties)))];
+    keys.forEach(k => { const fs = inf.features.filter(f => infraKey(f.properties) === k); if (!fs.length) return;
+      const bk = baseKey(k);
+      const gj = L.geoJSON({type: "FeatureCollection", features: fs}, {pane: bk === "cao_toc" ? "expw" : "infra", attribution: OSM, style: f => infraStyle(k, f.properties),
+        onEachFeature: (f, l) => { const p = f.properties, ln = k === "metro" ? metroLine(p) : null, rn = bk === "vanh_dai" ? ringNo(p) : null;
+          const title = ln ? `${t("lineW")} ${ln} · ${p.name || ""}` : bk === "vanh_dai" ? `${t("lyRing")} ${rn || ""} · ${regionName(regionOf(p))}` : bk === "cao_toc" ? [p.ref, p.name !== p.ref ? p.name : ""].filter(Boolean).join(" · ") : (p.name || "");
+          l.bindTooltip(`<b>${esc(title)}</b><br>${esc(stLabel(p.status))}`, {sticky: true}); }});
       extraGroups[k] = L.featureGroup([gj]);
-      if (k === "vanh_dai") {   /* nhãn VĐ1, VĐ2, VĐ3… rải dọc mỗi vành đai */
-        const byRing = {}; fs.forEach(f => { const n = ringNo(f.properties); if (n) (byRing[n] = byRing[n] || []).push(f); });
-        Object.keys(byRing).forEach(n => labelPoints(byRing[n], 6, 0.07).forEach(ll => {
-          const m = L.marker(ll, {icon: ringIcon(n), interactive: false, pane: "infraLbl", keyboard: false}); ringLabels.push({m, n}); extraGroups[k].addLayer(m); }));
+      const addLabels = (groups, maxN, gap, color, exp) => Object.keys(groups).forEach(n => labelPoints(groups[n], maxN, gap).forEach(ll => {
+        const c = typeof color === "function" ? color(n) : color, m = L.marker(ll, {icon: ringIcon(n, c, exp), interactive: false, pane: "infraLbl", keyboard: false});
+        ringLabels.push({m, n, c, exp}); extraGroups[k].addLayer(m); }));
+      if (bk === "vanh_dai") {   /* nhãn VĐ1, VĐ2, VĐ3… rải dọc mỗi vành đai */
+        const by = {}; fs.forEach(f => { const n = ringNo(f.properties); if (n) (by[n] = by[n] || []).push(f); });
+        addLabels(by, 6, 0.07, regionColor(k.slice(9)), false);
+      }
+      if (bk === "cao_toc") {    /* nhãn số hiệu cao tốc CT.01, CT.04… */
+        const by = {}; fs.forEach(f => { const n = f.properties.ref; if (n) (by[n] = by[n] || []).push(f); });
+        addLabels(by, 5, 0.15, INFRA_STYLE.cao_toc.color, true);
       }
     });
   }
@@ -549,7 +574,8 @@ async function loadExtraLayers() {
       m.bindTooltip(() => `<b>${esc(lang === "en" && a.name_en ? a.name_en : a.name)}</b><br>${esc(stLabel(a.status))}${a.approx ? " · " + esc(t("approxPos")) : ""}`);
       g.addLayer(m); });
   }
-  Object.keys(extraGroups).forEach(k => { if ((CONFIG.LAYERS_ON || []).includes(k)) extraGroups[k].addTo(map); });
+  const on = CONFIG.LAYERS_ON || [];
+  Object.keys(extraGroups).forEach(k => { if (on.includes(k) || on.includes(baseKey(k))) extraGroups[k].addTo(map); });
 }
 
 function normalize(rows) {
@@ -755,7 +781,13 @@ function applyLang() {
     const metroSw = `<i style="display:inline-block;width:20px;height:5px;border-radius:2px;margin:0 6px 0 2px;vertical-align:3px;background:linear-gradient(90deg,${Object.values(METRO_COLOR).join(",")})"></i>`;
     const ex = {};
     if (extraGroups.bound) ex[sw("#6b7280", 2, true) + esc(t("lyBound"))] = extraGroups.bound;
-    INFRA_KEYS.forEach(([k, lk]) => { if (!extraGroups[k]) return;
+    INFRA_KEYS.forEach(([k, lk]) => {
+      if (k === "vanh_dai") {   /* mỗi địa phương một dòng, màu riêng */
+        Object.keys(extraGroups).filter(x => x.startsWith("vanh_dai:")).sort((a, b) => REGION_ORDER(a.slice(9)).localeCompare(REGION_ORDER(b.slice(9)), "vi"))
+          .forEach(x => { ex[sw(regionColor(x.slice(9)), 4) + esc(t(lk)) + " – " + esc(regionName(x.slice(9)))] = extraGroups[x]; });
+        return;
+      }
+      if (!extraGroups[k]) return;
       const icon = k === "metro" ? metroSw : k === "san_bay" ? `<span style="display:inline-block;width:20px;margin:0 6px 0 2px;text-align:center">✈</span>` : sw(INFRA_STYLE[k].color, k.startsWith("cau") ? 6 : 4, k === "cau_xay");
       ex[icon + esc(t(lk))] = extraGroups[k]; });
     refreshRingLabels();
