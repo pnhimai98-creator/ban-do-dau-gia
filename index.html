@@ -35,6 +35,8 @@ select,input{height:40px;border:1px solid var(--line);border-radius:8px;backgrou
 .leaflet-control-layers-separator{margin:6px -14px 6px -10px}
 .leaflet-control-layers-toggle{width:40px;height:40px}
 .rr-lbl span{position:absolute;transform:translate(-50%,-50%);background:#fff;color:#c2410c;border:2px solid #c2410c;border-radius:5px;padding:0 6px;font:700 12px/17px "Be Vietnam Pro",system-ui,sans-serif;white-space:nowrap;box-shadow:0 1px 3px #0003}
+.z-lt10 .lbl-ql,.z-lt12 .lbl-dt{display:none}
+.lg-line{display:inline-block;width:22px;height:0;border-top:3px solid #495057;margin-right:6px;vertical-align:3px}
 .ap-ic span{display:flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;color:#fff;font-size:16px;border:2px solid #fff;box-shadow:0 1px 4px #0006}
 .anachk{font-size:13px;color:var(--mute);display:inline-flex;align-items:center;cursor:pointer}
 .tag.bad{background:#fee2e2;border-color:#fca5a5;color:#991b1b}.tag.ok{background:#dcfce7;border-color:#86efac;color:#166534}
@@ -225,9 +227,13 @@ const CONFIG = {
   TRANSLATE_EMAIL: "",
   // Lớp ranh giới xã/phường & hạ tầng (do GitHub Actions tạo từ OpenStreetMap, xem scripts/build_layers.py)
   BOUNDARY_URL: "layers/ranh-gioi-xa.geojson",
+  PROVINCE_URL: "layers/ranh-gioi-tinh.geojson",
+  DISTRICT_URL: "layers/ranh-gioi-huyen-cu.geojson",
+  // Quốc lộ & đường tỉnh: file lớn nên chỉ tải khi người xem bật lớp
+  ROADS_URL: "layers/duong-bo.geojson",
   INFRA_URL: "layers/ha-tang.geojson",
-  // Lớp bật sẵn khi mở trang: "bound" (ranh giới), "vanh_dai" (mọi vành đai) hoặc "vanh_dai:Hà Nội", "cao_toc", "metro", "cau", "cau_xay", "san_bay"
-  LAYERS_ON: ["bound"],
+  // Lớp bật sẵn khi mở trang: "bound" (ranh giới), "vanh_dai" (mọi vành đai) hoặc "vanh_dai:Hà Nội", "cao_toc", "quoc_lo", "duong_tinh", "metro", "cau", "cau_xay", "san_bay", "tinh" (ranh giới tỉnh), "huyen" (huyện cũ)
+  LAYERS_ON: ["bound", "tinh"],
   // Sân bay vẽ thêm bằng tay (OSM có thể thiếu). status: "hien_huu" | "dang_xay" | "quy_hoach"; approx: true = vị trí gần đúng
   AIRPORTS: [
     {name: "Cảng HKQT Nội Bài", name_en: "Noi Bai International Airport", lat: 21.2212, lng: 105.8072, status: "hien_huu"},
@@ -265,7 +271,9 @@ const T = {
   rk3: "Top phiên trúng cao gấp nhiều lần giá đất Nhà nước", cState: "Giá NN", noState: "Chưa có phiên nào có cả giá đất Nhà nước (cột gia_nha_nuoc) và giá trúng.",
   anaClean: "Loại phiên bỏ cọc / hủy kết quả", after: "Sau đấu giá", pAfter: "Sau đấu giá", pState: "Giá đất Nhà nước", xState: "trúng cao nhất gấp {x} lần giá NN",
   updatedOn: "cập nhật", autoSt: "tự chuyển vì đã qua ngày đấu giá", pBound: "Thuộc ranh giới", boundDiff: "khác cột xã trong dữ liệu",
-  lyBound: "Ranh giới xã/phường (2025)", lyRing: "Vành đai", lyMetro: "Đường sắt đô thị (metro)", lyBridge: "Cầu sông Hồng – đang vận hành", lyBridgeB: "Cầu sông Hồng – đang xây / quy hoạch", lyAir: "Sân bay", lyExp: "Đường cao tốc",
+  lyBound: "Ranh giới xã/phường (2025)", lyRing: "Vành đai", lyMetro: "Đường sắt đô thị (metro)", lyBridge: "Cầu sông Hồng – đang vận hành", lyBridgeB: "Cầu sông Hồng – đang xây / quy hoạch", lyAir: "Sân bay", lyExp: "Đường cao tốc", lyQL: "Quốc lộ", lyDT: "Đường tỉnh",
+  lyProv: "Ranh giới tỉnh/thành (2025)", lyDist: "Ranh giới huyện/quận cũ (trước 7/2025)", pDist: "Huyện/quận cũ",
+  lgInfra: "Hạ tầng", lgBuilt: "đang vận hành", lgBuild: "đang xây", lgPlan: "quy hoạch / kế hoạch",
   lineW: "Tuyến", ringW: "VĐ", approxPos: "vị trí gần đúng",
   stBuilt: "hiện hữu", stBuild: "đang xây", stPlan: "quy hoạch", plot1: "thửa",
   cArea: "Khu vực", cTop: "Cao nhất", cN: "Số phiên", cLast: "Gần nhất", cSess: "Phiên", cStart: "Khởi điểm", cWin: "Trúng cao nhất", cX: "Gấp", times: "lần",
@@ -295,7 +303,9 @@ const T = {
   rk3: "Auctions with the biggest multiple of the State land price", cState: "State price", noState: "No auction has both a State land price (gia_nha_nuoc column) and a winning bid yet.",
   anaClean: "Exclude forfeited / cancelled results", after: "After auction", pAfter: "After auction", pState: "State land price", xState: "top bid = {x}× the State price",
   updatedOn: "updated", autoSt: "auto-set: auction date has passed", pBound: "Inside boundary of", boundDiff: "differs from the commune column",
-  lyBound: "Commune/ward boundaries (2025)", lyRing: "Ring road", lyMetro: "Urban railway (metro)", lyBridge: "Red River bridges – in service", lyBridgeB: "Red River bridges – under construction / planned", lyAir: "Airports", lyExp: "Expressways",
+  lyBound: "Commune/ward boundaries (2025)", lyRing: "Ring road", lyMetro: "Urban railway (metro)", lyBridge: "Red River bridges – in service", lyBridgeB: "Red River bridges – under construction / planned", lyAir: "Airports", lyExp: "Expressways", lyQL: "National highways", lyDT: "Provincial roads",
+  lyProv: "Province/city boundaries (2025)", lyDist: "Former district boundaries (before Jul 2025)", pDist: "Former district",
+  lgInfra: "Infrastructure", lgBuilt: "in service", lgBuild: "under construction", lgPlan: "planned",
   lineW: "Line", ringW: "RR", approxPos: "approximate position",
   stBuilt: "existing", stBuild: "under construction", stPlan: "planned", plot1: "plot",
   cArea: "Area", cTop: "Highest", cN: "Auctions", cLast: "Latest", cSess: "Auction", cStart: "Start", cWin: "Top bid", cX: "Multiple", times: "×",
@@ -466,22 +476,29 @@ async function loadDecv() {
 }
 
 /* ---------- Lớp ranh giới xã/phường & hạ tầng / boundary & infrastructure overlays ---------- */
-let BOUND = null, extraGroups = {};
+let BOUND = null, DIST = null, extraGroups = {};
 /* Màu metro theo sơ đồ quy hoạch đường sắt đô thị Hà Nội */
 const METRO_COLOR = {"1": "#1c4fd6", "2": "#1f9d55", "2A": "#74b816", "3": "#f59f00", "4": "#e03131", "5": "#c2255c", "6": "#7048e8", "7": "#8b5e34", "8": "#d633c4"};
-const INFRA_STYLE = {vanh_dai: {color: "#c2410c", weight: 5}, cao_toc: {color: "#0b7285", weight: 5}, metro: {color: "#868e96", weight: 5}, cau: {color: "#1971c2", weight: 9}, cau_xay: {color: "#f08c00", weight: 9},
+const INFRA_STYLE = {vanh_dai: {color: "#c2410c", weight: 5}, cao_toc: {color: "#0b7285", weight: 5}, quoc_lo: {color: "#b02525", weight: 3.5}, duong_tinh: {color: "#e0a100", weight: 2.5}, metro: {color: "#868e96", weight: 5}, cau: {color: "#1971c2", weight: 9}, cau_xay: {color: "#f08c00", weight: 9},
   san_bay: {color: "#495057", weight: 2, fillOpacity: 0.2}};
 /* Thứ tự lớp trong nút chọn lớp; vành đai được tách theo từng địa phương (vanh_dai:Hà Nội, vanh_dai:Vĩnh Yên…) */
-const INFRA_KEYS = [["vanh_dai", "lyRing"], ["cao_toc", "lyExp"], ["metro", "lyMetro"], ["cau", "lyBridge"], ["cau_xay", "lyBridgeB"], ["san_bay", "lyAir"]];
-/* Màu vành đai theo địa phương; địa phương chưa có trong danh sách sẽ tự lấy màu từ bảng dự phòng */
-const REGION_COLOR = {"Hà Nội": "#c2410c", "Vùng Thủ đô": "#a61e4d", "Vĩnh Yên": "#1098ad", "Phúc Yên": "#3bc9db", "Việt Trì": "#0ca678", "Thái Nguyên": "#5c940d",
-  "Bắc Giang": "#364fc7", "Bắc Ninh": "#7950f2", "Hải Dương": "#d6336c", "Hưng Yên": "#e67700", "Phủ Lý": "#9c36b5", "Hòa Bình": "#2b8a3e",
-  "Nam Định": "#5f3dc4", "Ninh Bình": "#087f5b", "Thái Bình": "#c92a2a", "Sơn Tây": "#e8590c"};
+const INFRA_KEYS = [["vanh_dai", "lyRing"], ["cao_toc", "lyExp"], ["quoc_lo", "lyQL"], ["duong_tinh", "lyDT"], ["metro", "lyMetro"], ["cau", "lyBridge"], ["cau_xay", "lyBridgeB"], ["san_bay", "lyAir"]];
+/* Vành đai được nhóm theo tỉnh/thành MỚI (sau sắp xếp đơn vị hành chính 1/7/2025); đô thị cũ chỉ ghi trong chú thích khi rê chuột */
+const CITY_PROV = {"Vĩnh Yên": "Phú Thọ", "Phúc Yên": "Phú Thọ", "Việt Trì": "Phú Thọ", "Hòa Bình": "Phú Thọ",
+  "Bắc Giang": "Bắc Ninh", "Bắc Ninh": "Bắc Ninh", "Hải Dương": "Hải Phòng", "Hải Phòng": "Hải Phòng",
+  "Hưng Yên": "Hưng Yên", "Thái Bình": "Hưng Yên", "Phủ Lý": "Ninh Bình", "Nam Định": "Ninh Bình", "Ninh Bình": "Ninh Bình",
+  "Thái Nguyên": "Thái Nguyên", "Sơn Tây": "Hà Nội", "Lạng Sơn": "Lạng Sơn", "Hạ Long": "Quảng Ninh", "Uông Bí": "Quảng Ninh"};
+/* Màu theo tỉnh/thành; tỉnh chưa có trong danh sách sẽ tự lấy màu từ bảng dự phòng */
+const REGION_COLOR = {"Hà Nội": "#c2410c", "Vùng Thủ đô": "#a61e4d", "Phú Thọ": "#1098ad", "Bắc Ninh": "#364fc7", "Hải Phòng": "#d6336c",
+  "Hưng Yên": "#e67700", "Ninh Bình": "#087f5b", "Thái Nguyên": "#5c940d", "Lạng Sơn": "#862e9c", "Quảng Ninh": "#1864ab"};
 const SPARE = ["#495057", "#1864ab", "#862e9c", "#2f9e44", "#e03131", "#f08c00"];
-const regionOf = p => p.region || "Hà Nội";
+const cityOf = p => p.region || "Hà Nội";                      // đô thị (theo dữ liệu OSM)
+const regionOf = p => CITY_PROV[cityOf(p)] || cityOf(p);       // tỉnh/thành mới
 const regionColor = r => REGION_COLOR[r] || SPARE[[...r].reduce((h, c) => h + c.charCodeAt(0), 0) % SPARE.length];
 const noAccent = s => String(s || "").normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/đ/g, "d").replace(/Đ/g, "D");
 const regionName = r => lang === "en" ? (r === "Hà Nội" ? "Hanoi" : r === "Vùng Thủ đô" ? "Capital Region (RR4, RR5)" : noAccent(r)) : (r === "Vùng Thủ đô" ? "Vùng Thủ đô (VĐ4, VĐ5)" : r);
+/* "Phú Thọ (Vĩnh Yên)" – kèm tên đô thị cũ khi khác tên tỉnh */
+const placeName = p => { const r = regionOf(p), c = cityOf(p); return regionName(r) + (c !== r && r !== "Vùng Thủ đô" ? ` (${lang === "en" ? noAccent(c) : c})` : ""); };
 const REGION_ORDER = r => r === "Hà Nội" ? "0" : r === "Vùng Thủ đô" ? "1" : "2" + r;
 const ST_COLOR = {hien_huu: "#1971c2", dang_xay: "#f08c00", quy_hoach: "#868e96"};
 const ringNo = p => { if (p.ring) return String(p.ring); const m = `${p.name || ""} ${p.ref || ""}`.match(/(?:Vành\s*[đĐ]ai|V[ĐD])\s*(\d+(?:[.,]\d)?)/i); return m ? m[1].replace(",", ".") : null; };
@@ -498,8 +515,11 @@ function infraStyle(k, p) {
   const st = INFRA_STYLE[baseKey(k)] || {}, built = !p.status || p.status === "hien_huu";
   let color = st.color; if (k === "metro") color = METRO_COLOR[metroLine(p)] || p.colour || st.color;
   if (baseKey(k) === "vanh_dai") color = regionColor(regionOf(p));
-  return {...st, color, opacity: 0.92, dashArray: k === "cau_xay" ? "6 4" : !built && k !== "san_bay" ? "10 7" : null};
+  /* thống nhất cho mọi lớp hạ tầng: nét liền = đang vận hành, gạch dài = đang xây, chấm = quy hoạch / kế hoạch */
+  const stt = built ? "hien_huu" : p.status;
+  return {...st, color, opacity: stt === "quy_hoach" ? 0.75 : 0.92, dashArray: DASH[stt] || null, lineCap: stt === "quy_hoach" ? "round" : "butt"};
 }
+const DASH = {dang_xay: "10 6", quy_hoach: "1 7"};
 /* Chọn vài điểm rải đều trên đường để đặt nhãn (VĐ3, VĐ4…) */
 function labelPoints(feats, maxN, gap) {
   const parts = []; feats.forEach(f => { const g = f.geometry; (g.type === "LineString" ? [g.coordinates] : g.type === "MultiLineString" ? g.coordinates : []).forEach(c => {
@@ -510,9 +530,9 @@ function labelPoints(feats, maxN, gap) {
 }
 let ringLabels = [];
 /* nhãn trên đường: vành đai "VĐ3" (màu theo địa phương), cao tốc "CT.01" */
-const ringIcon = (n, c, exp) => L.divIcon({className: "rr-lbl", iconSize: null,
-  html: exp ? `<span style="background:${c};color:#fff;border-color:#fff">${esc(n)}</span>` : `<span style="color:${c};border-color:${c}">${esc(t("ringW"))}${esc(n)}</span>`});
-function refreshRingLabels() { ringLabels.forEach(({m, n, c, exp}) => m.setIcon(ringIcon(n, c, exp))); }
+const ringIcon = (n, c, exp, cls, fg) => L.divIcon({className: "rr-lbl " + (cls || ""), iconSize: null,
+  html: exp ? `<span style="background:${c};color:${fg || "#fff"};border-color:#fff">${esc(n)}</span>` : `<span style="color:${c};border-color:${c}">${esc(t("ringW"))}${esc(n)}</span>`});
+function refreshRingLabels() { ringLabels.forEach(({m, n, c, exp, cls, fg}) => m.setIcon(ringIcon(n, c, exp, cls, fg))); }
 const stLabel = s => s === "dang_xay" ? t("stBuild") : s === "quy_hoach" ? t("stPlan") : t("stBuilt");
 const fold = s => String(s || "").normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/đ/gi, "d").toLowerCase()
   .replace(/^(xa|phuong|thi tran|dac khu)\s+/, "").replace(/\s+/g, " ").trim();
@@ -522,55 +542,78 @@ function inRing(x, y, ring) { let ins = false;
     if ((yi > y) !== (yj > y) && x < (xj - xi) * (y - yi) / (yj - yi) + xi) ins = !ins; } return ins; }
 function inGeom(x, y, g) { const polys = g.type === "Polygon" ? [g.coordinates] : g.type === "MultiPolygon" ? g.coordinates : [];
   return polys.some(p => p.length && inRing(x, y, p[0]) && !p.slice(1).some(h => inRing(x, y, h))); }
-function boundaryAt(lat, lng) {
-  if (!BOUND || lat == null || lng == null) return null;
-  const f = BOUND.features.find(f => { const b = f._bb; return b && lng >= b[0] && lng <= b[2] && lat >= b[1] && lat <= b[3] && inGeom(lng, lat, f.geometry); });
+function featAt(fc, lat, lng) {
+  if (!fc || lat == null || lng == null) return null;
+  const f = fc.features.find(f => { const b = f._bb; return b && lng >= b[0] && lng <= b[2] && lat >= b[1] && lat <= b[3] && inGeom(lng, lat, f.geometry); });
   return f ? f.properties.name : null;
 }
+const boundaryAt = (lat, lng) => featAt(BOUND, lat, lng);
+const districtAt = (lat, lng) => featAt(DIST, lat, lng);
 const bbox = g => { let a = [180, 90, -180, -90]; const walk = c => typeof c[0] === "number" ? (a = [Math.min(a[0], c[0]), Math.min(a[1], c[1]), Math.max(a[2], c[0]), Math.max(a[3], c[1])]) : c.forEach(walk); walk(g.coordinates); return a; };
+async function exists(u) { try { const r = await fetch(u, {method: "HEAD", cache: "no-store"}); return r.ok; } catch (e) { return false; } }
 async function getJSON(u) { try { const r = await fetch(u + "?t=" + Date.now(), {cache: "no-store"}); return r.ok ? await r.json() : null; } catch (e) { return null; } }
+/* Dựng một lớp hạ tầng (đường + nhãn) vào nhóm g / build one infrastructure layer into group g */
+const OSM_ATTR = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>';
+function makeInfraLayer(k, fs, g) {
+  const bk = baseKey(k), pane = bk === "cao_toc" ? "expw" : (bk === "quoc_lo" || bk === "duong_tinh") ? "roads" : "infra";
+  const gj = L.geoJSON({type: "FeatureCollection", features: fs}, {pane, attribution: OSM_ATTR, style: f => infraStyle(k, f.properties),
+    onEachFeature: (f, l) => { const p = f.properties, ln = k === "metro" ? metroLine(p) : null, rn = bk === "vanh_dai" ? ringNo(p) : null;
+      const title = ln ? `${t("lineW")} ${ln} · ${p.name || ""}` : bk === "vanh_dai" ? `${t("lyRing")} ${rn || ""} · ${placeName(p)}`
+        : (bk === "cao_toc" || bk === "quoc_lo" || bk === "duong_tinh") ? [p.ref, p.name && p.name !== p.ref ? p.name : ""].filter(Boolean).join(" · ") || t(bk === "cao_toc" ? "lyExp" : bk === "quoc_lo" ? "lyQL" : "lyDT") : (p.name || "");
+      l.bindTooltip(`<b>${esc(title)}</b><br>${esc(stLabel(p.status))}`, {sticky: true}); }});
+  g.addLayer(gj);
+  const addLabels = (groups, maxN, gap, color, exp, cls, fg) => Object.keys(groups).forEach(key => labelPoints(groups[key], maxN, gap).forEach(ll => {
+    const n = key.split("|").pop(), m = L.marker(ll, {icon: ringIcon(n, color, exp, cls, fg), interactive: false, pane: "infraLbl", keyboard: false});
+    ringLabels.push({m, n, c: color, exp, cls, fg}); g.addLayer(m); }));
+  const byRef = () => { const by = {}; fs.forEach(f => { const n = f.properties.ref; if (n) (by[n] = by[n] || []).push(f); }); return by; };
+  if (bk === "vanh_dai") {   /* nhãn VĐ1, VĐ2, VĐ3… rải dọc mỗi vành đai, tách theo từng đô thị */
+    const by = {}; fs.forEach(f => { const n = ringNo(f.properties), key = cityOf(f.properties) + "|" + n; if (n) (by[key] = by[key] || []).push(f); });
+    addLabels(by, 6, 0.07, regionColor(k.slice(9)), false);
+  }
+  if (bk === "cao_toc") addLabels(byRef(), 5, 0.15, INFRA_STYLE.cao_toc.color, true);                 // CT.01…
+  if (bk === "quoc_lo") addLabels(byRef(), 4, 0.12, INFRA_STYLE.quoc_lo.color, true, "lbl-ql");       // QL.32… (ẩn khi thu nhỏ)
+  if (bk === "duong_tinh") addLabels(byRef(), 3, 0.08, "#ffd43b", true, "lbl-dt", "#343a40");         // ĐT.419… (chỉ hiện khi phóng to)
+}
+let roadsLoading = null;
+function loadRoads() {   /* tải quốc lộ & đường tỉnh khi người xem bật lớp lần đầu */
+  if (roadsLoading) return roadsLoading;
+  roadsLoading = getJSON(CONFIG.ROADS_URL).then(gj => { if (!gj || !gj.features) return;
+    ["quoc_lo", "duong_tinh"].forEach(k => { const fs = gj.features.filter(f => f.properties.kind === k); if (fs.length && extraGroups[k]) makeInfraLayer(k, fs, extraGroups[k]); }); });
+  return roadsLoading;
+}
+function boundaryLayer(fc, pane, style, hover, tip) {
+  fc.features.forEach(f => { f._bb = bbox(f.geometry); });
+  return L.geoJSON(fc, {pane, attribution: OSM_ATTR, style: () => style,
+    onEachFeature: (f, l) => { l.bindTooltip(tip(f.properties), {sticky: true, opacity: 0.85});
+      if (hover) { l.on("mouseover", () => l.setStyle(hover)); l.on("mouseout", () => l.setStyle(style)); } }});
+}
 async function loadExtraLayers() {
   if (!map || !location.protocol.startsWith("http")) return;
-  const OSM = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>';
-  const [bd, inf] = await Promise.all([CONFIG.BOUNDARY_URL ? getJSON(CONFIG.BOUNDARY_URL) : null, CONFIG.INFRA_URL ? getJSON(CONFIG.INFRA_URL) : null]);
-  if (bd && bd.features) {
-    bd.features.forEach(f => { f._bb = bbox(f.geometry); }); BOUND = bd;
-    if (!map.getPane("bound")) { map.createPane("bound"); map.getPane("bound").style.zIndex = 300; }
-    extraGroups.bound = L.geoJSON(bd, {pane: "bound", attribution: OSM,
-      style: () => ({color: "#6b7280", weight: 1, dashArray: "3 3", fillColor: "#6b7280", fillOpacity: 0.02}),
-      onEachFeature: (f, l) => { l.bindTooltip(esc(f.properties.name) + (f.properties.tinh ? ", " + esc(tv("prov", f.properties.tinh)) : ""), {sticky: true, opacity: 0.85});
-        l.on("mouseover", () => l.setStyle({weight: 2.5, fillOpacity: 0.08})); l.on("mouseout", () => l.setStyle({weight: 1, fillOpacity: 0.02})); }});
-  }
+  [["bound", 300], ["roads", 360], ["expw", 370], ["infra", 380], ["infraLbl", 390]].forEach(([n, z]) => { if (!map.getPane(n)) { map.createPane(n); map.getPane(n).style.zIndex = z; } });
+  map.getPane("infraLbl").style.pointerEvents = "none";
+  const zcls = () => { const z = map.getZoom(), el = map.getPane("infraLbl"); el.classList.toggle("z-lt10", z < 10); el.classList.toggle("z-lt12", z < 12); };
+  map.on("zoomend", zcls); zcls();
+  const [bd, inf, pv, dt, hasRoads] = await Promise.all([CONFIG.BOUNDARY_URL ? getJSON(CONFIG.BOUNDARY_URL) : null, CONFIG.INFRA_URL ? getJSON(CONFIG.INFRA_URL) : null,
+    CONFIG.PROVINCE_URL ? getJSON(CONFIG.PROVINCE_URL) : null, CONFIG.DISTRICT_URL ? getJSON(CONFIG.DISTRICT_URL) : null, CONFIG.ROADS_URL ? exists(CONFIG.ROADS_URL) : false]);
+  const where = p => (p.tinh ? ", " + esc(tv("prov", p.tinh)) : "");
+  if (pv && pv.features) extraGroups.tinh = boundaryLayer(pv, "bound", {color: "#343a40", weight: 2.5, fill: false}, null, p => esc(tv("prov", p.name)));
+  if (dt && dt.features) { DIST = dt;
+    extraGroups.huyen = boundaryLayer(dt, "bound", {color: "#7048e8", weight: 1.5, dashArray: "6 4", fillColor: "#7048e8", fillOpacity: 0.01}, {color: "#7048e8", weight: 3, dashArray: "6 4", fillColor: "#7048e8", fillOpacity: 0.06},
+      p => `${esc(p.name)} (${esc(t("pDist").toLowerCase())})${where(p)}`); }
+  if (bd && bd.features) { BOUND = bd;
+    extraGroups.bound = boundaryLayer(bd, "bound", {color: "#6b7280", weight: 1, dashArray: "3 3", fillColor: "#6b7280", fillOpacity: 0.02}, {color: "#6b7280", weight: 2.5, dashArray: "3 3", fillColor: "#6b7280", fillOpacity: 0.08},
+      p => esc(p.name) + where(p)); }
   if (inf && inf.features) {
-    if (!map.getPane("infra")) { map.createPane("infra"); map.getPane("infra").style.zIndex = 380; }
-    if (!map.getPane("infraLbl")) { map.createPane("infraLbl"); map.getPane("infraLbl").style.zIndex = 390; map.getPane("infraLbl").style.pointerEvents = "none"; }
-    if (!map.getPane("expw")) { map.createPane("expw"); map.getPane("expw").style.zIndex = 370; }   // cao tốc nằm dưới vành đai/metro
-    const keys = [...new Set(inf.features.map(f => infraKey(f.properties)))];
-    keys.forEach(k => { const fs = inf.features.filter(f => infraKey(f.properties) === k); if (!fs.length) return;
-      const bk = baseKey(k);
-      const gj = L.geoJSON({type: "FeatureCollection", features: fs}, {pane: bk === "cao_toc" ? "expw" : "infra", attribution: OSM, style: f => infraStyle(k, f.properties),
-        onEachFeature: (f, l) => { const p = f.properties, ln = k === "metro" ? metroLine(p) : null, rn = bk === "vanh_dai" ? ringNo(p) : null;
-          const title = ln ? `${t("lineW")} ${ln} · ${p.name || ""}` : bk === "vanh_dai" ? `${t("lyRing")} ${rn || ""} · ${regionName(regionOf(p))}` : bk === "cao_toc" ? [p.ref, p.name !== p.ref ? p.name : ""].filter(Boolean).join(" · ") : (p.name || "");
-          l.bindTooltip(`<b>${esc(title)}</b><br>${esc(stLabel(p.status))}`, {sticky: true}); }});
-      extraGroups[k] = L.featureGroup([gj]);
-      const addLabels = (groups, maxN, gap, color, exp) => Object.keys(groups).forEach(n => labelPoints(groups[n], maxN, gap).forEach(ll => {
-        const c = typeof color === "function" ? color(n) : color, m = L.marker(ll, {icon: ringIcon(n, c, exp), interactive: false, pane: "infraLbl", keyboard: false});
-        ringLabels.push({m, n, c, exp}); extraGroups[k].addLayer(m); }));
-      if (bk === "vanh_dai") {   /* nhãn VĐ1, VĐ2, VĐ3… rải dọc mỗi vành đai */
-        const by = {}; fs.forEach(f => { const n = ringNo(f.properties); if (n) (by[n] = by[n] || []).push(f); });
-        addLabels(by, 6, 0.07, regionColor(k.slice(9)), false);
-      }
-      if (bk === "cao_toc") {    /* nhãn số hiệu cao tốc CT.01, CT.04… */
-        const by = {}; fs.forEach(f => { const n = f.properties.ref; if (n) (by[n] = by[n] || []).push(f); });
-        addLabels(by, 5, 0.15, INFRA_STYLE.cao_toc.color, true);
-      }
-    });
+    [...new Set(inf.features.map(f => infraKey(f.properties)))].forEach(k => {
+      const fs = inf.features.filter(f => infraKey(f.properties) === k); if (fs.length) makeInfraLayer(k, fs, extraGroups[k] = L.featureGroup()); });
   }
-  /* sân bay vẽ thêm bằng tay / hand-placed airports */
+  if (hasRoads) ["quoc_lo", "duong_tinh"].forEach(k => { extraGroups[k] = L.featureGroup(); extraGroups[k].on("add", loadRoads); });
+  /* sân bay vẽ thêm bằng tay / hand-placed airports (viền nét đứt = đang xây / quy hoạch) */
   if ((CONFIG.AIRPORTS || []).length) {
     const g = extraGroups.san_bay || (extraGroups.san_bay = L.featureGroup());
     CONFIG.AIRPORTS.forEach(a => { if (a.lat == null || a.lng == null) return;
-      const m = L.marker([a.lat, a.lng], {icon: L.divIcon({className: "ap-ic", html: `<span style="background:${ST_COLOR[a.status] || "#495057"}">✈</span>`, iconSize: [28, 28]})});
+      const m = L.marker([a.lat, a.lng], {icon: L.divIcon({className: "ap-ic", iconSize: [28, 28],
+        html: `<span style="background:${ST_COLOR[a.status] || "#495057"};border-style:${!a.status || a.status === "hien_huu" ? "solid" : "dashed"}">✈</span>`})});
       m.bindTooltip(() => `<b>${esc(lang === "en" && a.name_en ? a.name_en : a.name)}</b><br>${esc(stLabel(a.status))}${a.approx ? " · " + esc(t("approxPos")) : ""}`);
       g.addLayer(m); });
   }
@@ -610,6 +653,7 @@ function popup(d) {
   /* điểm nằm trong ranh giới xã nào (nếu đã có lớp ranh giới) */
   const bn = boundaryAt(d.lat, d.lng);
   if (bn) rows.push([t("pBound"), bn + (d.xa && !sameName(bn, d.xa) ? ` ⚠ ${t("boundDiff")}` : "")]);
+  const dn = districtAt(d.lat, d.lng); if (dn) rows.push([t("pDist"), dn]);
   const afterTag = d.sau_dau_gia ? `<span class="tag ${BAD_AFTER.includes(d.sau_dau_gia) ? "bad" : d.sau_dau_gia === "Đã nộp đủ tiền" ? "ok" : ""}" style="margin:0 0 6px 4px">${esc(tv("after", d.sau_dau_gia))}</span>` : "";
   return `<div class="pop"><h3>${esc(d.xa)}, ${esc(tv("prov", d.tinh))}</h3><span class="tag" style="margin:0 0 6px" ${d.autoSt ? `title="${esc(t("autoSt"))}"` : ""}>${esc(tv("status", d.trang_thai))}${d.autoSt ? " *" : ""}</span>${afterTag}
    <table>${rows.map(r => `<tr><td>${r[0]}</td><td${r[2] ? ` data-mt="${esc(r[1])}"` : ""}>${esc(r[1])}</td></tr>`).join("")}</table>
@@ -780,6 +824,8 @@ function applyLang() {
     const sw = (c, line, dash) => `<i style="display:inline-block;width:20px;height:${line ? 0 : 12}px;${line ? `border-top:${line}px ${dash ? "dashed" : "solid"} ${c}` : `background:${c}`};border-radius:2px;margin:0 6px 0 2px;vertical-align:${line ? 4 : -1}px"></i>`;
     const metroSw = `<i style="display:inline-block;width:20px;height:5px;border-radius:2px;margin:0 6px 0 2px;vertical-align:3px;background:linear-gradient(90deg,${Object.values(METRO_COLOR).join(",")})"></i>`;
     const ex = {};
+    if (extraGroups.tinh) ex[sw("#343a40", 3) + esc(t("lyProv"))] = extraGroups.tinh;
+    if (extraGroups.huyen) ex[sw("#7048e8", 2, true) + esc(t("lyDist"))] = extraGroups.huyen;
     if (extraGroups.bound) ex[sw("#6b7280", 2, true) + esc(t("lyBound"))] = extraGroups.bound;
     INFRA_KEYS.forEach(([k, lk]) => {
       if (k === "vanh_dai") {   /* mỗi địa phương một dòng, màu riêng */
@@ -788,7 +834,7 @@ function applyLang() {
         return;
       }
       if (!extraGroups[k]) return;
-      const icon = k === "metro" ? metroSw : k === "san_bay" ? `<span style="display:inline-block;width:20px;margin:0 6px 0 2px;text-align:center">✈</span>` : sw(INFRA_STYLE[k].color, k.startsWith("cau") ? 6 : 4, k === "cau_xay");
+      const icon = k === "metro" ? metroSw : k === "san_bay" ? `<span style="display:inline-block;width:20px;margin:0 6px 0 2px;text-align:center">✈</span>` : sw(INFRA_STYLE[k].color, k.startsWith("cau") ? 6 : k === "duong_tinh" ? 3 : 4, k === "cau_xay");
       ex[icon + esc(t(lk))] = extraGroups[k]; });
     refreshRingLabels();
     layerCtl = L.control.layers(named, {...ex, ...ov}, {position: "topright"}).addTo(map);
@@ -797,7 +843,9 @@ function applyLang() {
     const binLabel = (b, i) => { if (!useUSD()) return b[2]; const lo = P(b[0]), hi = BINS[i + 1] ? P(BINS[i + 1][0]) : null;
       return i === 0 ? "< " + hi : hi ? lo + " – " + hi : "≥ " + lo; };
     legendCtl.onAdd = () => { const d = L.DomUtil.create("div", "legend"); d.innerHTML = `<b>${U("legendTitle")}</b><br>` + BINS.map((b, i) => `<i style="background:${b[1]}"></i>${binLabel(b, i)}`).join("<br>")
-      + `<br><i style="background:transparent;border:2px dashed ${STATUS_COLOR["Sắp đấu giá"]}"></i>${tv("status", "Sắp đấu giá")}<br><i style="background:transparent;border:2px dashed ${STATUS_COLOR["Chờ kết quả"]}"></i>${tv("status", "Chờ kết quả")}`; return d; };
+      + `<br><i style="background:transparent;border:2px dashed ${STATUS_COLOR["Sắp đấu giá"]}"></i>${tv("status", "Sắp đấu giá")}<br><i style="background:transparent;border:2px dashed ${STATUS_COLOR["Chờ kết quả"]}"></i>${tv("status", "Chờ kết quả")}`
+      + (Object.keys(extraGroups).some(k => !["bound", "tinh", "huyen"].includes(k)) ? `<div style="margin-top:6px;padding-top:4px;border-top:1px solid var(--line)"><b>${t("lgInfra")}</b><br>`
+        + `<span class="lg-line"></span>${t("lgBuilt")}<br><span class="lg-line" style="border-top-style:dashed"></span>${t("lgBuild")}<br><span class="lg-line" style="border-top-style:dotted"></span>${t("lgPlan")}</div>` : ""); return d; };
     legendCtl.addTo(map);
   }
   render();
