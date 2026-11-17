@@ -79,6 +79,10 @@ table.sheet{border-collapse:separate;border-spacing:0;font-size:14px;width:max-c
 .sheet tr.del td{background:light-dark(#fdecec,#33191a);opacity:.6}
 .sheet tr.del input{text-decoration:line-through}
 .sheet tr.err td{box-shadow:inset 0 -2px 0 var(--bad)}
+.pend-t{min-width:260px;max-width:340px;padding:6px 8px!important;font-size:13px;white-space:normal}
+.pend-t a{font-weight:600}.pend-t .warn{color:var(--bad);font-size:12px}
+.badge{display:inline-block;min-width:20px;padding:0 6px;margin-left:6px;border-radius:99px;background:var(--bad);color:#fff;font-size:12px;line-height:20px;text-align:center}
+.sheet td.ck{text-align:center;width:40px;min-width:40px}.sheet td.ck input{width:18px;height:18px}
 .xbtn{border:0;background:none;color:var(--bad);cursor:pointer;width:100%;height:34px;font-size:16px}
 </style>
 </head>
@@ -106,7 +110,7 @@ table.sheet{border-collapse:separate;border-spacing:0;font-size:14px;width:max-c
  </section>
  <div id="msg" class="status" hidden></div>
 
- <div class="tabs" id="mainTabs" hidden><button class="on" data-tab="grid">Bảng tính dữ liệu</button><button data-tab="form">Form & chọn vị trí trên bản đồ</button><button data-tab="theme">Giao diện – màu sắc</button></div>
+ <div class="tabs" id="mainTabs" hidden><button class="on" data-tab="grid">Bảng tính dữ liệu</button><button data-tab="pend">Tin chờ duyệt<span class="badge" id="pendBadge" hidden>0</span></button><button data-tab="form">Form & chọn vị trí trên bản đồ</button><button data-tab="theme">Giao diện – màu sắc</button></div>
 
  <section class="card" id="gridCard" hidden>
   <div class="row" style="justify-content:space-between;margin-bottom:10px">
@@ -119,6 +123,15 @@ table.sheet{border-collapse:separate;border-spacing:0;font-size:14px;width:max-c
    <textarea id="gImpTxt" rows="7" style="width:100%;margin:8px 0;font:12px monospace" placeholder="id	ngay	tinh	xa	…"></textarea>
    <button class="btn pri" id="gImpGo">Nhập vào bảng</button> <span class="muted">Phải có hàng tiêu đề. Dòng trùng mã → cập nhật, mã mới → thêm.</span></div>
   <p class="muted"><b>Dán cả bảng từ Google Sheets:</b> chọn từ ô A1 (có hàng tiêu đề id, ngay, tinh…) → Ctrl+C → bấm vào ô bất kỳ ở đây → Ctrl+V. Cột được khớp theo tên; dòng trùng mã thì cập nhật, mã mới thì thêm.<br>Gõ thẳng vào ô như Excel. <b>Enter</b> xuống dòng dưới, <b>Tab</b> sang ô bên phải. Có thể <b>sao chép nhiều ô từ Excel/Google Sheets rồi dán</b>: dán vào một <b>dòng mới</b> (nút ＋ Thêm dòng) thì mỗi dòng dán thành một phiên mới; dán vào dòng có sẵn thì ghi đè các ô bên dưới như Excel. Dòng vàng = đã sửa, xanh = mới, đỏ = sẽ xóa. Chỉ khi bấm <b>Lưu tất cả</b> mới ghi lên GitHub.</p>
+ </section>
+
+ <section class="card" id="pendCard" hidden>
+  <div class="row" style="justify-content:space-between;margin-bottom:10px">
+   <div><h2 style="margin:0">Tin đấu giá tự gom từ báo – chờ duyệt</h2><div class="muted" id="pendInfo"></div></div>
+   <div class="row"><button class="btn" id="pAll">Chọn tất cả</button><button class="btn" id="pReload">Tải lại</button><button class="btn danger" id="pSkip">Bỏ qua dòng đã chọn</button><button class="btn pri" id="pOk">Duyệt dòng đã chọn → data.csv</button></div>
+  </div>
+  <div class="gwrap"><table class="sheet"><thead id="ph"></thead><tbody id="pb"></tbody></table></div>
+  <p class="muted">Workflow <b>“Gom tin đấu giá từ báo”</b> chạy mỗi sáng, đọc tin mới và điền sẵn vào <code>cho-duyet.csv</code>. Kiểm tra từng dòng với bài gốc (bấm tiêu đề), sửa ô sai ngay trong bảng, tích chọn rồi bấm <b>Duyệt</b> → dòng được thêm vào <code>data.csv</code> (mã tự sinh) và rời khỏi danh sách chờ. <b>Bỏ qua</b> → xóa khỏi danh sách chờ, tin đó không bị gom lại nữa.<br>Tọa độ tự đặt ở <b>tâm xã</b> (gần đúng) – sau khi duyệt có thể chỉnh lại ở tab Form. Dòng có ⚠ nghi trùng với phiên đã có. Chỉnh sửa trong bảng này chỉ được lưu khi bấm Duyệt.</p>
  </section>
 
  <div class="two" id="work" hidden>
@@ -199,7 +212,9 @@ table.sheet{border-collapse:separate;border-spacing:0;font-size:14px;width:max-c
 {
 const STD = ["id","ngay","tinh","xa","dia_danh_cu","khu","loai_dat","so_thua","so_thua_trung","gia_khoi_diem","gia_trung_min","gia_trung_max","tong_tien_ty","nguoi_tham_gia","trang_thai","lat","lng","vi_tri","nguon","link","ghi_chu"];
 const PREFIX = {"Hà Nội":"HN","Bắc Ninh":"BN","Hưng Yên":"HY","Phú Thọ":"PT","Thái Nguyên":"TN","Ninh Bình":"NB"};
-const NUMS = ["so_thua","so_thua_trung","gia_khoi_diem","gia_trung_min","gia_trung_max","tong_tien_ty","nguoi_tham_gia","lat","lng"];
+/* cột bổ sung mà bản đồ dùng (theo dõi sau đấu giá, giá nhà nước) – tự thêm vào data.csv nếu chưa có */
+const EXTRA_STD = ["sau_dau_gia", "sau_dau_gia_ngay", "gia_nha_nuoc"];
+const NUMS = ["gia_nha_nuoc", "so_thua","so_thua_trung","gia_khoi_diem","gia_trung_min","gia_trung_max","tong_tien_ty","nguoi_tham_gia","lat","lng"];
 const $ = s => document.querySelector(s);
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const fdate = d => d ? d.split("-").reverse().join("/") : "";
@@ -244,7 +259,7 @@ async function load() {
   try {
     const j = await gh("GET");
     const p = parseCSV(b64dec(j.content));
-    HEAD = p.head.slice(); STD.forEach(h => { if (!HEAD.includes(h)) HEAD.push(h); });
+    HEAD = p.head.slice(); STD.concat(EXTRA_STD).forEach(h => { if (!HEAD.includes(h)) HEAD.push(h); });
     ROWS = p.rows; SHA = j.sha;
     if ($("#cRemember").checked) { store.set("dgAdminToken", cfg().token); }
     store.set("dgAdminCfg", JSON.stringify({...cfg(), token: undefined}));
@@ -252,7 +267,7 @@ async function load() {
     $("#mainTabs").hidden = false;
     buildExtra(); newForm(); initMap(); gridFromRows(); showTab("grid");
     say(`Đã tải ${ROWS.length} phiên từ ${cfg().path}.`, "ok");
-    loadThemeAdmin();
+    loadThemeAdmin(); loadPending();
   } catch (e) { say("Không tải được: " + explain(e), "err"); }
 }
 
@@ -274,7 +289,7 @@ async function commit(message) {
 /* ---------- Form ---------- */
 function buildExtra() {
   const extra = HEAD.filter(h => !STD.includes(h));
-  $("#extra").innerHTML = extra.length ? `<div class="grid">${extra.map(h => `<label>${esc(h)}<input name="${esc(h)}"></label>`).join("")}</div>` : "";
+  $("#extra").innerHTML = extra.length ? `<div class="grid">${extra.map(h => `<label>${esc((COL[h] || [h])[0])}${SELECTS[h] ? `<select name="${esc(h)}"><option value=""></option>${SELECTS[h].map(o => `<option>${esc(o)}</option>`).join("")}</select>` : `<input name="${esc(h)}"${h.endsWith("_ngay") ? ' type="date"' : ""}>`}</label>`).join("")}</div>` : "";
 }
 function nextId(tinh, ngay) {
   const pre = (PREFIX[tinh] || "XX") + "-" + ((ngay || "").slice(0, 4) || new Date().getFullYear()) + "-";
@@ -390,12 +405,14 @@ $("#btnCsv").addEventListener("click", () => { const a = document.createElement(
 /* ================= BẢNG TÍNH / GRID ================= */
 const COL = {id: ["Mã", 120], ngay: ["Ngày", 140], trang_thai: ["Trạng thái", 140], tinh: ["Tỉnh", 110], xa: ["Xã/phường", 130], dia_danh_cu: ["Địa danh cũ", 200], khu: ["Khu đấu giá", 240],
   loai_dat: ["Loại đất", 140], so_thua: ["Số thửa", 80], so_thua_trung: ["Thửa trúng", 90], gia_khoi_diem: ["Giá KĐ (tr/m²)", 110], gia_trung_min: ["Trúng thấp (tr/m²)", 120], gia_trung_max: ["Trúng cao (tr/m²)", 120],
-  tong_tien_ty: ["Tổng (tỷ)", 90], nguoi_tham_gia: ["Người tham gia", 110], lat: ["Vĩ độ", 100], lng: ["Kinh độ", 100], vi_tri: ["Vị trí", 110], nguon: ["Nguồn", 130], link: ["Link nguồn", 260], ghi_chu: ["Ghi chú", 260]};
-const SELECTS = {trang_thai: ["Sắp đấu giá", "Chờ kết quả", "Đã đấu giá", "Đã nộp tiền", "Hủy/bỏ cọc"], vi_tri: ["gần đúng", "chính xác"]};
+  tong_tien_ty: ["Tổng (tỷ)", 90], nguoi_tham_gia: ["Người tham gia", 110], lat: ["Vĩ độ", 100], lng: ["Kinh độ", 100], vi_tri: ["Vị trí", 110], nguon: ["Nguồn", 130], link: ["Link nguồn", 260], ghi_chu: ["Ghi chú", 260],
+  sau_dau_gia: ["Sau đấu giá", 160], sau_dau_gia_ngay: ["Cập nhật sau ĐG", 130], gia_nha_nuoc: ["Giá nhà nước (tr/m²)", 130]};
+const SELECTS = {trang_thai: ["Sắp đấu giá", "Chờ kết quả", "Đã đấu giá", "Đã nộp tiền", "Hủy/bỏ cọc"], vi_tri: ["gần đúng", "chính xác"],
+  sau_dau_gia: ["Đang trong hạn nộp", "Đã nộp đủ tiền", "Đã nộp một phần", "Quá hạn chưa nộp", "Bỏ cọc", "Đã hủy kết quả", "Chưa rõ"]};
 const DATALISTS = {tinh: "dlTinh", loai_dat: "dlLoai", nguon: "dlNguon"};
 let FILT = {};   // bộ lọc theo cột: {cột: Set các giá trị được hiện}
 let GRID = [];   // [{r: rowObj, orig: index in ROWS or -1, del: bool}]
-const ORDER = ["id", "ngay", "trang_thai", "xa", "tinh", "khu", "dia_danh_cu", "so_thua", "so_thua_trung", "gia_khoi_diem", "gia_trung_min", "gia_trung_max", "tong_tien_ty", "nguoi_tham_gia", "loai_dat", "nguon", "link", "ghi_chu", "lat", "lng", "vi_tri"];
+const ORDER = ["id", "ngay", "trang_thai", "xa", "tinh", "khu", "dia_danh_cu", "so_thua", "so_thua_trung", "gia_khoi_diem", "gia_trung_min", "gia_trung_max", "tong_tien_ty", "nguoi_tham_gia", "loai_dat", "nguon", "link", "ghi_chu", "gia_nha_nuoc", "sau_dau_gia", "sau_dau_gia_ngay", "lat", "lng", "vi_tri"];
 const gCols = () => ORDER.filter(h => HEAD.includes(h)).concat(HEAD.filter(h => !ORDER.includes(h)));
 function gridFromRows() { GRID = ROWS.map((r, i) => ({r: {...r}, orig: i, del: false})).sort((a, b) => (b.r.ngay || "").localeCompare(a.r.ngay || "")); }
 const rowChanged = g => g.orig < 0 || g.del || HEAD.some(h => (g.r[h] ?? "") !== (ROWS[g.orig][h] ?? ""));
@@ -549,13 +566,78 @@ $("#gFclr").addEventListener("click", () => { FILT = {}; renderGrid(); });
 /* ---------- chuyển tab ---------- */
 function showTab(t) {
   document.querySelectorAll("#mainTabs button").forEach(b => b.classList.toggle("on", b.dataset.tab === t));
-  $("#gridCard").hidden = t !== "grid"; $("#work").hidden = t !== "form"; $("#listCard").hidden = t !== "form"; $("#themeCard").hidden = t !== "theme";
+  $("#gridCard").hidden = t !== "grid"; $("#work").hidden = t !== "form"; $("#listCard").hidden = t !== "form"; $("#themeCard").hidden = t !== "theme"; $("#pendCard").hidden = t !== "pend";
+  if (t === "pend") renderPending();
   if (t === "form") { renderList(); if (map) setTimeout(() => map.invalidateSize && map.invalidateSize(), 50); }
   if (t === "grid") renderGrid();
 }
 $("#mainTabs").addEventListener("click", e => { const b = e.target.closest("[data-tab]"); if (!b) return;
   if (b.dataset.tab !== "grid" && GRID.some(rowChanged)) say("Bảng tính còn thay đổi chưa lưu — bấm “Lưu tất cả” trước khi rời đi nếu muốn giữ.", "err");
   showTab(b.dataset.tab); });
+
+/* ================= TIN CHỜ DUYỆT (cho-duyet.csv, do workflow gom tin tạo) ================= */
+const PEND_PATH = "cho-duyet.csv";
+const PCOLS = ["ngay", "trang_thai", "tinh", "xa", "dia_danh_cu", "khu", "loai_dat", "so_thua", "so_thua_trung", "gia_khoi_diem", "gia_trung_min", "gia_trung_max", "tong_tien_ty", "nguoi_tham_gia", "lat", "lng", "nguon", "ghi_chu"];
+let PHEAD = [], PROWS = [], PSHA = null, PSEL = new Set();
+const foldv = s => String(s || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/đ/gi, "d").toLowerCase().replace(/^(xa|phuong|thi tran)\s+/, "").replace(/\s+/g, " ").trim();
+const toCSVOf = (head, rows) => [head.join(",")].concat(rows.map(r => head.map(h => q(r[h])).join(","))).join("\n") + "\n";
+function pendDup(p) {
+  const hit = ROWS.find(r => (p.link && r.link === p.link) || (p.ngay && r.ngay === p.ngay && foldv(r.tinh) === foldv(p.tinh) && foldv(r.xa) && foldv(r.xa) === foldv(p.xa)));
+  return hit ? hit.id || "?" : "";
+}
+async function loadPending() {
+  try { const j = await gh("GET", null, PEND_PATH); const p = parseCSV(b64dec(j.content)); PHEAD = p.head; PROWS = p.rows; PSHA = j.sha; }
+  catch (e) { PHEAD = []; PROWS = []; PSHA = null; if (e.status !== 404) say("Không tải được tin chờ duyệt: " + explain(e), "err"); }
+  PSEL = new Set(); updPendBadge(); if (!$("#pendCard").hidden) renderPending();
+}
+function updPendBadge() { const b = $("#pendBadge"); b.textContent = PROWS.length; b.hidden = !PROWS.length; }
+function renderPending() {
+  $("#pendInfo").textContent = PROWS.length ? `${PROWS.length} dòng chờ duyệt · đã chọn ${PSEL.size}` : (PSHA ? "Không còn tin nào chờ duyệt." : "Chưa có file cho-duyet.csv – hãy chạy workflow “Gom tin đấu giá từ báo” trong tab Actions.");
+  $("#ph").innerHTML = `<tr><th class="rn">✓</th><th>Bài báo</th>${PCOLS.map(h => `<th>${esc((COL[h] || [h])[0])}</th>`).join("")}</tr>`;
+  $("#pb").innerHTML = PROWS.map((p, i) => { const d = pendDup(p);
+    return `<tr data-p="${i}" class="${d ? "err" : ""}"><td class="ck rn"><input type="checkbox" data-pc="${i}"${PSEL.has(i) ? " checked" : ""} aria-label="Chọn dòng ${i + 1}"></td>
+      <td class="pend-t">${p.link ? `<a href="${esc(p.link)}" target="_blank" rel="noopener">${esc(p._tieu_de || p.link)}</a>` : esc(p._tieu_de || "")}
+      <div class="muted">${esc(p.nguon || "")}${p._ngay_lay ? " · lấy " + esc(fdate(p._ngay_lay)) : ""}${p._cach_lay ? " · " + esc(p._cach_lay) : ""}</div>${d ? `<div class="warn">⚠ có thể trùng phiên ${esc(d)}</div>` : ""}</td>
+      ${PCOLS.map(h => `<td>${cellHTML(i, h, p[h]).replace(/data-g=/, "data-pi=")}</td>`).join("")}</tr>`; }).join("")
+    || `<tr><td colspan="${PCOLS.length + 2}" class="muted" style="padding:10px">Không có dòng nào.</td></tr>`;
+}
+$("#pb").addEventListener("input", e => { const el = e.target;
+  if (el.dataset.pc != null) { const i = +el.dataset.pc; el.checked ? PSEL.add(i) : PSEL.delete(i); renderPendInfo(); return; }
+  if (el.dataset.pi != null) PROWS[+el.dataset.pi][el.dataset.h] = el.value; });
+const renderPendInfo = () => { $("#pendInfo").textContent = `${PROWS.length} dòng chờ duyệt · đã chọn ${PSEL.size}`; };
+$("#pAll").addEventListener("click", () => { PSEL = PSEL.size === PROWS.length ? new Set() : new Set(PROWS.map((_, i) => i)); renderPending(); });
+$("#pReload").addEventListener("click", async () => { await loadPending(); renderPending(); say("Đã tải lại tin chờ duyệt.", "ok"); });
+async function savePending(message) {
+  const body = {message, content: b64enc(toCSVOf(PHEAD.length ? PHEAD : STD, PROWS)), branch: cfg().branch}; if (PSHA) body.sha = PSHA;
+  try { const j = await gh("PUT", body, PEND_PATH); PSHA = j.content.sha; return true; }
+  catch (e) { say("Đã lưu data.csv nhưng chưa cập nhật được danh sách chờ: " + explain(e) + " Bấm “Tải lại” rồi bỏ qua các dòng đã duyệt.", "err"); return false; }
+}
+$("#pSkip").addEventListener("click", async () => {
+  if (!PSEL.size) { say("Chưa chọn dòng nào.", "err"); return; }
+  const keep = PROWS, n = PSEL.size; PROWS = PROWS.filter((_, i) => !PSEL.has(i));
+  if (await savePending(`Bỏ qua ${n} tin chờ duyệt`)) { PSEL = new Set(); say(`Đã bỏ qua ${n} dòng.`, "ok"); } else PROWS = keep;
+  updPendBadge(); renderPending();
+});
+$("#pOk").addEventListener("click", async () => {
+  if (!PSEL.size) { say("Chưa chọn dòng nào để duyệt.", "err"); return; }
+  if (GRID.some(rowChanged)) { say("Tab Bảng tính còn thay đổi chưa lưu – hãy lưu hoặc hủy trước khi duyệt tin.", "err"); return; }
+  const keep = ROWS.slice(), picked = PROWS.filter((_, i) => PSEL.has(i)), warns = [];
+  picked.forEach(p => {
+    const r = Object.fromEntries(HEAD.map(h => [h, String(p[h] ?? "").trim()]));
+    NUMS.forEach(k => { if (r[k]) r[k] = normNum(r[k]); });
+    if (r.ngay && /^\d{1,2}\/\d{1,2}\/\d{4}$/.test(r.ngay)) { const [d, m, y] = r.ngay.split("/"); r.ngay = `${y}-${m.padStart(2, "0")}-${d.padStart(2, "0")}`; }
+    r.tinh = r.tinh || "Hà Nội"; r.trang_thai = r.trang_thai || "Sắp đấu giá"; r.vi_tri = r.vi_tri || "gần đúng";
+    r.id = nextId(r.tinh, r.ngay || new Date().toISOString().slice(0, 10));
+    const w = validate(r); if (w) warns.push(`${r.id}: ${w}`);
+    ROWS.push(r);
+  });
+  const ok = await commit(`Duyệt ${picked.length} phiên từ tin báo`);
+  if (!ok) { ROWS = keep; return; }
+  PROWS = PROWS.filter((_, i) => !PSEL.has(i)); PSEL = new Set();
+  const ok2 = await savePending(`Đã duyệt ${picked.length} tin`);
+  gridFromRows(); updPendBadge(); renderPending();
+  if (ok2) say(`Đã duyệt ${picked.length} phiên vào data.csv. Bản đồ cập nhật sau khoảng 1 phút.` + (warns.length ? " Lưu ý: " + warns.join("; ") : ""), "ok");
+});
 
 /* ================= GIAO DIỆN / THEME ================= */
 const DEFAULT_THEME = {
