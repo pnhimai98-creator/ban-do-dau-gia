@@ -298,10 +298,14 @@ relation["route"~"^(subway|light_rail)$"]({bb})->.mr;
   way["highway"~"^(construction|proposed)$"]["construction"="motorway"]({bb});
   way["highway"="proposed"]["proposed"="motorway"]({bb});
   way["aeroway"="aerodrome"]({bb});
+  node["railway"="station"]["station"~"subway|light_rail"]({bb});
+  node["public_transport"="station"]["subway"="yes"]({bb});
+  node["public_transport"="station"]["light_rail"="yes"]({bb});
+  node["railway"="construction"]["construction"="station"]({bb});
   relation["aeroway"="aerodrome"]({bb});
 );
 out tags geom;"""
-    lines, feats = {}, []
+    lines, feats, seen_st = {}, [], set()
     els = overpass(q).get("elements", [])
     # quan hệ (relation) tuyến vành đai / metro → biết mỗi đoạn đường thuộc vành đai / tuyến nào
     way_ring, way_line = {}, {}
@@ -321,6 +325,20 @@ out tags geom;"""
                     way_line[m["ref"]] = (ln.upper(), tg.get("colour", ""), tg.get("name", ""))
     for el in els:
         if el.get("type") == "relation" and not el.get("tags", {}).get("aeroway"):
+            continue
+        if el.get("type") == "node":   # ga metro
+            tg = el.get("tags", {})
+            if "lat" not in el:
+                continue
+            st = "dang_xay" if tg.get("railway") == "construction" else "hien_huu"
+            key = (round(el["lon"], 4), round(el["lat"], 4))
+            if key in seen_st:
+                continue
+            seen_st.add(key)
+            raw = (tg.get("line") or "").strip()
+            ln = raw.upper() if re.fullmatch(r"\d{1,2}[AB]?", raw, re.I) else metro_line(tg.get("line"), tg.get("ref"), tg.get("network"), tg.get("name"))
+            feats.append({"type": "Feature", "properties": {"kind": "ga_metro", "name": tg.get("name", "Ga"), "status": st, **({"line": ln} if ln else {})},
+                          "geometry": {"type": "Point", "coordinates": [round(el["lon"], 6), round(el["lat"], 6)]}})
             continue
         tg = el.get("tags", {})
         name = tg.get("name", "")
@@ -352,7 +370,7 @@ out tags geom;"""
             gkey = label
         elif tg.get("bridge") and name.startswith("Cầu"):
             kind, gkey, extra = "cau", name, {"name": name}
-        elif ring and ring_region(ring, el["geometry"]) != "Khác":
+        elif ring and ring_region(ring, el["geometry"]) in ("Hà Nội", "Vùng Thủ đô"):   # bỏ vành đai riêng của tỉnh/đô thị khác
             rg = ring_region(ring, el["geometry"])
             kind, gkey, extra = "vanh_dai", f"{rg}|{ring}", {"name": f"Vành đai {ring}" + ("" if rg in ("Hà Nội", "Vùng Thủ đô") else f" ({rg})"), "ring": ring, "region": rg}
         else:
@@ -370,7 +388,7 @@ out tags geom;"""
             continue
         part = simplify([pt(p) for p in el["geometry"]], 0.00004)
         todo = [(kind, gkey, extra)]
-        if kind == "cau" and ring and ring_region(ring, el["geometry"]) != "Khác":  # cầu nằm trên vành đai → vẽ cả vào vành đai để đường không bị đứt
+        if kind == "cau" and ring and ring_region(ring, el["geometry"]) in ("Hà Nội", "Vùng Thủ đô"):  # cầu nằm trên vành đai → vẽ cả vào vành đai để đường không bị đứt
             rg = ring_region(ring, el["geometry"])
             todo.append(("vanh_dai", f"{rg}|{ring}", {"name": f"Vành đai {ring}", "ring": ring, "region": rg}))
         for kd, gk, ex in todo:
