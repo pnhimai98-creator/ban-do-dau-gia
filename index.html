@@ -232,9 +232,9 @@ const CONFIG = {
   // Quốc lộ & đường tỉnh: file lớn nên chỉ tải khi người xem bật lớp
   ROADS_URL: "layers/duong-bo.geojson",
   // Các tuyến metro chưa có trên OpenStreetMap, vẽ tay (5 tuyến ưu tiên 1, 2, 8, 10, 14). File này không bị workflow ghi đè
-  PLANNED_METRO_URL: "layers/metro-quy-hoach.geojson",
+  PLANNED_METRO_URL: "",   // tạm tắt; sẽ thay bằng dữ liệu từ Google My Maps
   // Hướng tuyến tổng thể 7 vành đai Hà Nội & Vùng Thủ đô (vẽ tay, nét chấm nhạt) để khép kín các đoạn OSM còn thiếu
-  PLANNED_RING_URL: "layers/vanh-dai-quy-hoach.geojson",
+  PLANNED_RING_URL: "",   // đã tắt theo yêu cầu – để "" là không vẽ
   // Chỉ hiện vành đai của các nhóm này (vành đai riêng của tỉnh/đô thị khác bị bỏ)
   RING_REGIONS: ["Hà Nội", "Vùng Thủ đô"],
   INFRA_URL: "layers/ha-tang.geojson",
@@ -522,7 +522,9 @@ function infraStyle(k, p) {
   let color = st.color; if (k === "metro") color = METRO_COLOR[metroLine(p)] || p.colour || st.color;
   if (baseKey(k) === "vanh_dai") color = regionColor(regionOf(p));
   /* hướng tuyến vẽ tay của vành đai: mảnh, nhạt, nét chấm – nằm dưới đoạn OSM */
-  if (baseKey(k) === "vanh_dai" && p.approx) return {...st, color, weight: 3, opacity: 0.6, dashArray: "1 7", lineCap: "round"};
+  if (baseKey(k) === "vanh_dai" && p.approx) return {...st, color, weight: 4, opacity: 0.9, dashArray: "1 8", lineCap: "round"};
+  /* metro vẽ tay: vẫn nét đứt (đang xây) nhưng mảnh và nhạt hơn, nằm dưới tuyến OSM nếu trùng đoạn */
+  if (k === "metro" && p.approx) return {...st, color, weight: 3.5, opacity: 0.6, dashArray: "8 6", lineCap: "butt"};
   /* thống nhất cho mọi lớp hạ tầng: nét liền = đang vận hành, gạch dài = đang xây, chấm = quy hoạch / kế hoạch */
   const stt = built ? "hien_huu" : p.status;
   return {...st, color, opacity: stt === "quy_hoach" ? 0.75 : 0.92, dashArray: DASH[stt] || null, lineCap: stt === "quy_hoach" ? "round" : "butt"};
