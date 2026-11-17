@@ -1,0 +1,19 @@
+{"type":"FeatureCollection","name":"5 tuyến đường sắt đô thị ưu tiên (khởi công 22/6/2026) – hướng tuyến vẽ gần đúng",
+"note":"Vẽ tay theo các điểm khống chế được công bố trên báo chí (VOV, The Leader, 22/6/2026). Chưa phải phương án tuyến 1/500. Sửa tọa độ trực tiếp trong file này; workflow OSM không ghi đè file này. Tọa độ dạng [kinh độ, vĩ độ].",
+"features":[
+{"type":"Feature","properties":{"kind":"metro","line":"1","name":"Tuyến số 1: Thường Tín – Ngọc Hồi – Ga Hà Nội – Yên Viên – Nội Bài","status":"dang_xay","approx":true,
+ "via":"Thường Tín – Tam Hưng – Thượng Phúc – Dân Hòa – KCN đường sắt – Ngọc Hồi – ga Hà Nội – Yên Viên – KĐT Thư Lâm – sân bay Nội Bài"},
+ "geometry":{"type":"LineString","coordinates":[[105.862,20.865],[105.820,20.872],[105.785,20.882],[105.830,20.893],[105.842,20.918],[105.843,20.948],[105.841,20.982],[105.841,21.024],[105.861,21.040],[105.881,21.049],[105.918,21.083],[105.900,21.130],[105.870,21.160],[105.830,21.195],[105.805,21.214]]}},
+{"type":"Feature","properties":{"kind":"metro","line":"2","name":"Tuyến số 2: Nội Bài – Nam Thăng Long – Trần Hưng Đạo – Thượng Đình – Tây Nam","status":"dang_xay","approx":true,
+ "via":"Sân bay Nội Bài – Trần Hưng Đạo – Thượng Đình – khu vực Tây Nam thành phố"},
+ "geometry":{"type":"LineString","coordinates":[[105.805,21.214],[105.808,21.180],[105.812,21.150],[105.818,21.115],[105.820,21.093],[105.805,21.078],[105.795,21.072],[105.800,21.060],[105.802,21.046],[105.820,21.043],[105.832,21.045],[105.842,21.040],[105.850,21.035],[105.853,21.025],[105.851,21.019],[105.846,21.012],[105.840,21.002],[105.826,20.998],[105.813,20.996],[105.800,20.976],[105.765,20.956],[105.735,20.932]]}},
+{"type":"Feature","properties":{"kind":"metro","line":"8","name":"Tuyến số 8: Hòa Lạc – Sơn Đồng – Mai Dịch – Vành đai 3 – Lĩnh Nam – Dương Xá","status":"dang_xay","approx":true,
+ "via":"Hòa Lạc – Sơn Đồng – Mai Dịch – Vành đai 3 – Lĩnh Nam – Dương Xá"},
+ "geometry":{"type":"LineString","coordinates":[[105.525,21.015],[105.600,21.030],[105.700,21.045],[105.755,21.045],[105.775,21.038],[105.780,21.020],[105.785,21.005],[105.800,20.990],[105.830,20.966],[105.850,20.956],[105.866,20.965],[105.885,20.980],[105.905,20.990],[105.940,21.000],[105.975,21.020]]}},
+{"type":"Feature","properties":{"kind":"metro","line":"10","name":"Tuyến số 10 (vòng): Cổ Loa – Võ Chí Công – Vành đai 3 – Vành đai 2,5 – Times City – Cổ Loa","status":"dang_xay","approx":true,
+ "via":"Cổ Loa – Võ Chí Công – Vành đai 3 – Vành đai 2,5 – Times City – Cổ Loa"},
+ "geometry":{"type":"LineString","coordinates":[[105.873,21.113],[105.845,21.105],[105.822,21.095],[105.820,21.076],[105.805,21.060],[105.783,21.045],[105.783,21.020],[105.800,20.995],[105.815,20.985],[105.825,20.982],[105.842,20.985],[105.860,20.990],[105.868,20.996],[105.885,21.005],[105.895,21.040],[105.890,21.075],[105.873,21.113]]}},
+{"type":"Feature","properties":{"kind":"metro","line":"14","name":"Tuyến số 14: Cầu Thăng Long – Hồng Hà – Gia Lâm (trục sông Hồng)","status":"dang_xay","approx":true,
+ "via":"Cầu Thăng Long – Hồng Hà – Gia Lâm"},
+ "geometry":{"type":"LineString","coordinates":[[105.787,21.090],[105.805,21.080],[105.830,21.070],[105.848,21.052],[105.856,21.040],[105.862,21.025],[105.875,21.005],[105.890,20.990],[105.915,20.992],[105.940,21.000]]}}
+]}

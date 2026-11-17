@@ -1,0 +1,554 @@
+{
+"type": "FeatureCollection",
+"name": "Hướng tuyến tổng thể 7 vành đai Hà Nội & Vùng Thủ đô – vẽ gần đúng",
+"note": "Vẽ tay theo các nút giao/đường chính để khép kín vòng; chỉ để tham chiếu. Đoạn đã có trên OpenStreetMap sẽ hiện nét liền/gạch đè lên. Tọa độ [kinh độ, vĩ độ]. Workflow OSM không ghi đè file này.",
+"features": [
+{
+"type": "Feature",
+"properties": {
+"kind": "vanh_dai",
+"ring": "1",
+"region": "Hà Nội",
+"name": "Vành đai 1",
+"status": "quy_hoach",
+"approx": true,
+"via": "Ô Đông Mác – Đại Cồ Việt – Xã Đàn – Ô Chợ Dừa – Hoàng Cầu – Voi Phục – Bưởi – Hoàng Hoa Thám – Yên Phụ – Trần Nhật Duật – Trần Quang Khải – Trần Khánh Dư"
+},
+"geometry": {
+"type": "LineString",
+"coordinates": [
+[
+105.8605,
+21.0125
+],
+[
+105.85,
+21.0085
+],
+[
+105.841,
+21.0085
+],
+[
+105.834,
+21.015
+],
+[
+105.828,
+21.0205
+],
+[
+105.822,
+21.0225
+],
+[
+105.812,
+21.032
+],
+[
+105.813,
+21.041
+],
+[
+105.825,
+21.043
+],
+[
+105.84,
+21.046
+],
+[
+105.85,
+21.04
+],
+[
+105.858,
+21.03
+],
+[
+105.861,
+21.02
+],
+[
+105.8605,
+21.0125
+]
+]
+}
+},
+{
+"type": "Feature",
+"properties": {
+"kind": "vanh_dai",
+"ring": "2",
+"region": "Hà Nội",
+"name": "Vành đai 2",
+"status": "quy_hoach",
+"approx": true,
+"via": "Vĩnh Tuy – Minh Khai – Ngã Tư Vọng – Trường Chinh – Ngã Tư Sở – Láng – Cầu Giấy – Bưởi – Lạc Long Quân – cầu Nhật Tân – Đông Anh – cầu Đông Trù – Long Biên – Vĩnh Tuy"
+},
+"geometry": {
+"type": "LineString",
+"coordinates": [
+[
+105.877,
+21.002
+],
+[
+105.86,
+20.9975
+],
+[
+105.843,
+21.0
+],
+[
+105.83,
+21.003
+],
+[
+105.819,
+21.003
+],
+[
+105.81,
+21.02
+],
+[
+105.8,
+21.032
+],
+[
+105.806,
+21.045
+],
+[
+105.81,
+21.06
+],
+[
+105.82,
+21.075
+],
+[
+105.825,
+21.098
+],
+[
+105.845,
+21.105
+],
+[
+105.875,
+21.09
+],
+[
+105.89,
+21.075
+],
+[
+105.895,
+21.055
+],
+[
+105.893,
+21.035
+],
+[
+105.885,
+21.012
+],
+[
+105.877,
+21.002
+]
+]
+}
+},
+{
+"type": "Feature",
+"properties": {
+"kind": "vanh_dai",
+"ring": "2.5",
+"region": "Hà Nội",
+"name": "Vành đai 2.5",
+"status": "quy_hoach",
+"approx": true,
+"via": "Đền Lừ – Giải Phóng – Kim Giang – Đầm Hồng – Hoàng Minh Giám – Dương Đình Nghệ – Nguyễn Văn Huyên – Xuân La – cầu Tứ Liên – Đông Anh – Long Biên – Lĩnh Nam"
+},
+"geometry": {
+"type": "LineString",
+"coordinates": [
+[
+105.857,
+20.99
+],
+[
+105.842,
+20.985
+],
+[
+105.822,
+20.983
+],
+[
+105.815,
+20.993
+],
+[
+105.805,
+21.002
+],
+[
+105.795,
+21.025
+],
+[
+105.8,
+21.04
+],
+[
+105.805,
+21.065
+],
+[
+105.835,
+21.072
+],
+[
+105.86,
+21.09
+],
+[
+105.905,
+21.07
+],
+[
+105.91,
+21.035
+],
+[
+105.9,
+21.0
+],
+[
+105.88,
+20.982
+],
+[
+105.857,
+20.99
+]
+]
+}
+},
+{
+"type": "Feature",
+"properties": {
+"kind": "vanh_dai",
+"ring": "3",
+"region": "Hà Nội",
+"name": "Vành đai 3",
+"status": "quy_hoach",
+"approx": true,
+"via": "Cầu Thanh Trì – Pháp Vân – Nghiêm Xuân Yêm – Khuất Duy Tiến – Phạm Hùng – Mai Dịch – Phạm Văn Đồng – cầu Thăng Long – Bắc Thăng Long – cao tốc Hà Nội–Thái Nguyên – Ninh Hiệp – Thạch Bàn"
+},
+"geometry": {
+"type": "LineString",
+"coordinates": [
+[
+105.915,
+21.005
+],
+[
+105.895,
+20.975
+],
+[
+105.85,
+20.96
+],
+[
+105.83,
+20.968
+],
+[
+105.815,
+20.977
+],
+[
+105.8,
+20.995
+],
+[
+105.783,
+21.02
+],
+[
+105.776,
+21.04
+],
+[
+105.785,
+21.07
+],
+[
+105.787,
+21.09
+],
+[
+105.787,
+21.113
+],
+[
+105.8,
+21.15
+],
+[
+105.85,
+21.17
+],
+[
+105.885,
+21.14
+],
+[
+105.94,
+21.08
+],
+[
+105.925,
+21.03
+],
+[
+105.915,
+21.005
+]
+]
+}
+},
+{
+"type": "Feature",
+"properties": {
+"kind": "vanh_dai",
+"ring": "3.5",
+"region": "Hà Nội",
+"name": "Vành đai 3.5",
+"status": "quy_hoach",
+"approx": true,
+"via": "Cầu Thượng Cát – Đông Anh – Gia Lâm – Bát Tràng – Ngọc Hồi – Hà Đông – Dương Nội – Đại lộ Thăng Long – Tây Tựu"
+},
+"geometry": {
+"type": "LineString",
+"coordinates": [
+[
+105.76,
+21.11
+],
+[
+105.78,
+21.13
+],
+[
+105.84,
+21.15
+],
+[
+105.95,
+21.1
+],
+[
+105.96,
+21.02
+],
+[
+105.92,
+20.96
+],
+[
+105.85,
+20.92
+],
+[
+105.77,
+20.94
+],
+[
+105.735,
+20.975
+],
+[
+105.73,
+21.0
+],
+[
+105.735,
+21.065
+],
+[
+105.75,
+21.09
+],
+[
+105.76,
+21.11
+]
+]
+}
+},
+{
+"type": "Feature",
+"properties": {
+"kind": "vanh_dai",
+"ring": "4",
+"region": "Vùng Thủ đô",
+"name": "Vành đai 4",
+"status": "quy_hoach",
+"approx": true,
+"via": "Mê Linh – cầu Hồng Hà – Đan Phượng – Hoài Đức – Hà Đông – Thanh Oai – Thường Tín – cầu Mễ Sở – Văn Giang – Như Quỳnh – Thuận Thành – Quế Võ – Yên Phong – Sóc Sơn"
+},
+"geometry": {
+"type": "LineString",
+"coordinates": [
+[
+105.72,
+21.19
+],
+[
+105.68,
+21.13
+],
+[
+105.665,
+21.09
+],
+[
+105.68,
+21.03
+],
+[
+105.69,
+20.99
+],
+[
+105.71,
+20.94
+],
+[
+105.75,
+20.88
+],
+[
+105.86,
+20.855
+],
+[
+105.93,
+20.86
+],
+[
+105.97,
+20.92
+],
+[
+106.0,
+20.98
+],
+[
+106.07,
+21.04
+],
+[
+106.15,
+21.15
+],
+[
+105.98,
+21.21
+],
+[
+105.86,
+21.26
+],
+[
+105.78,
+21.24
+],
+[
+105.72,
+21.19
+]
+]
+}
+},
+{
+"type": "Feature",
+"properties": {
+"kind": "vanh_dai",
+"ring": "5",
+"region": "Vùng Thủ đô",
+"name": "Vành đai 5",
+"status": "quy_hoach",
+"approx": true,
+"via": "Hòa Bình – Phú Thọ – chân Tam Đảo – Phổ Yên (Thái Nguyên) – Kép (Bắc Giang) – Chí Linh – Hải Dương – Hưng Hà – Phủ Lý – Lương Sơn"
+},
+"geometry": {
+"type": "LineString",
+"coordinates": [
+[
+105.52,
+20.87
+],
+[
+105.34,
+20.82
+],
+[
+105.26,
+21.05
+],
+[
+105.55,
+21.37
+],
+[
+105.85,
+21.45
+],
+[
+106.27,
+21.4
+],
+[
+106.4,
+21.3
+],
+[
+106.4,
+21.13
+],
+[
+106.33,
+20.94
+],
+[
+106.2,
+20.6
+],
+[
+105.91,
+20.54
+],
+[
+105.68,
+20.65
+],
+[
+105.52,
+20.87
+]
+]
+}
+}
+]
+}
