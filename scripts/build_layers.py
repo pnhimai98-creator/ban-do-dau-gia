@@ -2,7 +2,7 @@
 """
 Tạo 2 lớp bản đồ từ OpenStreetMap (qua Overpass API) cho trang bản đồ đấu giá:
   layers/ranh-gioi-xa.geojson  – ranh giới xã/phường mới (sau sáp nhập 2025)
-  layers/ha-tang.geojson       – các đường vành đai (1–5); đường sắt đô thị; cầu qua sông Hồng; sân bay
+  layers/ha-tang.geojson       – vành đai Hà Nội & các đô thị lân cận; đường cao tốc; đường sắt đô thị; cầu qua sông Hồng; sân bay
 
 Chạy tự động bằng GitHub Actions (.github/workflows/build-layers.yml) hoặc trên máy: python scripts/build_layers.py
 Chỉ dùng thư viện có sẵn của Python, không cần cài thêm.
@@ -18,6 +18,22 @@ BBOX = (20.20, 104.95, 21.80, 106.65)   # đủ rộng để lấy cả Vành đ
 # Các cầu qua sông Hồng (tên bắt đầu bằng "Cầu …")
 BRIDGES = ["Nhật Tân", "Thăng Long", "Long Biên", "Chương Dương", "Vĩnh Tuy", "Thanh Trì", "Vĩnh Thịnh", "Tứ Liên",
            "Trần Hưng Đạo", "Hồng Hà", "Mễ Sở", "Vân Phúc", "Thượng Cát", "Ngọc Hồi", "Phù Đổng"]
+# Vùng của từng vành đai Hà Nội (nam, tây, bắc, đông). Đoạn "Vành đai …" nằm ngoài vùng này được gán cho
+# đô thị gần nhất (Vĩnh Yên, Hải Dương, Bắc Giang… cũng có vành đai riêng) và vẽ màu khác
+RING_BOX = {
+    "1": (20.98, 105.79, 21.05, 105.88),
+    "2": (20.95, 105.75, 21.12, 105.95),
+    "2.5": (20.95, 105.75, 21.10, 105.95),
+    "3": (20.90, 105.70, 21.30, 106.00),
+    "3.5": (20.83, 105.62, 21.25, 106.02),
+    "4": (20.72, 105.52, 21.40, 106.22),
+    "5": (20.20, 104.95, 21.80, 106.65),
+}
+# Tâm các đô thị lân cận có vành đai riêng (vĩ độ, kinh độ)
+CITIES = {"Vĩnh Yên": (21.31, 105.60), "Phúc Yên": (21.24, 105.70), "Việt Trì": (21.32, 105.40), "Thái Nguyên": (21.59, 105.84),
+          "Bắc Giang": (21.27, 106.19), "Bắc Ninh": (21.18, 106.07), "Hải Dương": (20.94, 106.33), "Hưng Yên": (20.65, 106.05),
+          "Phủ Lý": (20.54, 105.91), "Hòa Bình": (20.82, 105.34), "Nam Định": (20.43, 106.17), "Ninh Bình": (20.25, 105.97),
+          "Thái Bình": (20.45, 106.34), "Sơn Tây": (21.14, 105.50)}
 # Số xã/phường hợp lý của một tỉnh sau sáp nhập (để tự chọn đúng cấp hành chính trong OSM)
 COMMUNE_RANGE = (40, 400)
 OUT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "layers")
@@ -171,6 +187,25 @@ def metro_line(*texts):
     return m.group(1).upper() if m else None
 
 
+def ring_region(ring, geom):
+    """Vành đai này thuộc đâu: "Hà Nội", "Vùng Thủ đô" (VĐ4, VĐ5) hay tên đô thị lân cận."""
+    if ring in ("4", "5") and in_ring_box(ring, geom):
+        return "Vùng Thủ đô"
+    if in_ring_box(ring, geom):
+        return "Hà Nội"
+    p = geom[len(geom) // 2]
+    name, d = min(((c, math.hypot(p["lat"] - y, p["lon"] - x)) for c, (y, x) in CITIES.items()), key=lambda z: z[1])
+    return name if d < 0.2 else "Khác"
+
+
+def in_ring_box(ring, geom):
+    b = RING_BOX.get(ring)
+    if not b or not geom:
+        return False
+    p = geom[len(geom) // 2]
+    return b[0] <= p["lat"] <= b[2] and b[1] <= p["lon"] <= b[3]
+
+
 def build_infra():
     s, w, n, e = BBOX
     bb = f"{s},{w},{n},{e}"
@@ -188,6 +223,9 @@ relation["route"~"^(subway|light_rail)$"]({bb})->.mr;
   way["railway"~"^(construction|proposed)$"]["construction"~"subway|light_rail"]({bb});
   way["railway"="proposed"]["proposed"~"subway|light_rail"]({bb});
   way["bridge"]["name"~"^Cầu ({br})"]({bb});
+  way["highway"="motorway"]({bb});
+  way["highway"~"^(construction|proposed)$"]["construction"="motorway"]({bb});
+  way["highway"="proposed"]["proposed"="motorway"]({bb});
   way["aeroway"="aerodrome"]({bb});
   relation["aeroway"="aerodrome"]({bb});
 );
@@ -243,14 +281,27 @@ out tags geom;"""
             gkey = label
         elif tg.get("bridge") and name.startswith("Cầu"):
             kind, gkey, extra = "cau", name, {"name": name}
-        elif ring:
-            kind, gkey, extra = "vanh_dai", ring, {"name": f"Vành đai {ring}", "ring": ring}
+        elif ring and ring_region(ring, el["geometry"]) != "Khác":
+            rg = ring_region(ring, el["geometry"])
+            kind, gkey, extra = "vanh_dai", f"{rg}|{ring}", {"name": f"Vành đai {ring}" + ("" if rg in ("Hà Nội", "Vùng Thủ đô") else f" ({rg})"), "ring": ring, "region": rg}
         else:
+            kind = None
+        # đường cao tốc (có thể trùng một phần với vành đai 3, 4 → vẽ ở cả hai lớp)
+        if hw == "motorway" or tg.get("construction") == "motorway" or tg.get("proposed") == "motorway":
+            ref = (tg.get("ref") or "").split(";")[0].strip()
+            mref = re.match(r"CT\.?\s*(\d+)", ref, re.I)
+            ref = f"CT.{int(mref.group(1)):02d}" if mref else ref.replace(" ", "")
+            cname = "" if (tg.get("name") or "").startswith("Cầu") else (tg.get("name") or "")
+            ckey = ref or cname or "Cao tốc"
+            v = lines.setdefault(("cao_toc", ckey, status), {"props": {"kind": "cao_toc", "status": status, **({"ref": ref} if ref else {}), "name": cname or ref or "Đường cao tốc"}, "parts": []})
+            v["parts"].append(simplify([pt(p) for p in el["geometry"]], 0.00004))
+        if kind is None:
             continue
         part = simplify([pt(p) for p in el["geometry"]], 0.00004)
         todo = [(kind, gkey, extra)]
-        if kind == "cau" and ring:  # cầu nằm trên vành đai → vẽ cả vào vành đai để đường không bị đứt
-            todo.append(("vanh_dai", ring, {"name": f"Vành đai {ring}", "ring": ring}))
+        if kind == "cau" and ring and ring_region(ring, el["geometry"]) != "Khác":  # cầu nằm trên vành đai → vẽ cả vào vành đai để đường không bị đứt
+            rg = ring_region(ring, el["geometry"])
+            todo.append(("vanh_dai", f"{rg}|{ring}", {"name": f"Vành đai {ring}", "ring": ring, "region": rg}))
         for kd, gk, ex in todo:
             v = lines.setdefault((kd, gk, status), {"props": {"kind": kd, "status": status, **{k: x for k, x in ex.items() if x}}, "parts": []})
             v["parts"].append(part)
@@ -259,7 +310,7 @@ out tags geom;"""
     # tóm tắt để xem trong nhật ký GitHub Actions
     from collections import Counter
     print("  Hạ tầng lấy được:")
-    for k, c in sorted(Counter((f["properties"]["kind"], f["properties"].get("ring") or f["properties"].get("line") or f["properties"].get("name", ""), f["properties"]["status"]) for f in feats).items()):
+    for k, c in sorted(Counter((f["properties"]["kind"], f["properties"].get("region", ""), f["properties"].get("ring") or f["properties"].get("line") or f["properties"].get("ref") or f["properties"].get("name", ""), f["properties"]["status"]) for f in feats).items()):
         print("   ", *k)
     return feats
 
