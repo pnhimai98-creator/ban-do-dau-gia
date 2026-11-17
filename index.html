@@ -231,6 +231,12 @@ const CONFIG = {
   DISTRICT_URL: "layers/ranh-gioi-huyen-cu.geojson",
   // Quốc lộ & đường tỉnh: file lớn nên chỉ tải khi người xem bật lớp
   ROADS_URL: "layers/duong-bo.geojson",
+  // Các tuyến metro chưa có trên OpenStreetMap, vẽ tay (5 tuyến ưu tiên 1, 2, 8, 10, 14). File này không bị workflow ghi đè
+  PLANNED_METRO_URL: "layers/metro-quy-hoach.geojson",
+  // Hướng tuyến tổng thể 7 vành đai Hà Nội & Vùng Thủ đô (vẽ tay, nét chấm nhạt) để khép kín các đoạn OSM còn thiếu
+  PLANNED_RING_URL: "layers/vanh-dai-quy-hoach.geojson",
+  // Chỉ hiện vành đai của các nhóm này (vành đai riêng của tỉnh/đô thị khác bị bỏ)
+  RING_REGIONS: ["Hà Nội", "Vùng Thủ đô"],
   INFRA_URL: "layers/ha-tang.geojson",
   // Lớp bật sẵn khi mở trang: "bound" (ranh giới), "vanh_dai" (mọi vành đai) hoặc "vanh_dai:Hà Nội", "cao_toc", "quoc_lo", "duong_tinh", "metro", "cau", "cau_xay", "san_bay", "tinh" (ranh giới tỉnh), "huyen" (huyện cũ)
   LAYERS_ON: ["bound", "tinh"],
@@ -274,7 +280,7 @@ const T = {
   lyBound: "Ranh giới xã/phường (2025)", lyRing: "Vành đai", lyMetro: "Đường sắt đô thị (metro)", lyBridge: "Cầu sông Hồng – đang vận hành", lyBridgeB: "Cầu sông Hồng – đang xây / quy hoạch", lyAir: "Sân bay", lyExp: "Đường cao tốc", lyQL: "Quốc lộ", lyDT: "Đường tỉnh",
   lyProv: "Ranh giới tỉnh/thành (2025)", lyDist: "Ranh giới huyện/quận cũ (trước 7/2025)", pDist: "Huyện/quận cũ",
   lgInfra: "Hạ tầng", lgBuilt: "đang vận hành", lgBuild: "đang xây", lgPlan: "quy hoạch / kế hoạch",
-  lineW: "Tuyến", ringW: "VĐ", approxPos: "vị trí gần đúng",
+  lineW: "Tuyến", ringW: "VĐ", approxPos: "vị trí gần đúng", approxRoute: "hướng tuyến vẽ gần đúng", ringRef: "hướng tuyến tổng thể (tham chiếu)",
   stBuilt: "hiện hữu", stBuild: "đang xây", stPlan: "quy hoạch", plot1: "thửa",
   cArea: "Khu vực", cTop: "Cao nhất", cN: "Số phiên", cLast: "Gần nhất", cSess: "Phiên", cStart: "Khởi điểm", cWin: "Trúng cao nhất", cX: "Gấp", times: "lần",
   noRatio: "Chưa có phiên nào có đủ cả giá khởi điểm và giá trúng.", other: "(khác)", sessN: "phiên",
@@ -306,7 +312,7 @@ const T = {
   lyBound: "Commune/ward boundaries (2025)", lyRing: "Ring road", lyMetro: "Urban railway (metro)", lyBridge: "Red River bridges – in service", lyBridgeB: "Red River bridges – under construction / planned", lyAir: "Airports", lyExp: "Expressways", lyQL: "National highways", lyDT: "Provincial roads",
   lyProv: "Province/city boundaries (2025)", lyDist: "Former district boundaries (before Jul 2025)", pDist: "Former district",
   lgInfra: "Infrastructure", lgBuilt: "in service", lgBuild: "under construction", lgPlan: "planned",
-  lineW: "Line", ringW: "RR", approxPos: "approximate position",
+  lineW: "Line", ringW: "RR", approxPos: "approximate position", approxRoute: "approximate alignment", ringRef: "overall alignment (reference)",
   stBuilt: "existing", stBuild: "under construction", stPlan: "planned", plot1: "plot",
   cArea: "Area", cTop: "Highest", cN: "Auctions", cLast: "Latest", cSess: "Auction", cStart: "Start", cWin: "Top bid", cX: "Multiple", times: "×",
   noRatio: "No auction has both a starting price and a winning bid yet.", other: "(other)", sessN: "auctions",
@@ -478,7 +484,7 @@ async function loadDecv() {
 /* ---------- Lớp ranh giới xã/phường & hạ tầng / boundary & infrastructure overlays ---------- */
 let BOUND = null, DIST = null, extraGroups = {};
 /* Màu metro theo sơ đồ quy hoạch đường sắt đô thị Hà Nội */
-const METRO_COLOR = {"1": "#1c4fd6", "2": "#1f9d55", "2A": "#74b816", "3": "#f59f00", "4": "#e03131", "5": "#c2255c", "6": "#7048e8", "7": "#8b5e34", "8": "#d633c4"};
+const METRO_COLOR = {"1": "#1c4fd6", "2": "#1f9d55", "2A": "#74b816", "3": "#f59f00", "4": "#e03131", "5": "#c2255c", "6": "#7048e8", "7": "#8b5e34", "8": "#d633c4", "10": "#f06595", "14": "#15aabf"};
 const INFRA_STYLE = {vanh_dai: {color: "#c2410c", weight: 5}, cao_toc: {color: "#0b7285", weight: 5}, quoc_lo: {color: "#b02525", weight: 3.5}, duong_tinh: {color: "#e0a100", weight: 2.5}, metro: {color: "#868e96", weight: 5}, cau: {color: "#1971c2", weight: 9}, cau_xay: {color: "#f08c00", weight: 9},
   san_bay: {color: "#495057", weight: 2, fillOpacity: 0.2}};
 /* Thứ tự lớp trong nút chọn lớp; vành đai được tách theo từng địa phương (vanh_dai:Hà Nội, vanh_dai:Vĩnh Yên…) */
@@ -515,6 +521,8 @@ function infraStyle(k, p) {
   const st = INFRA_STYLE[baseKey(k)] || {}, built = !p.status || p.status === "hien_huu";
   let color = st.color; if (k === "metro") color = METRO_COLOR[metroLine(p)] || p.colour || st.color;
   if (baseKey(k) === "vanh_dai") color = regionColor(regionOf(p));
+  /* hướng tuyến vẽ tay của vành đai: mảnh, nhạt, nét chấm – nằm dưới đoạn OSM */
+  if (baseKey(k) === "vanh_dai" && p.approx) return {...st, color, weight: 3, opacity: 0.6, dashArray: "1 7", lineCap: "round"};
   /* thống nhất cho mọi lớp hạ tầng: nét liền = đang vận hành, gạch dài = đang xây, chấm = quy hoạch / kế hoạch */
   const stt = built ? "hien_huu" : p.status;
   return {...st, color, opacity: stt === "quy_hoach" ? 0.75 : 0.92, dashArray: DASH[stt] || null, lineCap: stt === "quy_hoach" ? "round" : "butt"};
@@ -560,7 +568,7 @@ function makeInfraLayer(k, fs, g) {
     onEachFeature: (f, l) => { const p = f.properties, ln = k === "metro" ? metroLine(p) : null, rn = bk === "vanh_dai" ? ringNo(p) : null;
       const title = ln ? `${t("lineW")} ${ln} · ${p.name || ""}` : bk === "vanh_dai" ? `${t("lyRing")} ${rn || ""} · ${placeName(p)}`
         : (bk === "cao_toc" || bk === "quoc_lo" || bk === "duong_tinh") ? [p.ref, p.name && p.name !== p.ref ? p.name : ""].filter(Boolean).join(" · ") || t(bk === "cao_toc" ? "lyExp" : bk === "quoc_lo" ? "lyQL" : "lyDT") : (p.name || "");
-      l.bindTooltip(`<b>${esc(title)}</b><br>${esc(stLabel(p.status))}`, {sticky: true}); }});
+      l.bindTooltip(`<b>${esc(title)}</b><br>${esc(p.approx && bk === "vanh_dai" ? t("ringRef") : stLabel(p.status))}${p.approx ? ` · <i>${esc(t("approxRoute"))}</i>` : ""}${p.via && lang !== "en" ? `<br><span style="font-size:12px">${esc(p.via)}</span>` : ""}`, {sticky: true}); }});
   g.addLayer(gj);
   const addLabels = (groups, maxN, gap, color, exp, cls, fg) => Object.keys(groups).forEach(key => labelPoints(groups[key], maxN, gap).forEach(ll => {
     const n = key.split("|").pop(), m = L.marker(ll, {icon: ringIcon(n, color, exp, cls, fg), interactive: false, pane: "infraLbl", keyboard: false});
@@ -593,8 +601,15 @@ async function loadExtraLayers() {
   map.getPane("infraLbl").style.pointerEvents = "none";
   const zcls = () => { const z = map.getZoom(), el = map.getPane("infraLbl"); el.classList.toggle("z-lt10", z < 10); el.classList.toggle("z-lt12", z < 12); };
   map.on("zoomend", zcls); zcls();
-  const [bd, inf, pv, dt, hasRoads] = await Promise.all([CONFIG.BOUNDARY_URL ? getJSON(CONFIG.BOUNDARY_URL) : null, CONFIG.INFRA_URL ? getJSON(CONFIG.INFRA_URL) : null,
-    CONFIG.PROVINCE_URL ? getJSON(CONFIG.PROVINCE_URL) : null, CONFIG.DISTRICT_URL ? getJSON(CONFIG.DISTRICT_URL) : null, CONFIG.ROADS_URL ? exists(CONFIG.ROADS_URL) : false]);
+  let [bd, inf, pv, dt, hasRoads, pm, pr] = await Promise.all([CONFIG.BOUNDARY_URL ? getJSON(CONFIG.BOUNDARY_URL) : null, CONFIG.INFRA_URL ? getJSON(CONFIG.INFRA_URL) : null,
+    CONFIG.PROVINCE_URL ? getJSON(CONFIG.PROVINCE_URL) : null, CONFIG.DISTRICT_URL ? getJSON(CONFIG.DISTRICT_URL) : null, CONFIG.ROADS_URL ? exists(CONFIG.ROADS_URL) : false,
+    CONFIG.PLANNED_METRO_URL ? getJSON(CONFIG.PLANNED_METRO_URL) : null, CONFIG.PLANNED_RING_URL ? getJSON(CONFIG.PLANNED_RING_URL) : null]);
+  /* ghép các tuyến vẽ tay (metro, vành đai) vào trước dữ liệu OSM để đoạn OSM vẽ đè lên / hand-drawn lines go underneath OSM data */
+  const hand = [...((pm && pm.features) || []), ...((pr && pr.features) || [])];
+  if (hand.length || inf) inf = {type: "FeatureCollection", features: [...hand, ...((inf && inf.features) || [])]};
+  /* chỉ giữ vành đai Hà Nội & Vùng Thủ đô / keep only Hanoi & Capital Region ring roads */
+  const RR = CONFIG.RING_REGIONS || [];
+  if (inf && RR.length) inf.features = inf.features.filter(f => f.properties.kind !== "vanh_dai" || RR.includes(cityOf(f.properties)));
   const where = p => (p.tinh ? ", " + esc(tv("prov", p.tinh)) : "");
   if (pv && pv.features) extraGroups.tinh = boundaryLayer(pv, "bound", {color: "#343a40", weight: 2.5, fill: false}, null, p => esc(tv("prov", p.name)));
   if (dt && dt.features) { DIST = dt;
