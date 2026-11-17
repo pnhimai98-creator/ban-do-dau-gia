@@ -2,6 +2,9 @@
 """
 Tạo 2 lớp bản đồ từ OpenStreetMap (qua Overpass API) cho trang bản đồ đấu giá:
   layers/ranh-gioi-xa.geojson  – ranh giới xã/phường mới (sau sáp nhập 2025)
+  layers/ranh-gioi-tinh.geojson – ranh giới tỉnh/thành mới
+  layers/ranh-gioi-huyen-cu.geojson – ranh giới huyện/quận cũ (nếu OpenStreetMap còn lưu)
+  layers/duong-bo.geojson      – quốc lộ (QL) và đường tỉnh (ĐT)
   layers/ha-tang.geojson       – vành đai Hà Nội & các đô thị lân cận; đường cao tốc; đường sắt đô thị; cầu qua sông Hồng; sân bay
 
 Chạy tự động bằng GitHub Actions (.github/workflows/build-layers.yml) hoặc trên máy: python scripts/build_layers.py
@@ -11,8 +14,10 @@ Dữ liệu © OpenStreetMap contributors (giấy phép ODbL).
 import json, math, os, re, sys, time, urllib.parse, urllib.request
 
 # ===== CẤU HÌNH =====
-# Tỉnh/thành lấy ranh giới xã (đúng tên trong OpenStreetMap). Thêm "Bắc Ninh", "Hưng Yên", "Phú Thọ"… nếu muốn
-PROVINCES = ["Hà Nội"]
+# Tỉnh/thành lấy ranh giới xã/phường (và huyện cũ nếu có), đúng tên trong OpenStreetMap
+PROVINCES = ["Hà Nội", "Bắc Ninh", "Hưng Yên", "Phú Thọ"]
+# Tỉnh/thành vẽ đường ranh giới tỉnh
+OUTLINE_PROVINCES = ["Hà Nội", "Bắc Ninh", "Hưng Yên", "Phú Thọ", "Thái Nguyên", "Ninh Bình", "Hải Phòng", "Tuyên Quang", "Lạng Sơn", "Quảng Ninh"]
 # Vùng lấy dữ liệu hạ tầng: nam, tây, bắc, đông
 BBOX = (20.20, 104.95, 21.80, 106.65)   # đủ rộng để lấy cả Vành đai 5
 # Các cầu qua sông Hồng (tên bắt đầu bằng "Cầu …")
@@ -147,7 +152,8 @@ def relation_polygon(el, tol):
 
 # ---------- ranh giới xã/phường ----------
 def build_boundaries():
-    feats = []
+    """Trả về (xã/phường mới, huyện/quận cũ)."""
+    feats, dist = [], []
     for prov in PROVINCES:
         print(f"Ranh giới: {prov}")
         q = f"""[out:json][timeout:300];
@@ -172,6 +178,71 @@ out tags geom;"""
                 continue
             tg = e["tags"]
             feats.append({"type": "Feature", "properties": {"name": tg.get("name", ""), "tinh": prov, "admin_level": level, "osm_id": e["id"]}, "geometry": g})
+        # huyện/quận cũ: cấp hành chính khác, số lượng 5–60 (VD Hà Nội có 30 quận/huyện/thị xã trước 7/2025)
+        dl = [k for k, v in by_level.items() if k != level and 5 <= len(v) <= 60 and int(k) < int(level)]
+        if dl:
+            k = max(dl, key=lambda x: len(by_level[x]))
+            print(f"  huyện/quận cũ: admin_level={k} ({len(by_level[k])} đơn vị)")
+            for e in by_level[k]:
+                g = relation_polygon(e, 0.00012)
+                if g:
+                    dist.append({"type": "Feature", "properties": {"name": e["tags"].get("name", ""), "tinh": prov, "osm_id": e["id"]}, "geometry": g})
+        else:
+            print("  (OpenStreetMap không còn ranh giới huyện/quận cũ cho tỉnh này)")
+        time.sleep(3)
+    return feats, dist
+
+
+# ---------- ranh giới tỉnh ----------
+def build_provinces():
+    names = "|".join(OUTLINE_PROVINCES)
+    q = f"""[out:json][timeout:300];
+relation["boundary"="administrative"]["admin_level"="4"]["name"~"^({names})$"];
+out tags geom;"""
+    feats = []
+    for e in overpass(q).get("elements", []):
+        if e.get("type") != "relation":
+            continue
+        g = relation_polygon(e, 0.0004)
+        if g:
+            feats.append({"type": "Feature", "properties": {"name": e["tags"].get("name", ""), "osm_id": e["id"]}, "geometry": g})
+    print(f"Ranh giới tỉnh: {len(feats)} tỉnh/thành")
+    return feats
+
+
+# ---------- quốc lộ & đường tỉnh ----------
+def norm_road_ref(ref):
+    """'QL 32' → ('ql', 'QL.32'); 'DT419' → ('dt', 'ĐT.419'); 'TL.70' → ('dt', 'ĐT.70')"""
+    for r in (ref or "").split(";"):
+        m = re.match(r"\s*(QL|ĐT|DT|TL)\s*\.?\s*(\d+[A-Z]?)", r.strip(), re.I)
+        if m:
+            cls = "ql" if m.group(1).upper() == "QL" else "dt"
+            return cls, ("QL." if cls == "ql" else "ĐT.") + m.group(2).upper()
+    return None, None
+
+
+def build_roads():
+    s, w, n, e = BBOX
+    bb = f"{s},{w},{n},{e}"
+    q = f"""[out:json][timeout:900];
+way["highway"~"^(motorway|trunk|primary|secondary|tertiary|unclassified|construction|proposed)$"]["ref"~"^ *(QL|ĐT|DT|TL)",i]({bb});
+out tags geom;"""
+    lines = {}
+    for el in overpass(q).get("elements", []):
+        if el.get("type") != "way" or not el.get("geometry"):
+            continue
+        tg = el.get("tags", {})
+        cls, ref = norm_road_ref(tg.get("ref"))
+        if not cls:
+            continue
+        hw = tg.get("highway", "")
+        status = "dang_xay" if hw == "construction" else "quy_hoach" if hw == "proposed" else "hien_huu"
+        v = lines.setdefault((cls, ref, status), {"props": {"kind": "quoc_lo" if cls == "ql" else "duong_tinh", "ref": ref, "status": status}, "parts": []})
+        v["parts"].append(simplify([pt(p) for p in el["geometry"]], 0.0001))
+    feats = [{"type": "Feature", "properties": v["props"], "geometry": {"type": "MultiLineString", "coordinates": v["parts"]}} for v in lines.values()]
+    from collections import Counter
+    c = Counter((f["properties"]["kind"], f["properties"]["status"]) for f in feats)
+    print("Đường bộ:", dict(c))
     return feats
 
 
@@ -325,19 +396,36 @@ def save(name, feats, title):
     print(f"→ {path}: {len(feats)} đối tượng, {os.path.getsize(path) // 1024} KB")
 
 
+def step(title, fn):
+    """Chạy một bước; lỗi ở bước này không làm hỏng các bước khác (file cũ được giữ nguyên)."""
+    try:
+        r = fn()
+        time.sleep(5)
+        return r
+    except Exception as e:
+        print(f"⚠ {title}: lỗi {e} – giữ nguyên file cũ (nếu có)", file=sys.stderr)
+        return None
+
+
 def main():
-    b = build_boundaries()
-    if b:
-        save("ranh-gioi-xa.geojson", b, "Ranh giới xã/phường")
-    else:
-        print("⚠ Không có ranh giới nào – giữ nguyên file cũ (nếu có)", file=sys.stderr)
-    time.sleep(5)
-    i = build_infra()
+    ok = 0
+    r = step("Ranh giới xã/huyện", build_boundaries)
+    if r:
+        b, d = r
+        if b:
+            save("ranh-gioi-xa.geojson", b, "Ranh giới xã/phường"); ok += 1
+        if d:
+            save("ranh-gioi-huyen-cu.geojson", d, "Ranh giới huyện/quận cũ (trước 7/2025)"); ok += 1
+    p = step("Ranh giới tỉnh", build_provinces)
+    if p:
+        save("ranh-gioi-tinh.geojson", p, "Ranh giới tỉnh/thành"); ok += 1
+    i = step("Hạ tầng", build_infra)
     if i:
-        save("ha-tang.geojson", i, "Hạ tầng giao thông")
-    else:
-        print("⚠ Không có dữ liệu hạ tầng – giữ nguyên file cũ (nếu có)", file=sys.stderr)
-    if not b and not i:
+        save("ha-tang.geojson", i, "Hạ tầng giao thông"); ok += 1
+    rd = step("Quốc lộ & đường tỉnh", build_roads)
+    if rd:
+        save("duong-bo.geojson", rd, "Quốc lộ & đường tỉnh"); ok += 1
+    if not ok:
         sys.exit(1)
 
 
