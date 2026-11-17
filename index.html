@@ -234,6 +234,8 @@ const CONFIG = {
   // Các tuyến metro chưa có trên OpenStreetMap, vẽ tay (5 tuyến ưu tiên 1, 2, 8, 10, 14). File này không bị workflow ghi đè
   PLANNED_METRO_URL: "layers/metro-quy-hoach.geojson",
   // Hướng tuyến tổng thể 7 vành đai Hà Nội & Vùng Thủ đô (vẽ tay, nét chấm nhạt) để khép kín các đoạn OSM còn thiếu
+  // Ga metro đang triển khai (tuyến 2, 5) theo vị trí báo chí mô tả; ga đã có trên OSM sẽ dùng bản OSM
+  PLANNED_STATIONS_URL: "layers/ga-metro-trien-khai.geojson",
   PLANNED_RING_URL: "",   // đã tắt theo yêu cầu – để "" là không vẽ
   // Chỉ hiện vành đai của các nhóm này (vành đai riêng của tỉnh/đô thị khác bị bỏ)
   RING_REGIONS: ["Hà Nội", "Vùng Thủ đô"],
@@ -280,7 +282,7 @@ const T = {
   lyBound: "Ranh giới xã/phường (2025)", lyRing: "Vành đai", lyMetro: "Đường sắt đô thị (metro)", lyBridge: "Cầu sông Hồng – đang vận hành", lyBridgeB: "Cầu sông Hồng – đang xây / quy hoạch", lyAir: "Sân bay", lyExp: "Đường cao tốc", lyQL: "Quốc lộ", lyDT: "Đường tỉnh",
   lyProv: "Ranh giới tỉnh/thành (2025)", lyDist: "Ranh giới huyện/quận cũ (trước 7/2025)", pDist: "Huyện/quận cũ",
   lgInfra: "Hạ tầng", lgBuilt: "đang vận hành", lgBuild: "đang xây", lgPlan: "quy hoạch / kế hoạch",
-  lineW: "Tuyến", ringW: "VĐ", approxPos: "vị trí gần đúng", approxRoute: "hướng tuyến vẽ gần đúng", ringRef: "hướng tuyến tổng thể (tham chiếu)",
+  lineW: "Tuyến", ringW: "VĐ", approxPos: "vị trí gần đúng", approxRoute: "hướng tuyến vẽ gần đúng", ringRef: "hướng tuyến tổng thể (tham chiếu)", confW: "Độ tin cậy vị trí",
   stBuilt: "hiện hữu", stBuild: "đang xây", stPlan: "quy hoạch", plot1: "thửa",
   cArea: "Khu vực", cTop: "Cao nhất", cN: "Số phiên", cLast: "Gần nhất", cSess: "Phiên", cStart: "Khởi điểm", cWin: "Trúng cao nhất", cX: "Gấp", times: "lần",
   noRatio: "Chưa có phiên nào có đủ cả giá khởi điểm và giá trúng.", other: "(khác)", sessN: "phiên",
@@ -312,7 +314,7 @@ const T = {
   lyBound: "Commune/ward boundaries (2025)", lyRing: "Ring road", lyMetro: "Urban railway (metro)", lyBridge: "Red River bridges – in service", lyBridgeB: "Red River bridges – under construction / planned", lyAir: "Airports", lyExp: "Expressways", lyQL: "National highways", lyDT: "Provincial roads",
   lyProv: "Province/city boundaries (2025)", lyDist: "Former district boundaries (before Jul 2025)", pDist: "Former district",
   lgInfra: "Infrastructure", lgBuilt: "in service", lgBuild: "under construction", lgPlan: "planned",
-  lineW: "Line", ringW: "RR", approxPos: "approximate position", approxRoute: "approximate alignment", ringRef: "overall alignment (reference)",
+  lineW: "Line", ringW: "RR", approxPos: "approximate position", approxRoute: "approximate alignment", ringRef: "overall alignment (reference)", confW: "Position confidence",
   stBuilt: "existing", stBuild: "under construction", stPlan: "planned", plot1: "plot",
   cArea: "Area", cTop: "Highest", cN: "Auctions", cLast: "Latest", cSess: "Auction", cStart: "Start", cWin: "Top bid", cX: "Multiple", times: "×",
   noRatio: "No auction has both a starting price and a winning bid yet.", other: "(other)", sessN: "auctions",
@@ -515,7 +517,7 @@ const metroLine = p => {
   if (m) return m[1].toUpperCase();
   if (/Cát Linh|Hà Đông/i.test(s)) return "2A"; if (/Nhổn/i.test(s)) return "3"; if (/Nam Thăng Long|Thượng Đình/i.test(s)) return "2"; if (/Yên Viên|Ngọc Hồi|Như Quỳnh/i.test(s)) return "1";
   return null; };
-const infraKey = p => p.kind === "cau" ? (p.status && p.status !== "hien_huu" ? "cau_xay" : "cau") : p.kind === "vanh_dai" ? "vanh_dai:" + regionOf(p) : p.kind;
+const infraKey = p => p.kind === "ga_metro" ? "metro" : p.kind === "cau" ? (p.status && p.status !== "hien_huu" ? "cau_xay" : "cau") : p.kind === "vanh_dai" ? "vanh_dai:" + regionOf(p) : p.kind;
 const baseKey = k => k.split(":")[0];
 function infraStyle(k, p) {
   const st = INFRA_STYLE[baseKey(k)] || {}, built = !p.status || p.status === "hien_huu";
@@ -567,10 +569,13 @@ const OSM_ATTR = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenS
 function makeInfraLayer(k, fs, g) {
   const bk = baseKey(k), pane = bk === "cao_toc" ? "expw" : (bk === "quoc_lo" || bk === "duong_tinh") ? "roads" : "infra";
   const gj = L.geoJSON({type: "FeatureCollection", features: fs}, {pane, attribution: OSM_ATTR, style: f => infraStyle(k, f.properties),
+    /* ga metro: chấm trắng viền theo màu tuyến (viền đứt = ga đang xây) */
+    pointToLayer: (f, ll) => { const p = f.properties, c = METRO_COLOR[metroLine(p)] || "#343a40";
+      return L.circleMarker(ll, {pane: "infra", radius: 4.5, color: c, weight: 2.5, fillColor: "#fff", fillOpacity: 1, dashArray: p.status && p.status !== "hien_huu" ? "3 2" : null, interactive: true}); },
     onEachFeature: (f, l) => { const p = f.properties, ln = k === "metro" ? metroLine(p) : null, rn = bk === "vanh_dai" ? ringNo(p) : null;
-      const title = ln ? `${t("lineW")} ${ln} · ${p.name || ""}` : bk === "vanh_dai" ? `${t("lyRing")} ${rn || ""} · ${placeName(p)}`
+      const title = p.kind === "ga_metro" ? (p.code ? p.code + " · " : "") + (p.name || "") + (ln ? ` (${t("lineW")} ${ln})` : "") : ln ? `${t("lineW")} ${ln} · ${p.name || ""}` : bk === "vanh_dai" ? `${t("lyRing")} ${rn || ""} · ${placeName(p)}`
         : (bk === "cao_toc" || bk === "quoc_lo" || bk === "duong_tinh") ? [p.ref, p.name && p.name !== p.ref ? p.name : ""].filter(Boolean).join(" · ") || t(bk === "cao_toc" ? "lyExp" : bk === "quoc_lo" ? "lyQL" : "lyDT") : (p.name || "");
-      l.bindTooltip(`<b>${esc(title)}</b><br>${esc(p.approx && bk === "vanh_dai" ? t("ringRef") : stLabel(p.status))}${p.approx ? ` · <i>${esc(t("approxRoute"))}</i>` : ""}${p.via && lang !== "en" ? `<br><span style="font-size:12px">${esc(p.via)}</span>` : ""}`, {sticky: true}); }});
+      l.bindTooltip(`<b>${esc(title)}</b><br>${esc(p.approx && bk === "vanh_dai" ? t("ringRef") : stLabel(p.status))}${p.approx ? ` · <i>${esc(t("approxRoute"))}</i>` : ""}${p.via && lang !== "en" ? `<br><span style="font-size:12px">${esc(p.via)}</span>` : ""}${p.where && lang !== "en" ? `<br><span style="font-size:12px">${esc(p.where)}</span>` : ""}${p.confidence ? `<br><span style="font-size:12px">${esc(t("confW"))}: ${esc(lang === "en" ? ({cao: "high", "trung bình": "medium", "thấp": "low"}[p.confidence] || p.confidence) : p.confidence)}</span>` : ""}`, {sticky: true}); }});
   g.addLayer(gj);
   const addLabels = (groups, maxN, gap, color, exp, cls, fg) => Object.keys(groups).forEach(key => labelPoints(groups[key], maxN, gap).forEach(ll => {
     const n = key.split("|").pop(), m = L.marker(ll, {icon: ringIcon(n, color, exp, cls, fg), interactive: false, pane: "infraLbl", keyboard: false});
@@ -603,11 +608,17 @@ async function loadExtraLayers() {
   map.getPane("infraLbl").style.pointerEvents = "none";
   const zcls = () => { const z = map.getZoom(), el = map.getPane("infraLbl"); el.classList.toggle("z-lt10", z < 10); el.classList.toggle("z-lt12", z < 12); };
   map.on("zoomend", zcls); zcls();
-  let [bd, inf, pv, dt, hasRoads, pm, pr] = await Promise.all([CONFIG.BOUNDARY_URL ? getJSON(CONFIG.BOUNDARY_URL) : null, CONFIG.INFRA_URL ? getJSON(CONFIG.INFRA_URL) : null,
+  let [bd, inf, pv, dt, hasRoads, pm, pr, ps] = await Promise.all([CONFIG.BOUNDARY_URL ? getJSON(CONFIG.BOUNDARY_URL) : null, CONFIG.INFRA_URL ? getJSON(CONFIG.INFRA_URL) : null,
     CONFIG.PROVINCE_URL ? getJSON(CONFIG.PROVINCE_URL) : null, CONFIG.DISTRICT_URL ? getJSON(CONFIG.DISTRICT_URL) : null, CONFIG.ROADS_URL ? exists(CONFIG.ROADS_URL) : false,
-    CONFIG.PLANNED_METRO_URL ? getJSON(CONFIG.PLANNED_METRO_URL) : null, CONFIG.PLANNED_RING_URL ? getJSON(CONFIG.PLANNED_RING_URL) : null]);
+    CONFIG.PLANNED_METRO_URL ? getJSON(CONFIG.PLANNED_METRO_URL) : null, CONFIG.PLANNED_RING_URL ? getJSON(CONFIG.PLANNED_RING_URL) : null,
+    CONFIG.PLANNED_STATIONS_URL ? getJSON(CONFIG.PLANNED_STATIONS_URL) : null]);
+  /* ga nhập tay: bỏ ga nào đã có trên OSM trong bán kính ~150 m / drop hand-placed stations already mapped in OSM */
+  if (ps && ps.features) {
+    const osmSt = ((inf && inf.features) || []).filter(f => f.properties.kind === "ga_metro").map(f => f.geometry.coordinates);
+    ps.features = ps.features.filter(f => !osmSt.some(c => Math.hypot(c[0] - f.geometry.coordinates[0], c[1] - f.geometry.coordinates[1]) < 0.0015));
+  }
   /* ghép các tuyến vẽ tay (metro, vành đai) vào trước dữ liệu OSM để đoạn OSM vẽ đè lên / hand-drawn lines go underneath OSM data */
-  const hand = [...((pm && pm.features) || []), ...((pr && pr.features) || [])];
+  const hand = [...((pm && pm.features) || []), ...((pr && pr.features) || []), ...((ps && ps.features) || [])];
   if (hand.length || inf) inf = {type: "FeatureCollection", features: [...hand, ...((inf && inf.features) || [])]};
   /* chỉ giữ vành đai Hà Nội & Vùng Thủ đô / keep only Hanoi & Capital Region ring roads */
   const RR = CONFIG.RING_REGIONS || [];
