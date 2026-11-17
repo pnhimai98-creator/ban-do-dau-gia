@@ -1,0 +1,31 @@
+name: Cập nhật lớp ranh giới & hạ tầng (OpenStreetMap)
+
+on:
+  workflow_dispatch:        # bấm "Run workflow" trong tab Actions để chạy ngay
+  schedule:
+    - cron: "17 20 1 * *"   # 03:17 sáng (giờ VN) ngày 2 hằng tháng
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Tạo file GeoJSON từ OpenStreetMap
+        run: python scripts/build_layers.py
+      - name: Lưu lên repo
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898333+github-actions[bot]@users.noreply.github.com"
+          git add layers/
+          if git diff --cached --quiet; then echo "Không có thay đổi"; else
+            git commit -m "Cập nhật lớp ranh giới & hạ tầng từ OSM"
+            git pull --rebase
+            git push
+          fi
