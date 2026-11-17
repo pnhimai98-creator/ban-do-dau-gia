@@ -1,0 +1,38 @@
+name: Gom tin đấu giá từ báo (chờ duyệt)
+
+on:
+  workflow_dispatch:        # bấm "Run workflow" trong tab Actions để chạy ngay
+  schedule:
+    - cron: "23 23 * * *"   # 06:23 sáng (giờ VN) mỗi ngày
+
+permissions:
+  contents: write
+
+concurrency:
+  group: fetch-news
+  cancel-in-progress: false
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Gom tin và bóc tách
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}   # để trống nếu chưa tạo → dùng chế độ regex
+          MAX_ARTICLES: "25"
+        run: python scripts/fetch_news.py
+      - name: Lưu lên repo
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898333+github-actions[bot]@users.noreply.github.com"
+          git add cho-duyet.csv data/tin-da-xu-ly.json
+          if git diff --cached --quiet; then echo "Không có tin mới"; else
+            git commit -m "Tin đấu giá mới chờ duyệt"
+            git pull --rebase
+            git push
+          fi
