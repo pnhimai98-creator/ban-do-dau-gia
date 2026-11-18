@@ -50,7 +50,8 @@ SRC_NAME = {"vnexpress.net": "VnExpress", "dantri.com.vn": "Dân trí", "baodaut
 
 COLS = ["id", "ngay", "tinh", "xa", "dia_danh_cu", "khu", "loai_dat", "so_thua", "so_thua_trung", "gia_khoi_diem", "gia_trung_min", "gia_trung_max",
         "tong_tien_ty", "nguoi_tham_gia", "trang_thai", "lat", "lng", "vi_tri", "nguon", "link", "ghi_chu"]
-META = ["_tieu_de", "_ngay_lay", "_cach_lay", "_da_doc"]   # cột phụ, admin bỏ đi khi duyệt
+META = ["link_thong_bao", "_cap_nhat_id", "_tieu_de", "_ngay_lay", "_cach_lay", "_tu_dien", "_da_doc"]
+RESULT_KEYS = ["so_thua_trung", "gia_trung_min", "gia_trung_max", "tong_tien_ty", "nguoi_tham_gia"]   # cột phụ, admin bỏ đi khi duyệt
 
 UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124 Safari/537.36"
 
@@ -335,6 +336,8 @@ def main():
     head = COLS + [h for h in dhead if h not in COLS] + META
     known_links = {r.get("link", "").strip() for r in drows + prows if r.get("link")}
     known_keys = {dup_key(r) for r in drows + prows if r.get("ngay") and (r.get("xa") or r.get("khu"))}
+    data_by_key = {dup_key(r): r for r in drows if r.get("ngay") and (r.get("xa") or r.get("khu"))}
+    waiting = {p.get("_cap_nhat_id") for p in prows if p.get("_cap_nhat_id")}
     communes = load_communes()
     log(f"Chế độ bóc tách: {'AI (' + MODEL + ')' if API_KEY else 'regex (chưa có ANTHROPIC_API_KEY)'}")
 
@@ -390,6 +393,23 @@ def main():
         seen[it["link"]] = seen[link] = TODAY.isoformat()
         for r in rows:
             if r.get("ngay") and (r.get("xa") or r.get("khu")) and dup_key(r) in known_keys:
+                old = data_by_key.get(dup_key(r))
+                # bài KẾT QUẢ của một phiên đã có mà chưa có giá → dòng "cập nhật kết quả" (duyệt sẽ ghi vào phiên cũ)
+                if old and not old.get("gia_trung_max") and (r.get("gia_trung_max") or r.get("so_thua_trung")) and old.get("id") not in waiting:
+                    p = dict(old)
+                    for k in RESULT_KEYS:
+                        if r.get(k): p[k] = r[k]
+                    p["trang_thai"] = "Đã đấu giá"
+                    if r.get("ghi_chu"):
+                        add = [x for x in r["ghi_chu"].split("; ") if x not in (p.get("ghi_chu") or "")]
+                        if add: p["ghi_chu"] = "; ".join(filter(None, [p.get("ghi_chu"), *add]))
+                    p["link_thong_bao"] = old.get("link_thong_bao") or old.get("link", "")
+                    p.update({"link": link, "nguon": SRC_NAME.get(host) or D.src_name(link), "_cap_nhat_id": old.get("id", ""), "_tieu_de": title,
+                              "_ngay_lay": TODAY.isoformat(), "_cach_lay": "kết quả phiên đã có", "_da_doc": TODAY.isoformat(),
+                              "_tu_dien": ",".join(k for k in RESULT_KEYS + ["trang_thai"] if r.get(k) or k == "trang_thai")})
+                    prows.append(p); waiting.add(old.get("id")); added += 1
+                    log(f"  ↻ kết quả cho phiên {old.get('id')}: {r.get('gia_trung_max') or '?'} tr/m²")
+                    continue
                 log(f"  = trùng phiên đã có: {r.get('xa') or r.get('khu')} {r.get('ngay')}")
                 continue
             locate(r, communes)
