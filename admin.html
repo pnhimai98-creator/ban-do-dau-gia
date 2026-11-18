@@ -774,7 +774,7 @@ function renderPending() {
     return `<tr data-p="${i}" class="${d ? "err" : ""}"><td class="ck rn"><input type="checkbox" data-pc="${i}"${PSEL.has(i) ? " checked" : ""} aria-label="Chọn dòng ${i + 1}"></td>
       <td class="pend-t">${p.link ? `<a href="${esc(p.link)}" target="_blank" rel="noopener">${esc(p._tieu_de || p.link)}</a>` : esc(p._tieu_de || "")}
       <div class="muted">${esc(p.nguon || "")}${p._ngay_lay ? " · lấy " + esc(fdate(p._ngay_lay)) : ""}${p._cach_lay ? " · " + esc(p._cach_lay) : ""}</div>${d ? `<div class="warn">⚠ có thể trùng phiên ${esc(d)}</div>` : ""}${p._cap_nhat_id ? `<div class="rd ok"><b>↻ Kết quả cho phiên ${esc(p._cap_nhat_id)}</b> – duyệt sẽ ghi vào phiên này, không tạo phiên mới</div>` : ""}
-      ${p.link ? `<div class="rd ${PSTAT[p.link] ? PSTAT[p.link][0] : ""}"><button class="fbtn" style="margin:0 6px 0 0" data-rd="${i}" type="button">🔎 Đọc bài</button>${PSTAT[p.link] ? esc(PSTAT[p.link][1]) : (missing(p) ? `thiếu ${missing(p)} ô` : "")}</div>` : ""}</td>
+      ${p.link ? `<div class="rd ${PSTAT[p.link] ? PSTAT[p.link][0] : ""}"><button class="fbtn" style="margin:0 6px 0 0" data-rd="${i}" type="button">🔎 Đọc bài</button>${PSTAT[p.link] ? esc(PSTAT[p.link][1]) : p._loi_doc ? esc(p._loi_doc) : (missing(p) ? `thiếu ${missing(p)} ô` : "")}</div>` : ""}</td>
       ${PCOLS.map(h => `<td${(PAUTO[p.link] && PAUTO[p.link].has(h)) || String(p._tu_dien || "").split(",").includes(h) ? ' class="auto" title="Tự điền từ bài báo – hãy soát lại"' : ""}>${cellHTML(i, h, p[h]).replace(/data-g=/, "data-pi=")}</td>`).join("")}</tr>`; }).join("")
     || `<tr><td colspan="${PCOLS.length + 2}" class="muted" style="padding:10px">Không có dòng nào.</td></tr>`;
 }
@@ -940,7 +940,11 @@ const AX = (() => {
     if ((m = all.match(/hạn\s*(?:cuối\s*)?(?:nộp|bán|đăng ký)\s*(hồ sơ|tiền đặt trước|tiền)?[^.]{0,60}?(\d{1,2}\s*\/\s*\d{1,2}(?:\s*\/\s*\d{4})?)/i))) note.push(`Hạn nộp ${m[1] || "hồ sơ"} ${m[2].replace(/\s/g, "").replace(/\/\d{4}$/, "")}`);
     for (const s of S) { if (!/tổ chức|phiên đấu giá|thời gian đấu giá/i.test(s) || /hạn|nộp|bán hồ sơ|đặt trước/i.test(s)) continue;
       const mm = s.match(/(\d{1,2})\s*(?:h|giờ)\s*(\d{2})?(?![\d\/])/i); if (mm && +mm[1] < 24) { note.push(`Phiên lúc ${mm[1]}h${mm[2] || ""}`); break; } }
-    if (note.length) out.ghi_chu = note.join("; ");
+    if (!note.some(x => x.startsWith("Hạn nộp"))) for (const s of S) {
+      const mm = /hồ sơ|đặt trước|đăng ký/i.test(s) && s.match(/đến\s*(?:\d{1,2}\s*(?:giờ|h)\s*\d{0,2}\s*(?:phút)?\s*)?(?:,\s*)?ngày\s*(\d{1,2}\s*\/\s*\d{1,2})/i);
+      if (mm) { note.push("Hạn nộp hồ sơ " + mm[1].replace(/\s/g, "")); break; } }
+    if ((m = all.match(/tiền đặt trước[^.\d]{0,20}(\d{1,2})\s*%/i))) note.push(`Đặt trước ${m[1]}%`);
+    if (note.length) out.ghi_chu = note.slice(0, 6).join("; ");
     Object.keys(out).forEach(k => { if (out[k] === "" || out[k] == null || (typeof out[k] === "number" && !isFinite(out[k]))) delete out[k]; else out[k] = String(out[k]); });
     return out;
   }
@@ -971,7 +975,8 @@ const AX = (() => {
 
 const PSTAT = {}, PAUTO = {}, AXC = {};   // trạng thái đọc bài, ô đã tự điền, bộ đệm nội dung bài (theo link)
 const KEYF = ["ngay", "xa", "dia_danh_cu", "khu", "so_thua", "gia_khoi_diem", "gia_trung_max", "so_thua_trung", "tong_tien_ty", "nguoi_tham_gia"];
-const missing = p => KEYF.filter(k => !String(p[k] ?? "").trim()).length;
+const BASICF = ["ngay", "xa", "khu", "so_thua", "gia_khoi_diem"], RESF = ["gia_trung_max", "so_thua_trung", "tong_tien_ty"];
+const missing = p => BASICF.concat(["Đã đấu giá", "Đã nộp tiền"].includes(p.trang_thai) ? RESF : []).filter(k => !String(p[k] ?? "").trim()).length;
 async function readArticle(p) {
   if (!p || !p.link) return 0;
   const key = p.link; let n = 0; PSTAT[key] = ["…", "đang đọc bài…"]; renderPending();
@@ -989,7 +994,7 @@ async function readArticle(p) {
       const g = await AX.geocode(p.xa, p.tinh); if (g) { p.lat = g.lat; p.lng = g.lng; p.vi_tri = p.vi_tri || "gần đúng"; filled.add("lat"); filled.add("lng"); n += 2; }
     }
     p._tu_dien = [...filled].join(",");
-    PSTAT[key] = n ? ["ok", `✓ đã điền ${n} ô từ bài – soát lại ô tô xanh`] : ["", "bài không có thêm dữ liệu cho ô trống"];
+    PSTAT[key] = n ? ["ok", `✓ đã điền ${n} ô từ bài – soát lại ô tô xanh`] : ["", "bài không có thêm dữ liệu cho ô trống (" + (txt.length < 800 ? "chỉ đọc được rất ít chữ – mở bài kiểm tra" : "bài không nêu các ô còn trống") + ")"];
   } catch (e) { PSTAT[key] = ["bad", `không đọc được bài (${e.message || e}) – mở bài và nhập tay`]; }
   renderPending(); return n;
 }
@@ -998,10 +1003,12 @@ async function fillMany(rows, auto) {
   if (filling) return; filling = true; $("#pFill").disabled = true; let tot = 0, k = 0;
   for (const p of rows) { k++; if (!auto) say(`Đang đọc bài ${k}/${rows.length}…`); tot += await readArticle(p); await new Promise(r => setTimeout(r, 700)); }
   filling = false; $("#pFill").disabled = false;
-  if (rows.length) say(`Đã đọc ${rows.length} bài, điền thêm ${tot} ô (tô xanh nhạt). Soát lại rồi bấm “Lưu bảng chờ” hoặc “Duyệt”.`, "ok");
+  /* tự lưu luôn để lần sau mở admin không phải đọc lại */
+  if (tot && await savePending(`Tự điền ${tot} ô từ bài báo cho tin chờ duyệt`)) say(`Đã đọc ${rows.length} bài, điền thêm ${tot} ô (tô xanh nhạt) và đã lưu bảng chờ. Soát lại rồi bấm “Duyệt”.`, "ok");
+  else if (rows.length) say(`Đã đọc ${rows.length} bài, điền thêm ${tot} ô.` + (tot ? " Chưa lưu được bảng chờ – bấm “Lưu bảng chờ”." : " Xem lý do dưới tiêu đề từng dòng."), tot ? "err" : "ok");
 }
 let autoDone = false;
-function autoFill() { if (autoDone) return; autoDone = true; const rows = PROWS.filter(p => p.link && missing(p) >= 3 && !PSTAT[p.link] && !p._da_doc);   /* dòng workflow đã đọc thì thôi */ if (rows.length) fillMany(rows, true); }
+function autoFill() { if (autoDone) return; autoDone = true; const rows = PROWS.filter(p => p.link && !/news\.google\./.test(p.link) && missing(p) >= 1 && !PSTAT[p.link]); if (rows.length) fillMany(rows, true); }
 $("#pFill").addEventListener("click", () => { const rows = PSEL.size ? PROWS.filter((_, i) => PSEL.has(i)) : PROWS; fillMany(rows.filter(p => p.link)); });
 $("#pb").addEventListener("click", e => { const b = e.target.closest("[data-rd]"); if (!b) return; e.preventDefault(); readArticle(PROWS[+b.dataset.rd]); });
 $("#pSaveP").addEventListener("click", async () => { if (await savePending(`Cập nhật ${PROWS.length} tin chờ duyệt (điền từ bài báo)`)) say("Đã lưu bảng chờ duyệt.", "ok"); });
