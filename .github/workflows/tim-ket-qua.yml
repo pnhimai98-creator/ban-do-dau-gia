@@ -1,9 +1,10 @@
-name: Tìm kết quả đấu giá (phiên đã qua ngày) & tọa độ theo thôn
+name: Tìm kết quả, bỏ cọc (phiên đã có) & tọa độ theo thôn
 
 on:
   workflow_dispatch:        # bấm "Run workflow" trong tab Actions để chạy ngay
   schedule:
-    - cron: "13 0 * * *"    # 07:13 sáng (giờ VN) mỗi ngày, sau workflow gom tin
+    - cron: "13 0 * * *"    # 07:13 sáng (giờ VN)
+    - cron: "13 12 * * *"   # 19:13 tối (giờ VN)
 
 permissions:
   contents: write
@@ -21,15 +22,16 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Tìm bài kết quả cho các phiên "Chờ kết quả"
+      - name: Tìm kết quả (phiên "Chờ kết quả") và tin bỏ cọc/hủy kết quả (phiên "Đã đấu giá")
         env:
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}   # có → Claude đọc bài
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}     # có → Gemini (miễn phí) đọc bài
           MAX_SESSIONS: "25"
+          MAX_AFTER: "20"
           TIME_BUDGET_MIN: "15"
         run: python scripts/tim_ket_qua.py
       - name: Đọc lại bài gốc, điền các ô còn thiếu của tin chờ duyệt
         env:
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}   # có → Claude đọc bài
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}     # có → Gemini (miễn phí) đọc bài
           JINA_API_KEY: ${{ secrets.JINA_API_KEY }}
           TIME_BUDGET_MIN: "8"
         run: python scripts/dien_tin_cho_duyet.py

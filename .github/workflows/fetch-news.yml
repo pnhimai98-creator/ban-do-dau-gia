@@ -23,12 +23,12 @@ jobs:
           python-version: "3.12"
       - name: Gom tin và bóc tách
         env:
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}   # để trống nếu chưa tạo → dùng chế độ regex
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}     # khóa Gemini miễn phí; để trống → dùng quy tắc
           MAX_ARTICLES: "25"
         run: python scripts/fetch_news.py
       - name: Đọc lại bài gốc, điền đầy đủ các ô còn trống
         env:
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}   # có → Claude đọc bài
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}     # có → Gemini (miễn phí) đọc bài
         run: python scripts/dien_tin_cho_duyet.py
       - name: Lưu lên repo
         if: always()

@@ -26,7 +26,7 @@ jobs:
           python-version: "3.12"
       - name: Đọc lại bài gốc, điền các ô còn thiếu
         env:
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}   # có → Claude đọc bài
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}     # có → Gemini (miễn phí) đọc bài
           JINA_API_KEY: ${{ secrets.JINA_API_KEY }}   # không bắt buộc; có thì đọc nhanh hơn
         run: python scripts/dien_tin_cho_duyet.py
       - name: Lưu lên repo
