@@ -15,7 +15,7 @@ concurrency:
 jobs:
   fetch:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -26,6 +26,8 @@ jobs:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}   # để trống nếu chưa tạo → dùng chế độ regex
           MAX_ARTICLES: "25"
         run: python scripts/fetch_news.py
+      - name: Đọc lại bài gốc, điền đầy đủ các ô còn trống
+        run: python scripts/dien_tin_cho_duyet.py
       - name: Lưu lên repo
         run: |
           git config user.name "github-actions[bot]"
