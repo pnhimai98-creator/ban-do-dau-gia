@@ -554,7 +554,7 @@ async function loadDecv() {
 let BOUND = null, DIST = null, extraGroups = {};
 /* Màu metro theo sơ đồ quy hoạch đường sắt đô thị Hà Nội */
 const METRO_COLOR = {"1": "#1c4fd6", "2": "#1f9d55", "2A": "#74b816", "3": "#f59f00", "4": "#e03131", "5": "#c2255c", "6": "#7048e8", "7": "#8b5e34", "8": "#d633c4", "10": "#f06595", "14": "#15aabf"};
-const INFRA_STYLE = {vanh_dai: {color: "#c2410c", weight: 5}, cao_toc: {color: "#0b7285", weight: 5}, quoc_lo: {color: "#b02525", weight: 3.5}, duong_tinh: {color: "#e0a100", weight: 2.5}, metro: {color: "#868e96", weight: 5}, cau: {color: "#1971c2", weight: 9}, cau_xay: {color: "#f08c00", weight: 9},
+const INFRA_STYLE = {vanh_dai: {color: "#c2410c", weight: 3.5}, cao_toc: {color: "#0b7285", weight: 5}, quoc_lo: {color: "#b02525", weight: 3.5}, duong_tinh: {color: "#e0a100", weight: 2.5}, metro: {color: "#868e96", weight: 5}, cau: {color: "#1971c2", weight: 9}, cau_xay: {color: "#f08c00", weight: 9},
   san_bay: {color: "#495057", weight: 2, fillOpacity: 0.2}};
 /* Thứ tự lớp trong nút chọn lớp; vành đai được tách theo từng địa phương (vanh_dai:Hà Nội, vanh_dai:Vĩnh Yên…) */
 const INFRA_KEYS = [["vanh_dai", "lyRing"], ["cao_toc", "lyExp"], ["quoc_lo", "lyQL"], ["duong_tinh", "lyDT"], ["metro", "lyMetro"], ["cau", "lyBridge"], ["cau_xay", "lyBridgeB"], ["san_bay", "lyAir"]];
