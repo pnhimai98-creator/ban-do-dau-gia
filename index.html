@@ -523,8 +523,10 @@ function infraStyle(k, p) {
   const st = INFRA_STYLE[baseKey(k)] || {}, built = !p.status || p.status === "hien_huu";
   let color = st.color; if (k === "metro") color = METRO_COLOR[metroLine(p)] || p.colour || st.color;
   if (baseKey(k) === "vanh_dai") color = regionColor(regionOf(p));
-  /* hướng tuyến vẽ tay của vành đai: mảnh, nhạt, nét chấm – nằm dưới đoạn OSM */
-  if (baseKey(k) === "vanh_dai" && p.approx) return {...st, color, weight: 4, opacity: 0.9, dashArray: "1 8", lineCap: "round"};
+  /* đoạn vành đai vẽ tay (vá chỗ hở): mảnh và nhạt hơn đoạn OSM nhưng VẪN theo trạng thái
+     – nét liền = đang vận hành, gạch = đang xây, chấm = quy hoạch */
+  if (baseKey(k) === "vanh_dai" && p.approx) { const s2 = !p.status || p.status === "hien_huu" ? null : p.status;
+    return {...st, color, weight: 3.5, opacity: 0.7, dashArray: s2 ? DASH[s2] : null, lineCap: s2 === "quy_hoach" ? "round" : "butt"}; }
   /* metro vẽ tay: vẫn nét đứt (đang xây) nhưng mảnh và nhạt hơn, nằm dưới tuyến OSM nếu trùng đoạn */
   if (k === "metro" && p.approx) return {...st, color, weight: 3.5, opacity: 0.6, dashArray: "8 6", lineCap: "butt"};
   /* thống nhất cho mọi lớp hạ tầng: nét liền = đang vận hành, gạch dài = đang xây, chấm = quy hoạch / kế hoạch */
@@ -575,7 +577,7 @@ function makeInfraLayer(k, fs, g) {
     onEachFeature: (f, l) => { const p = f.properties, ln = k === "metro" ? metroLine(p) : null, rn = bk === "vanh_dai" ? ringNo(p) : null;
       const title = p.kind === "ga_metro" ? (p.code ? p.code + " · " : "") + (p.name || "") + (ln ? ` (${t("lineW")} ${ln})` : "") : ln ? `${t("lineW")} ${ln} · ${p.name || ""}` : bk === "vanh_dai" ? `${t("lyRing")} ${rn || ""} · ${placeName(p)}`
         : (bk === "cao_toc" || bk === "quoc_lo" || bk === "duong_tinh") ? [p.ref, p.name && p.name !== p.ref ? p.name : ""].filter(Boolean).join(" · ") || t(bk === "cao_toc" ? "lyExp" : bk === "quoc_lo" ? "lyQL" : "lyDT") : (p.name || "");
-      l.bindTooltip(`<b>${esc(title)}</b><br>${esc(p.approx && bk === "vanh_dai" ? t("ringRef") : stLabel(p.status))}${p.approx ? ` · <i>${esc(t("approxRoute"))}</i>` : ""}${p.via && lang !== "en" ? `<br><span style="font-size:12px">${esc(p.via)}</span>` : ""}${p.where && lang !== "en" ? `<br><span style="font-size:12px">${esc(p.where)}</span>` : ""}${p.confidence ? `<br><span style="font-size:12px">${esc(t("confW"))}: ${esc(lang === "en" ? ({cao: "high", "trung bình": "medium", "thấp": "low"}[p.confidence] || p.confidence) : p.confidence)}</span>` : ""}`, {sticky: true}); }});
+      l.bindTooltip(`<b>${esc(title)}</b><br>${esc(stLabel(p.status))}${p.approx ? ` · <i>${esc(t("approxRoute"))}</i>` : ""}${p.via && lang !== "en" ? `<br><span style="font-size:12px">${esc(p.via)}</span>` : ""}${p.where && lang !== "en" ? `<br><span style="font-size:12px">${esc(p.where)}</span>` : ""}${p.confidence ? `<br><span style="font-size:12px">${esc(t("confW"))}: ${esc(lang === "en" ? ({cao: "high", "trung bình": "medium", "thấp": "low"}[p.confidence] || p.confidence) : p.confidence)}</span>` : ""}`, {sticky: true}); }});
   g.addLayer(gj);
   const addLabels = (groups, maxN, gap, color, exp, cls, fg) => Object.keys(groups).forEach(key => labelPoints(groups[key], maxN, gap).forEach(ll => {
     const n = key.split("|").pop(), m = L.marker(ll, {icon: ringIcon(n, color, exp, cls, fg), interactive: false, pane: "infraLbl", keyboard: false});
