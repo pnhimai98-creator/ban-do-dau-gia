@@ -368,7 +368,7 @@ def main():
             if link in known_links or link in seen:
                 seen[it["link"]] = TODAY.isoformat(); continue
         title = re.sub(r"\s+-\s+[^-]{2,40}$", "", title) if "news.google." in it["link"] else title   # bỏ " - Tên báo" Google thêm vào cuối
-        text = ""
+        text, full = "", False
         try:                               # r.jina.ai đọc bài thành chữ sạch (giữ cả bảng số liệu); lỗi thì tự bóc HTML
             text = D.body(D.fetch_text(link), title)
         except Exception as e:
@@ -378,7 +378,8 @@ def main():
                 page, final = fetch(link); text = article_text(page) if len(article_text(page)) > len(text) else text
             except Exception:
                 pass
-        if len(text) < 300:               # không đọc được bài → dùng tóm tắt RSS
+        full = len(text) >= 300
+        if not full:                       # không đọc được bài → dùng tạm tóm tắt RSS; bước sau sẽ đọc lại bài
             text = it["desc"]
         host = urllib.parse.urlparse(link).netloc.replace("www.", "")
         try:
@@ -414,14 +415,14 @@ def main():
                 continue
             locate(r, communes)
             r.update({"link": link, "nguon": SRC_NAME.get(host) or D.src_name(link, it["src"] if it["src"] != "Google News" else host),
-                      "_tieu_de": title, "_ngay_lay": TODAY.isoformat(), "_cach_lay": "AI" if API_KEY else "quy tắc", "_da_doc": TODAY.isoformat()})
+                      "_tieu_de": title, "_ngay_lay": TODAY.isoformat(), "_cach_lay": ("AI" if API_KEY else "quy tắc") + ("" if full else " (chỉ tóm tắt RSS)")})
             if not r.get("vi_tri"):
                 r["vi_tri"] = "gần đúng"
             prows.append(r)
             known_keys.add(dup_key(r))
             added += 1
             log(f"  + {r.get('tinh')} · {r.get('xa') or r.get('khu') or '?'} · {r.get('ngay') or '?'} · {r.get('trang_thai')}")
-        time.sleep(1)
+        time.sleep(3.5)                    # dịch vụ đọc bài miễn phí giới hạn ~20 bài/phút
 
     write_csv(PENDING, head if not phead else phead + [h for h in head if h not in phead], prows)
     os.makedirs(os.path.dirname(SEEN), exist_ok=True)

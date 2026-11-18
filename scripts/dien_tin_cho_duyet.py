@@ -26,6 +26,14 @@ PEND = os.path.join(ROOT, "cho-duyet.csv")
 UA = {"User-Agent": "Mozilla/5.0 (ban-do-dau-gia; +https://github.com)"}
 KEYF = ["ngay", "xa", "dia_danh_cu", "khu", "so_thua", "gia_khoi_diem", "gia_trung_max",
         "so_thua_trung", "tong_tien_ty", "nguoi_tham_gia"]
+BASIC = ["ngay", "xa", "khu", "so_thua", "gia_khoi_diem"]          # bài thông báo trước phiên luôn phải có
+RESULT = ["gia_trung_max", "so_thua_trung", "tong_tien_ty"]        # chỉ đòi khi phiên đã có kết quả
+MAX_TRIES = 3
+JINA_KEY = os.environ.get("JINA_API_KEY", "").strip()
+
+def missing_keys(p):
+    need = BASIC + (RESULT if p.get("trang_thai") in ("Đã đấu giá", "Đã nộp tiền") else [])
+    return [k for k in need if not (p.get(k) or "").strip()]
 
 # ------------------------------------------------------------------ tải bài
 class _Text(HTMLParser):
@@ -52,12 +60,19 @@ def get(url, timeout=40, headers=None):
 
 def fetch_text(url):
     """Ưu tiên r.jina.ai (trả về chữ sạch của bài), dự phòng tải thẳng trang rồi bỏ thẻ HTML."""
-    for attempt in range(2):
+    for attempt in range(3):
         try:
-            t = get("https://r.jina.ai/" + url, headers={"X-Return-Format": "markdown"})
+            hd = {"X-Return-Format": "markdown"}
+            if JINA_KEY: hd["Authorization"] = "Bearer " + JINA_KEY
+            t = get("https://r.jina.ai/" + url, headers=hd)
             if len(t) > 300: return t
+            break
         except Exception as ex:
-            print(f"    jina lỗi: {ex}"); time.sleep(3)
+            code = getattr(ex, "code", 0)
+            print(f"    jina lỗi: {ex}")
+            if code == 429: time.sleep(20 * (attempt + 1)); continue    # vượt hạn mức miễn phí (~20 bài/phút) → chờ rồi thử lại
+            if code in (400, 401, 403, 404, 422, 451): break
+            time.sleep(3)
     h = get(url)
     m = re.search(r"<article\b.*?</article>", h, re.S | re.I)
     p = _Text(); p.feed(m.group(0) if m and len(m.group(0)) > 1500 else h)
@@ -272,7 +287,12 @@ def extract(raw, row):
         if not re.search(r"tổ chức|phiên đấu giá|thời gian đấu giá", s, re.I) or re.search(r"hạn|nộp|bán hồ sơ|đặt trước", s, re.I): continue
         if (m := re.search(r"(\d{1,2})\s*(?:h|giờ)\s*(\d{2})?(?![\d/])", s, re.I)) and int(m[1]) < 24: note.append(f"Phiên lúc {m[1]}h{m[2] or ''}"); break
     if out.get("khu") and len(out["khu"]) > 90: out["khu"] = out["khu"][:90].rsplit(",", 1)[0].rsplit(" ", 1)[0] + "…"
-    if note: out["ghi_chu"] = "; ".join(note[:5])
+    if not any(x.startswith("Hạn nộp") for x in note):
+        for s in S:   # "Thời gian bán hồ sơ, nộp tiền đặt trước: từ … đến 17 giờ ngày 18/11/2026"
+            if re.search(r"hồ sơ|đặt trước|đăng ký", s, re.I) and (m := re.search(r"đến\s*(?:\d{1,2}\s*(?:giờ|h)\s*\d{0,2}\s*(?:phút)?\s*)?(?:,\s*)?ngày\s*(\d{1,2}\s*/\s*\d{1,2})", s, re.I)):
+                note.append("Hạn nộp hồ sơ " + re.sub(r"\s", "", m[1])); break
+    if (m := re.search(r"tiền đặt trước[^.\d]{0,20}(\d{1,2})\s*%", alltxt, re.I)): note.append(f"Đặt trước {m[1]}%")
+    if note: out["ghi_chu"] = "; ".join(note[:6])
     return {k: (f"{v:g}" if isinstance(v, float) else str(v)) for k, v in out.items() if v not in ("", None)}
 
 def geocode(xa, tinh):
@@ -305,7 +325,7 @@ def main():
     if not os.path.exists(PEND): print("Chưa có cho-duyet.csv – bỏ qua"); return
     txt = open(PEND, encoding="utf-8-sig").read()
     rd = csv.DictReader(io.StringIO(txt)); head = list(rd.fieldnames or []); rows = list(rd)
-    for h in ["link", "vi_tri", "_tu_dien", "_da_doc"]:
+    for h in ["link", "vi_tri", "_tu_dien", "_da_doc", "_so_lan_doc", "_loi_doc"]:
         if h not in head: head.append(h)
     force = "--all" in sys.argv; n_read = n_cells = 0
     for p in rows:
@@ -313,17 +333,22 @@ def main():
             real = decode_google(p["link"]); time.sleep(1)
             if real:
                 print(f"Link gốc: {real}"); p["link"] = real; p["nguon"] = src_name(real, p.get("nguon")); p["_da_doc"] = ""
-        miss = [k for k in KEYF if not (p.get(k) or "").strip()]
-        if not p.get("link") or "news.google." in p["link"] or (p.get("_da_doc") and not force) or not miss: continue
+        miss = missing_keys(p)
+        tries = int(p.get("_so_lan_doc") or 0)
+        # đọc khi còn thiếu ô cơ bản; đã đọc rồi mà vẫn thiếu thì thử lại (tối đa 3 lần, mỗi ngày một lần)
+        if not p.get("link") or "news.google." in p["link"] or not miss: continue
+        if not force and (tries >= MAX_TRIES or p.get("_da_doc") == date.today().isoformat()): continue
         print(f"Đọc: {p['link']} (thiếu {len(miss)} ô)")
         try:
             raw = fetch_text(p["link"]); done = fill_row(p, raw)
             p["_tu_dien"] = ",".join(sorted(set(filter(None, (p.get("_tu_dien") or "").split(",") + done))))
             print(f"    điền {len(done)} ô: {', '.join(done) or '—'}"); n_cells += len(done)
-            p["_da_doc"] = date.today().isoformat(); n_read += 1   # chỉ đánh dấu khi đọc được, lỗi thì lần sau thử lại
+            p["_da_doc"] = date.today().isoformat(); n_read += 1
+            left = missing_keys(p); p["_loi_doc"] = ("bài không nêu: " + ", ".join(left)) if left else ""
         except Exception as ex:
-            print(f"    không đọc được bài (sẽ thử lại lần sau): {ex}")
-        time.sleep(1.5)
+            print(f"    không đọc được bài (sẽ thử lại lần sau): {ex}"); p["_loi_doc"] = f"không tải được bài: {str(ex)[:80]}"
+        p["_so_lan_doc"] = str(tries + 1)
+        time.sleep(1.5 if JINA_KEY else 3.5)   # không có khóa Jina: giữ dưới ~20 bài/phút
     buf = io.StringIO(); w = csv.DictWriter(buf, fieldnames=head, extrasaction="ignore", lineterminator="\n")
     w.writeheader(); [w.writerow({h: p.get(h, "") for h in head}) for p in rows]
     open(PEND, "w", encoding="utf-8").write(buf.getvalue())
