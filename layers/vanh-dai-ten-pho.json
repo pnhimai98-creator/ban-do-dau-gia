@@ -1,8 +1,0 @@
-{
-  "_ghi_chu": "Tên phố/đường/cầu mà mỗi vành đai đi trùng. Script noi_vanh_dai.py tải từ OpenStreetMap các đoạn đường có ĐÚNG tên này (bỏ qua tiền tố 'Đường', 'Phố'), chỉ giữ đoạn nào nối liền được với vành đai đó, rồi gán số vành đai. Trạng thái lấy theo OSM: highway=construction → đang xây, highway=proposed → quy hoạch, còn lại → đang vận hành. Thêm/bớt tên ở đây rồi chạy lại script; không cần sửa code. Nguồn danh sách: tổng hợp báo chí 11/2026 (LuatVietnam, VnEconomy, Hoatieu, Nhà đầu tư, Thư viện pháp luật).",
-  "1": ["Trần Khát Chân", "Đại Cồ Việt", "Xã Đàn", "Ô Chợ Dừa", "Đê La Thành", "Hoàng Cầu", "Voi Phục", "Cầu Giấy", "Bưởi", "Lạc Long Quân", "Âu Cơ", "Nghi Tàm", "Yên Phụ", "Trần Nhật Duật", "Trần Quang Khải", "Trần Khánh Dư", "Nguyễn Khoái"],
-  "2": ["Cầu Vĩnh Tuy", "Minh Khai", "Đại La", "Trường Chinh", "Láng", "Cầu Giấy", "Bưởi", "Võ Chí Công", "Cầu Nhật Tân", "Trường Sa", "Cầu Đông Trù", "Nguyễn Văn Linh"],
-  "2.5": ["Nguyễn Văn Huyên", "Dương Đình Nghệ", "Trung Kính", "Hoàng Đạo Thúy", "Kim Đồng", "Lĩnh Nam"],
-  "3": ["Phạm Văn Đồng", "Phạm Hùng", "Khuất Duy Tiến", "Nguyễn Xiển", "Nghiêm Xuân Yêm", "Nguyễn Hữu Thọ", "Cầu Thăng Long", "Cầu Thanh Trì", "Cầu Phù Đổng"],
-  "3.5": ["Lê Trọng Tấn", "Kỳ Vũ", "Cầu Thượng Cát", "Cầu Ngọc Hồi"]
-}
