@@ -60,6 +60,7 @@ select,input{height:40px;border:1px solid var(--line);border-radius:8px;backgrou
 .pop td{padding:2px 0;vertical-align:top}.pop td:first-child{color:#667;padding-right:10px;white-space:nowrap}
 .news{padding:10px 14px;border-bottom:1px solid var(--line);font-size:13px}
 .news b{display:block;margin-bottom:2px}
+.news .nl{margin:3px 0;line-height:1.45}.news .nl a{text-decoration:none}.news .nl a:hover{text-decoration:underline}.news .nl .go{color:var(--ink)}.news .nl .src{white-space:nowrap;font-size:12px}
 footer{padding:16px max(3vw,14px);font-size:13px;color:var(--mute);border-top:1px solid var(--line)}
 .empty{padding:24px 14px;color:var(--mute)}
 @media(max-width:860px){.layout{grid-template-columns:1fr;height:auto}#map{height:58vh}aside{border-left:0}.list{max-height:none;overflow:visible}header{align-items:flex-start}}
@@ -289,7 +290,7 @@ const T = {
   province: "Tỉnh/thành", landType: "Loại đất", from: "Từ ngày", to: "Đến ngày", all: "Tất cả",
   search: "Tìm xã, khu, địa danh cũ", searchPh: "VD: Đông Anh, Thanh Oai, thôn Văn Quán",
   stDone: "phiên có kết quả", stWon: "thửa trúng", stMax: "giá trúng cao nhất (tr/m²)", stMed: "trung vị giá cao nhất mỗi phiên", stUp: "phiên sắp tới / chờ KQ",
-  newsTitle: "Kết quả mới nhất", newsLine: (d, x, p) => `${d} — ${x}: trúng cao nhất ${p}`, none: "Chưa có",
+  newsTitle: "Kết quả mới nhất", newsLine: (d, x, p) => `${d} — ${x}: trúng cao nhất ${p}`, newsLine2: (d, x, n) => `${d} — ${x}: đấu giá thành công${n ? " " + n + " thửa" : ""}, chưa công bố giá trúng`, newsGo: "Xem trên bản đồ", none: "Chưa có",
   empty: "Không có phiên nào khớp bộ lọc.", mapErr: "Không tải được thư viện bản đồ. Kiểm tra kết nối mạng.", mapLabel: "Bản đồ các phiên đấu giá", statusGroup: "Trạng thái",
   topWin: "trúng cao nhất", startP: "khởi điểm", plots: "thửa", unit: "tr/m²", bn: "tỷ", won: "trúng", highest: "cao nhất",
   legendTitle: "Giá trúng cao nhất (tr/m²)",
@@ -324,7 +325,7 @@ const T = {
   province: "Province/City", landType: "Land type", from: "From", to: "To", all: "All",
   search: "Search commune, site, former place name", searchPh: "e.g. Đông Anh, Thanh Oai, Văn Quán village",
   stDone: "auctions with results", stWon: "plots sold", stMax: "highest winning bid ({u})", stMed: "median top bid per auction", stUp: "upcoming / awaiting results",
-  newsTitle: "Latest results", newsLine: (d, x, p) => `${d} — ${x}: top bid ${p}`, none: "None yet",
+  newsTitle: "Latest results", newsLine: (d, x, p) => `${d} — ${x}: top bid ${p}`, newsLine2: (d, x, n) => `${d} — ${x}: ${n ? n + " plots " : ""}sold, winning bids not yet published`, newsGo: "Show on map", none: "None yet",
   empty: "No auctions match the filters.", mapErr: "Could not load the map library. Please check your connection.", mapLabel: "Map of land auctions", statusGroup: "Status",
   topWin: "top bid", startP: "starting price", plots: "plots", unit: "M VND/m²", bn: "bn VND", won: "sold", highest: "highest",
   legendTitle: "Highest winning bid ({u})",
@@ -910,7 +911,10 @@ function applyLang() {
       + (lang === "en" ? (useUSD() ? ` · 1 USD = ${Math.round(RATE.usd_vnd).toLocaleString("en-US")} VND (Vietcombank, ${fdate(RATE.date)})` : "") : "");
     fillSelect($("#fTinh"), "tinh", "prov"); fillSelect($("#fLoai"), "loai_dat", "land"); fillSelect($("#fSau"), "sau_dau_gia", "after");
     const recent = DATA.filter(d => d.trang_thai === "Đã đấu giá").slice(0, 3);
-    $("#news").innerHTML = `<b>${t("newsTitle")}</b>` + (recent.map(d => esc(t("newsLine")(fdate(d.ngay), d.xa, PU(d.max)))).join("<br>") || t("none"));
+    /* mỗi tin: bấm dòng chữ → tới điểm trên bản đồ; bấm tên báo → mở bài gốc */
+    $("#news").innerHTML = `<b>${t("newsTitle")}</b>` + (recent.map(d => {
+      const line = d.max != null ? t("newsLine")(fdate(d.ngay), d.xa, PU(d.max)) : t("newsLine2")(fdate(d.ngay), d.xa, d.won || d.lots);
+      return `<div class="nl"><a href="#" class="go" data-go="${esc(d.id)}" title="${esc(t("newsGo"))}">${esc(line)}</a>${d.link ? ` · <a class="src" href="${esc(d.link)}" target="_blank" rel="noopener">${esc(tv("src", d.nguon) || t("seeArticle"))} ↗</a>` : ""}</div>`; }).join("") || t("none"));
   } else $("#updated").textContent = t("loading");
   if (map) {
     /* nút chọn nền & chú giải dựng lại theo ngôn ngữ */
@@ -978,6 +982,7 @@ async function init() {
   $("#anaClean").addEventListener("change", renderAna);
   $("#list").addEventListener("click", e => { const it = e.target.closest(".item"); if (!it) return; highlight(it.dataset.id);
     const m = markers[it.dataset.id]; if (m) { map.setView(m.getLatLng(), Math.max(map.getZoom(), 13)); m.openPopup(); } });
+  $("#news").addEventListener("click", e => { const a = e.target.closest("[data-go]"); if (!a) return; e.preventDefault(); goTo(a.dataset.go); });
   $("#list").addEventListener("keydown", e => { if (e.key === "Enter" && e.target.matches(".item")) e.target.click(); });
 }
 initAna();
