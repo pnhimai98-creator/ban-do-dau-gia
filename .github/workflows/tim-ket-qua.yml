@@ -1,0 +1,41 @@
+name: Tìm kết quả đấu giá (phiên đã qua ngày) & tọa độ theo thôn
+
+on:
+  workflow_dispatch:        # bấm "Run workflow" trong tab Actions để chạy ngay
+  schedule:
+    - cron: "13 0 * * *"    # 07:13 sáng (giờ VN) mỗi ngày, sau workflow gom tin
+
+permissions:
+  contents: write
+
+concurrency:
+  group: fetch-news         # dùng chung nhóm với "Gom tin đấu giá từ báo" để hai workflow không ghi đè nhau
+  cancel-in-progress: false
+
+jobs:
+  results:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Tìm bài kết quả cho các phiên "Chờ kết quả"
+        env:
+          MAX_SESSIONS: "40"
+        run: python scripts/tim_ket_qua.py
+      - name: Đặt tọa độ theo thôn/khu cho các phiên còn ở tâm xã
+        env:
+          MAX_GEOCODE: "60"
+        run: python scripts/toa_do_thon.py
+      - name: Lưu lên repo
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898333+github-actions[bot]@users.noreply.github.com"
+          git add cho-duyet.csv data.csv data/
+          if git diff --cached --quiet; then echo "Không có thay đổi"; else
+            git commit -m "Kết quả đấu giá tìm được & tọa độ theo thôn"
+            git pull --rebase
+            git push
+          fi
