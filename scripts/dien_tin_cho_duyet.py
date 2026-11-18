@@ -32,8 +32,12 @@ MAX_TRIES = 3
 BUDGET_MIN = float(os.environ.get("TIME_BUDGET_MIN", "12"))
 T0 = time.monotonic()
 JINA_KEY = os.environ.get("JINA_API_KEY", "").strip()
-AI_KEY = os.environ.get("ANTHROPIC_API_KEY", "").strip()          # có khóa → Claude đọc bài; không có → quy tắc
-AI_MODEL = os.environ.get("ANTHROPIC_MODEL", "claude-haiku-5-5")
+# Gemini API (gói miễn phí của Google AI Studio): có khóa → Gemini đọc bài; không có / hết hạn mức → quy tắc
+AI_KEY = os.environ.get("GEMINI_API_KEY", "").strip()
+AI_MODELS = [m.strip() for m in os.environ.get("GEMINI_MODEL", "gemini-flash-lite-latest,gemini-flash-latest").split(",") if m.strip()]
+AI_NAME = "Gemini"
+AI_GAP_S = float(os.environ.get("GEMINI_GAP_S", "6"))   # giãn cách giữa 2 lần gọi để nằm trong hạn mức miễn phí (~10 lượt/phút)
+_ai_state = {"last": 0.0, "off": False, "model": 0, "calls": 0}
 
 def missing_keys(p):
     need = BASIC + (RESULT if p.get("trang_thai") in ("Đã đấu giá", "Đã nộp tiền") else [])
@@ -271,7 +275,7 @@ def extract(raw, row):
     elif (m := re.search(rf"(huyện|quận|thị xã)\s+({NAMEW})\s*\(cũ\)", alltxt)) and cap(m[2]): out["dia_danh_cu"] = f"{m[1]} {cap(m[2])}"
     if "tinh" not in out and (m := re.search(r"(?:thành phố|TP\.?|tỉnh)\s+(Hà Nội|Bắc Ninh|Hưng Yên|Phú Thọ|Thái Nguyên|Ninh Bình|Hải Phòng|Quảng Ninh)", alltxt)): out["tinh"] = m[1]
     # khu / thôn
-    if (m := re.search(r"((?:Khu|khu|Điểm|điểm|Ô đất|ô đất|Lô đất|lô đất|Cụm|cụm)\s+(?!vực)[^.;:\n]{2,90}?)(?=\s*(?:,\s*(?:xã|phường|thị trấn)\s|\.|;|\n|\(|$))", t)) \
+    if (m := re.search(r"((?:Khu|khu|(?<!khởi )Điểm|(?<!khởi )điểm|Ô đất|ô đất|Lô đất|lô đất|Cụm|cụm)\s+(?!vực|từ\b|\d)(?:[^.;:\n]|\.(?=\d)){2,90}?)(?=\s*(?:,\s*(?:xã|phường|thị trấn)\s|\.(?!\d)|;|\n|\(|$))", t)) \
             and not re.match(r"(khu)\s+(vực|đất này|đất trên)|\S+\s+đất\s+tại\s+(xã|phường|thị trấn)\s", m[1], re.I):
         out["khu"] = re.sub(r"\s+", " ", m[1]).strip()
     if (m := re.search(rf"(?:thôn|xóm|tổ dân phố|TDP|làng)\s+({NAMEW})", alltxt)) and cap(m[1]):
@@ -284,6 +288,13 @@ def extract(raw, row):
                        "Đất sản xuất kinh doanh" if re.search("sản xuất kinh doanh", alltxt, re.I) else "Đất ở")
     if out.get("gia_trung_max") or out.get("so_thua_trung") or re.search("đấu giá thành công|trúng đấu giá", alltxt, re.I):
         out["trang_thai"] = "Đã đấu giá"
+    # sau đấu giá: bỏ cọc / hủy kết quả / đã nộp đủ tiền (chỉ câu không nói chuyện năm trước)
+    now = " ".join(x for x in S if not HIST.search(x))
+    if re.search(r"hủy (bỏ )?kết quả|hủy quyết định công nhận kết quả|kết quả .{0,20}bị hủy", now, re.I): out["sau_dau_gia"] = "Đã hủy kết quả"
+    elif re.search(r"bỏ cọc|không nộp tiền trúng|không nộp (đủ )?tiền|mất (tiền )?cọc", now, re.I): out["sau_dau_gia"] = "Bỏ cọc"
+    elif re.search(r"(đã )?nộp đủ tiền (trúng đấu giá|sử dụng đất)", now, re.I): out["sau_dau_gia"] = "Đã nộp đủ tiền"
+    if (m := re.search(r"(\d+)\s*(?:thửa|lô|suất)[^.]{0,40}?bỏ cọc|bỏ cọc[^.]{0,30}?(\d+)\s*(?:thửa|lô|suất)", now, re.I)):
+        note.append(f"Bỏ cọc {m[1] or m[2]} thửa")
     # ghi chú
     if (m := re.search(r"tổng diện tích[^.\d]{0,25}(\d[\d.,]*)\s*m\s*(?:2|²)", alltxt, re.I)): note.append(f"Tổng diện tích {m[1].rstrip('.,')} m²")
     if (m := re.search(r"hạn\s*(?:cuối\s*)?(?:nộp|bán|đăng ký)\s*(hồ sơ|tiền đặt trước|tiền)?[^.]{0,60}?(\d{1,2}\s*/\s*\d{1,2}(?:\s*/\s*\d{4})?)", alltxt, re.I)):
@@ -300,9 +311,9 @@ def extract(raw, row):
     if note: out["ghi_chu"] = "; ".join(note[:6])
     return {k: (f"{v:g}" if isinstance(v, float) else str(v)) for k, v in out.items() if v not in ("", None)}
 
-# ------------------------------------------------------------------ Claude đọc bài
+# ------------------------------------------------------------------ AI (Gemini miễn phí) đọc bài
 FIELDS = ["ngay", "tinh", "xa", "dia_danh_cu", "khu", "loai_dat", "so_thua", "so_thua_trung", "gia_khoi_diem",
-          "gia_trung_min", "gia_trung_max", "tong_tien_ty", "nguoi_tham_gia", "trang_thai", "ghi_chu"]
+          "gia_trung_min", "gia_trung_max", "tong_tien_ty", "nguoi_tham_gia", "trang_thai", "sau_dau_gia", "ghi_chu"]
 AI_PROMPT = """Bạn trích xuất số liệu một phiên đấu giá quyền sử dụng đất từ bài báo tiếng Việt, để điền vào bảng dữ liệu.
 {hint}
 Trả về DUY NHẤT một JSON (không giải thích) với các khóa sau, giá trị là chuỗi ngắn gọn; bài không nêu thì để "":
@@ -319,62 +330,81 @@ Trả về DUY NHẤT một JSON (không giải thích) với các khóa sau, gi
 - gia_trung_min, gia_trung_max: giá trúng thấp nhất / cao nhất, TRIỆU đồng/m² (không lấy số so sánh với năm trước)
 - tong_tien_ty: tổng tiền trúng đấu giá, TỶ đồng
 - nguoi_tham_gia: số người/hồ sơ tham gia
-- trang_thai: "Sắp đấu giá" | "Chờ kết quả" (đã diễn ra, chưa có kết quả) | "Đã đấu giá" (đã có kết quả) | "Hủy/bỏ cọc"
-- ghi_chu: tối đa 5 ý cực ngắn cách nhau "; " – khoảng giá khởi điểm nếu nhiều mức, tổng diện tích, tổng giá khởi điểm, hạn nộp hồ sơ, tiền đặt trước, giờ phiên, điểm đáng chú ý. Tự viết lại, không chép nguyên văn.
+- trang_thai: "Sắp đấu giá" | "Chờ kết quả" (đã diễn ra, chưa có kết quả) | "Đã đấu giá" (đã có kết quả) | "Hủy/bỏ cọc" (cả phiên bị hủy, hoặc mọi người trúng đều bỏ cọc)
+- sau_dau_gia: tình hình SAU phiên của chính phiên này nếu bài nêu: "Bỏ cọc" (có người trúng bỏ cọc/không nộp tiền) | "Đã hủy kết quả" | "Đã nộp đủ tiền" | "Đã nộp một phần" | ""
+- ghi_chu: tối đa 5 ý cực ngắn cách nhau "; " – số thửa bị bỏ cọc nếu có, khoảng giá khởi điểm nếu nhiều mức, tổng diện tích, tổng giá khởi điểm, hạn nộp hồ sơ, tiền đặt trước, giờ phiên, điểm đáng chú ý. Tự viết lại, không chép nguyên văn.
 Chỉ ghi điều bài nêu rõ, không suy đoán. Hôm nay là {today}.
 
 TIÊU ĐỀ: {title}
 NỘI DUNG:
 {text}"""
 
+def _gemini(prompt):
+    """Gọi Gemini, trả chuỗi JSON. Hết hạn mức (429) → tắt AI cho lượt chạy này, quay về quy tắc."""
+    if not AI_KEY or _ai_state["off"]: return None
+    for attempt in range(3):
+        wait = AI_GAP_S - (time.monotonic() - _ai_state["last"])
+        if wait > 0: time.sleep(wait)
+        _ai_state["last"] = time.monotonic()
+        model = AI_MODELS[min(_ai_state["model"], len(AI_MODELS) - 1)]
+        body_ = json.dumps({"contents": [{"role": "user", "parts": [{"text": prompt}]}],
+                            "generationConfig": {"temperature": 0, "responseMimeType": "application/json", "maxOutputTokens": 1200}}).encode()
+        try:
+            req = urllib.request.Request(f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent", data=body_,
+                                         headers={"x-goog-api-key": AI_KEY, "content-type": "application/json"})
+            with urllib.request.urlopen(req, timeout=90) as r: j = json.loads(r.read().decode("utf-8"))
+            _ai_state["calls"] += 1
+            parts = ((j.get("candidates") or [{}])[0].get("content") or {}).get("parts") or []
+            return "".join(p.get("text", "") for p in parts)
+        except Exception as ex:
+            code = getattr(ex, "code", 0); print(f"    Gemini lỗi ({model}): {ex}")
+            if code == 404 and _ai_state["model"] < len(AI_MODELS) - 1: _ai_state["model"] += 1; continue   # tên model đổi → thử model sau
+            if code == 429:
+                if attempt == 0: time.sleep(40); continue
+                print("    → hết hạn mức miễn phí của Gemini hôm nay: phần còn lại dùng quy tắc"); _ai_state["off"] = True; return None
+            if code in (500, 502, 503, 504): time.sleep(8 * (attempt + 1)); continue
+            if code in (400, 401, 403): print("    → khóa GEMINI_API_KEY sai hoặc chưa bật API: dùng quy tắc"); _ai_state["off"] = True
+            return None
+    return None
+
 def ai_extract(text, title, row=None):
-    """Claude đọc bài, trả dict các ô (chỉ ô có giá trị) + '_khop' (True/False). Lỗi → None."""
-    if not AI_KEY: return None
+    """AI đọc bài, trả dict các ô (chỉ ô có giá trị) + '_khop' (True/False). Không có AI / lỗi → None."""
+    if not AI_KEY or _ai_state["off"]: return None
     hint = ""
     if row and (row.get("xa") or row.get("khu")):
         hint = ("Phiên cần tìm (bài có thể nói nhiều phiên – CHỈ lấy số liệu của phiên này): "
                 f"xã/phường {row.get('xa', '')}; địa danh cũ {row.get('dia_danh_cu', '')}; khu {row.get('khu', '')}; "
                 f"ngày {row.get('ngay', '') or 'chưa rõ'}; số thửa {row.get('so_thua', '') or 'chưa rõ'}; giá khởi điểm {row.get('gia_khoi_diem', '') or 'chưa rõ'} tr/m².")
-    body_ = json.dumps({"model": AI_MODEL, "max_tokens": 900, "messages": [{"role": "user", "content": AI_PROMPT.format(
-        hint=hint, yr=date.today().year, today=date.today().isoformat(), title=title, text=text[:12000])}]}).encode()
-    for attempt in range(3):
-        try:
-            req = urllib.request.Request("https://api.anthropic.com/v1/messages", data=body_, headers={
-                "x-api-key": AI_KEY, "anthropic-version": "2023-06-01", "content-type": "application/json"})
-            with urllib.request.urlopen(req, timeout=90) as r: j = json.loads(r.read().decode("utf-8"))
-            out = "".join(b.get("text", "") for b in j.get("content", []))
-            m = re.search(r"\{.*\}", out, re.S)
-            if not m: return None
-            d = json.loads(m.group(0))
-            res = {"_khop": str(d.get("khop", "co")).strip().lower() not in ("khong", "không", "false", "no")}
-            for k in FIELDS:
-                v = str(d.get(k, "") or "").strip()
-                if not v: continue
-                if k in ("so_thua", "so_thua_trung", "nguoi_tham_gia", "gia_khoi_diem", "gia_trung_min", "gia_trung_max", "tong_tien_ty"):
-                    mm = re.search(r"\d+(?:[.,]\d+)?", v)
-                    if not mm: continue
-                    v = f"{vn(mm.group(0)):g}" if k not in ("so_thua", "so_thua_trung", "nguoi_tham_gia") else str(int(vn(mm.group(0), "m2")))
-                if k == "ngay" and not re.fullmatch(r"\d{4}-\d{2}-\d{2}", v): continue
-                res[k] = v
-            return res
-        except Exception as ex:
-            code = getattr(ex, "code", 0)
-            print(f"    Claude lỗi: {ex}")
-            if code in (429, 500, 502, 503, 529): time.sleep(10 * (attempt + 1)); continue
-            return None
-    return None
+    out = _gemini(AI_PROMPT.format(hint=hint, yr=date.today().year, today=date.today().isoformat(), title=title, text=text[:12000]))
+    if not out: return None
+    m = re.search(r"\{.*\}", out, re.S)
+    if not m: return None
+    try: d = json.loads(m.group(0))
+    except Exception: return None
+    if isinstance(d, list): d = d[0] if d else {}
+    res = {"_khop": str(d.get("khop", "co")).strip().lower() not in ("khong", "không", "false", "no")}
+    for k in FIELDS:
+        v = str(d.get(k, "") or "").strip()
+        if not v: continue
+        if k in ("so_thua", "so_thua_trung", "nguoi_tham_gia", "gia_khoi_diem", "gia_trung_min", "gia_trung_max", "tong_tien_ty"):
+            mm = re.search(r"\d+(?:[.,]\d+)?", v)
+            if not mm: continue
+            v = f"{vn(mm.group(0)):g}" if k not in ("so_thua", "so_thua_trung", "nguoi_tham_gia") else str(int(vn(mm.group(0), "m2")))
+        if k == "ngay" and not re.fullmatch(r"\d{4}-\d{2}-\d{2}", v): continue
+        res[k] = v
+    return res
 
 def extract_best(raw, row):
-    """Claude (nếu có khóa) + quy tắc bù chỗ Claude để trống. Trả (dict, cách đọc)."""
+    """Gemini (nếu có khóa) + quy tắc bù chỗ AI để trống. Trả (dict, cách đọc)."""
     rx = extract(raw, row)
     title = row.get("_tieu_de") or (re.search(r"^Title:\s*(.+)$", raw, re.M) or [None, ""])[1]
     ai = ai_extract(body(raw, title), title, row)
     if ai is None: return rx, "quy tắc"
-    if not ai.pop("_khop", True): return {"_khong_khop": "1"}, "Claude"
+    if not ai.pop("_khop", True): return {"_khong_khop": "1"}, AI_NAME
     for k, v in rx.items():
         if k not in ai and k != "ghi_chu": ai[k] = v
     if rx.get("ghi_chu") and not ai.get("ghi_chu"): ai["ghi_chu"] = rx["ghi_chu"]
-    return ai, "Claude"
+    return ai, AI_NAME
 
 def geocode(xa, tinh):
     try:
@@ -390,7 +420,7 @@ def fill_row(p, raw):
     ex, how = extract_best(raw, p); done = []
     p["_cach_doc"] = how
     if ex.get("_khong_khop"):
-        p["_loi_doc"] = "Claude: bài không nói về phiên này – kiểm tra lại link"; return done
+        p["_loi_doc"] = "AI: bài không nói về phiên này – kiểm tra lại link"; return done
     for k, v in ex.items():
         cur = (p.get(k) or "").strip()
         if k == "ghi_chu" and cur:
@@ -431,7 +461,7 @@ def main():
             print(f"    điền {len(done)} ô: {', '.join(done) or '—'}"); n_cells += len(done)
             p["_da_doc"] = date.today().isoformat(); n_read += 1
             left = missing_keys(p)
-            if not p.get("_loi_doc", "").startswith("Claude:"): p["_loi_doc"] = ("bài không nêu: " + ", ".join(left)) if left else ""
+            if not p.get("_loi_doc", "").startswith("AI:"): p["_loi_doc"] = ("bài không nêu: " + ", ".join(left)) if left else ""
         except Exception as ex:
             print(f"    không đọc được bài (sẽ thử lại lần sau): {ex}"); p["_loi_doc"] = f"không tải được bài: {str(ex)[:80]}"
         p["_so_lan_doc"] = str(tries + 1)
@@ -439,7 +469,7 @@ def main():
     buf = io.StringIO(); w = csv.DictWriter(buf, fieldnames=head, extrasaction="ignore", lineterminator="\n")
     w.writeheader(); [w.writerow({h: p.get(h, "") for h in head}) for p in rows]
     open(PEND, "w", encoding="utf-8").write(buf.getvalue())
-    print(f"Đã đọc {n_read} bài ({'Claude ' + AI_MODEL if AI_KEY else 'quy tắc – chưa có ANTHROPIC_API_KEY'}), điền thêm {n_cells} ô vào {PEND}")
+    print(f"Đã đọc {n_read} bài ({f'Gemini {_ai_state["calls"]} lượt' + (' – đã hết hạn mức, phần sau dùng quy tắc' if _ai_state['off'] else '') if AI_KEY else 'quy tắc – chưa có GEMINI_API_KEY'}), điền thêm {n_cells} ô vào {PEND}")
 
 if __name__ == "__main__":
     main()

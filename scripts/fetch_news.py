@@ -27,8 +27,9 @@ COMMUNES = os.path.join(ROOT, "layers", "ranh-gioi-xa.geojson")
 VN = timezone(timedelta(hours=7))
 TODAY = datetime.now(VN).date()
 MAX_ARTICLES = int(os.environ.get("MAX_ARTICLES", "25"))   # giới hạn số bài xử lý mỗi lần (kiểm soát chi phí AI)
-MODEL = os.environ.get("ANTHROPIC_MODEL", "claude-haiku-5-5")
-API_KEY = os.environ.get("ANTHROPIC_API_KEY", "").strip()
+# Không dùng Claude nữa. AI đọc bài (nếu có) = Gemini miễn phí, cấu hình trong dien_tin_cho_duyet.py (GEMINI_API_KEY)
+MODEL = ""
+API_KEY = ""
 
 # ---------------- Nguồn tin (sửa / thêm tại đây) ----------------
 GN = "https://news.google.com/rss/search?hl=vi&gl=VN&ceid=VN:vi&q="
@@ -141,7 +142,8 @@ def find_date(text, pub):
 
 def regex_extract(title, text, pub, link=""):
     """Bóc tách không cần AI: dùng bộ quy tắc đầy đủ của dien_tin_cho_duyet, rồi bù bằng quy tắc cũ."""
-    ex = D.extract(text, {"_tieu_de": title, "link": link})
+    ex, how = D.extract_best(text, {"_tieu_de": title, "link": link})   # Gemini nếu có khóa, không thì quy tắc
+    if ex.pop("_khong_khop", None): ex = D.extract(text, {"_tieu_de": title, "link": link})
     old = regex_extract_old(title, text, pub)
     r = old[0] if old else {k: "" for k in COLS}
     for k, v in ex.items():
@@ -339,7 +341,7 @@ def main():
     data_by_key = {dup_key(r): r for r in drows if r.get("ngay") and (r.get("xa") or r.get("khu"))}
     waiting = {p.get("_cap_nhat_id") for p in prows if p.get("_cap_nhat_id")}
     communes = load_communes()
-    log(f"Chế độ bóc tách: {'AI (' + MODEL + ')' if API_KEY else 'regex (chưa có ANTHROPIC_API_KEY)'}")
+    log(f"Chế độ bóc tách: {'Gemini (miễn phí) + quy tắc' if D.AI_KEY else 'quy tắc (chưa có GEMINI_API_KEY)'}")
 
     items, byl = read_feeds(), {}
     for it in items:                      # bỏ tin trùng link / trùng tiêu đề
@@ -415,7 +417,7 @@ def main():
                 continue
             locate(r, communes)
             r.update({"link": link, "nguon": SRC_NAME.get(host) or D.src_name(link, it["src"] if it["src"] != "Google News" else host),
-                      "_tieu_de": title, "_ngay_lay": TODAY.isoformat(), "_cach_lay": ("AI" if API_KEY else "quy tắc") + ("" if full else " (chỉ tóm tắt RSS)")})
+                      "_tieu_de": title, "_ngay_lay": TODAY.isoformat(), "_cach_lay": (D.AI_NAME if D.AI_KEY and not D._ai_state["off"] else "quy tắc") + ("" if full else " (chỉ tóm tắt RSS)")})
             if not r.get("vi_tri"):
                 r["vi_tri"] = "gần đúng"
             prows.append(r)

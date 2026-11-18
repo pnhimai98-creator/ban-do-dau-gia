@@ -37,6 +37,9 @@ T0 = time.monotonic()
 MAX_DAYS = 120
 GN = "https://news.google.com/rss/search?hl=vi&gl=VN&ceid=VN:vi&q="
 RESULT_KEYS = ["so_thua_trung", "gia_trung_min", "gia_trung_max", "tong_tien_ty", "nguoi_tham_gia"]
+MAX_AFTER = int(os.environ.get("MAX_AFTER", "20"))     # số phiên "Đã đấu giá" kiểm tra bỏ cọc mỗi lần
+AFTER_DAYS = 180
+FINAL_AFTER = {"Bỏ cọc", "Đã hủy kết quả", "Đã nộp đủ tiền"}
 STOP = set("khu diem o lo dat thua thon xom to dan pho lang xa phuong huyen quan thi tran va cac tai dau gia quyen su dung con lai khac moi cu so nhung cum ho tro dinh cu xen ket hoi truong ubnd phuc vu san xuat nong nghiep truc tuyen".split())
 
 
@@ -110,6 +113,65 @@ def matches(r, ex, text, sess_date):
     return score if score >= 3 else 0
 
 
+def check_after(drows, dhead, prows, seen, waiting):
+    """Lượt 2: phiên 'Đã đấu giá' trong 180 ngày → tìm tin bỏ cọc / hủy kết quả / nộp đủ tiền."""
+    todo = []
+    for r in drows:
+        try: d = date.fromisoformat((r.get("ngay") or "")[:10])
+        except Exception: continue
+        if r.get("trang_thai") != "Đã đấu giá" or r.get("sau_dau_gia") in FINAL_AFTER or r.get("id") in waiting: continue
+        if 0 <= (TODAY - d).days <= AFTER_DAYS: todo.append((d, r))
+    todo.sort(key=lambda x: x[0], reverse=True)
+    print(f"Phiên đã đấu giá cần kiểm tra bỏ cọc/hủy kết quả: {len(todo)} (tối đa {MAX_AFTER})")
+    n, TEXTS = 0, {}
+    for d, r in todo[:MAX_AFTER]:
+        if time.monotonic() - T0 > BUDGET_MIN * 60:
+            print("⏱ Hết giờ – phần kiểm tra bỏ cọc còn lại để lần sau."); break
+        xa = r.get("xa") or ""
+        after = (d - timedelta(days=1)).isoformat()
+        qs = [f'"{xa}" đấu giá "bỏ cọc" after:{after}', f'"{xa}" đấu giá "hủy kết quả" after:{after}']
+        qs += [f'"{o}" đấu giá "bỏ cọc" after:{after}' for o in old_communes(r)[:1]]
+        sk = lambda u: f"{r.get('id')}|sau|{u}"
+        print(f"• [sau ĐG] {r.get('id')} {xa} {d.isoformat()}")
+        cands = []
+        for q in qs:
+            for it in search(q)[:5]:
+                if sk(it["link"]) in seen or (it["pub"] and it["pub"] < d) or any(c["link"] == it["link"] for c in cands): continue
+                cands.append(it)
+            time.sleep(1.2)
+        best = (0, None, None, None)
+        for it in cands[:4]:
+            link = D.decode_google(it["link"]) if "news.google." in it["link"] else it["link"]
+            if not link: continue
+            try: raw = TEXTS.get(link) or D.fetch_text(link); TEXTS[link] = raw
+            except Exception as ex: print(f"    không đọc được {link}: {ex}"); continue
+            seen[sk(it["link"])] = seen[sk(link)] = TODAY.isoformat()
+            title = re.sub(r"\s+-\s+[^-]{2,40}$", "", it["title"])
+            ex, how = D.extract_best(raw, {**r, "_tieu_de": title, "link": link})
+            if ex.get("_khong_khop") or not ex.get("sau_dau_gia"): print(f"    · {title[:80]}"); continue
+            text = title + " " + D.body(raw, title)
+            sc = matches(r, {**ex, "gia_trung_max": ex.get("gia_trung_max") or "1"}, text, d)
+            if how == D.AI_NAME and not sc: sc = 3
+            if r.get("gia_trung_max") and r["gia_trung_max"].replace(".", ",") in text: sc += 2   # bài nhắc đúng giá trúng của phiên
+            print(f"    {'✓' if sc else '·'} {sc} {ex.get('sau_dau_gia')} – {title[:70]}")
+            if sc > best[0]: best = (sc, link, ex, title)
+            time.sleep(1.5)
+        if not best[1]: continue
+        sc, link, ex, title = best
+        p = {k: r.get(k, "") for k in dhead}
+        p["sau_dau_gia"], p["sau_dau_gia_ngay"] = ex["sau_dau_gia"], TODAY.isoformat()
+        if ex.get("trang_thai") == "Hủy/bỏ cọc": p["trang_thai"] = "Hủy/bỏ cọc"
+        if ex.get("ghi_chu"):
+            add = [x for x in ex["ghi_chu"].split("; ") if x.startswith("Bỏ cọc") and x not in (p.get("ghi_chu") or "")]
+            if add: p["ghi_chu"] = "; ".join(filter(None, [p.get("ghi_chu"), *add]))
+        p.update({"link": link, "nguon": D.src_name(link, p.get("nguon")), "_giu_link": "1", "_cap_nhat_id": r.get("id", ""),
+                  "_tieu_de": title, "_ngay_lay": TODAY.isoformat(), "_cach_lay": f"tin sau đấu giá ({D.AI_NAME if D.AI_KEY else 'quy tắc'}, điểm {sc})",
+                  "_tu_dien": "sau_dau_gia,sau_dau_gia_ngay" + (",trang_thai" if p["trang_thai"] == "Hủy/bỏ cọc" else ""), "_da_doc": TODAY.isoformat()})
+        prows.append(p); waiting.add(r.get("id")); n += 1
+        print(f"    → cập nhật sau đấu giá cho {r.get('id')}: {p['sau_dau_gia']}")
+    return n
+
+
 def main():
     dhead, drows = read_csv(DATA)
     phead, prows = read_csv(PEND)
@@ -130,8 +192,8 @@ def main():
     print(f"Phiên đã qua ngày chưa có kết quả: {len(todo)} (xử lý tối đa {MAX_SESSIONS})")
     found, LINKS, TEXTS = 0, {}, {}
     for d, r in todo[:MAX_SESSIONS]:
-        if time.monotonic() - T0 > BUDGET_MIN * 60:
-            print(f"⏱ Hết {BUDGET_MIN:g} phút – dừng, các phiên còn lại để lần chạy sau."); break
+        if time.monotonic() - T0 > BUDGET_MIN * 60 * 0.7:      # 70% thời gian cho kết quả, 30% cho bỏ cọc
+            print(f"⏱ Hết thời gian phần tìm kết quả – các phiên còn lại để lần chạy sau."); break
         xa = r.get("xa") or ""
         kt = " ".join(sorted(toks(r.get("khu"), xa), key=len, reverse=True)[:2])
         after, before = (d - timedelta(days=1)).isoformat(), (d + timedelta(days=75)).isoformat()
@@ -157,11 +219,11 @@ def main():
             seen[sk(it["link"])] = seen[sk(link)] = TODAY.isoformat()
             title = re.sub(r"\s+-\s+[^-]{2,40}$", "", it["title"])
             text = D.body(raw, title)
-            ex, how = D.extract_best(raw, {**r, "_tieu_de": title, "link": link})   # Claude được báo phiên cần tìm
-            if ex.get("_khong_khop"): sc = 0                                       # Claude: bài nói về phiên khác
+            ex, how = D.extract_best(raw, {**r, "_tieu_de": title, "link": link})   # AI được báo phiên cần tìm
+            if ex.get("_khong_khop"): sc = 0                                       # AI: bài nói về phiên khác
             else:
                 sc = matches(r, ex, title + " " + text, d)
-                if how == "Claude" and not sc and (ex.get("gia_trung_max") or ex.get("so_thua_trung")): sc = 3   # Claude xác nhận đúng phiên
+                if how == D.AI_NAME and not sc and (ex.get("gia_trung_max") or ex.get("so_thua_trung")): sc = 3   # AI xác nhận đúng phiên
             ex.pop("_khong_khop", None)
             print(f"    {'✓' if sc else '·'} {sc} {title[:80]}")
             if sc > best[0]: best = (sc, link, ex, title)
@@ -177,17 +239,18 @@ def main():
             if add: p["ghi_chu"] = "; ".join(filter(None, [p.get("ghi_chu"), *add]))
         p["link_thong_bao"] = r.get("link_thong_bao") or r.get("link", "")
         p["link"], p["nguon"] = link, D.src_name(link, p.get("nguon"))
-        p.update({"_cap_nhat_id": r.get("id", ""), "_tieu_de": title, "_ngay_lay": TODAY.isoformat(), "_cach_lay": f"tìm kết quả ({'Claude' if D.AI_KEY else 'quy tắc'}, điểm khớp {sc})",
+        p.update({"_cap_nhat_id": r.get("id", ""), "_tieu_de": title, "_ngay_lay": TODAY.isoformat(), "_cach_lay": f"tìm kết quả ({D.AI_NAME if D.AI_KEY else 'quy tắc'}, điểm khớp {sc})",
                   "_tu_dien": ",".join(k for k in RESULT_KEYS + ["trang_thai"] if p.get(k)), "_da_doc": TODAY.isoformat()})
         prows.append(p); found += 1
         print(f"    → thêm dòng cập nhật kết quả cho {r.get('id')}: {', '.join(f'{k}={p[k]}' for k in RESULT_KEYS if p.get(k))}")
+    found += check_after(drows, dhead, prows, seen, waiting)
     head = phead or dhead
-    for h in dhead + ["link_thong_bao", "_cap_nhat_id", "_tieu_de", "_ngay_lay", "_cach_lay", "_tu_dien", "_da_doc"]:
+    for h in dhead + ["sau_dau_gia", "sau_dau_gia_ngay", "link_sau_dau_gia", "_giu_link", "link_thong_bao", "_cap_nhat_id", "_tieu_de", "_ngay_lay", "_cach_lay", "_tu_dien", "_da_doc"]:
         if h not in head: head.append(h)
     write_csv(PEND, head, prows)
     os.makedirs(os.path.dirname(SEEN), exist_ok=True)
     json.dump(seen, open(SEEN, "w", encoding="utf-8"), ensure_ascii=False, indent=0, sort_keys=True)
-    print(f"Xong: tìm được kết quả cho {found} phiên → cho-duyet.csv (duyệt trong admin).")
+    print(f"Xong: {found} dòng cập nhật (kết quả / bỏ cọc) → cho-duyet.csv, duyệt trong admin.")
 
 
 if __name__ == "__main__":
