@@ -29,7 +29,11 @@ KEYF = ["ngay", "xa", "dia_danh_cu", "khu", "so_thua", "gia_khoi_diem", "gia_tru
 BASIC = ["ngay", "xa", "khu", "so_thua", "gia_khoi_diem"]          # bài thông báo trước phiên luôn phải có
 RESULT = ["gia_trung_max", "so_thua_trung", "tong_tien_ty"]        # chỉ đòi khi phiên đã có kết quả
 MAX_TRIES = 3
+BUDGET_MIN = float(os.environ.get("TIME_BUDGET_MIN", "12"))
+T0 = time.monotonic()
 JINA_KEY = os.environ.get("JINA_API_KEY", "").strip()
+AI_KEY = os.environ.get("ANTHROPIC_API_KEY", "").strip()          # có khóa → Claude đọc bài; không có → quy tắc
+AI_MODEL = os.environ.get("ANTHROPIC_MODEL", "claude-haiku-5-5")
 
 def missing_keys(p):
     need = BASIC + (RESULT if p.get("trang_thai") in ("Đã đấu giá", "Đã nộp tiền") else [])
@@ -54,6 +58,7 @@ class _Text(HTMLParser):
 
 def get(url, timeout=40, headers=None):
     req = urllib.request.Request(url, headers={**UA, **(headers or {})})
+    timeout = min(timeout, 30)
     with urllib.request.urlopen(req, timeout=timeout) as r:
         raw = r.read(); cs = r.headers.get_content_charset() or "utf-8"
     return raw.decode(cs, errors="replace")
@@ -70,7 +75,7 @@ def fetch_text(url):
         except Exception as ex:
             code = getattr(ex, "code", 0)
             print(f"    jina lỗi: {ex}")
-            if code == 429: time.sleep(20 * (attempt + 1)); continue    # vượt hạn mức miễn phí (~20 bài/phút) → chờ rồi thử lại
+            if code == 429: time.sleep(15 * (attempt + 1)); continue    # vượt hạn mức miễn phí (~20 bài/phút) → chờ rồi thử lại
             if code in (400, 401, 403, 404, 422, 451): break
             time.sleep(3)
     h = get(url)
@@ -295,6 +300,82 @@ def extract(raw, row):
     if note: out["ghi_chu"] = "; ".join(note[:6])
     return {k: (f"{v:g}" if isinstance(v, float) else str(v)) for k, v in out.items() if v not in ("", None)}
 
+# ------------------------------------------------------------------ Claude đọc bài
+FIELDS = ["ngay", "tinh", "xa", "dia_danh_cu", "khu", "loai_dat", "so_thua", "so_thua_trung", "gia_khoi_diem",
+          "gia_trung_min", "gia_trung_max", "tong_tien_ty", "nguoi_tham_gia", "trang_thai", "ghi_chu"]
+AI_PROMPT = """Bạn trích xuất số liệu một phiên đấu giá quyền sử dụng đất từ bài báo tiếng Việt, để điền vào bảng dữ liệu.
+{hint}
+Trả về DUY NHẤT một JSON (không giải thích) với các khóa sau, giá trị là chuỗi ngắn gọn; bài không nêu thì để "":
+- khop: "co" nếu bài có nói về phiên cần tìm ở trên (hoặc không có thông tin phiên cần tìm), "khong" nếu bài nói về phiên/khu/xã khác
+- ngay: ngày tổ chức phiên, dạng YYYY-MM-DD (năm mặc định {yr})
+- tinh: tỉnh/thành phố (VD "Hà Nội")
+- xa: tên xã/phường MỚI (sau sáp nhập 7/2025), không kèm chữ "xã"/"phường"
+- dia_danh_cu: địa danh cũ, VD "xã Kim Nỗ, huyện Đông Anh"
+- khu: tên khu/điểm đấu giá kèm thôn, ngắn gọn, VD "Khu X1, thôn Thọ Đa"
+- loai_dat: "Đất ở" | "Đất thương mại dịch vụ" | "Đất sản xuất kinh doanh" | "Đất nông nghiệp" | "Đất ở – dự án nhà ở cao tầng"
+- so_thua: số thửa/lô đưa ra đấu giá (số nguyên)
+- so_thua_trung: số thửa có người trúng (số nguyên)
+- gia_khoi_diem: giá khởi điểm THẤP NHẤT, quy ra TRIỆU đồng/m², số thập phân dùng dấu chấm (VD 14.35)
+- gia_trung_min, gia_trung_max: giá trúng thấp nhất / cao nhất, TRIỆU đồng/m² (không lấy số so sánh với năm trước)
+- tong_tien_ty: tổng tiền trúng đấu giá, TỶ đồng
+- nguoi_tham_gia: số người/hồ sơ tham gia
+- trang_thai: "Sắp đấu giá" | "Chờ kết quả" (đã diễn ra, chưa có kết quả) | "Đã đấu giá" (đã có kết quả) | "Hủy/bỏ cọc"
+- ghi_chu: tối đa 5 ý cực ngắn cách nhau "; " – khoảng giá khởi điểm nếu nhiều mức, tổng diện tích, tổng giá khởi điểm, hạn nộp hồ sơ, tiền đặt trước, giờ phiên, điểm đáng chú ý. Tự viết lại, không chép nguyên văn.
+Chỉ ghi điều bài nêu rõ, không suy đoán. Hôm nay là {today}.
+
+TIÊU ĐỀ: {title}
+NỘI DUNG:
+{text}"""
+
+def ai_extract(text, title, row=None):
+    """Claude đọc bài, trả dict các ô (chỉ ô có giá trị) + '_khop' (True/False). Lỗi → None."""
+    if not AI_KEY: return None
+    hint = ""
+    if row and (row.get("xa") or row.get("khu")):
+        hint = ("Phiên cần tìm (bài có thể nói nhiều phiên – CHỈ lấy số liệu của phiên này): "
+                f"xã/phường {row.get('xa', '')}; địa danh cũ {row.get('dia_danh_cu', '')}; khu {row.get('khu', '')}; "
+                f"ngày {row.get('ngay', '') or 'chưa rõ'}; số thửa {row.get('so_thua', '') or 'chưa rõ'}; giá khởi điểm {row.get('gia_khoi_diem', '') or 'chưa rõ'} tr/m².")
+    body_ = json.dumps({"model": AI_MODEL, "max_tokens": 900, "messages": [{"role": "user", "content": AI_PROMPT.format(
+        hint=hint, yr=date.today().year, today=date.today().isoformat(), title=title, text=text[:12000])}]}).encode()
+    for attempt in range(3):
+        try:
+            req = urllib.request.Request("https://api.anthropic.com/v1/messages", data=body_, headers={
+                "x-api-key": AI_KEY, "anthropic-version": "2023-06-01", "content-type": "application/json"})
+            with urllib.request.urlopen(req, timeout=90) as r: j = json.loads(r.read().decode("utf-8"))
+            out = "".join(b.get("text", "") for b in j.get("content", []))
+            m = re.search(r"\{.*\}", out, re.S)
+            if not m: return None
+            d = json.loads(m.group(0))
+            res = {"_khop": str(d.get("khop", "co")).strip().lower() not in ("khong", "không", "false", "no")}
+            for k in FIELDS:
+                v = str(d.get(k, "") or "").strip()
+                if not v: continue
+                if k in ("so_thua", "so_thua_trung", "nguoi_tham_gia", "gia_khoi_diem", "gia_trung_min", "gia_trung_max", "tong_tien_ty"):
+                    mm = re.search(r"\d+(?:[.,]\d+)?", v)
+                    if not mm: continue
+                    v = f"{vn(mm.group(0)):g}" if k not in ("so_thua", "so_thua_trung", "nguoi_tham_gia") else str(int(vn(mm.group(0), "m2")))
+                if k == "ngay" and not re.fullmatch(r"\d{4}-\d{2}-\d{2}", v): continue
+                res[k] = v
+            return res
+        except Exception as ex:
+            code = getattr(ex, "code", 0)
+            print(f"    Claude lỗi: {ex}")
+            if code in (429, 500, 502, 503, 529): time.sleep(10 * (attempt + 1)); continue
+            return None
+    return None
+
+def extract_best(raw, row):
+    """Claude (nếu có khóa) + quy tắc bù chỗ Claude để trống. Trả (dict, cách đọc)."""
+    rx = extract(raw, row)
+    title = row.get("_tieu_de") or (re.search(r"^Title:\s*(.+)$", raw, re.M) or [None, ""])[1]
+    ai = ai_extract(body(raw, title), title, row)
+    if ai is None: return rx, "quy tắc"
+    if not ai.pop("_khop", True): return {"_khong_khop": "1"}, "Claude"
+    for k, v in rx.items():
+        if k not in ai and k != "ghi_chu": ai[k] = v
+    if rx.get("ghi_chu") and not ai.get("ghi_chu"): ai["ghi_chu"] = rx["ghi_chu"]
+    return ai, "Claude"
+
 def geocode(xa, tinh):
     try:
         q = urllib.parse.quote(f"{xa}, {tinh or 'Hà Nội'}")
@@ -306,7 +387,10 @@ def geocode(xa, tinh):
 
 # ------------------------------------------------------------------ chạy
 def fill_row(p, raw):
-    ex = extract(raw, p); done = []
+    ex, how = extract_best(raw, p); done = []
+    p["_cach_doc"] = how
+    if ex.get("_khong_khop"):
+        p["_loi_doc"] = "Claude: bài không nói về phiên này – kiểm tra lại link"; return done
     for k, v in ex.items():
         cur = (p.get(k) or "").strip()
         if k == "ghi_chu" and cur:
@@ -325,7 +409,7 @@ def main():
     if not os.path.exists(PEND): print("Chưa có cho-duyet.csv – bỏ qua"); return
     txt = open(PEND, encoding="utf-8-sig").read()
     rd = csv.DictReader(io.StringIO(txt)); head = list(rd.fieldnames or []); rows = list(rd)
-    for h in ["link", "vi_tri", "_tu_dien", "_da_doc", "_so_lan_doc", "_loi_doc"]:
+    for h in ["link", "vi_tri", "_tu_dien", "_da_doc", "_so_lan_doc", "_loi_doc", "_cach_doc"]:
         if h not in head: head.append(h)
     force = "--all" in sys.argv; n_read = n_cells = 0
     for p in rows:
@@ -333,6 +417,8 @@ def main():
             real = decode_google(p["link"]); time.sleep(1)
             if real:
                 print(f"Link gốc: {real}"); p["link"] = real; p["nguon"] = src_name(real, p.get("nguon")); p["_da_doc"] = ""
+        if time.monotonic() - T0 > BUDGET_MIN * 60:
+            print(f"⏱ Hết {BUDGET_MIN:g} phút – dừng, lần sau đọc tiếp."); break
         miss = missing_keys(p)
         tries = int(p.get("_so_lan_doc") or 0)
         # đọc khi còn thiếu ô cơ bản; đã đọc rồi mà vẫn thiếu thì thử lại (tối đa 3 lần, mỗi ngày một lần)
@@ -344,7 +430,8 @@ def main():
             p["_tu_dien"] = ",".join(sorted(set(filter(None, (p.get("_tu_dien") or "").split(",") + done))))
             print(f"    điền {len(done)} ô: {', '.join(done) or '—'}"); n_cells += len(done)
             p["_da_doc"] = date.today().isoformat(); n_read += 1
-            left = missing_keys(p); p["_loi_doc"] = ("bài không nêu: " + ", ".join(left)) if left else ""
+            left = missing_keys(p)
+            if not p.get("_loi_doc", "").startswith("Claude:"): p["_loi_doc"] = ("bài không nêu: " + ", ".join(left)) if left else ""
         except Exception as ex:
             print(f"    không đọc được bài (sẽ thử lại lần sau): {ex}"); p["_loi_doc"] = f"không tải được bài: {str(ex)[:80]}"
         p["_so_lan_doc"] = str(tries + 1)
@@ -352,7 +439,7 @@ def main():
     buf = io.StringIO(); w = csv.DictWriter(buf, fieldnames=head, extrasaction="ignore", lineterminator="\n")
     w.writeheader(); [w.writerow({h: p.get(h, "") for h in head}) for p in rows]
     open(PEND, "w", encoding="utf-8").write(buf.getvalue())
-    print(f"Đã đọc {n_read} bài, điền thêm {n_cells} ô vào {PEND}")
+    print(f"Đã đọc {n_read} bài ({'Claude ' + AI_MODEL if AI_KEY else 'quy tắc – chưa có ANTHROPIC_API_KEY'}), điền thêm {n_cells} ô vào {PEND}")
 
 if __name__ == "__main__":
     main()
