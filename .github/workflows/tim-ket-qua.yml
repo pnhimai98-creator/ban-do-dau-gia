@@ -25,6 +25,10 @@ jobs:
         env:
           MAX_SESSIONS: "40"
         run: python scripts/tim_ket_qua.py
+      - name: Đọc lại bài gốc, điền các ô còn thiếu của tin chờ duyệt
+        env:
+          JINA_API_KEY: ${{ secrets.JINA_API_KEY }}
+        run: python scripts/dien_tin_cho_duyet.py
       - name: Đặt tọa độ theo thôn/khu cho các phiên còn ở tâm xã
         env:
           MAX_GEOCODE: "60"
