@@ -317,7 +317,7 @@ const T = {
   repTitle: "Báo cáo định kỳ", repSub: "Các báo cáo định kỳ dạng PDF, mới nhất ở trên. Bấm vào tên để mở.", repNone: "Chưa có báo cáo nào.",
   cRepDate: "Kỳ báo cáo", cRepName: "Báo cáo", cRepSize: "Dung lượng",
   repBtn: "Báo cáo", repNewTab: "Mở tab mới ↗", repDown: "Tải về", repNew: "MỚI", repPeriod: "Kỳ",
-  reAuc: "Đấu lại", reAucT: "Cùng khu đất đã đưa ra đấu giá ở phiên trước (đấu lại các thửa còn lại hoặc đợt tiếp theo)", pRel: "Phiên liên quan", round: "lần", pNotice: "Thông báo đấu giá", byThon: "theo thôn/khu (gần đúng)"
+  reAuc: "Đấu lại", reAucT: "Cùng khu đất đã đưa ra đấu giá ở phiên trước (đấu lại các thửa còn lại hoặc đợt tiếp theo)", pRel: "Phiên liên quan", round: "lần", pNotice: "Thông báo đấu giá", pAfterSrc: "Tin sau đấu giá (bỏ cọc / hủy / nộp tiền)", byThon: "theo thôn/khu (gần đúng)"
  },
  en: {
   title: "Hanoi & Surrounding Areas Land Auction Map", docTitle: "Hanoi Land Auction Map",
@@ -354,7 +354,7 @@ const T = {
   repTitle: "Periodic reports", repSub: "Periodic reports in PDF (in Vietnamese), newest first. Click a title to open it.", repNone: "No reports yet.",
   cRepDate: "Period", cRepName: "Report", cRepSize: "Size",
   repBtn: "Reports", repNewTab: "Open in new tab ↗", repDown: "Download", repNew: "NEW", repPeriod: "Period",
-  reAuc: "Re-auction", reAucT: "Same site was auctioned in an earlier session (remaining plots re-offered or a later batch)", pRel: "Related auctions", round: "round", pNotice: "Auction notice", byThon: "by village/site (approximate)"
+  reAuc: "Re-auction", reAucT: "Same site was auctioned in an earlier session (remaining plots re-offered or a later batch)", pRel: "Related auctions", round: "round", pNotice: "Auction notice", pAfterSrc: "Post-auction news (forfeit / cancel / payment)", byThon: "by village/site (approximate)"
  }
 };
 /* Giá trị dữ liệu có bản dịch / Data values with translations (lọc vẫn dùng giá trị tiếng Việt) */
@@ -782,7 +782,8 @@ function popup(d) {
    <table>${rows.map(r => `<tr><td>${r[0]}</td><td${r[2] ? ` data-mt="${esc(r[1])}"` : ""}>${esc(r[1])}</td></tr>`).join("")}</table>
    ${d.relList && d.relList.length ? `<p style="margin:8px 0 0;font-size:13px"><b>${t("pRel")}</b> (${t("round")} ${d.round}/${d.relList.length + 1})<br>${d.relList.map(x => `<a href="#" data-go="${esc(x.id)}">${fdate(x.ngay)} · ${esc(tv("status", x.trang_thai))}${x.max != null ? " · " + PU(x.max) : ""}${x.lots != null ? " · " + x.lots + " " + plotsWord(x.lots) : ""}</a>`).join("<br>")}</p>` : ""}
    ${d.link ? `<p style="margin:8px 0 0"><a href="${esc(d.link)}" target="_blank" rel="noopener">${t("pSrc")}: ${esc(tv("src", d.nguon) || t("seeArticle"))} ↗</a></p>` : ""}
-   ${d.link_thong_bao && d.link_thong_bao !== d.link ? `<p style="margin:2px 0 0;font-size:13px"><a href="${esc(d.link_thong_bao)}" target="_blank" rel="noopener">${t("pNotice")} ↗</a></p>` : ""}</div>`;
+   ${d.link_thong_bao && d.link_thong_bao !== d.link ? `<p style="margin:2px 0 0;font-size:13px"><a href="${esc(d.link_thong_bao)}" target="_blank" rel="noopener">${t("pNotice")} ↗</a></p>` : ""}
+   ${d.link_sau_dau_gia ? `<p style="margin:2px 0 0;font-size:13px"><a href="${esc(d.link_sau_dau_gia)}" target="_blank" rel="noopener">${t("pAfterSrc")} ↗</a></p>` : ""}</div>`;
 }
 
 function render() {
