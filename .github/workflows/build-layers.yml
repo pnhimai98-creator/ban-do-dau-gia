@@ -21,6 +21,8 @@ jobs:
         run: python scripts/build_layers.py
       - name: Nối vành đai liền mạch theo tên phố
         run: python scripts/noi_vanh_dai.py
+      - name: Vẽ lại vành đai thành một nét, khép kín VĐ2–5, để hở VĐ1–2.5–3.5
+        run: python scripts/khep_vanh_dai.py
       - name: Lưu lên repo
         run: |
           git config user.name "github-actions[bot]"
