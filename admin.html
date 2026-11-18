@@ -160,7 +160,7 @@ table.sheet{border-collapse:separate;border-spacing:0;font-size:14px;width:max-c
      <label>Tổng tiền (tỷ đồng)<input name="tong_tien_ty" inputmode="decimal"></label>
      <label>Vĩ độ (lat)<input name="lat" inputmode="decimal"></label>
      <label>Kinh độ (lng)<input name="lng" inputmode="decimal"></label>
-     <label>Độ chính xác vị trí<select name="vi_tri"><option>gần đúng</option><option>chính xác</option></select></label>
+     <label>Độ chính xác vị trí<select name="vi_tri"><option>gần đúng</option><option>theo thôn</option><option>chính xác</option></select></label>
      <label>Tên nguồn<input name="nguon" list="dlNguon" placeholder="VD: VnExpress"></label>
      <label class="full">Link nguồn<input name="link" type="url" placeholder="https://…"></label>
      <label class="full">Ghi chú<textarea name="ghi_chu"></textarea></label>
@@ -384,7 +384,7 @@ table.sheet{border-collapse:separate;border-spacing:0;font-size:14px;width:max-c
 const STD = ["id","ngay","tinh","xa","dia_danh_cu","khu","loai_dat","so_thua","so_thua_trung","gia_khoi_diem","gia_trung_min","gia_trung_max","tong_tien_ty","nguoi_tham_gia","trang_thai","lat","lng","vi_tri","nguon","link","ghi_chu"];
 const PREFIX = {"Hà Nội":"HN","Bắc Ninh":"BN","Hưng Yên":"HY","Phú Thọ":"PT","Thái Nguyên":"TN","Ninh Bình":"NB"};
 /* cột bổ sung mà bản đồ dùng (theo dõi sau đấu giá, giá nhà nước) – tự thêm vào data.csv nếu chưa có */
-const EXTRA_STD = ["sau_dau_gia", "sau_dau_gia_ngay", "gia_nha_nuoc"];
+const EXTRA_STD = ["sau_dau_gia", "sau_dau_gia_ngay", "gia_nha_nuoc", "link_thong_bao", "lien_quan"];
 const NUMS = ["gia_nha_nuoc", "so_thua","so_thua_trung","gia_khoi_diem","gia_trung_min","gia_trung_max","tong_tien_ty","nguoi_tham_gia","lat","lng"];
 const $ = s => document.querySelector(s);
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -577,8 +577,9 @@ $("#btnCsv").addEventListener("click", () => { const a = document.createElement(
 const COL = {id: ["Mã", 120], ngay: ["Ngày", 140], trang_thai: ["Trạng thái", 140], tinh: ["Tỉnh", 110], xa: ["Xã/phường", 130], dia_danh_cu: ["Địa danh cũ", 200], khu: ["Khu đấu giá", 240],
   loai_dat: ["Loại đất", 140], so_thua: ["Số thửa", 80], so_thua_trung: ["Thửa trúng", 90], gia_khoi_diem: ["Giá KĐ (tr/m²)", 110], gia_trung_min: ["Trúng thấp (tr/m²)", 120], gia_trung_max: ["Trúng cao (tr/m²)", 120],
   tong_tien_ty: ["Tổng (tỷ)", 90], nguoi_tham_gia: ["Người tham gia", 110], lat: ["Vĩ độ", 100], lng: ["Kinh độ", 100], vi_tri: ["Vị trí", 110], nguon: ["Nguồn", 130], link: ["Link nguồn", 260], ghi_chu: ["Ghi chú", 260],
-  sau_dau_gia: ["Sau đấu giá", 160], sau_dau_gia_ngay: ["Cập nhật sau ĐG", 130], gia_nha_nuoc: ["Giá nhà nước (tr/m²)", 130]};
-const SELECTS = {trang_thai: ["Sắp đấu giá", "Chờ kết quả", "Đã đấu giá", "Đã nộp tiền", "Hủy/bỏ cọc"], vi_tri: ["gần đúng", "chính xác"],
+  sau_dau_gia: ["Sau đấu giá", 160], sau_dau_gia_ngay: ["Cập nhật sau ĐG", 130], gia_nha_nuoc: ["Giá nhà nước (tr/m²)", 130],
+  link_thong_bao: ["Link thông báo (trước phiên)", 260], lien_quan: ["Phiên liên quan (mã)", 160]};
+const SELECTS = {trang_thai: ["Sắp đấu giá", "Chờ kết quả", "Đã đấu giá", "Đã nộp tiền", "Hủy/bỏ cọc"], vi_tri: ["gần đúng", "theo thôn", "chính xác"],
   sau_dau_gia: ["Đang trong hạn nộp", "Đã nộp đủ tiền", "Đã nộp một phần", "Quá hạn chưa nộp", "Bỏ cọc", "Đã hủy kết quả", "Chưa rõ"]};
 const DATALISTS = {tinh: "dlTinh", loai_dat: "dlLoai", nguon: "dlNguon"};
 let FILT = {};   // bộ lọc theo cột: {cột: Set các giá trị được hiện}
@@ -753,6 +754,7 @@ let PHEAD = [], PROWS = [], PSHA = null, PSEL = new Set();
 const foldv = s => String(s || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/đ/gi, "d").toLowerCase().replace(/^(xa|phuong|thi tran)\s+/, "").replace(/\s+/g, " ").trim();
 const toCSVOf = (head, rows) => [head.join(",")].concat(rows.map(r => head.map(h => q(r[h])).join(","))).join("\n") + "\n";
 function pendDup(p) {
+  if (p._cap_nhat_id) return "";
   const hit = ROWS.find(r => (p.link && r.link === p.link) || (p.ngay && r.ngay === p.ngay && foldv(r.tinh) === foldv(p.tinh) && foldv(r.xa) && foldv(r.xa) === foldv(p.xa)));
   return hit ? hit.id || "?" : "";
 }
@@ -763,12 +765,15 @@ async function loadPending() {
 }
 function updPendBadge() { const b = $("#pendBadge"); b.textContent = PROWS.length; b.hidden = !PROWS.length; }
 function renderPending() {
-  $("#pendInfo").textContent = PROWS.length ? `${PROWS.length} dòng chờ duyệt · đã chọn ${PSEL.size}` : (PSHA ? "Không còn tin nào chờ duyệt." : "Chưa có file cho-duyet.csv – hãy chạy workflow “Gom tin đấu giá từ báo” trong tab Actions.");
+  const today = new Date(Date.now() + 7 * 3600e3).toISOString().slice(0, 10);
+  const need = ROWS.filter(r => !r.gia_trung_max && r.ngay && r.ngay < today && (r.trang_thai === "Chờ kết quả" || r.trang_thai === "Sắp đấu giá")).length;
+  $("#pendInfo").textContent = (PROWS.length ? `${PROWS.length} dòng chờ duyệt · đã chọn ${PSEL.size}` : (PSHA ? "Không còn tin nào chờ duyệt." : "Chưa có file cho-duyet.csv – hãy chạy workflow “Gom tin đấu giá từ báo” trong tab Actions."))
+    + (need ? ` · ${need} phiên đã qua ngày chưa có kết quả (workflow “Tìm kết quả đấu giá” tự tìm mỗi sáng)` : "");
   $("#ph").innerHTML = `<tr><th class="rn">✓</th><th>Bài báo</th>${PCOLS.map(h => `<th>${esc((COL[h] || [h])[0])}</th>`).join("")}</tr>`;
   $("#pb").innerHTML = PROWS.map((p, i) => { const d = pendDup(p);
     return `<tr data-p="${i}" class="${d ? "err" : ""}"><td class="ck rn"><input type="checkbox" data-pc="${i}"${PSEL.has(i) ? " checked" : ""} aria-label="Chọn dòng ${i + 1}"></td>
       <td class="pend-t">${p.link ? `<a href="${esc(p.link)}" target="_blank" rel="noopener">${esc(p._tieu_de || p.link)}</a>` : esc(p._tieu_de || "")}
-      <div class="muted">${esc(p.nguon || "")}${p._ngay_lay ? " · lấy " + esc(fdate(p._ngay_lay)) : ""}${p._cach_lay ? " · " + esc(p._cach_lay) : ""}</div>${d ? `<div class="warn">⚠ có thể trùng phiên ${esc(d)}</div>` : ""}
+      <div class="muted">${esc(p.nguon || "")}${p._ngay_lay ? " · lấy " + esc(fdate(p._ngay_lay)) : ""}${p._cach_lay ? " · " + esc(p._cach_lay) : ""}</div>${d ? `<div class="warn">⚠ có thể trùng phiên ${esc(d)}</div>` : ""}${p._cap_nhat_id ? `<div class="rd ok"><b>↻ Kết quả cho phiên ${esc(p._cap_nhat_id)}</b> – duyệt sẽ ghi vào phiên này, không tạo phiên mới</div>` : ""}
       ${p.link ? `<div class="rd ${PSTAT[p.link] ? PSTAT[p.link][0] : ""}"><button class="fbtn" style="margin:0 6px 0 0" data-rd="${i}" type="button">🔎 Đọc bài</button>${PSTAT[p.link] ? esc(PSTAT[p.link][1]) : (missing(p) ? `thiếu ${missing(p)} ô` : "")}</div>` : ""}</td>
       ${PCOLS.map(h => `<td${(PAUTO[p.link] && PAUTO[p.link].has(h)) || String(p._tu_dien || "").split(",").includes(h) ? ' class="auto" title="Tự điền từ bài báo – hãy soát lại"' : ""}>${cellHTML(i, h, p[h]).replace(/data-g=/, "data-pi=")}</td>`).join("")}</tr>`; }).join("")
     || `<tr><td colspan="${PCOLS.length + 2}" class="muted" style="padding:10px">Không có dòng nào.</td></tr>`;
@@ -796,7 +801,14 @@ $("#pOk").addEventListener("click", async () => {
   if (!PSEL.size) { say("Chưa chọn dòng nào để duyệt.", "err"); return; }
   if (GRID.some(rowChanged)) { say("Tab Bảng tính còn thay đổi chưa lưu – hãy lưu hoặc hủy trước khi duyệt tin.", "err"); return; }
   const keep = ROWS.slice(), picked = PROWS.filter((_, i) => PSEL.has(i)), warns = [];
+  let merged = 0;
   picked.forEach(p => {
+    const tgt = p._cap_nhat_id ? ROWS.find(x => x.id === p._cap_nhat_id) : null;
+    if (tgt) {   /* dòng "cập nhật kết quả": ghi vào phiên cũ, giữ mã, link thông báo cũ chuyển sang cột link_thong_bao */
+      if (!HEAD.includes("link_thong_bao")) HEAD.push("link_thong_bao");
+      HEAD.forEach(h => { if (h === "id") return; const v = String(p[h] ?? "").trim(); if (v) tgt[h] = NUMS.includes(h) ? normNum(v) : v; });
+      const w = validate(tgt); if (w) warns.push(`${tgt.id}: ${w}`); merged++; return;
+    }
     const r = Object.fromEntries(HEAD.map(h => [h, String(p[h] ?? "").trim()]));
     NUMS.forEach(k => { if (r[k]) r[k] = normNum(r[k]); });
     if (r.ngay && /^\d{1,2}\/\d{1,2}\/\d{4}$/.test(r.ngay)) { const [d, m, y] = r.ngay.split("/"); r.ngay = `${y}-${m.padStart(2, "0")}-${d.padStart(2, "0")}`; }
@@ -805,12 +817,12 @@ $("#pOk").addEventListener("click", async () => {
     const w = validate(r); if (w) warns.push(`${r.id}: ${w}`);
     ROWS.push(r);
   });
-  const ok = await commit(`Duyệt ${picked.length} phiên từ tin báo`);
+  const ok = await commit(`Duyệt ${picked.length} tin từ báo` + (merged ? ` (${merged} cập nhật kết quả phiên cũ)` : ""));
   if (!ok) { ROWS = keep; return; }
   PROWS = PROWS.filter((_, i) => !PSEL.has(i)); PSEL = new Set();
   const ok2 = await savePending(`Đã duyệt ${picked.length} tin`);
   gridFromRows(); updPendBadge(); renderPending();
-  if (ok2) say(`Đã duyệt ${picked.length} phiên vào data.csv. Bản đồ cập nhật sau khoảng 1 phút.` + (warns.length ? " Lưu ý: " + warns.join("; ") : ""), "ok");
+  if (ok2) say(`Đã duyệt ${picked.length} tin vào data.csv${merged ? ` – trong đó ${merged} tin là kết quả, đã ghi vào phiên cũ` : ""}. Bản đồ cập nhật sau khoảng 1 phút.` + (warns.length ? " Lưu ý: " + warns.join("; ") : ""), "ok");
 });
 
 /* ---------- Đọc bài báo & trích dữ liệu phiên đấu giá / read an article and extract auction fields ---------- */

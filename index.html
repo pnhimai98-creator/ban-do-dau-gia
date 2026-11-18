@@ -92,7 +92,7 @@ footer{padding:16px max(3vw,14px);font-size:13px;color:var(--mute);border-top:1p
 .chartbox .pt:hover{stroke:var(--ink)}
 .ctip{position:absolute;pointer-events:none;background:var(--ink);color:var(--bg);font-size:12px;line-height:1.45;padding:6px 9px;border-radius:8px;max-width:260px;z-index:5;box-shadow:0 4px 14px #0003}
 .anagrid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
-.rank{border:1px solid var(--line);border-radius:12px;padding:12px;background:var(--card);overflow:auto}
+.rank[hidden]{display:none}.rank{border:1px solid var(--line);border-radius:12px;padding:12px;background:var(--card);overflow:auto}
 .rank table{border-collapse:collapse;width:100%;font-size:13px}
 .rank th{font-size:11.5px;color:var(--mute);font-weight:600;text-align:left;padding:4px 6px;border-bottom:1px solid var(--line);white-space:nowrap}
 .rank td{padding:6px;border-bottom:1px solid var(--line);vertical-align:top}
@@ -156,7 +156,7 @@ footer{padding:16px max(3vw,14px);font-size:13px;color:var(--mute);border-top:1p
  <div class="anagrid">
   <div class="rank"><h3 data-t="rk1"></h3><div id="rk1"></div></div>
   <div class="rank"><h3 data-t="rk2"></h3><div id="rk2"></div></div>
-  <div class="rank"><h3 data-t="rk3"></h3><div id="rk3"></div></div>
+  <div class="rank" id="rk3box"><h3 data-t="rk3"></h3><div id="rk3"></div></div>
  </div>
 </section>
 <section class="ana" id="reports" aria-labelledby="repT">
@@ -316,7 +316,8 @@ const T = {
   dSum: "Tóm tắt", dOwner: "Chủ dự án", dFunc: "Chức năng", dSel: "Hình thức chọn nhà đầu tư",
   repTitle: "Báo cáo định kỳ", repSub: "Các báo cáo định kỳ dạng PDF, mới nhất ở trên. Bấm vào tên để mở.", repNone: "Chưa có báo cáo nào.",
   cRepDate: "Kỳ báo cáo", cRepName: "Báo cáo", cRepSize: "Dung lượng",
-  repBtn: "Báo cáo", repNewTab: "Mở tab mới ↗", repDown: "Tải về", repNew: "MỚI", repPeriod: "Kỳ"
+  repBtn: "Báo cáo", repNewTab: "Mở tab mới ↗", repDown: "Tải về", repNew: "MỚI", repPeriod: "Kỳ",
+  reAuc: "Đấu lại", reAucT: "Cùng khu đất đã đưa ra đấu giá ở phiên trước (đấu lại các thửa còn lại hoặc đợt tiếp theo)", pRel: "Phiên liên quan", round: "lần", pNotice: "Thông báo đấu giá", byThon: "theo thôn/khu (gần đúng)"
  },
  en: {
   title: "Hanoi & Surrounding Areas Land Auction Map", docTitle: "Hanoi Land Auction Map",
@@ -352,7 +353,8 @@ const T = {
   dSum: "Summary", dOwner: "Project owner", dFunc: "Function", dSel: "Investor selection",
   repTitle: "Periodic reports", repSub: "Periodic reports in PDF (in Vietnamese), newest first. Click a title to open it.", repNone: "No reports yet.",
   cRepDate: "Period", cRepName: "Report", cRepSize: "Size",
-  repBtn: "Reports", repNewTab: "Open in new tab ↗", repDown: "Download", repNew: "NEW", repPeriod: "Period"
+  repBtn: "Reports", repNewTab: "Open in new tab ↗", repDown: "Download", repNew: "NEW", repPeriod: "Period",
+  reAuc: "Re-auction", reAucT: "Same site was auctioned in an earlier session (remaining plots re-offered or a later batch)", pRel: "Related auctions", round: "round", pNotice: "Auction notice", byThon: "by village/site (approximate)"
  }
 };
 /* Giá trị dữ liệu có bản dịch / Data values with translations (lọc vẫn dùng giá trị tiếng Việt) */
@@ -619,6 +621,8 @@ const stLabel = s => s === "dang_xay" ? t("stBuild") : s === "quy_hoach" ? t("st
 const fold = s => String(s || "").normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/đ/gi, "d").toLowerCase()
   .replace(/^(xa|phuong|thi tran|dac khu)\s+/, "").replace(/\s+/g, " ").trim();
 const sameName = (a, b) => fold(a) === fold(b);
+/* tìm không phân biệt dấu, hoa/thường: "dong anh" = "Đông Anh" */
+const qfold = s => String(s || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/đ/gi, "d").toLowerCase().replace(/\s+/g, " ").trim();
 function inRing(x, y, ring) { let ins = false;
   for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) { const [xi, yi] = ring[i], [xj, yj] = ring[j];
     if ((yi > y) !== (yj > y) && x < (xj - xi) * (y - yi) / (yj - yi) + xi) ins = !ins; } return ins; }
@@ -728,19 +732,40 @@ function normalize(rows) {
     const dt = (d.ngay || "").trim();
     if (d.trang_thai === "Sắp đấu giá" && dt.length >= 7 && dt < TODAY.slice(0, dt.length)) { d.trang_thai = "Chờ kết quả"; d.autoSt = true; }
     d.ratioState = d.max != null && d.state > 0 ? d.max / d.state : null;
+    d._q = qfold([d.id, d.xa, d.khu, d.khu_en, d.dia_danh_cu, d.tinh, VAL.prov[d.tinh], d.ghi_chu].join(" "));
     return d;
   }).sort((a, b) => (b.ngay || "").localeCompare(a.ngay || ""));
 }
+/* ---------- Phiên đấu lại / liên quan: cùng xã, tên khu trùng nhau (VD đợt 1 rồi đấu lại các thửa còn lại) ---------- */
+const STOP = new Set("khu diem o lo dat thua thon xom to dan pho lang xa phuong huyen quan thi tran va cac tai dau gia quyen su dung con lai khac moi cu so nhung cum ho tro tai dinh cu xen ket hoi truong ubnd phuc vu san xuat nong nghiep truc tuyen".split(" "));
+function linkRelated(rows) {
+  const toks = d => { const own = new Set(qfold(d.xa).split(/[^a-z0-9]+/));
+    return new Set(qfold(d.khu).split(/[^a-z0-9]+/).filter(w => w.length > 1 && !/^\d+$/.test(w) && !STOP.has(w) && !own.has(w))); };
+  const add = (a, b) => { (a.rel = a.rel || new Set()).add(b.id); (b.rel = b.rel || new Set()).add(a.id); };
+  const byId = Object.fromEntries(rows.map(d => [d.id, d]));
+  /* cột lien_quan (nhập tay, VD "HN-2026-018") luôn được tính */
+  rows.forEach(d => String(d.lien_quan || "").split(/[;, ]+/).forEach(id => { if (byId[id] && id !== d.id) add(d, byId[id]); }));
+  const T = rows.map(toks);
+  for (let i = 0; i < rows.length; i++) for (let j = i + 1; j < rows.length; j++) {
+    const a = rows[i], b = rows[j]; if (!a.xa || qfold(a.xa) !== qfold(b.xa) || a.tinh !== b.tinh) continue;
+    const A = T[i], B = T[j]; if (!A.size || !B.size) continue;
+    const inter = [...A].filter(w => B.has(w)).length;
+    if (inter >= 2 && inter / Math.min(A.size, B.size) >= 0.5) add(a, b);
+  }
+  rows.forEach(d => { if (!d.rel) return; const grp = [...d.rel, d.id].map(id => byId[id]).sort((p, q) => (p.ngay || "").localeCompare(q.ngay || ""));
+    d.relList = grp.filter(x => x.id !== d.id); d.round = grp.indexOf(d) + 1; });
+  return rows;
+}
 
 function filtered() {
-  const tn = $("#fTinh").value, l = $("#fLoai").value, f = $("#fFrom").value, to = $("#fTo").value, q = $("#fQ").value.trim().toLowerCase(), sau = $("#fSau").value;
+  const tn = $("#fTinh").value, l = $("#fLoai").value, f = $("#fFrom").value, to = $("#fTo").value, q = qfold($("#fQ").value), sau = $("#fSau").value;
   return DATA.filter(d => (state.status === "Tất cả" || d.trang_thai === state.status) && (!tn || d.tinh === tn) && (!l || d.loai_dat === l) && (!sau || d.sau_dau_gia === sau)
     && (!f || d.ngay >= f) && (!to || d.ngay <= to)
-    && (!q || [d.xa, d.khu, d.khu_en, d.dia_danh_cu, d.tinh, tv("prov", d.tinh)].join(" ").toLowerCase().includes(q)));
+    && (!q || d._q.includes(q)));
 }
 
 function popup(d) {
-  const loc = d.vi_tri === "gần đúng" ? t("approx") : d.vi_tri === "chính xác" ? t("exact") : d.vi_tri;
+  const loc = d.vi_tri === "gần đúng" ? t("approx") : d.vi_tri === "chính xác" ? t("exact") : d.vi_tri === "theo thôn" ? t("byThon") : d.vi_tri;
   const rows = [[t("pDate"), fdate(d.ngay)], [t("pOld"), d.dia_danh_cu], [t("pArea"), pick(d, "khu")], [t("pType"), tv("land", d.loai_dat)],
     [t("pPlots"), d.lots != null ? (d.won != null ? `${d.won}/${d.lots} ${t("won")}` : d.lots) : ""], [t("pStart"), d.start != null ? PU(d.start) + VNDnote(fmt(d.start)) : ""],
     [t("pWin"), d.max != null ? (d.min != null ? P(d.min) + " – " : t("highest") + " ") + PU(d.max) + VNDnote((d.min != null ? fmt(d.min) + " – " : "") + fmt(d.max)) : ""],
@@ -755,7 +780,9 @@ function popup(d) {
   const afterTag = d.sau_dau_gia ? `<span class="tag ${BAD_AFTER.includes(d.sau_dau_gia) ? "bad" : d.sau_dau_gia === "Đã nộp đủ tiền" ? "ok" : ""}" style="margin:0 0 6px 4px">${esc(tv("after", d.sau_dau_gia))}</span>` : "";
   return `<div class="pop"><h3>${esc(d.xa)}, ${esc(tv("prov", d.tinh))}</h3><span class="tag" style="margin:0 0 6px" ${d.autoSt ? `title="${esc(t("autoSt"))}"` : ""}>${esc(tv("status", d.trang_thai))}${d.autoSt ? " *" : ""}</span>${afterTag}
    <table>${rows.map(r => `<tr><td>${r[0]}</td><td${r[2] ? ` data-mt="${esc(r[1])}"` : ""}>${esc(r[1])}</td></tr>`).join("")}</table>
-   ${d.link ? `<p style="margin:8px 0 0"><a href="${esc(d.link)}" target="_blank" rel="noopener">${t("pSrc")}: ${esc(tv("src", d.nguon) || t("seeArticle"))} ↗</a></p>` : ""}</div>`;
+   ${d.relList && d.relList.length ? `<p style="margin:8px 0 0;font-size:13px"><b>${t("pRel")}</b> (${t("round")} ${d.round}/${d.relList.length + 1})<br>${d.relList.map(x => `<a href="#" data-go="${esc(x.id)}">${fdate(x.ngay)} · ${esc(tv("status", x.trang_thai))}${x.max != null ? " · " + PU(x.max) : ""}${x.lots != null ? " · " + x.lots + " " + plotsWord(x.lots) : ""}</a>`).join("<br>")}</p>` : ""}
+   ${d.link ? `<p style="margin:8px 0 0"><a href="${esc(d.link)}" target="_blank" rel="noopener">${t("pSrc")}: ${esc(tv("src", d.nguon) || t("seeArticle"))} ↗</a></p>` : ""}
+   ${d.link_thong_bao && d.link_thong_bao !== d.link ? `<p style="margin:2px 0 0;font-size:13px"><a href="${esc(d.link_thong_bao)}" target="_blank" rel="noopener">${t("pNotice")} ↗</a></p>` : ""}</div>`;
 }
 
 function render() {
@@ -776,10 +803,11 @@ function render() {
         .bindPopup(popup(d), {maxWidth: 320}).bindTooltip(`${d.xa} · ${d.max != null ? PU(d.max) : tv("status", d.trang_thai)}`);
       m.on("click", () => highlight(d.id)); layer.addLayer(m); markers[d.id] = m; pts.push([d.lat, d.lng]); });
     if (pts.length && !state.fitted) { map.fitBounds(pts, {padding: [40, 40], maxZoom: 12}); state.fitted = true; }
+    spreadMarkers();
   }
   $("#list").innerHTML = list.length ? list.map(d => `<div class="item" data-id="${esc(d.id)}" tabindex="0">
     <span class="dot" style="background:${markColor(d)}"></span>
-    <div><b>${esc(d.xa)}</b><span class="tag">${esc(tv("status", d.trang_thai))}</span>${d.sau_dau_gia ? `<span class="tag ${BAD_AFTER.includes(d.sau_dau_gia) ? "bad" : d.sau_dau_gia === "Đã nộp đủ tiền" ? "ok" : ""}">${esc(tv("after", d.sau_dau_gia))}</span>` : ""}<div class="m">${fdate(d.ngay)} · ${esc(tv("prov", d.tinh))}${d.dia_danh_cu ? " · " + esc(d.dia_danh_cu) : ""}</div>
+    <div><b>${esc(d.xa)}</b><span class="tag">${esc(tv("status", d.trang_thai))}</span>${d.round > 1 ? `<span class="tag" title="${esc(t("reAucT"))}">↻ ${esc(t("reAuc"))} · ${t("round")} ${d.round}</span>` : ""}${d.sau_dau_gia ? `<span class="tag ${BAD_AFTER.includes(d.sau_dau_gia) ? "bad" : d.sau_dau_gia === "Đã nộp đủ tiền" ? "ok" : ""}">${esc(tv("after", d.sau_dau_gia))}</span>` : ""}<div class="m">${fdate(d.ngay)} · ${esc(tv("prov", d.tinh))}${d.dia_danh_cu ? " · " + esc(d.dia_danh_cu) : ""}</div>
     <div class="m">${esc(pick(d, "khu") || "")}${d.lots != null ? ` · ${d.won != null ? d.won + "/" : ""}${d.lots} ${plotsWord(d.lots)}` : ""}</div></div>
     <div class="price">${d.max != null ? P(d.max) : d.start != null ? P(d.start) : "—"}<small>${d.max != null ? t("topWin") : d.start != null ? t("startP") : ""}${d.max != null || d.start != null ? " · " + UN() : ""}</small></div></div>`).join("")
     : `<div class="empty">${t("empty")}</div>`;
@@ -795,11 +823,11 @@ const huyenOf = d => { const s = d.dia_danh_cu || ""; const m = [...s.matchAll(/
 const areaOf = d => ana.by === "xa" ? (d.xa || t("other")) : huyenOf(d);
 const pv = v => useUSD() ? usdM2(v) : v;          // giá trị vẽ (tr/m² hoặc USD/m²)
 function anaBase() {
-  const tn = $("#fTinh").value, l = $("#fLoai").value, f = $("#fFrom").value, to = $("#fTo").value, q = $("#fQ").value.trim().toLowerCase();
+  const tn = $("#fTinh").value, l = $("#fLoai").value, f = $("#fFrom").value, to = $("#fTo").value, q = qfold($("#fQ").value);
   const clean = $("#anaClean") ? $("#anaClean").checked : true, sau = $("#fSau").value;
   return DATA.filter(d => d.max != null && d.ngay && (!clean || !BAD_AFTER.includes(d.sau_dau_gia)) && (!sau || d.sau_dau_gia === sau)
     && (!tn || d.tinh === tn) && (!l || d.loai_dat === l) && (!f || d.ngay >= f) && (!to || d.ngay <= to)
-    && (!q || [d.xa, d.khu, d.khu_en, d.dia_danh_cu, d.tinh, tv("prov", d.tinh)].join(" ").toLowerCase().includes(q)));
+    && (!q || d._q.includes(q)));
 }
 function niceTicks(lo, hi, n) { const span = hi - lo || 1, raw = span / n, mag = Math.pow(10, Math.floor(Math.log10(raw)));
   const step = [1, 2, 2.5, 5, 10].map(k => k * mag).find(s => span / s <= n) || 10 * mag; const out = []; const top = Math.ceil(hi / step) * step; for (let v = Math.floor(lo / step) * step; v <= top + 1e-9; v += step) out.push(+v.toFixed(6)); return out; }
@@ -860,9 +888,23 @@ function renderAna() {
     <td class="n">${P(r.d.start)}</td><td class="n">${P(r.d.max)}</td><td class="n"><b>${lang === "en" ? r.x.toFixed(1) + "×" : fmt(+r.x.toFixed(1)) + " " + t("times")}</b></td></tr>`).join("")}</table>` : `<p class="noda">${t("noRatio")}</p>`;
   /* bảng xếp hạng 3: gấp bao nhiêu lần giá đất Nhà nước (cột gia_nha_nuoc) */
   const rs = base.filter(d => d.ratioState != null).sort((p, q) => q.ratioState - p.ratioState).slice(0, 10);
+  $("#rk3box").hidden = !rs.length;   /* chưa có phiên nào nhập giá đất Nhà nước → ẩn hẳn bảng */
   $("#rk3").innerHTML = rs.length ? `<table><tr><th>#</th><th>${t("cSess")}</th><th class="n">${t("cState")}</th><th class="n">${t("cWin")}</th><th class="n">${t("cX")}</th></tr>
     ${rs.map((d, i) => `<tr data-id="${esc(d.id)}"><td>${i + 1}</td><td><b>${esc(d.xa)}</b> <span class="k">${fdate(d.ngay)}</span><div class="k">${esc(pick(d, "khu") || "")}</div></td>
     <td class="n">${P(d.state)}</td><td class="n">${P(d.max)}</td><td class="n"><b>${lang === "en" ? d.ratioState.toFixed(1) + "×" : fmt(+d.ratioState.toFixed(1)) + " " + t("times")}</b></td></tr>`).join("")}</table>` : `<p class="noda">${t("noState")}</p>`;
+}
+/* Tách các chấm trùng chỗ (nhiều phiên cùng tâm xã/thôn): xếp quanh một vòng nhỏ, tính lại khi phóng to/thu nhỏ */
+function spreadMarkers() {
+  if (!map) return; const ms = Object.values(markers); if (!ms.length) return;
+  ms.forEach(m => { if (!m._base) m._base = m.getLatLng(); });
+  const P = ms.map(m => map.latLngToLayerPoint(m._base)), used = new Array(ms.length).fill(false), GAP = 16;
+  for (let i = 0; i < ms.length; i++) { if (used[i]) continue;
+    const grp = [i]; used[i] = true;
+    for (let j = i + 1; j < ms.length; j++) if (!used[j] && grp.some(k => P[k].distanceTo(P[j]) < GAP)) { grp.push(j); used[j] = true; }
+    if (grp.length === 1) { ms[i].setLatLng(ms[i]._base); continue; }
+    const c = grp.reduce((s, k) => s.add(P[k]), L.point(0, 0)).divideBy(grp.length), R = Math.max(14, grp.length * 5.5);
+    grp.forEach((k, n) => { const a = 2 * Math.PI * n / grp.length - Math.PI / 2; ms[k].setLatLng(map.layerPointToLatLng(c.add(L.point(R * Math.cos(a), R * Math.sin(a))))); });
+  }
 }
 function goTo(id) { const m = markers[id]; highlight(id); if (m && map) { $("#map").scrollIntoView({behavior: "smooth", block: "center"}); map.setView(m.getLatLng(), Math.max(map.getZoom(), 13)); m.openPopup(); } }
 function initAna() {
@@ -966,12 +1008,14 @@ async function init() {
     /* OpenStreetMap chặn trang mở trực tiếp từ ổ đĩa (file://) → khi mở file trên máy dùng nền Esri, khi lên web dùng OpenStreetMap */
     (location.protocol.startsWith("http") ? bases.osm : bases.esri).addTo(map);
     layer = L.layerGroup().addTo(map);
-    map.on("popupopen", e => translatePopup(e.popup.getElement()));
+    map.on("zoomend", spreadMarkers);
+    map.on("popupopen", e => { const el = e.popup.getElement(); translatePopup(el);
+      el.querySelectorAll("[data-go]").forEach(a => a.addEventListener("click", ev => { ev.preventDefault(); goTo(a.dataset.go); })); });
   } else { $("#map").innerHTML = `<p class="empty">${t("mapErr")}</p>`; }
 
   applyLang();
   const [{rows, src}, rate, theme, reps] = await Promise.all([loadData(), loadRate(), loadTheme(), loadReports(), loadDecv(), loadExtraLayers()]);
-  DATA = normalize(rows); SRC = src; RATE = rate; REPORTS = reps; applyTheme(theme);
+  DATA = linkRelated(normalize(rows)); SRC = src; RATE = rate; REPORTS = reps; applyTheme(theme);
   applyLang();
 
   document.querySelector(".lang").addEventListener("click", e => { const b = e.target.closest("[data-lang]"); if (!b || b.dataset.lang === lang) return;
