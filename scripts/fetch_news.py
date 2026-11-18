@@ -7,10 +7,16 @@ Auto-collect land-auction news into cho-duyet.csv (pending review in admin.html)
 - Nếu có biến môi trường ANTHROPIC_API_KEY (GitHub Secret) → bóc tách bằng AI (chính xác hơn);
   không có → bóc tách bằng mẫu chữ (regex), điền được ít ô hơn.
 - Không ghi vào data.csv. Chỉ lưu số liệu + link nguồn, không lưu nội dung bài báo.
+- Link Google News được giải ra LINK BÁO GỐC (không giải được thì để lần sau thử lại, không lưu link Google).
+- Bóc tách dùng chung bộ quy tắc trong scripts/dien_tin_cho_duyet.py (cần đặt file đó cùng thư mục);
+  khi có AI thì kết quả AI được bổ sung các ô AI để trống.
 """
 import csv, html, io, json, os, re, sys, time, unicodedata, urllib.parse, urllib.request
 from datetime import datetime, timedelta, timezone
 from xml.etree import ElementTree as ET
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import dien_tin_cho_duyet as D   # bóc tách đầy đủ + giải link Google News
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA = os.path.join(ROOT, "data.csv")
@@ -44,7 +50,7 @@ SRC_NAME = {"vnexpress.net": "VnExpress", "dantri.com.vn": "Dân trí", "baodaut
 
 COLS = ["id", "ngay", "tinh", "xa", "dia_danh_cu", "khu", "loai_dat", "so_thua", "so_thua_trung", "gia_khoi_diem", "gia_trung_min", "gia_trung_max",
         "tong_tien_ty", "nguoi_tham_gia", "trang_thai", "lat", "lng", "vi_tri", "nguon", "link", "ghi_chu"]
-META = ["_tieu_de", "_ngay_lay", "_cach_lay"]   # cột phụ, admin bỏ đi khi duyệt
+META = ["_tieu_de", "_ngay_lay", "_cach_lay", "_da_doc"]   # cột phụ, admin bỏ đi khi duyệt
 
 UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124 Safari/537.36"
 
@@ -132,7 +138,22 @@ def find_date(text, pub):
     return None
 
 
-def regex_extract(title, text, pub):
+def regex_extract(title, text, pub, link=""):
+    """Bóc tách không cần AI: dùng bộ quy tắc đầy đủ của dien_tin_cho_duyet, rồi bù bằng quy tắc cũ."""
+    ex = D.extract(text, {"_tieu_de": title, "link": link})
+    old = regex_extract_old(title, text, pub)
+    r = old[0] if old else {k: "" for k in COLS}
+    for k, v in ex.items():
+        if k in COLS and v: r[k] = v
+    if not r.get("tinh"):
+        r["tinh"] = ex.get("tinh", "")
+    d = r.get("ngay")
+    if not ex.get("trang_thai"):
+        r["trang_thai"] = "Sắp đấu giá" if not d or d >= TODAY.isoformat() else "Chờ kết quả"
+    return [r] if r.get("tinh") else []
+
+
+def regex_extract_old(title, text, pub):
     t = title + ". " + text
     r = {k: "" for k in COLS}
     for p in PROVINCES:
@@ -178,7 +199,8 @@ dia_danh_cu (địa danh cũ, vd "xã Kim Nỗ, huyện Đông Anh"), khu (tên 
 so_thua (số thửa đưa ra đấu giá), so_thua_trung (số thửa trúng), gia_khoi_diem, gia_trung_min, gia_trung_max (đều quy ra TRIỆU đồng/m², số thập phân dùng dấu chấm),
 tong_tien_ty (tổng tiền trúng, tỷ đồng), nguoi_tham_gia (số người/hồ sơ tham gia),
 trang_thai ("Sắp đấu giá" nếu phiên chưa diễn ra; "Đã đấu giá" nếu đã có kết quả; "Chờ kết quả" nếu đã diễn ra mà chưa có kết quả; "Hủy/bỏ cọc" nếu bị hủy hoặc người trúng bỏ cọc),
-ghi_chu (tối đa 1 câu NGẮN tự viết lại, nêu điểm đáng chú ý; không chép nguyên văn bài).
+ghi_chu (ngắn gọn, các ý cách nhau bằng "; ": khoảng giá khởi điểm nếu có nhiều mức, tổng diện tích, tổng giá khởi điểm, hạn nộp hồ sơ, giờ phiên, điểm đáng chú ý; tự viết lại, không chép nguyên văn bài).
+PHẢI điền ĐỦ mọi khóa mà bài có thông tin (đọc cả bảng số liệu trong bài); giá trị ngắn gọn, đúng như bài nêu, không suy đoán.
 Nếu bài không có phiên đấu giá đất phù hợp thì trả {{"phien":[]}}.
 Hôm nay là {today}. Bài báo được đăng ngày {pub}.
 
@@ -190,7 +212,7 @@ NỘI DUNG:
 def ai_extract(title, text, pub):
     body = json.dumps({"model": MODEL, "max_tokens": 1500, "messages": [{"role": "user", "content": PROMPT.format(
         prov=", ".join(PROVINCES), yr=(pub or TODAY).year, today=TODAY.isoformat(), pub=(pub.isoformat() if pub else "không rõ"),
-        title=title, text=text[:8000])}]}).encode()
+        title=title, text=text[:12000])}]}).encode()
     raw, _ = fetch("https://api.anthropic.com/v1/messages", data=body, timeout=90, headers={
         "x-api-key": API_KEY, "anthropic-version": "2023-06-01", "content-type": "application/json"})
     out = "".join(b.get("text", "") for b in json.loads(raw).get("content", []))
@@ -334,19 +356,34 @@ def main():
     added = 0
     for it in todo[:MAX_ARTICLES]:
         link, title = it["link"], it["title"]
+        if "news.google." in link:        # Google News → link báo gốc
+            real = D.decode_google(link)
+            if not real:
+                log(f"  ! chưa giải được link gốc, để lần sau: {title[:70]}")
+                continue                   # không đánh dấu đã xử lý → lần sau thử lại
+            link = real
+            if link in known_links or link in seen:
+                seen[it["link"]] = TODAY.isoformat(); continue
+        title = re.sub(r"\s+-\s+[^-]{2,40}$", "", title) if "news.google." in it["link"] else title   # bỏ " - Tên báo" Google thêm vào cuối
         text = ""
-        try:
-            page, final = fetch(link)
-            if "news.google.com" not in final:
-                link = final
-            text = article_text(page)
+        try:                               # r.jina.ai đọc bài thành chữ sạch (giữ cả bảng số liệu); lỗi thì tự bóc HTML
+            text = D.body(D.fetch_text(link), title)
         except Exception as e:
             log(f"  ! không mở được bài: {e}")
+        if len(text) < 300:
+            try:
+                page, final = fetch(link); text = article_text(page) if len(article_text(page)) > len(text) else text
+            except Exception:
+                pass
         if len(text) < 300:               # không đọc được bài → dùng tóm tắt RSS
             text = it["desc"]
         host = urllib.parse.urlparse(link).netloc.replace("www.", "")
         try:
-            rows = ai_extract(title, text, it["pub"]) if API_KEY else regex_extract(title, text, it["pub"])
+            rows = ai_extract(title, text, it["pub"]) if API_KEY else regex_extract(title, text, it["pub"], link)
+            if API_KEY and len(rows) == 1:  # AI bỏ sót ô nào thì bù bằng quy tắc
+                ex = D.extract(text, {"_tieu_de": title, "link": link})
+                for k, v in ex.items():
+                    if k in COLS and v and not rows[0].get(k): rows[0][k] = v
         except Exception as e:
             log(f"  ! lỗi bóc tách ({title[:60]}): {e}")
             continue                       # không đánh dấu đã xử lý → lần sau thử lại
@@ -356,8 +393,8 @@ def main():
                 log(f"  = trùng phiên đã có: {r.get('xa') or r.get('khu')} {r.get('ngay')}")
                 continue
             locate(r, communes)
-            r.update({"link": link, "nguon": SRC_NAME.get(host, it["src"] if it["src"] != "Google News" else host),
-                      "_tieu_de": title, "_ngay_lay": TODAY.isoformat(), "_cach_lay": "AI" if API_KEY else "regex"})
+            r.update({"link": link, "nguon": SRC_NAME.get(host) or D.src_name(link, it["src"] if it["src"] != "Google News" else host),
+                      "_tieu_de": title, "_ngay_lay": TODAY.isoformat(), "_cach_lay": "AI" if API_KEY else "quy tắc", "_da_doc": TODAY.isoformat()})
             if not r.get("vi_tri"):
                 r["vi_tri"] = "gần đúng"
             prows.append(r)
