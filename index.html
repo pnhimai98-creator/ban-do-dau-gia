@@ -616,7 +616,42 @@ let ringLabels = [];
 /* nhãn trên đường: vành đai "VĐ3" (màu theo địa phương), cao tốc "CT.01" */
 const ringIcon = (n, c, exp, cls, fg) => L.divIcon({className: "rr-lbl " + (cls || ""), iconSize: null,
   html: exp ? `<span style="background:${c};color:${fg || "#fff"};border-color:#fff">${esc(n)}</span>` : `<span style="color:${c};border-color:${c}">${esc(t("ringW"))}${esc(n)}</span>`});
-function refreshRingLabels() { ringLabels.forEach(({m, n, c, exp, cls, fg}) => m.setIcon(ringIcon(n, c, exp, cls, fg))); }
+function refreshRingLabels() { ringLabels.forEach(({m, n, c, exp, cls, fg}) => m.setIcon(ringIcon(n, c, exp, cls, fg))); placeRingLabels(); }
+/* Nhãn vành đai động: chỉ đặt trên đoạn đã có trên OpenStreetMap (không đặt trên đoạn vẽ tay / quy hoạch gần đúng –
+   nơi nền OSM không có nhãn đường), giãn cách theo pixel và tính lại mỗi lần phóng/kéo bản đồ để không chồng chéo.
+   Dynamic ring labels: only on segments that exist in OSM (never on hand-drawn approximate ones), spaced in pixels, re-placed on zoom/pan. */
+const ringDyn = [];
+const RING_LBL = {try: 36, same: 300, any: 46, perView: 3, edge: 24};   // try: thử vị trí mỗi 36 px; same: nhãn cùng vành đai cách ≥300 px
+function placeRingLabels() {
+  if (typeof map === "undefined" || !map || !ringDyn.length) return;
+  const sz = map.getSize(), placed = [], E = RING_LBL.edge;
+  const free = (pt, n) => placed.every(q => { const d = pt.distanceTo(q.pt); return d >= RING_LBL.any && (q.n !== n || d >= RING_LBL.same); });
+  ringDyn.forEach(R => R.lg.clearLayers());
+  ringDyn.slice().sort((a, b) => parseFloat(a.n) - parseFloat(b.n)).forEach(R => {
+    if (!map.hasLayer(R.g)) return;
+    let cnt = 0;
+    for (const part of R.parts) {
+      if (cnt >= RING_LBL.perView) break;
+      const pts = part.map(ll => map.latLngToContainerPoint(ll));
+      let tot = 0; for (let i = 1; i < pts.length; i++) tot += pts[i - 1].distanceTo(pts[i]);
+      if (tot < 70) continue;   // đoạn quá ngắn ở mức zoom này
+      let acc = 0, next = Math.min(RING_LBL.try, tot / 2);
+      for (let i = 1; i < pts.length && cnt < RING_LBL.perView; i++) {
+        const a = pts[i - 1], b = pts[i], seg = a.distanceTo(b);
+        while (seg > 0 && acc + seg >= next && cnt < RING_LBL.perView) {
+          const tt = (next - acc) / seg, pt = L.point(a.x + (b.x - a.x) * tt, a.y + (b.y - a.y) * tt);
+          next += RING_LBL.try;
+          if (pt.x < E || pt.y < E || pt.x > sz.x - E || pt.y > sz.y - E || !free(pt, R.key)) continue;
+          placed.push({pt, n: R.key}); cnt++;
+          R.lg.addLayer(L.marker(map.containerPointToLatLng(pt), {icon: ringIcon(R.n, R.c, false), interactive: false, pane: "infraLbl", keyboard: false}));
+        }
+        acc += seg;
+      }
+    }
+  });
+}
+let ringTimer = null;
+const ringSchedule = () => { clearTimeout(ringTimer); ringTimer = setTimeout(placeRingLabels, 60); };
 const stLabel = s => s === "dang_xay" ? t("stBuild") : s === "quy_hoach" ? t("stPlan") : t("stBuilt");
 const fold = s => String(s || "").normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/đ/gi, "d").toLowerCase()
   .replace(/^(xa|phuong|thi tran|dac khu)\s+/, "").replace(/\s+/g, " ").trim();
@@ -656,8 +691,13 @@ function makeInfraLayer(k, fs, g) {
     ringLabels.push({m, n, c: color, exp, cls, fg}); g.addLayer(m); }));
   const byRef = () => { const by = {}; fs.forEach(f => { const n = f.properties.ref; if (n) (by[n] = by[n] || []).push(f); }); return by; };
   if (bk === "vanh_dai") {   /* nhãn VĐ1, VĐ2, VĐ3… rải dọc mỗi vành đai, tách theo từng đô thị */
-    const by = {}; fs.forEach(f => { const n = ringNo(f.properties), key = cityOf(f.properties) + "|" + n; if (n) (by[key] = by[key] || []).push(f); });
-    addLabels(by, 6, 0.07, regionColor(k.slice(9)), false);
+    const by = {}; fs.forEach(f => { const p = f.properties, n = ringNo(p), key = cityOf(p) + "|" + n;
+      if (!n || p.approx) return;   // đoạn vẽ tay / gần đúng: không gắn nhãn
+      const g2 = f.geometry; (g2.type === "LineString" ? [g2.coordinates] : g2.type === "MultiLineString" ? g2.coordinates : []).forEach(c => { if (c.length > 1) (by[key] = by[key] || []).push(c.map(q => L.latLng(q[1], q[0]))); }); });
+    Object.keys(by).forEach(key => { const lg = L.layerGroup(); g.addLayer(lg);
+      ringDyn.push({g, lg, key, n: key.split("|").pop(), c: regionColor(k.slice(9)), parts: by[key].sort((a, b) => b.length - a.length)}); });
+    if (!ringDyn.hooked) { ringDyn.hooked = true; map.on("zoomend moveend overlayadd overlayremove layeradd", e => { if (e.type !== "layeradd" || ringDyn.some(R => R.g === e.layer)) ringSchedule(); }); }
+    ringSchedule();
   }
   if (bk === "cao_toc") addLabels(byRef(), 5, 0.15, INFRA_STYLE.cao_toc.color, true);                 // CT.01…
   if (bk === "quoc_lo") addLabels(byRef(), 4, 0.12, INFRA_STYLE.quoc_lo.color, true, "lbl-ql");       // QL.32… (ẩn khi thu nhỏ)
