@@ -131,7 +131,7 @@ th .hbtn{border:0;background:none;color:var(--muted,#888);cursor:pointer;padding
 
  <section class="card" id="gridCard" hidden>
   <div class="row" style="justify-content:space-between;margin-bottom:10px">
-   <div class="row"><button class="btn" id="gAdd">＋ Thêm dòng</button><button class="btn pri" id="gImpBtn">📋 Dán từ Google Sheets</button><button class="btn pri" id="gUpBtn" title="Tải file Excel (.xlsx, .xls) hoặc .csv lên – dữ liệu cập nhật theo file">📤 Tải lên Excel</button><input type="file" id="gUpFile" accept=".xlsx,.xls,.xlsm,.csv,.tsv" hidden><button class="btn" id="gCls" title="Điền Loại phiên / Còn hiệu lực / Phiên trước – Phiên sau cho các dòng còn trống, nhận ra phiên đấu lại cùng khu">🔁 Tự phân loại phiên</button><button class="btn" id="gClean" title="Xóa các dòng mới chưa nhập xã/khu/link">Xóa dòng trống</button><button class="btn" id="gFclr" hidden>✕ Bỏ tất cả bộ lọc</button><button class="btn" data-cols="grid" title="Ẩn / hiện cột">☰ Cột</button><input id="gq" type="search" placeholder="Lọc nhanh…" style="width:200px"><span class="muted" id="gInfo"></span></div>
+   <div class="row"><button class="btn" id="gAdd">＋ Thêm dòng</button><button class="btn pri" id="gImpBtn">📋 Dán từ Google Sheets</button><button class="btn pri" id="gUpBtn" title="Tải file Excel (.xlsx, .xls) hoặc .csv lên – dữ liệu cập nhật theo file">📤 Tải lên Excel</button><input type="file" id="gUpFile" accept=".xlsx,.xls,.xlsm,.csv,.tsv" hidden><button class="btn pri" id="gFillAll" title="Điền các ô còn trống: từ phiên trước/sau cùng khu, từ ghi chú, đọc bài báo trong các cột link, tìm tọa độ xã. Không ghi đè ô đã có.">✨ Tự điền ô trống</button><button class="btn" id="gCls" title="Điền Loại phiên / Còn hiệu lực / Phiên trước – Phiên sau cho các dòng còn trống, nhận ra phiên đấu lại cùng khu">🔁 Tự phân loại phiên</button><button class="btn" id="gClean" title="Xóa các dòng mới chưa nhập xã/khu/link">Xóa dòng trống</button><button class="btn" id="gFclr" hidden>✕ Bỏ tất cả bộ lọc</button><button class="btn" data-cols="grid" title="Ẩn / hiện cột">☰ Cột</button><input id="gq" type="search" placeholder="Lọc nhanh…" style="width:200px"><span class="muted" id="gInfo"></span></div>
    <div class="row"><button class="btn" id="gFull" title="Mở bảng tính toàn màn hình (Esc để thoát)">⛶ Toàn màn hình</button><button class="btn" id="gXlsx" title="Tải các dòng đang hiện (theo bộ lọc / lọc nhanh) ra file Excel">⬇ Tải Excel</button><button class="btn" id="gUndo">Hủy thay đổi</button><button class="btn pri" id="gSave">Lưu tất cả lên GitHub</button></div>
   </div>
   <div class="gwrap"><table class="sheet"><thead id="gh"></thead><tbody id="gb"></tbody></table></div>
@@ -415,6 +415,7 @@ th .hbtn{border:0;background:none;color:var(--muted,#888);cursor:pointer;padding
 <script>
 {
 const STD = ["id","ngay","tinh","xa","dia_danh_cu","khu","loai_dat","so_thua","so_thua_trung","gia_khoi_diem","gia_trung_min","gia_trung_max","tong_tien_ty","nguoi_tham_gia","trang_thai","lat","lng","vi_tri","nguon","link","ghi_chu"];
+const AUTOG = {};   /* Bảng tính: gi → Set các cột vừa tự điền (tô xanh) */
 const PREFIX = {"Hà Nội":"HN","Bắc Ninh":"BN","Hưng Yên":"HY","Phú Thọ":"PT","Thái Nguyên":"TN","Ninh Bình":"NB"};
 /* cột bổ sung mà bản đồ dùng (theo dõi sau đấu giá, giá nhà nước) – tự thêm vào data.csv nếu chưa có */
 const EXTRA_STD = ["loai_phien", "con_hieu_luc", "phien_truoc", "phien_sau", "nguon_thong_bao", "link_thong_bao", "nguon_ket_qua", "link_ket_qua", "sau_dau_gia", "sau_dau_gia_ngay", "gia_nha_nuoc", "link_sau_dau_gia", "lien_quan"];
@@ -642,7 +643,7 @@ document.addEventListener("click", e => {
   p.addEventListener("change", e2 => { const x = e2.target; if (x.value) hideCol(k, x.value, !x.checked); });
   p.addEventListener("click", e2 => { const x = e2.target.closest("[data-sh]"); if (!x) return; e2.stopPropagation(); const s = hid(k); s.clear(); if (x.dataset.sh === "none") colsOf(k).forEach(h => s.add(h)); saveHide(k); rerender(k); draw(); });
 });
-function gridFromRows() { GRID = ROWS.map((r, i) => ({r: {...r}, orig: i, del: false})).sort((a, b) => (b.r.ngay || "").localeCompare(a.r.ngay || "")); }
+function gridFromRows() { Object.keys(AUTOG).forEach(k => delete AUTOG[k]); GRID = ROWS.map((r, i) => ({r: {...r}, orig: i, del: false})).sort((a, b) => (b.r.ngay || "").localeCompare(a.r.ngay || "")); }
 const rowChanged = g => g.orig < 0 || g.del || HEAD.some(h => (g.r[h] ?? "") !== (ROWS[g.orig][h] ?? ""));
 function cellHTML(gi, h, v) {
   const w = (COL[h] || [h, 140])[1];
@@ -661,7 +662,7 @@ function renderGrid() {
   $("#gb").innerHTML = GRID.map((g, gi) => {
     if (!gridShown(g, qq)) return "";
     const cls = g.del ? "del" : g.orig < 0 ? "new" : rowChanged(g) ? "chg" : "";
-    return `<tr data-g="${gi}" class="${cls}"><td class="rn">${gi + 1}</td>${gColsV().map(h => `<td>${cellHTML(gi, h, g.r[h])}</td>`).join("")}<td><button class="xbtn" data-x="${gi}" title="${g.del ? "Bỏ xóa" : "Xóa dòng"}">${g.del ? "↺" : "✕"}</button></td></tr>`;
+    return `<tr data-g="${gi}" class="${cls}"><td class="rn">${gi + 1}</td>${gColsV().map(h => `<td${AUTOG[gi] && AUTOG[gi].has(h) ? ' class="auto" title="Tự điền – hãy soát lại"' : ""}>${cellHTML(gi, h, g.r[h])}</td>`).join("")}<td><button class="xbtn" data-x="${gi}" title="${g.del ? "Bỏ xóa" : "Xóa dòng"}">${g.del ? "↺" : "✕"}</button></td></tr>`;
   }).join("");
   updInfo(); RSEL.paint();
 }
@@ -802,6 +803,89 @@ function classifySessions(rows, targets) {
   });
   return log;
 }
+
+
+/* ================= TỰ ĐIỀN Ô TRỐNG (Bảng tính) =================
+   Chỉ điền ô đang trống, không bao giờ ghi đè. Thứ tự nguồn:
+   1) quy tắc: tỉnh theo mã, trạng thái theo ngày, loại đất mặc định, nguồn/link thông báo – kết quả từ cột Nguồn/Link;
+   2) phiên trước / phiên sau cùng khu (khu, địa danh cũ, tọa độ, giá KĐ…);  3) chữ trong Ghi chú / Khu (số thửa, KĐ);
+   4) đọc bài báo ở Link thông báo / Link kết quả / Link nguồn (như nút "Đọc bài" ở tab chờ duyệt);
+   5) tọa độ trung tâm xã (OpenStreetMap) → Vị trí "Ước lượng xã";  6) phân loại Lần đầu / Đấu lại. */
+const blank = v => !String(v ?? "").trim();
+function fillOffline(r, all, mark) {
+  const set = (k, v) => { if (blank(r[k]) && !blank(v)) { if (!HEAD.includes(k)) HEAD.push(k); r[k] = String(v); mark(k); } };
+  const pre = String(r.id || "").slice(0, 2); const tinh = Object.keys(PREFIX).find(k => PREFIX[k] === pre); set("tinh", tinh);
+  if (blank(r.trang_thai) && r.ngay) set("trang_thai", r.ngay >= todayVN() ? "Sắp đấu giá" : "Chờ kết quả");
+  set("loai_dat", "Đất ở");
+  /* nguồn thông báo / kết quả */
+  if (["Sắp đấu giá", "Chờ kết quả", "Đấu giá lại"].includes(r.trang_thai) && r.link) { set("link_thong_bao", r.link); set("nguon_thong_bao", r.nguon); }
+  if (r.link_thong_bao && r.link_thong_bao === r.link) set("nguon_thong_bao", r.nguon);
+  if (["Đã đấu giá", "Đã nộp tiền", "Hủy/bỏ cọc"].includes(r.trang_thai) && r.link && r.link !== r.link_thong_bao) { set("link_ket_qua", r.link); set("nguon_ket_qua", r.nguon); }
+  if (r.link_ket_qua && r.link_ket_qua === r.link) set("nguon_ket_qua", r.nguon);
+  /* phiên trước / sau cùng khu */
+  [r.phien_truoc, r.phien_sau].filter(Boolean).forEach(id => { const o = all.find(x => x.id === id); if (!o) return;
+    ["xa", "tinh", "khu", "dia_danh_cu", "loai_dat", "lat", "lng", "vi_tri"].forEach(k => set(k, o[k]));
+    if (id === r.phien_truoc) set("gia_khoi_diem", o.gia_khoi_diem); });
+  /* chữ trong ghi chú / khu */
+  const t = [r.khu, r.ghi_chu].join(" ");
+  let m; if (blank(r.so_thua) && (m = t.match(/(\d{1,4})\s*(?:thửa|lô|suất)\b/i))) set("so_thua", m[1]);
+  /* KĐ chỉ lấy khi ghi rõ đơn vị triệu đồng/m² (bỏ qua "tỷ đồng", "đ/m²/năm"…) */
+  if (blank(r.gia_khoi_diem) && (m = t.match(/(?:KĐ|khởi điểm)[^\d]{0,12}(\d{1,3}(?:[.,]\d+)?)(?:\s*[–-]\s*\d{1,3}(?:[.,]\d+)?)?\s*(?:tr\b|tr\/|triệu)(?:\s*đồng)?\s*\/\s*m/i))) set("gia_khoi_diem", normNum(m[1]));
+  /* vị trí: lấy tọa độ phiên khác cùng xã (ước lượng) */
+  if (blank(r.lat) && r.xa) { const o = all.find(x => x !== r && hfold(x.xa) === hfold(r.xa) && (x.tinh || "Hà Nội") === (r.tinh || "Hà Nội") && !blank(x.lat) && !blank(x.lng));
+    if (o) { set("lat", o.lat); set("lng", o.lng); if (/cần bổ sung/i.test(r.vi_tri || "")) r.vi_tri = ""; set("vi_tri", "Ước lượng xã"); } }
+}
+function needArticle(r) {
+  const base = ["khu", "so_thua", "gia_khoi_diem", "dia_danh_cu"].filter(k => blank(r[k]));
+  const res = ["Đã đấu giá", "Đã nộp tiền"].includes(r.trang_thai) ? ["so_thua_trung", "gia_trung_max", "gia_trung_min", "tong_tien_ty", "nguoi_tham_gia"].filter(k => blank(r[k])) : [];
+  return base.concat(res);
+}
+let gFilling = false;
+$("#gFillAll").addEventListener("click", async () => {
+  if (gFilling) return;
+  const sel = RSEL.sel(), qq = $("#gq").value.trim().toLowerCase();
+  const list = (sel && sel.t === "grid" && RSEL.multi() ? sel.rows : GRID.map((g, i) => i).filter(i => gridShown(GRID[i], qq))).filter(i => !GRID[i].del);
+  if (!list.length) { say("Không có dòng nào để điền.", "err"); return; }
+  gFilling = true; $("#gFillAll").disabled = true;
+  const all = GRID.filter(g => !g.del).map(g => g.r); let cells = 0, read = 0, fail = 0;
+  const markFn = gi => k => { (AUTOG[gi] = AUTOG[gi] || new Set()).add(k); cells++; };
+  /* 1–3: quy tắc, phiên cùng khu, ghi chú */
+  list.forEach(gi => fillOffline(GRID[gi].r, all, markFn(gi)));
+  /* 4: đọc bài báo cho dòng còn thiếu (tối đa 30 bài/lần) */
+  const todo = list.filter(gi => needArticle(GRID[gi].r).length && (GRID[gi].r.link_ket_qua || GRID[gi].r.link_thong_bao || GRID[gi].r.link)).slice(0, 30);
+  for (const gi of todo) {
+    const r = GRID[gi].r, mark = markFn(gi);
+    const isRes = ["Đã đấu giá", "Đã nộp tiền"].includes(r.trang_thai);
+    const links = [...new Set([isRes ? r.link_ket_qua : r.link_thong_bao, r.link, isRes ? r.link_thong_bao : r.link_ket_qua].filter(u => /^https?:\/\//.test(u || "") && !/news\.google\./.test(u)))];
+    say(`Đang đọc bài ${read + fail + 1}/${todo.length}: ${r.id}…`);
+    for (const u of links.slice(0, 2)) {
+      if (!needArticle(r).length) break;
+      try {
+        let txt = AXC[u]; if (!txt) { txt = await AX.fetchText(u); AXC[u] = txt; }
+        const ex = AX.extract(txt, r); read++;
+        Object.entries(ex).forEach(([k, v]) => {
+          if (["trang_thai", "ngay", "xa", "tinh"].includes(k)) return;           /* không đổi thông tin nhận dạng phiên */
+          if (k === "ghi_chu") { const cur = String(r.ghi_chu || ""), add = v.split("; ").filter(x => !cur.includes(x));
+            if (add.length) { r.ghi_chu = cur ? cur + "; " + add.join("; ") : add.join("; "); mark("ghi_chu"); } return; }
+          if (blank(r[k])) { r[k] = v; mark(k); }
+        });
+      } catch (e) { fail++; }
+      await new Promise(res => setTimeout(res, 700));
+    }
+  }
+  /* 5: tọa độ trung tâm xã nếu vẫn trống */
+  for (const gi of list) { const r = GRID[gi].r; if (!blank(r.lat) || !r.xa) continue;
+    const g = await AX.geocode(r.xa, r.tinh); if (g) { const mark = markFn(gi); r.lat = g.lat; mark("lat"); r.lng = g.lng; mark("lng"); if (blank(r.vi_tri) || /cần bổ sung/i.test(r.vi_tri)) { r.vi_tri = "Ước lượng xã"; mark("vi_tri"); } }
+    await new Promise(res => setTimeout(res, 1100)); }
+  /* 6: phân loại phiên cho dòng còn trống */
+  const before = all.map(r => JSON.stringify(r)); const log = classifySessions(all);
+  all.forEach((r, i) => { if (JSON.stringify(r) !== before[i]) { const gi = GRID.findIndex(g => g.r === r), b = JSON.parse(before[i]);
+    Object.keys(r).forEach(k => { if (String(r[k] ?? "") !== String(b[k] ?? "")) (AUTOG[gi] = AUTOG[gi] || new Set()).add(k); }); } });
+  GRID.forEach((g, gi) => { if (!g.del && rowChanged(g)) markRow(gi); });
+  gFilling = false; $("#gFillAll").disabled = false; renderGrid();
+  const still = list.filter(gi => needArticle(GRID[gi].r).length).length;
+  say(`Đã điền ${cells} ô trống cho ${list.length} dòng${read ? `, đọc ${read} bài` : ""}${fail ? ` (${fail} bài không tải được)` : ""}${log.length ? `; phân loại: ${log.join("; ")}` : ""}. Ô tô xanh là ô vừa điền – soát lại rồi bấm “Lưu tất cả”.${still ? ` Còn ${still} dòng vẫn thiếu thông tin (bài báo không nêu${fail ? " hoặc không tải được bài" : ""}) – để trống.` : ""}`, cells ? "ok" : "");
+});
 
 /* ================= TẢI LÊN FILE EXCEL → cập nhật dữ liệu theo file =================
    Khớp theo cột Mã: mã đã có → cập nhật; mã mới / không có mã → thêm phiên (tự sinh mã theo tỉnh + năm).
@@ -993,7 +1077,8 @@ const RSEL = (() => {
     if (e.key === "Escape") { clear(); return; }
     if ((e.key === "Delete" || e.key === "Backspace") && multi()) { e.preventDefault(); wipe(); return; }
   });
-  return {paint, multi, clear};
+  const sel = () => { const R = rect(); return R && S ? {t: S.t, rows: R.rows} : null; };
+  return {paint, multi, clear, sel};
 })();
 $("#gCls").addEventListener("click", () => {
   const live = GRID.filter(g => !g.del), rows = live.map(g => g.r), before = rows.map(r => JSON.stringify(r));
