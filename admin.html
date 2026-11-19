@@ -69,6 +69,8 @@ table.sheet{border-collapse:separate;border-spacing:0;font-size:14px;width:max-c
 #fpop .fl{max-height:240px;overflow:auto;border:1px solid var(--line);border-radius:8px;padding:4px 6px;margin:6px 0}
 #fpop label{display:flex;gap:6px;align-items:center;color:var(--ink);font-size:13px;padding:2px 0;cursor:pointer}
 #fpop label input{width:auto;height:auto}
+.ptitle [data-cols]{font-size:12px;padding:2px 10px;min-height:0;height:26px;vertical-align:middle;margin-left:6px}
+th .hbtn{border:0;background:none;color:var(--muted,#888);cursor:pointer;padding:0 2px;font-size:12px;opacity:.55}th .hbtn:hover{opacity:1;color:var(--bad)}
 #fpop input[type=search]{height:32px;font-size:13px}
 #fpop .srt{display:flex;gap:6px;margin-bottom:6px}#fpop .srt button,#fpop .act button{flex:1;height:30px;padding:0 8px;font-size:12px}
 #fpop .act{display:flex;gap:6px}
@@ -84,11 +86,19 @@ table.sheet{border-collapse:separate;border-spacing:0;font-size:14px;width:max-c
 .badge{display:inline-block;min-width:20px;padding:0 6px;margin-left:6px;border-radius:99px;background:var(--bad);color:#fff;font-size:12px;line-height:20px;text-align:center}
 .sheet td.ck{text-align:center;width:40px;min-width:40px}.sheet td.ck input{width:18px;height:18px}
 .sheet td.auto input,.sheet td.auto select{background:light-dark(#e7f5ff,#10263a)}
+.sheet td.sel,.sheet td.sel input,.sheet td.sel select{background:light-dark(#dbeafe,#1e3a5f)!important}
+.sheet td.sel.st{box-shadow:inset 0 2px 0 var(--acc)}.sheet td.sel.sb{box-shadow:inset 0 -2px 0 var(--acc)}
+.sheet td.sel.st.sb{box-shadow:inset 0 2px 0 var(--acc),inset 0 -2px 0 var(--acc)}
+.sheet td.sel.sl{border-left:2px solid var(--acc)}.sheet td.sel.sr{border-right:2px solid var(--acc)}
+.sheet td.rn,.sheet td.ck,.sheet thead th{cursor:pointer}body.nosel,body.nosel *{user-select:none!important}
 .pend-t .rd{margin:4px 0 0;font-size:12px}.pend-t .rd.ok{color:var(--ok)}.pend-t .rd.bad{color:var(--bad)}
 .pbar{margin:0 0 8px;gap:6px}.pbar select{width:auto;max-width:180px;height:36px;font-size:14px}.pbar input{height:36px;font-size:14px}
 .ptitle{margin:14px 0 6px;font-size:15px}.pwrap{max-height:46vh}
+#gridCard.fs{position:fixed;inset:0;z-index:5000;margin:0;border-radius:0;overflow:auto;padding:14px 18px}
+#gridCard.fs .gwrap{max-height:calc(100vh - 90px)}
 #pendCard.fs{position:fixed;inset:0;z-index:5000;margin:0;border-radius:0;overflow:auto;padding:14px 18px}
 #pendCard.fs .pwrap{max-height:calc(50vh - 120px)}
+.sheet select.need{outline:2px solid var(--bad);outline-offset:-2px}
 .okb{display:inline-block;font-size:12px;border-radius:99px;padding:0 8px;line-height:20px;margin:2px 0}.okb.y{background:light-dark(#dcfce7,#14361f);color:var(--ok)}.okb.n{background:light-dark(#fff1e6,#3a2615);color:var(--bad)}
 .xbtn{border:0;background:none;color:var(--bad);cursor:pointer;width:100%;height:34px;font-size:16px}
 </style>
@@ -121,8 +131,8 @@ table.sheet{border-collapse:separate;border-spacing:0;font-size:14px;width:max-c
 
  <section class="card" id="gridCard" hidden>
   <div class="row" style="justify-content:space-between;margin-bottom:10px">
-   <div class="row"><button class="btn" id="gAdd">＋ Thêm dòng</button><button class="btn pri" id="gImpBtn">📋 Dán từ Google Sheets</button><button class="btn" id="gClean" title="Xóa các dòng mới chưa nhập xã/khu/link">Xóa dòng trống</button><button class="btn" id="gFclr" hidden>✕ Bỏ tất cả bộ lọc</button><input id="gq" type="search" placeholder="Lọc nhanh…" style="width:200px"><span class="muted" id="gInfo"></span></div>
-   <div class="row"><button class="btn" id="gUndo">Hủy thay đổi</button><button class="btn pri" id="gSave">Lưu tất cả lên GitHub</button></div>
+   <div class="row"><button class="btn" id="gAdd">＋ Thêm dòng</button><button class="btn pri" id="gImpBtn">📋 Dán từ Google Sheets</button><button class="btn" id="gClean" title="Xóa các dòng mới chưa nhập xã/khu/link">Xóa dòng trống</button><button class="btn" id="gFclr" hidden>✕ Bỏ tất cả bộ lọc</button><button class="btn" data-cols="grid" title="Ẩn / hiện cột">☰ Cột</button><input id="gq" type="search" placeholder="Lọc nhanh…" style="width:200px"><span class="muted" id="gInfo"></span></div>
+   <div class="row"><button class="btn" id="gFull" title="Mở bảng tính toàn màn hình (Esc để thoát)">⛶ Toàn màn hình</button><button class="btn" id="gXlsx" title="Tải các dòng đang hiện (theo bộ lọc / lọc nhanh) ra file Excel">⬇ Tải Excel</button><button class="btn" id="gUndo">Hủy thay đổi</button><button class="btn pri" id="gSave">Lưu tất cả lên GitHub</button></div>
   </div>
   <div class="gwrap"><table class="sheet"><thead id="gh"></thead><tbody id="gb"></tbody></table></div>
   <div id="gImp" hidden style="margin:10px 0;padding:12px;border:1px dashed var(--line,#ccc);border-radius:10px">
@@ -149,12 +159,12 @@ table.sheet{border-collapse:separate;border-spacing:0;font-size:14px;width:max-c
    <select id="pfDup" title="Trùng phiên"><option value="">Trùng hoặc không</option><option value="dup">⚠ Nghi trùng phiên đã có</option><option value="new">Không trùng</option></select>
    <button class="btn" id="pfClr">✕ Bỏ lọc</button>
   </div>
-  <h3 class="ptitle">① Phiên mới – sắp đấu giá <span class="muted" id="pc1"></span></h3>
+  <h3 class="ptitle">① Phiên mới – sắp đấu giá <span class="muted" id="pc1"></span> <button class="btn" data-cols="p1" title="Ẩn / hiện cột của khung ①">☰ Cột</button></h3>
   <div class="gwrap pwrap"><table class="sheet"><thead id="ph1"></thead><tbody id="pb1" class="pbody"></tbody></table></div>
-  <h3 class="ptitle">② Cập nhật trạng thái – chờ kết quả, đã đấu giá, bỏ cọc / hủy <span class="muted" id="pc2"></span></h3>
+  <h3 class="ptitle">② Cập nhật trạng thái – chờ kết quả, đã đấu giá, bỏ cọc / hủy <span class="muted" id="pc2"></span> <button class="btn" data-cols="p2" title="Ẩn / hiện cột của khung ②">☰ Cột</button></h3>
   <div class="gwrap pwrap"><table class="sheet"><thead id="ph2"></thead><tbody id="pb2" class="pbody"></tbody></table></div>
-  <p class="muted"><b>Khung ①</b>: tin về phiên <b>sắp đấu giá</b> chưa có trong dữ liệu → Duyệt sẽ thêm phiên mới. <b>Khung ②</b>: tin <b>cập nhật</b> – kết quả trúng giá / bỏ cọc / hủy kết quả cho phiên đã có (dòng “↻ Cập nhật phiên …”, Duyệt sẽ ghi vào phiên đó), hoặc tin về phiên đã diễn ra chưa có trong dữ liệu.<br>
-  <b>Đủ điều kiện duyệt</b> = có đủ <b>ngày đấu giá, tên xã, loại đất, giá khởi điểm, nguồn báo và link báo gốc</b>; các dòng này luôn xếp lên đầu mỗi khung. Dòng ⚠ nghi trùng với phiên đã có thường nên Bỏ qua.<br>
+  <p class="muted"><b>Khung ①</b>: tin về phiên <b>sắp đấu giá</b> chưa có trong dữ liệu → Duyệt sẽ thêm phiên mới. <b>Khung ②</b>: tin <b>cập nhật</b> cho phiên đã có. Mỗi dòng phải <b>ghép với một mã phiên</b> (cột “Cập nhật phiên”, ★ = khớp tốt, tự ghép sẵn – hãy soát) và <b>chọn trạng thái mới</b>: <b>Đã đấu giá</b> (cần giá trúng hoặc số thửa trúng) hoặc <b>Hủy/bỏ cọc</b> (cần lý do ở cột Sau đấu giá hoặc Ghi chú). Duyệt chỉ ghi trạng thái và kết quả vào phiên đó, không tạo phiên mới, không đổi ngày/xã của phiên. Dòng còn “Chờ kết quả” không duyệt được.<br>
+  <b>Đủ điều kiện duyệt (khung ①)</b> = có đủ <b>ngày đấu giá, tên xã, loại đất, giá khởi điểm, nguồn báo và link báo gốc</b>; các dòng này luôn xếp lên đầu mỗi khung. Dòng ⚠ nghi trùng với phiên đã có thường nên Bỏ qua.<br>
   Workflow tự động: gom tin mới (6h23), điền ô còn thiếu (3 tiếng/lần), tìm kết quả & tin bỏ cọc cho phiên đã có (7h13 và 19h13). Ô nền xanh = tự điền từ bài báo, hãy soát lại. Chỉnh sửa được lưu khi bấm <b>Duyệt</b> hoặc <b>Lưu bảng chờ</b>.</p>
  </section>
 
@@ -600,7 +610,7 @@ const COL = {id: ["Mã", 120], ngay: ["Ngày", 140], trang_thai: ["Trạng thái
   loai_dat: ["Loại đất", 140], so_thua: ["Số thửa", 80], so_thua_trung: ["Thửa trúng", 90], gia_khoi_diem: ["Giá KĐ (tr/m²)", 110], gia_trung_min: ["Trúng thấp (tr/m²)", 120], gia_trung_max: ["Trúng cao (tr/m²)", 120],
   tong_tien_ty: ["Tổng (tỷ)", 90], nguoi_tham_gia: ["Người tham gia", 110], lat: ["Vĩ độ", 100], lng: ["Kinh độ", 100], vi_tri: ["Vị trí", 110], nguon: ["Nguồn", 130], link: ["Link nguồn", 260], ghi_chu: ["Ghi chú", 260],
   sau_dau_gia: ["Sau đấu giá", 160], sau_dau_gia_ngay: ["Cập nhật sau ĐG", 130], gia_nha_nuoc: ["Giá nhà nước (tr/m²)", 130],
-  link_thong_bao: ["Link thông báo (trước phiên)", 260], link_sau_dau_gia: ["Link tin sau đấu giá", 260], lien_quan: ["Phiên liên quan (mã)", 160]};
+  link_thong_bao: ["Link thông báo (trước phiên)", 260], link_sau_dau_gia: ["Link tin sau đấu giá", 260], lien_quan: ["Phiên liên quan (mã)", 160], _cap_nhat_id: ["Cập nhật phiên (mã)", 300]};
 const SELECTS = {trang_thai: ["Sắp đấu giá", "Chờ kết quả", "Đã đấu giá", "Đã nộp tiền", "Hủy/bỏ cọc"], vi_tri: ["gần đúng", "theo thôn", "chính xác"],
   sau_dau_gia: ["Đang trong hạn nộp", "Đã nộp đủ tiền", "Đã nộp một phần", "Quá hạn chưa nộp", "Bỏ cọc", "Đã hủy kết quả", "Chưa rõ"]};
 const DATALISTS = {tinh: "dlTinh", loai_dat: "dlLoai", nguon: "dlNguon"};
@@ -608,6 +618,28 @@ let FILT = {};   // bộ lọc theo cột: {cột: Set các giá trị được 
 let GRID = [];   // [{r: rowObj, orig: index in ROWS or -1, del: bool}]
 const ORDER = ["id", "ngay", "trang_thai", "xa", "tinh", "khu", "dia_danh_cu", "so_thua", "so_thua_trung", "gia_khoi_diem", "gia_trung_min", "gia_trung_max", "tong_tien_ty", "nguoi_tham_gia", "loai_dat", "nguon", "link", "ghi_chu", "gia_nha_nuoc", "sau_dau_gia", "sau_dau_gia_ngay", "lat", "lng", "vi_tri"];
 const gCols = () => ORDER.filter(h => HEAD.includes(h)).concat(HEAD.filter(h => !ORDER.includes(h)));
+/* ---- ẩn / hiện cột (nhớ trong trình duyệt này, riêng cho từng bảng: grid, p1 = khung ①, p2 = khung ②) ---- */
+const HIDE = {};
+const hid = k => HIDE[k] || (HIDE[k] = new Set((() => { try { return JSON.parse(store.get("dg-hide-" + k) || "[]"); } catch (e) { return []; } })()));
+const saveHide = k => store.set("dg-hide-" + k, JSON.stringify([...hid(k)]));
+const visCols = (k, cols) => cols.filter(h => !hid(k).has(h));
+const gColsV = () => visCols("grid", gCols());
+const colsOf = k => k === "grid" ? gCols() : k === "p1" ? PCOLS : PCOLS2;
+const rerender = k => k === "grid" ? renderGrid() : renderPending();
+function hideCol(k, h, on) { const s = hid(k); on ? s.add(h) : s.delete(h); saveHide(k); rerender(k); }
+function colsLabel() { document.querySelectorAll("[data-cols]").forEach(b => { const k = b.dataset.cols, n = colsOf(k).filter(h => hid(k).has(h)).length; b.textContent = n ? `☰ Cột (${n} ẩn)` : "☰ Cột"; b.classList.toggle("on", !!n); }); }
+document.addEventListener("click", e => {
+  const b = e.target.closest("[data-cols]"); if (!b) return; e.stopImmediatePropagation(); e.preventDefault();
+  const k = b.dataset.cols; if ($("#fpop") && $("#fpop").dataset.cols === k) { closeFpop(); return; } closeFpop();
+  const p = document.createElement("div"); p.id = "fpop"; p.dataset.cols = k;
+  const draw = () => { const cols = colsOf(k);
+    p.innerHTML = `<b>Hiện các cột</b> <span class="muted">(bỏ tích để ẩn)</span><div class="fl" style="max-height:340px">${cols.map(h => `<label><input type="checkbox" value="${esc(h)}"${hid(k).has(h) ? "" : " checked"}> ${esc((COL[h] || [h])[0])}</label>`).join("")}</div>
+      <div class="act"><button class="btn" data-sh="all">Hiện tất cả</button><button class="btn" data-sh="none">Ẩn tất cả</button></div>`; };
+  draw(); document.body.appendChild(p);
+  const r = b.getBoundingClientRect(); p.style.top = Math.max(8, Math.min(r.bottom + 4, innerHeight - p.offsetHeight - 8)) + "px"; p.style.left = Math.max(8, Math.min(r.left, innerWidth - 270)) + "px";
+  p.addEventListener("change", e2 => { const x = e2.target; if (x.value) hideCol(k, x.value, !x.checked); });
+  p.addEventListener("click", e2 => { const x = e2.target.closest("[data-sh]"); if (!x) return; e2.stopPropagation(); const s = hid(k); s.clear(); if (x.dataset.sh === "none") colsOf(k).forEach(h => s.add(h)); saveHide(k); rerender(k); draw(); });
+});
 function gridFromRows() { GRID = ROWS.map((r, i) => ({r: {...r}, orig: i, del: false})).sort((a, b) => (b.r.ngay || "").localeCompare(a.r.ngay || "")); }
 const rowChanged = g => g.orig < 0 || g.del || HEAD.some(h => (g.r[h] ?? "") !== (ROWS[g.orig][h] ?? ""));
 function cellHTML(gi, h, v) {
@@ -615,17 +647,21 @@ function cellHTML(gi, h, v) {
   if (SELECTS[h]) return `<select data-g="${gi}" data-h="${h}" style="--w:${w}px"><option value=""${v ? "" : " selected"}></option>${SELECTS[h].map(o => `<option${o === v ? " selected" : ""}>${o}</option>`).join("")}${v && !SELECTS[h].includes(v) ? `<option selected>${esc(v)}</option>` : ""}</select>`;
   return `<input data-g="${gi}" data-h="${h}" value="${esc(v ?? "")}" style="--w:${w}px"${h === "ngay" ? ' placeholder="YYYY-MM-DD"' : ""}${DATALISTS[h] ? ` list="${DATALISTS[h]}"` : ""}${h === "id" ? " readonly" : ""}>`;
 }
+/* dòng có đang hiện theo lọc nhanh + bộ lọc cột không (dùng chung cho bảng và nút Tải Excel) */
+function gridShown(g, qq) {
+  if (qq && !gCols().some(h => String(g.r[h] || "").toLowerCase().includes(qq))) return false;
+  return !Object.entries(FILT).some(([h, set]) => !set.has(String(g.r[h] ?? "").trim()));
+}
 function renderGrid() {
   const qq = $("#gq").value.trim().toLowerCase();
-  $("#gh").innerHTML = `<tr><th class="rn">#</th>${gCols().map(h => `<th title="${h}">${esc((COL[h] || [h])[0])}<button class="fbtn${FILT[h] ? " on" : ""}" data-f="${h}" title="Lọc / sắp xếp">▼</button></th>`).join("")}<th></th></tr>`;
+  $("#gh").innerHTML = `<tr><th class="rn">#</th>${gColsV().map(h => `<th title="${h}">${esc((COL[h] || [h])[0])}<button class="fbtn${FILT[h] ? " on" : ""}" data-f="${h}" title="Lọc / sắp xếp / ẩn cột">▼</button></th>`).join("")}<th></th></tr>`; colsLabel();
   $("#gFclr").hidden = !Object.keys(FILT).length;
   $("#gb").innerHTML = GRID.map((g, gi) => {
-    if (qq && !gCols().some(h => String(g.r[h] || "").toLowerCase().includes(qq))) return "";
-    if (Object.entries(FILT).some(([h, set]) => !set.has(String(g.r[h] ?? "").trim()))) return "";
+    if (!gridShown(g, qq)) return "";
     const cls = g.del ? "del" : g.orig < 0 ? "new" : rowChanged(g) ? "chg" : "";
-    return `<tr data-g="${gi}" class="${cls}"><td class="rn">${gi + 1}</td>${gCols().map(h => `<td>${cellHTML(gi, h, g.r[h])}</td>`).join("")}<td><button class="xbtn" data-x="${gi}" title="${g.del ? "Bỏ xóa" : "Xóa dòng"}">${g.del ? "↺" : "✕"}</button></td></tr>`;
+    return `<tr data-g="${gi}" class="${cls}"><td class="rn">${gi + 1}</td>${gColsV().map(h => `<td>${cellHTML(gi, h, g.r[h])}</td>`).join("")}<td><button class="xbtn" data-x="${gi}" title="${g.del ? "Bỏ xóa" : "Xóa dòng"}">${g.del ? "↺" : "✕"}</button></td></tr>`;
   }).join("");
-  updInfo();
+  updInfo(); RSEL.paint();
 }
 function updInfo() { const n = GRID.filter(rowChanged).length; $("#gInfo").textContent = n ? `${n} dòng chưa lưu` : `${GRID.length} dòng`; $("#gSave").disabled = !n; }
 function markRow(gi) { const tr = $(`#gb tr[data-g="${gi}"]`); if (!tr) return; const g = GRID[gi]; tr.className = g.del ? "del" : g.orig < 0 ? "new" : rowChanged(g) ? "chg" : ""; updInfo(); }
@@ -687,13 +723,16 @@ $("#gImpGo").addEventListener("click", () => {
 });
 /* dán nhiều ô từ Excel / Google Sheets */
 $("#gb").addEventListener("paste", e => {
-  const el = e.target; if (el.dataset.g == null) return;
+  const el = e.target; if (el.dataset.g == null || RSEL.multi()) return;   /* đang chọn vùng nhiều ô → để bộ chọn vùng xử lý */
   const txt = (e.clipboardData || window.clipboardData).getData("text"); if (!/[\t\n]/.test(txt.replace(/\n$/, ""))) return;
   e.preventDefault();
   const lines = tsvLines(txt);
   if (importTable(lines)) return;
-  const cols = gCols(); const c0 = cols.indexOf(el.dataset.h);
-  const vis = [...$("#gb").querySelectorAll("tr[data-g]")].map(tr => +tr.dataset.g); const start = vis.indexOf(+el.dataset.g);
+  gridPaste(+el.dataset.g, el.dataset.h, lines);
+});
+function gridPaste(gStart, hStart, lines) {
+  const cols = gColsV(); const c0 = cols.indexOf(hStart);   /* dán theo các cột đang hiện */
+  const vis = [...$("#gb").querySelectorAll("tr[data-g]")].map(tr => +tr.dataset.g); const start = vis.indexOf(gStart);
   const intoNew = GRID[vis[start]] && GRID[vis[start]].orig < 0;   // dán vào dòng mới → tạo thêm dòng mới, không đè dòng cũ
   if (intoNew) { const g0 = vis[start]; for (let i = 1; i < lines.length; i++) GRID.splice(g0 + i, 0, {r: newRowObj(), orig: -1, del: false});
     lines.forEach((cells, i) => cells.forEach((v, j) => { const h = cols[c0 + j]; if (h && h !== "id") GRID[g0 + i].r[h] = v.trim(); }));
@@ -704,7 +743,103 @@ $("#gb").addEventListener("paste", e => {
     cells.forEach((v, j) => { const h = cols[c0 + j]; if (h && h !== "id") GRID[gi].r[h] = v.trim(); });
   });
   renderGrid(); say(`Đã dán ${lines.length} dòng × ${lines[0].length} cột. Kiểm tra lại rồi bấm “Lưu tất cả”.`, "ok");
-});
+}
+
+/* ================= BÔI CHỌN VÙNG Ô (như Excel): kéo chuột / Shift+click / bấm số dòng / bấm tên cột
+   Ctrl+C sao chép · Ctrl+X cắt · Ctrl+V dán (1 giá trị → điền cả vùng) · Delete xóa · Esc bỏ chọn
+   Dùng cho Bảng tính và hai khung Tin chờ duyệt. ================= */
+const RSEL = (() => {
+  const T = {
+    grid: {tb: "#gb", ra: "g", cols: () => gColsV(), row: k => GRID[k] && GRID[k].r, done: () => renderGrid()},
+    p1: {tb: "#pb1", ra: "p", cols: () => visCols("p1", PCOLS), row: k => PROWS[k], done: () => renderPending()},
+    p2: {tb: "#pb2", ra: "p", cols: () => visCols("p2", PCOLS2), row: k => PROWS[k], done: () => renderPending()}};
+  let S = null, drag = false;          /* S = {t, a:{k,h}, b:{k,h}} – k: khóa dòng, h: tên cột */
+  const tOf = tb => Object.keys(T).find(t => tb && tb.matches(T[t].tb));
+  const keys = t => [...document.querySelectorAll(`${T[t].tb} tr[data-${T[t].ra}]`)].map(tr => +tr.dataset[T[t].ra]);
+  const cellAt = td => { const el = td && td.querySelector("[data-h]"), tr = td && td.closest("tr"), tb = tr && tr.parentElement, t = tOf(tb);
+    return el && t && tr.dataset[T[t].ra] != null ? {t, k: +tr.dataset[T[t].ra], h: el.dataset.h} : null; };
+  function rect() {
+    if (!S) return null; const ks = keys(S.t), cs = T[S.t].cols();
+    const r0 = ks.indexOf(S.a.k), r1 = ks.indexOf(S.b.k), c0 = cs.indexOf(S.a.h), c1 = cs.indexOf(S.b.h);
+    if (r0 < 0 || r1 < 0 || c0 < 0 || c1 < 0) return null;
+    return {rows: ks.slice(Math.min(r0, r1), Math.max(r0, r1) + 1), cols: cs.slice(Math.min(c0, c1), Math.max(c0, c1) + 1)};
+  }
+  function paint() {
+    document.querySelectorAll("td.sel").forEach(td => td.classList.remove("sel", "st", "sb", "sl", "sr"));
+    const R = rect(); if (!R) return;
+    const rs = new Set(R.rows), cs = new Set(R.cols), ra = T[S.t].ra;
+    document.querySelectorAll(`${T[S.t].tb} tr[data-${ra}]`).forEach(tr => { const k = +tr.dataset[ra]; if (!rs.has(k)) return;
+      tr.querySelectorAll("[data-h]").forEach(el => { const h = el.dataset.h; if (!cs.has(h)) return; const td = el.closest("td");
+        td.classList.add("sel"); if (k === R.rows[0]) td.classList.add("st"); if (k === R.rows[R.rows.length - 1]) td.classList.add("sb");
+        if (h === R.cols[0]) td.classList.add("sl"); if (h === R.cols[R.cols.length - 1]) td.classList.add("sr"); }); });
+  }
+  const multi = () => { const R = rect(); return !!R && (R.rows.length > 1 || R.cols.length > 1); };
+  const clear = () => { S = null; paint(); };
+  const tsvCell = v => { v = String(v ?? ""); return /[\t\n"]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; };
+  function text() { const R = rect(); return R.rows.map(k => R.cols.map(h => tsvCell((T[S.t].row(k) || {})[h])).join("\t")).join("\n"); }
+  function setVal(k, h, v) {
+    if (h === "id") return; const r = T[S.t].row(k); if (!r) return; r[h] = v;
+    if (S.t === "grid") markRow(k);
+    else if (h === "_cap_nhat_id" || h === "trang_thai") { r._tu_dien = String(r._tu_dien || "").split(",").filter(x => x && x !== h).join(","); if (h === "_cap_nhat_id") r._khong_ghep = v ? "" : "1"; }
+  }
+  function wipe() { const R = rect(); R.rows.forEach(k => R.cols.forEach(h => setVal(k, h, ""))); const n = R.rows.length * R.cols.length; T[S.t].done(); paint(); say(`Đã xóa ${n} ô. ${S.t === "grid" ? "Bấm “Lưu tất cả” để ghi lên GitHub." : "Bấm “Lưu bảng chờ” để giữ thay đổi."}`, "ok"); }
+  function paste(lines) {
+    const R = rect(); if (!R) return;
+    if (lines.length === 1 && lines[0].length === 1) {           /* một giá trị → điền cả vùng */
+      const v = lines[0][0].trim(); R.rows.forEach(k => R.cols.forEach(h => setVal(k, h, v)));
+      T[S.t].done(); paint(); say(`Đã điền “${v}” vào ${R.rows.length * R.cols.length} ô.`, "ok"); return; }
+    if (S.t === "grid") { if (!importTable(lines)) gridPaste(R.rows[0], R.cols[0], lines); return; }
+    const ks = keys(S.t), cs = T[S.t].cols(), r0 = ks.indexOf(R.rows[0]), c0 = cs.indexOf(R.cols[0]); let n = 0;
+    lines.forEach((cells, i) => { const k = ks[r0 + i]; if (k == null) return; cells.forEach((v, j) => { const h = cs[c0 + j]; if (h) { setVal(k, h, v.trim()); n++; } }); });
+    T[S.t].done(); say(`Đã dán ${n} ô vào bảng chờ. Bấm “Lưu bảng chờ” để giữ thay đổi.`, "ok");
+  }
+  /* chuột */
+  document.addEventListener("mousedown", e => {
+    if (e.button !== 0) return;
+    const rn = e.target.closest("td.rn, td.ck"), th = e.target.closest("thead th");
+    if (th && !e.target.closest("button")) {                         /* bấm tên cột → chọn cả cột */
+      const tb = th.closest("table").querySelector("tbody"), t = tOf(tb); if (!t) return;
+      const ths = [...th.parentElement.children], off = ths.length - T[t].cols().length - (t === "grid" ? 1 : 0), h = T[t].cols()[ths.indexOf(th) - off];
+      const ks = keys(t); if (!h || !ks.length) return;
+      if (e.shiftKey && S && S.t === t) S.b = {k: ks[ks.length - 1], h}; else S = {t, a: {k: ks[0], h}, b: {k: ks[ks.length - 1], h}};
+      paint(); e.preventDefault(); return;
+    }
+    if (rn && !e.target.closest("input")) {                          /* bấm số dòng → chọn cả dòng */
+      const tr = rn.closest("tr"), t = tOf(tr.parentElement); if (!t || tr.dataset[T[t].ra] == null) return;
+      const cs = T[t].cols(), k = +tr.dataset[T[t].ra];
+      if (e.shiftKey && S && S.t === t) S.b = {k, h: cs[cs.length - 1]}; else S = {t, a: {k, h: cs[0]}, b: {k, h: cs[cs.length - 1]}};
+      drag = true; paint(); e.preventDefault(); return;
+    }
+    const c = cellAt(e.target.closest("td"));
+    if (!c) { if (!e.target.closest(".gwrap, #fpop")) clear(); return; }   /* bấm ra ngoài bảng → bỏ chọn (bấm thanh cuộn thì giữ) */
+    if (e.shiftKey && S && S.t === c.t) { S.b = {k: c.k, h: c.h}; e.preventDefault(); document.activeElement && document.activeElement.blur(); }
+    else S = {t: c.t, a: {k: c.k, h: c.h}, b: {k: c.k, h: c.h}};
+    drag = true; paint();
+  });
+  document.addEventListener("mouseover", e => {
+    if (!drag || !S) return; const c = cellAt(e.target.closest("td")); if (!c || c.t !== S.t) return;
+    if (c.k === S.b.k && c.h === S.b.h) return;
+    S.b = {k: c.k, h: c.h};
+    if (multi()) { document.body.classList.add("nosel"); const a = document.activeElement; if (a && a.closest && a.closest(".sheet")) a.blur(); getSelection().removeAllRanges(); }
+    paint();
+  });
+  document.addEventListener("mouseup", () => { drag = false; document.body.classList.remove("nosel"); });
+  /* bàn phím & clipboard */
+  const otherField = () => { const a = document.activeElement; return a && /^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName) && !a.closest(".sheet"); };   /* ô tìm kiếm, ô dán… ngoài bảng */
+  const editingText = () => { const a = document.activeElement; return a && a.tagName === "INPUT" && a.closest(".sheet") && a.type !== "checkbox" && a.selectionStart !== a.selectionEnd; };
+  document.addEventListener("copy", e => { if (!S || !rect() || otherField() || (!multi() && editingText())) return; e.clipboardData.setData("text/plain", text()); e.preventDefault();
+    const R = rect(); say(`Đã sao chép ${R.rows.length} dòng × ${R.cols.length} cột – dán được vào Excel / Google Sheets.`, "ok"); });
+  document.addEventListener("cut", e => { if (!S || !rect() || otherField() || !multi()) return; e.clipboardData.setData("text/plain", text()); e.preventDefault(); wipe(); });
+  document.addEventListener("paste", e => { if (!S || !rect()) return; const a = document.activeElement, inSheet = a && a.closest && a.closest(".sheet");
+    if (otherField() || (!multi() && inSheet)) return;               /* 1 ô đang sửa → để ô tự xử lý (dán nhiều dòng do bộ dán bảng tính lo) */
+    const txt = (e.clipboardData || window.clipboardData).getData("text"); if (!txt) return; e.preventDefault(); paste(tsvLines(txt)); }, true);
+  document.addEventListener("keydown", e => {
+    if (!S || !rect() || $("#fpop") || otherField()) return;
+    if (e.key === "Escape") { clear(); return; }
+    if ((e.key === "Delete" || e.key === "Backspace") && multi()) { e.preventDefault(); wipe(); return; }
+  });
+  return {paint, multi, clear};
+})();
 $("#gSave").addEventListener("click", async () => {
   const errs = [];
   GRID.forEach((g, gi) => { if (g.del || !rowChanged(g)) return; NUMS.forEach(k => { if (g.r[k]) g.r[k] = normNum(g.r[k]); });
@@ -736,7 +871,7 @@ $("#gh").addEventListener("click", e => {
     <input type="search" placeholder="Tìm giá trị…">
     <div class="fl"><label><input type="checkbox" data-all checked> <b>(Chọn tất cả)</b></label>
     ${vals.map(v => `<label data-v="${esc(v.toLowerCase())}"><input type="checkbox" value="${esc(v)}"${!cur || cur.has(v) ? " checked" : ""}> ${v === "" ? "<i>(Trống)</i>" : esc(v)}</label>`).join("")}</div>
-    <div class="act"><button class="btn pri" data-ok>Lọc</button><button class="btn" data-clr>Bỏ lọc cột này</button></div>`;
+    <div class="act"><button class="btn pri" data-ok>Lọc</button><button class="btn" data-clr>Bỏ lọc cột này</button><button class="btn" data-hide title="Ẩn cột này (hiện lại bằng nút ☰ Cột)">Ẩn cột</button></div>`;
   document.body.appendChild(p);
   const r = b.getBoundingClientRect(); p.style.top = Math.min(r.bottom + 4, innerHeight - p.offsetHeight - 8) + "px"; p.style.left = Math.max(8, Math.min(r.left - 120, innerWidth - 270)) + "px";
   const boxes = () => [...p.querySelectorAll(".fl input:not([data-all])")];
@@ -752,6 +887,7 @@ $("#gh").addEventListener("click", e => {
   p.querySelector("[data-ok]").addEventListener("click", () => { const on = boxes().filter(x => x.checked).map(x => x.value);
     if (on.length === vals.length) delete FILT[h]; else FILT[h] = new Set(on); closeFpop(); renderGrid(); });
   p.querySelector("[data-clr]").addEventListener("click", () => { delete FILT[h]; closeFpop(); renderGrid(); });
+  p.querySelector("[data-hide]").addEventListener("click", () => { closeFpop(); hideCol("grid", h, true); });
 });
 document.addEventListener("click", e => { const p = $("#fpop"); if (p && !p.contains(e.target)) closeFpop(); });
 document.addEventListener("keydown", e => { if (e.key === "Escape") closeFpop(); });
@@ -783,14 +919,90 @@ function pendDup(p) {
 async function loadPending() {
   try { const j = await gh("GET", null, PEND_PATH); const p = parseCSV(b64dec(j.content)); PHEAD = p.head; PROWS = p.rows; PSHA = j.sha; }
   catch (e) { PHEAD = []; PROWS = []; PSHA = null; if (e.status !== 404) say("Không tải được tin chờ duyệt: " + explain(e), "err"); }
-  PSEL = new Set(); autoDone = false; updPendBadge(); if (!$("#pendCard").hidden) { renderPending(); autoFill(); }
+  PSEL = new Set(); autoDone = false; if (ROWS.length) autoLink(); updPendBadge(); if (!$("#pendCard").hidden) { renderPending(); autoFill(); }
 }
 function updPendBadge() { const b = $("#pendBadge"); b.textContent = PROWS.length; b.hidden = !PROWS.length; }
 /* ---- điều kiện duyệt, phân khung, lọc ---- */
 const NEED = [["ngay", "Ngày"], ["xa", "Xã"], ["loai_dat", "Loại đất"], ["gia_khoi_diem", "Giá KĐ"], ["nguon", "Nguồn"], ["link", "Link báo gốc"]];
-const lacks = p => NEED.filter(([k]) => { const v = String(p[k] ?? "").trim(); return !v || (k === "link" && (/news\.google\./.test(v) || !/^https?:\/\//.test(v))) || (k === "ngay" && !/^\d{4}-\d{2}(-\d{2})?$/.test(v)); }).map(([, l]) => l);
-const frameOf = p => p._cap_nhat_id || (p.trang_thai && p.trang_thai !== "Sắp đấu giá") ? 2 : 1;
-const PCOLS2 = PCOLS.slice(0, 2).concat(["sau_dau_gia"], PCOLS.slice(2));
+const lacks1 = p => NEED.filter(([k]) => { const v = String(p[k] ?? "").trim(); return !v || (k === "link" && (/news\.google\./.test(v) || !/^https?:\/\//.test(v))) || (k === "ngay" && !/^\d{4}-\d{2}(-\d{2})?$/.test(v)); }).map(([, l]) => l);
+const frameOf = p => p._khung === "2" || p._cap_nhat_id || (p.trang_thai && p.trang_thai !== "Sắp đấu giá") ? 2 : 1;
+/* ---- KHUNG ②: tin cập nhật phải GHÉP vào một phiên đã có và CHUYỂN trạng thái ----
+   Phiên "Chờ kết quả" (hoặc "Sắp đấu giá" đã qua ngày) → "Đã đấu giá" hoặc "Hủy/bỏ cọc".
+   Phiên "Đã đấu giá" → giữ "Đã đấu giá" + cột Sau đấu giá (bỏ cọc một phần…) hoặc chuyển "Hủy/bỏ cọc".
+   Không cho duyệt dòng khung ② còn để "Chờ kết quả" / "Sắp đấu giá". */
+const UPD_ST = ["Đã đấu giá", "Hủy/bỏ cọc"];
+const todayVN = () => new Date(Date.now() + 7 * 3600e3).toISOString().slice(0, 10);
+const findRow = id => id ? ROWS.find(r => r.id === id) : null;
+const fold0 = s => String(s || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/đ/gi, "d").toLowerCase().replace(/\s+/g, " ").trim();
+const placeNames = (s, kinds) => [...String(s || "").matchAll(new RegExp(`(?:${kinds})\\s+([^,;()]+)`, "gi"))].map(m => m[1].trim()).filter(Boolean);
+/* phiên có thể nhận tin cập nhật */
+const updTargets = () => { const t = todayVN(); return ROWS.filter(r => r.id && (r.trang_thai === "Chờ kết quả" || r.trang_thai === "Đã đấu giá" || (r.trang_thai === "Sắp đấu giá" && r.ngay && r.ngay <= t))); };
+/* điểm khớp giữa tin chờ duyệt p và phiên r (xã mới/cũ, huyện cũ, ngày, số thửa, giá KĐ, tên khu) */
+function matchScore(p, r) {
+  const txt = " " + fold0([p._tieu_de, p.xa, p.dia_danh_cu, p.khu, p.ghi_chu].join(" ")) + " ", has = n => n && txt.includes(" " + fold0(n) + " ") || (n && fold0(n).length > 4 && txt.includes(fold0(n)));
+  let sc = 0;
+  if (has(r.xa)) sc += 3;
+  if (placeNames(r.dia_danh_cu, "xã|phường|thị trấn").some(has)) sc += 3;
+  if (placeNames(r.dia_danh_cu, "huyện|quận|thị xã").some(has)) sc += 1;
+  if (!sc) return 0;                                   /* không trùng địa danh nào → không phải phiên này */
+  if (p.ngay && r.ngay) { const g = Math.abs((new Date(p.ngay) - new Date(r.ngay)) / 864e5); if (g <= 1) sc += 3; else if (g <= 5) sc += 1; else if (g > 30) sc -= 3; }
+  if (p.so_thua && r.so_thua && +p.so_thua === +r.so_thua) sc += 2;
+  if (p.gia_khoi_diem && r.gia_khoi_diem && Math.abs(+normNum(p.gia_khoi_diem) - +r.gia_khoi_diem) < 0.01) sc += 2;
+  const kw = fold0(r.khu).split(/[^a-z0-9]+/).filter(w => w.length > 2 && !/^(khu|dat|thon|xom|lang|xa|phuong|cac|tai|dau|gia|quyen|dung|thua|diem)$/.test(w));
+  if (kw.length && kw.filter(w => txt.includes(" " + w + " ")).length >= Math.min(2, kw.length)) sc += 2;
+  return sc;
+}
+const rankTargets = p => updTargets().map(r => ({r, sc: matchScore(p, r)})).filter(x => x.sc > 0).sort((a, b) => b.sc - a.sc || String(b.r.ngay).localeCompare(String(a.r.ngay)));
+/* đoán trạng thái mới từ bài */
+function guessStatus(p) {
+  const t = fold0([p._tieu_de, p.ghi_chu, p.sau_dau_gia].join(" "));
+  if (["Bỏ cọc", "Đã hủy kết quả"].includes(p.sau_dau_gia) || /bo coc|huy ket qua|huy phien|dung (to chuc )?dau gia|huy cuoc dau gia|tam dung dau gia/.test(t)) return "Hủy/bỏ cọc";
+  if (p.gia_trung_max || p.so_thua_trung || /trung dau gia|dau gia thanh cong|gia trung|ket qua dau gia/.test(t)) return "Đã đấu giá";
+  return "";
+}
+/* chạy khi tải bảng chờ: tự ghép mã phiên + tự chọn trạng thái mới cho khung ② (ô tô xanh, soát lại) */
+function autoLink() {
+  PROWS.forEach(p => {
+    if (frameOf(p) !== 2) return;
+    p._khung = "2";   /* giữ ở khung ② kể cả khi bỏ chọn trạng thái / mã */
+    const auto = new Set(String(p._tu_dien || "").split(",").filter(Boolean));
+    if (!p._cap_nhat_id && p._khong_ghep !== "1") { const best = rankTargets(p)[0]; if (best && best.sc >= 5) { p._cap_nhat_id = best.r.id; auto.add("_cap_nhat_id"); } }
+    const tgt = findRow(p._cap_nhat_id);
+    if (!UPD_ST.includes(p.trang_thai)) { const g = guessStatus(p) || (tgt && tgt.trang_thai === "Đã đấu giá" ? "Đã đấu giá" : ""); if (g) { p.trang_thai = g; auto.add("trang_thai"); } }
+    p._tu_dien = [...auto].join(",");
+  });
+}
+function lacks2(p) {
+  const out = [], tgt = findRow(p._cap_nhat_id), v = k => String(p[k] ?? "").trim();
+  if (p._cap_nhat_id && !tgt) out.push(`Mã ${p._cap_nhat_id} không có trong dữ liệu`);
+  if (!UPD_ST.includes(p.trang_thai)) out.push("Trạng thái mới (Đã đấu giá / Hủy-bỏ cọc)");
+  if (!tgt) out.push(...lacks1(p).filter(x => x !== "Nguồn" && x !== "Link báo gốc"));   /* không ghép → phải đủ thông tin như một phiên mới */
+  if (p.trang_thai === "Đã đấu giá" && !(tgt && tgt.trang_thai === "Đã đấu giá") && !v("gia_trung_max") && !v("so_thua_trung")) out.push("Giá trúng hoặc số thửa trúng");
+  if (p.trang_thai === "Hủy/bỏ cọc" && !v("sau_dau_gia") && !v("ghi_chu")) out.push("Lý do (Sau đấu giá hoặc Ghi chú)");
+  if (!v("nguon")) out.push("Nguồn");
+  if (!/^https?:\/\//.test(v("link")) || /news\.google\./.test(v("link"))) out.push("Link báo gốc");
+  return out.filter(Boolean);
+}
+const lacks = p => frameOf(p) === 2 ? lacks2(p) : lacks1(p);
+/* ô riêng của khung ②: chọn phiên cần cập nhật, chọn trạng thái mới */
+function pendCell2(i, h, p) {
+  if (h === "_cap_nhat_id") {
+    const ranked = rankTargets(p), cur = p._cap_nhat_id, list = ranked.slice(0, 12).map(x => x.r), all = updTargets();
+    if (cur && !list.some(r => r.id === cur)) { const c = findRow(cur); if (c) list.unshift(c); }
+    const lab = r => `${r.id} · ${fdate(r.ngay)} · ${r.xa || "?"} · ${r.trang_thai}${(ranked.find(x => x.r === r) || {}).sc >= 5 ? " ★" : ""}`;
+    const rest = all.filter(r => !list.includes(r)).sort((a, b) => String(b.ngay).localeCompare(String(a.ngay)));
+    return `<select data-pi="${i}" data-h="_cap_nhat_id" style="--w:300px"><option value=""${cur ? "" : " selected"}>— Không ghép (phiên mới đã diễn ra) —</option>
+      ${list.length ? `<optgroup label="Gợi ý khớp nhất">${list.map(r => `<option value="${esc(r.id)}"${r.id === cur ? " selected" : ""}>${esc(lab(r))}</option>`).join("")}</optgroup>` : ""}
+      ${rest.length ? `<optgroup label="Các phiên khác chờ kết quả / đã đấu giá">${rest.map(r => `<option value="${esc(r.id)}"${r.id === cur ? " selected" : ""}>${esc(lab(r))}</option>`).join("")}</optgroup>` : ""}
+      ${cur && !findRow(cur) ? `<option selected value="${esc(cur)}">${esc(cur)} (không tồn tại)</option>` : ""}</select>`;
+  }
+  if (h === "trang_thai") {
+    const v = p.trang_thai, ok = UPD_ST.includes(v);
+    return `<select data-pi="${i}" data-h="trang_thai" style="--w:170px"${ok ? "" : ' class="need"'}><option value=""${ok ? "" : " selected"}>${v && !ok ? `⚠ đang “${esc(v)}” – chọn mới` : "— chọn trạng thái mới —"}</option>${UPD_ST.map(o => `<option${o === v ? " selected" : ""}>${o}</option>`).join("")}</select>`;
+  }
+  return cellHTML(i, h, p[h]).replace(/data-g=/, "data-pi=");
+}
+const PCOLS2 = ["_cap_nhat_id", "trang_thai", "sau_dau_gia", "so_thua_trung", "gia_trung_min", "gia_trung_max", "tong_tien_ty", "nguoi_tham_gia", "ngay", "tinh", "xa", "dia_danh_cu", "khu", "loai_dat", "so_thua", "gia_khoi_diem", "lat", "lng", "nguon", "ghi_chu"];
 const PF = {};
 function pendFilterOpts() {
   const opt = (id, key, label) => { const el = $(id), cur = el.value, vals = [...new Set(PROWS.map(p => String(p[key] || "").trim()).filter(Boolean))].sort((a, b) => a.localeCompare(b, "vi"));
@@ -805,21 +1017,27 @@ function pendVisible() {
     && (!ng || p.nguon === ng) && (!dup || (dup === "dup") === !!d))
     .sort((a, b) => (a.miss.length ? 1 : 0) - (b.miss.length ? 1 : 0) || a.miss.length - b.miss.length || String(b.p.ngay || "").localeCompare(String(a.p.ngay || "")));
 }
-function pendRow({p, i, miss, d}, cols) {
+function pendRow({p, i, miss, d}, cols, f2) {
   return `<tr data-p="${i}" class="${d ? "err" : ""}"><td class="ck rn"><input type="checkbox" data-pc="${i}"${PSEL.has(i) ? " checked" : ""} aria-label="Chọn dòng"></td>
     <td class="pend-t">${miss.length ? `<span class="okb n" title="Chưa đủ điều kiện duyệt">Thiếu: ${esc(miss.join(", "))}</span>` : `<span class="okb y">✓ Đủ điều kiện</span>`}<br>
     ${p.link ? `<a href="${esc(p.link)}" target="_blank" rel="noopener">${esc(p._tieu_de || p.link)}</a>` : esc(p._tieu_de || "")}
-    <div class="muted">${esc(p.nguon || "")}${p._ngay_lay ? " · lấy " + esc(fdate(p._ngay_lay)) : ""}${p._cach_lay ? " · " + esc(p._cach_lay) : ""}</div>${d ? `<div class="warn">⚠ có thể trùng phiên ${esc(d)}</div>` : ""}${p._cap_nhat_id ? `<div class="rd ok"><b>↻ Cập nhật phiên ${esc(p._cap_nhat_id)}</b>${p._giu_link === "1" ? " (tin sau đấu giá)" : ""} – duyệt sẽ ghi vào phiên này</div>` : ""}
+    <div class="muted">${esc(p.nguon || "")}${p._ngay_lay ? " · lấy " + esc(fdate(p._ngay_lay)) : ""}${p._cach_lay ? " · " + esc(p._cach_lay) : ""}</div>${d ? `<div class="warn">⚠ có thể trùng phiên ${esc(d)}</div>` : ""}${(() => { const t = findRow(p._cap_nhat_id);
+      if (t) return `<div class="rd ok"><b>↻ Cập nhật phiên ${esc(t.id)}</b> · ${esc(fdate(t.ngay))} · ${esc(t.xa)}${t.khu ? " – " + esc(t.khu.slice(0, 50)) : ""}<br>${esc(t.trang_thai)} → <b>${UPD_ST.includes(p.trang_thai) ? esc(p.trang_thai) : "?"}</b>${p.sau_dau_gia ? " · " + esc(p.sau_dau_gia) : ""} – duyệt sẽ ghi vào phiên này, không tạo phiên mới</div>`;
+      if (frameOf(p) === 2) return `<div class="warn">Chưa ghép với phiên nào – chọn ở cột “Cập nhật phiên”, hoặc để trống nếu đây là phiên mới chưa có trong dữ liệu</div>`;
+      return ""; })()}
+    ${p.xa && p._tieu_de && !findRow(p._cap_nhat_id) && !fold0(p._tieu_de).includes(fold0(p.xa)) ? `<div class="warn">⚠ Xã “${esc(p.xa)}” không có trong tiêu đề bài – có thể đọc nhầm địa danh</div>` : ""}
     ${p.link ? `<div class="rd ${PSTAT[p.link] ? PSTAT[p.link][0] : ""}"><button class="fbtn" style="margin:0 6px 0 0" data-rd="${i}" type="button">🔎 Đọc bài</button>${PSTAT[p.link] ? esc(PSTAT[p.link][1]) : p._loi_doc ? esc(p._loi_doc) : ""}</div>` : ""}</td>
-    ${cols.map(h => `<td${(PAUTO[p.link] && PAUTO[p.link].has(h)) || String(p._tu_dien || "").split(",").includes(h) ? ' class="auto" title="Tự điền từ bài báo – hãy soát lại"' : ""}>${cellHTML(i, h, p[h]).replace(/data-g=/, "data-pi=")}</td>`).join("")}</tr>`;
+    ${cols.map(h => `<td${(PAUTO[p.link] && PAUTO[p.link].has(h)) || String(p._tu_dien || "").split(",").includes(h) ? ' class="auto" title="Tự điền / tự ghép – hãy soát lại"' : ""}>${f2 ? pendCell2(i, h, p) : cellHTML(i, h, p[h]).replace(/data-g=/, "data-pi=")}</td>`).join("")}</tr>`;
 }
 function renderPending() {
   pendFilterOpts();
   const vis = pendVisible(), f1 = vis.filter(v => frameOf(v.p) === 1), f2 = vis.filter(v => frameOf(v.p) === 2);
-  const head = cols => `<tr><th class="rn">✓</th><th>Bài báo · điều kiện</th>${cols.map(h => `<th>${esc((COL[h] || [h])[0])}</th>`).join("")}</tr>`;
+  const head = (cols, k) => `<tr><th class="rn">✓</th><th>Bài báo · điều kiện</th>${cols.map(h => `<th>${esc((COL[h] || [h])[0])}<button class="hbtn" data-hc="${k}|${h}" title="Ẩn cột này (hiện lại bằng nút ☰ Cột)">✕</button></th>`).join("")}</tr>`;
+  const c1 = visCols("p1", PCOLS), c2 = visCols("p2", PCOLS2);
   const empty = cols => `<tr><td colspan="${cols.length + 2}" class="muted" style="padding:10px">Không có dòng nào${Object.values(PF).some(Boolean) ? " khớp bộ lọc" : ""}.</td></tr>`;
-  $("#ph1").innerHTML = head(PCOLS); $("#pb1").innerHTML = f1.map(v => pendRow(v, PCOLS)).join("") || empty(PCOLS);
-  $("#ph2").innerHTML = head(PCOLS2); $("#pb2").innerHTML = f2.map(v => pendRow(v, PCOLS2)).join("") || empty(PCOLS2);
+  $("#ph1").innerHTML = head(c1, "p1"); $("#pb1").innerHTML = f1.map(v => pendRow(v, c1, false)).join("") || empty(c1);
+  $("#ph2").innerHTML = head(c2, "p2"); $("#pb2").innerHTML = f2.map(v => pendRow(v, c2, true)).join("") || empty(c2);
+  colsLabel(); RSEL.paint();
   const cnt = a => `(${a.length} dòng · ${a.filter(v => !v.miss.length).length} đủ điều kiện)`;
   $("#pc1").textContent = cnt(f1); $("#pc2").textContent = cnt(f2);
   renderPendInfo();
@@ -833,7 +1051,12 @@ const renderPendInfo = () => {
 };
 document.querySelectorAll(".pbody").forEach(tb => tb.addEventListener("input", e => { const el = e.target;
   if (el.dataset.pc != null) { const i = +el.dataset.pc; el.checked ? PSEL.add(i) : PSEL.delete(i); renderPendInfo(); return; }
-  if (el.dataset.pi != null) PROWS[+el.dataset.pi][el.dataset.h] = el.value; }));
+  if (el.dataset.pi != null) { const p = PROWS[+el.dataset.pi], h = el.dataset.h; p[h] = el.value;
+    if (h === "_cap_nhat_id" || h === "trang_thai") {
+      p._tu_dien = String(p._tu_dien || "").split(",").filter(x => x && x !== h).join(",");
+      if (h === "_cap_nhat_id") p._khong_ghep = el.value ? "" : "1";
+      renderPending();
+    } } }));
 ["#pfQ", "#pfOkS", "#pfSt", "#pfTinh", "#pfLoai", "#pfNguon", "#pfDup"].forEach(id => $(id).addEventListener("input", () => { PF[id] = $(id).value; renderPending(); }));
 $("#pfClr").addEventListener("click", () => { ["#pfQ", "#pfOkS", "#pfSt", "#pfTinh", "#pfLoai", "#pfNguon", "#pfDup"].forEach(id => { $(id).value = ""; PF[id] = ""; }); renderPending(); });
 $("#pAll").addEventListener("click", () => { const ids = pendVisible().map(v => v.i), all = ids.every(i => PSEL.has(i)); ids.forEach(i => all ? PSEL.delete(i) : PSEL.add(i)); renderPending(); });
@@ -847,7 +1070,7 @@ let xlsxLib = null;
 const loadXlsx = () => xlsxLib || (xlsxLib = new Promise((ok, no) => { if (window.XLSX) return ok(window.XLSX);
   const sc = document.createElement("script"); sc.src = "https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"; sc.onload = () => ok(window.XLSX); sc.onerror = () => { xlsxLib = null; no(new Error("không tải được thư viện Excel")); }; document.head.appendChild(sc); }));
 $("#pXlsx").addEventListener("click", async () => {
-  const vis = pendVisible(), cols = PCOLS2;
+  const vis = pendVisible(), cols = PCOLS2.filter(h => h !== "_cap_nhat_id");
   const toRows = list => list.map(({p, miss, d}) => Object.assign({"Điều kiện": miss.length ? "Thiếu: " + miss.join(", ") : "Đủ điều kiện", "Cập nhật phiên": p._cap_nhat_id || "", "Nghi trùng": d || "", "Tiêu đề bài": p._tieu_de || "", "Link báo": p.link || ""},
     Object.fromEntries(cols.map(h => [(COL[h] || [h])[0], NUMS.includes(h) && p[h] !== "" && !isNaN(+p[h]) ? +p[h] : (p[h] ?? "")]))));
   const r1 = toRows(vis.filter(v => frameOf(v.p) === 1)), r2 = toRows(vis.filter(v => frameOf(v.p) === 2));
@@ -861,6 +1084,30 @@ $("#pXlsx").addEventListener("click", async () => {
     const all = r1.map(r => ({"Khung": "Phiên mới", ...r})).concat(r2.map(r => ({"Khung": "Cập nhật", ...r}))), keys = Object.keys(all[0] || {"Khung": 1});
     const csv = [keys.join(",")].concat(all.map(r => keys.map(k => q(r[k])).join(","))).join("\n");
     const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob(["﻿" + csv], {type: "text/csv"})); a.download = name + ".csv"; a.click();
+    say("Không tải được thư viện Excel – đã tải file CSV (mở được bằng Excel).", "err");
+  }
+});
+document.addEventListener("click", e => { const b = e.target.closest("[data-hc]"); if (!b) return; const [k, h] = b.dataset.hc.split("|"); hideCol(k, h, true); });
+/* ---- Bảng tính: toàn màn hình + tải Excel ---- */
+function setGridFull(on) { const c = $("#gridCard"); c.classList.toggle("fs", on); $("#gFull").textContent = on ? "✕ Thoát toàn màn hình" : "⛶ Toàn màn hình"; document.body.style.overflow = on ? "hidden" : ""; }
+$("#gFull").addEventListener("click", () => setGridFull(!$("#gridCard").classList.contains("fs")));
+document.addEventListener("keydown", e => { if (e.key === "Escape" && $("#gridCard").classList.contains("fs") && !$("#fpop")) setGridFull(false); });
+$("#gXlsx").addEventListener("click", async () => {
+  const qq = $("#gq").value.trim().toLowerCase(), cols = gColsV(), filtered = !!qq || Object.keys(FILT).length;   /* Excel lấy đúng các cột đang hiện */
+  const list = GRID.filter(g => !g.del && gridShown(g, qq));
+  if (!list.length) { say("Không có dòng nào để tải.", "err"); return; }
+  const rows = list.map(g => Object.fromEntries(cols.map(h => { const v = g.r[h] ?? ""; return [(COL[h] || [h])[0], NUMS.includes(h) && v !== "" && !isNaN(+v) ? +v : v]; })));
+  const name = `du-lieu-dau-gia-${new Date().toISOString().slice(0, 10)}${filtered ? "-loc" : ""}`;
+  const unsaved = GRID.some(rowChanged) ? " (gồm cả thay đổi chưa lưu lên GitHub)" : "";
+  try {
+    const X = await loadXlsx(), wb = X.utils.book_new(), ws = X.utils.json_to_sheet(rows);
+    ws["!cols"] = Object.keys(rows[0]).map(k => ({wch: /Link|Khu|Ghi chú|Địa danh/.test(k) ? 40 : 14}));
+    ws["!autofilter"] = {ref: ws["!ref"]}; ws["!freeze"] = {xSplit: 1, ySplit: 1};
+    X.utils.book_append_sheet(wb, ws, "Dữ liệu đấu giá"); X.writeFile(wb, name + ".xlsx");
+    say(`Đã tải ${rows.length} dòng${filtered ? " (theo bộ lọc đang bật)" : ""} ra ${name}.xlsx${unsaved}.`, "ok");
+  } catch (e) {
+    const keys = Object.keys(rows[0]), csv = [keys.join(",")].concat(rows.map(r => keys.map(k => q(r[k])).join(","))).join("\n");
+    const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob(["\ufeff" + csv], {type: "text/csv"})); a.download = name + ".csv"; a.click();
     say("Không tải được thư viện Excel – đã tải file CSV (mở được bằng Excel).", "err");
   }
 });
@@ -881,15 +1128,28 @@ $("#pSkip").addEventListener("click", async () => {
 $("#pOk").addEventListener("click", async () => {
   if (!PSEL.size) { say("Chưa chọn dòng nào để duyệt.", "err"); return; }
   if (GRID.some(rowChanged)) { say("Tab Bảng tính còn thay đổi chưa lưu – hãy lưu hoặc hủy trước khi duyệt tin.", "err"); return; }
-  const keep = ROWS.slice(), picked = PROWS.filter((_, i) => PSEL.has(i)), warns = [];
+  /* khung ②: chỉ duyệt dòng đã chọn trạng thái mới (Đã đấu giá / Hủy-bỏ cọc) và đủ điều kiện */
+  const blocked = [...PSEL].filter(i => frameOf(PROWS[i]) === 2 && lacks2(PROWS[i]).length);
+  blocked.forEach(i => PSEL.delete(i));
+  if (!PSEL.size) { renderPending(); say(`Không duyệt được: ${blocked.length} dòng ở khung ② chưa đủ điều kiện (chưa chọn trạng thái mới Đã đấu giá / Hủy-bỏ cọc, chưa ghép mã phiên hoặc thiếu kết quả/lý do).`, "err"); return; }
+  const keep = ROWS.map(r => ({...r})), keepHead = HEAD.slice(), picked = PROWS.filter((_, i) => PSEL.has(i)), warns = [];
   let merged = 0;
   picked.forEach(p => {
-    const tgt = p._cap_nhat_id ? ROWS.find(x => x.id === p._cap_nhat_id) : null;
-    if (tgt) {   /* dòng "cập nhật kết quả": ghi vào phiên cũ, giữ mã, link thông báo cũ chuyển sang cột link_thong_bao */
+    const tgt = findRow(p._cap_nhat_id);
+    if (tgt) {   /* dòng cập nhật: CHỈ ghi trạng thái + kết quả vào phiên cũ; không đè mã, ngày, tỉnh, xã của phiên */
       ["link_thong_bao", "link_sau_dau_gia", "sau_dau_gia", "sau_dau_gia_ngay"].forEach(h => { if (!HEAD.includes(h)) HEAD.push(h); });
-      const keepLink = p._giu_link === "1";   /* tin bỏ cọc/hủy: giữ link nguồn chính, link mới vào cột link_sau_dau_gia */
-      HEAD.forEach(h => { if (h === "id" || (keepLink && (h === "link" || h === "nguon"))) return; const v = String(p[h] ?? "").trim(); if (v) tgt[h] = NUMS.includes(h) ? normNum(v) : v; });
-      if (keepLink && p.link) tgt.link_sau_dau_gia = p.link;
+      const v = h => { const x = String(p[h] ?? "").trim(); return x && NUMS.includes(h) ? normNum(x) : x; }, from = tgt.trang_thai;
+      tgt.trang_thai = p.trang_thai;
+      ["so_thua_trung", "gia_trung_min", "gia_trung_max", "tong_tien_ty", "nguoi_tham_gia", "sau_dau_gia"].forEach(h => { if (v(h)) tgt[h] = v(h); });
+      ["so_thua", "gia_khoi_diem", "khu", "dia_danh_cu", "loai_dat", "lat", "lng", "vi_tri"].forEach(h => { if (v(h) && !String(tgt[h] ?? "").trim()) tgt[h] = v(h); });
+      if (v("ghi_chu")) { const add = v("ghi_chu").split(/;\s*/).filter(x => x && !(tgt.ghi_chu || "").includes(x)); if (add.length) tgt.ghi_chu = [tgt.ghi_chu, ...add].filter(Boolean).join("; "); }
+      if (v("sau_dau_gia") || p.trang_thai === "Hủy/bỏ cọc") tgt.sau_dau_gia_ngay = v("sau_dau_gia_ngay") || todayVN();
+      /* tin kết quả → link bài thành nguồn chính, link thông báo cũ giữ ở link_thong_bao; tin bỏ cọc/hủy → link_sau_dau_gia */
+      const afterNews = p._giu_link === "1" || p.trang_thai === "Hủy/bỏ cọc" || from === "Đã đấu giá";
+      if (p.link && p.link !== tgt.link) {
+        if (afterNews) tgt.link_sau_dau_gia = p.link;
+        else { if (!tgt.link_thong_bao && tgt.link) tgt.link_thong_bao = tgt.link; tgt.link = p.link; if (v("nguon")) tgt.nguon = v("nguon"); }
+      }
       const w = validate(tgt); if (w) warns.push(`${tgt.id}: ${w}`); merged++; return;
     }
     const r = Object.fromEntries(HEAD.map(h => [h, String(p[h] ?? "").trim()]));
@@ -901,11 +1161,11 @@ $("#pOk").addEventListener("click", async () => {
     ROWS.push(r);
   });
   const ok = await commit(`Duyệt ${picked.length} tin từ báo` + (merged ? ` (${merged} cập nhật kết quả phiên cũ)` : ""));
-  if (!ok) { ROWS = keep; return; }
+  if (!ok) { ROWS = keep; HEAD = keepHead; return; }
   PROWS = PROWS.filter((_, i) => !PSEL.has(i)); PSEL = new Set();
   const ok2 = await savePending(`Đã duyệt ${picked.length} tin`);
   gridFromRows(); updPendBadge(); renderPending();
-  if (ok2) say(`Đã duyệt ${picked.length} tin vào data.csv${merged ? ` – trong đó ${merged} tin là kết quả, đã ghi vào phiên cũ` : ""}. Bản đồ cập nhật sau khoảng 1 phút.` + (warns.length ? " Lưu ý: " + warns.join("; ") : ""), "ok");
+  if (ok2) say(`Đã duyệt ${picked.length} tin vào data.csv${merged ? ` – trong đó ${merged} tin cập nhật trạng thái phiên cũ` : ""}. Bản đồ cập nhật sau khoảng 1 phút.` + (blocked.length ? ` ${blocked.length} dòng khung ② chưa đủ điều kiện nên chưa duyệt.` : "") + (warns.length ? " Lưu ý: " + warns.join("; ") : ""), "ok");
 });
 
 /* ---------- Đọc bài báo & trích dữ liệu phiên đấu giá / read an article and extract auction fields ---------- */
