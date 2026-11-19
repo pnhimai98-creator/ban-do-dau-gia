@@ -164,7 +164,7 @@ th .hbtn{border:0;background:none;color:var(--muted,#888);cursor:pointer;padding
   <div class="gwrap pwrap"><table class="sheet"><thead id="ph1"></thead><tbody id="pb1" class="pbody"></tbody></table></div>
   <h3 class="ptitle">② Cập nhật trạng thái – chờ kết quả, đã đấu giá, bỏ cọc / hủy <span class="muted" id="pc2"></span> <button class="btn" data-cols="p2" title="Ẩn / hiện cột của khung ②">☰ Cột</button></h3>
   <div class="gwrap pwrap"><table class="sheet"><thead id="ph2"></thead><tbody id="pb2" class="pbody"></tbody></table></div>
-  <p class="muted"><b>Khung ①</b>: tin về phiên <b>sắp đấu giá</b> chưa có trong dữ liệu → Duyệt sẽ thêm phiên mới. <b>Khung ②</b>: tin <b>cập nhật</b> cho phiên đã có. Mỗi dòng phải <b>ghép với một mã phiên</b> (cột “Cập nhật phiên”, ★ = khớp tốt, tự ghép sẵn – hãy soát) và <b>chọn trạng thái mới</b>: <b>Đã đấu giá</b> (cần giá trúng hoặc số thửa trúng) hoặc <b>Hủy/bỏ cọc</b> (cần lý do ở cột Sau đấu giá hoặc Ghi chú). Duyệt chỉ ghi trạng thái và kết quả vào phiên đó, không tạo phiên mới, không đổi ngày/xã của phiên. Dòng còn “Chờ kết quả” không duyệt được.<br>
+  <p class="muted"><b>Khung ①</b>: tin về phiên <b>sắp đấu giá</b> chưa có trong dữ liệu → Duyệt sẽ thêm phiên mới. <b>Khung ②</b>: tin <b>cập nhật</b> cho phiên đã có. Mỗi dòng phải <b>ghép với một mã phiên</b> (cột “Cập nhật phiên”, ★ = khớp tốt, tự ghép sẵn – hãy soát) và <b>chọn trạng thái mới</b>: <b>Đã đấu giá</b> (cần giá trúng hoặc số thửa trúng) <b>Đấu giá lại</b> (phiên không thành / còn thửa ế, đưa ra đấu lại – ghi mã phiên đấu lại vào cột Phiên sau hoặc ghi chú; duyệt sẽ đặt phiên cũ “Còn hiệu lực = Không” và nối Phiên trước/Phiên sau) hoặc <b>Hủy/bỏ cọc</b> (cần lý do ở cột Sau đấu giá hoặc Ghi chú). Duyệt chỉ ghi trạng thái và kết quả vào phiên đó, không tạo phiên mới, không đổi ngày/xã của phiên. Dòng còn “Chờ kết quả” không duyệt được.<br>
   <b>Đủ điều kiện duyệt (khung ①)</b> = có đủ <b>ngày đấu giá, tên xã, loại đất, giá khởi điểm, nguồn báo và link báo gốc</b>; các dòng này luôn xếp lên đầu mỗi khung. Dòng ⚠ nghi trùng với phiên đã có thường nên Bỏ qua.<br>
   Workflow tự động: gom tin mới (6h23), điền ô còn thiếu (3 tiếng/lần), tìm kết quả & tin bỏ cọc cho phiên đã có (7h13 và 19h13). Ô nền xanh = tự điền từ bài báo, hãy soát lại. Chỉnh sửa được lưu khi bấm <b>Duyệt</b> hoặc <b>Lưu bảng chờ</b>.</p>
  </section>
@@ -178,7 +178,7 @@ th .hbtn{border:0;background:none;color:var(--muted,#888);cursor:pointer;padding
      <label>Mã (tự sinh)<input name="id" readonly></label>
      <label>Ngày đấu giá<input name="ngay" type="date"></label>
      <label>Trạng thái<select name="trang_thai">
-      <option>Sắp đấu giá</option><option>Chờ kết quả</option><option>Đã đấu giá</option><option>Đã nộp tiền</option><option>Hủy/bỏ cọc</option></select></label>
+      <option>Sắp đấu giá</option><option>Chờ kết quả</option><option>Đã đấu giá</option><option>Đấu giá lại</option><option>Đã nộp tiền</option><option>Hủy/bỏ cọc</option></select></label>
      <label>Tỉnh/thành<input name="tinh" list="dlTinh" value="Hà Nội"></label>
      <label>Xã/phường (tên mới)<input name="xa" placeholder="VD: Thiên Lộc"></label>
      <label class="wide">Địa danh cũ<input name="dia_danh_cu" placeholder="VD: xã Kim Nỗ, huyện Đông Anh"></label>
@@ -233,7 +233,7 @@ th .hbtn{border:0;background:none;color:var(--muted,#888);cursor:pointer;padding
 
  <section class="card" id="listCard" hidden>
   <div class="row" style="justify-content:space-between;margin-bottom:10px"><h2 style="margin:0">Danh sách phiên (<span id="cnt">0</span>)</h2>
-   <div class="row"><select id="lf"><option value="">Tất cả trạng thái</option><option>Sắp đấu giá</option><option>Chờ kết quả</option><option>Đã đấu giá</option><option>Đã nộp tiền</option><option>Hủy/bỏ cọc</option></select>
+   <div class="row"><select id="lf"><option value="">Tất cả trạng thái</option><option>Sắp đấu giá</option><option>Chờ kết quả</option><option>Đã đấu giá</option><option>Đấu giá lại</option><option>Đã nộp tiền</option><option>Hủy/bỏ cọc</option></select>
    <input id="lq" type="search" placeholder="Tìm xã, khu…" style="width:200px"><button class="btn" id="btnCsv">Sao lưu CSV</button></div></div>
   <div class="scroll"><table><thead><tr><th>Ngày</th><th>Xã/phường</th><th>Tỉnh</th><th>Trạng thái</th><th>Thửa</th><th>Giá trúng (tr/m²)</th><th>Nguồn</th><th></th></tr></thead><tbody id="tb"></tbody></table></div>
  </section>
@@ -417,7 +417,7 @@ th .hbtn{border:0;background:none;color:var(--muted,#888);cursor:pointer;padding
 const STD = ["id","ngay","tinh","xa","dia_danh_cu","khu","loai_dat","so_thua","so_thua_trung","gia_khoi_diem","gia_trung_min","gia_trung_max","tong_tien_ty","nguoi_tham_gia","trang_thai","lat","lng","vi_tri","nguon","link","ghi_chu"];
 const PREFIX = {"Hà Nội":"HN","Bắc Ninh":"BN","Hưng Yên":"HY","Phú Thọ":"PT","Thái Nguyên":"TN","Ninh Bình":"NB"};
 /* cột bổ sung mà bản đồ dùng (theo dõi sau đấu giá, giá nhà nước) – tự thêm vào data.csv nếu chưa có */
-const EXTRA_STD = ["sau_dau_gia", "sau_dau_gia_ngay", "gia_nha_nuoc", "link_thong_bao", "link_sau_dau_gia", "lien_quan"];
+const EXTRA_STD = ["loai_phien", "con_hieu_luc", "phien_truoc", "phien_sau", "nguon_thong_bao", "link_thong_bao", "nguon_ket_qua", "link_ket_qua", "sau_dau_gia", "sau_dau_gia_ngay", "gia_nha_nuoc", "link_sau_dau_gia", "lien_quan"];
 const NUMS = ["gia_nha_nuoc", "so_thua","so_thua_trung","gia_khoi_diem","gia_trung_min","gia_trung_max","tong_tien_ty","nguoi_tham_gia","lat","lng"];
 const $ = s => document.querySelector(s);
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -611,13 +611,14 @@ const COL = {id: ["Mã", 120], ngay: ["Ngày", 140], trang_thai: ["Trạng thái
   loai_dat: ["Loại đất", 140], so_thua: ["Số thửa", 80], so_thua_trung: ["Thửa trúng", 90], gia_khoi_diem: ["Giá KĐ (tr/m²)", 110], gia_trung_min: ["Trúng thấp (tr/m²)", 120], gia_trung_max: ["Trúng cao (tr/m²)", 120],
   tong_tien_ty: ["Tổng (tỷ)", 90], nguoi_tham_gia: ["Người tham gia", 110], lat: ["Vĩ độ", 100], lng: ["Kinh độ", 100], vi_tri: ["Vị trí", 110], nguon: ["Nguồn", 130], link: ["Link nguồn", 260], ghi_chu: ["Ghi chú", 260],
   sau_dau_gia: ["Sau đấu giá", 160], sau_dau_gia_ngay: ["Cập nhật sau ĐG", 130], gia_nha_nuoc: ["Giá nhà nước (tr/m²)", 130],
-  link_thong_bao: ["Link thông báo (trước phiên)", 260], link_sau_dau_gia: ["Link tin sau đấu giá", 260], lien_quan: ["Phiên liên quan (mã)", 160], _cap_nhat_id: ["Cập nhật phiên (mã)", 300]};
-const SELECTS = {trang_thai: ["Sắp đấu giá", "Chờ kết quả", "Đã đấu giá", "Đã nộp tiền", "Hủy/bỏ cọc"], vi_tri: ["gần đúng", "theo thôn", "chính xác"],
+  link_thong_bao: ["Link thông báo", 260], link_sau_dau_gia: ["Link tin sau đấu giá", 260], lien_quan: ["Phiên liên quan (mã)", 160], loai_phien: ["Loại phiên", 110], con_hieu_luc: ["Còn hiệu lực", 100], phien_truoc: ["Phiên trước", 120], phien_sau: ["Phiên sau", 120],
+  nguon_thong_bao: ["Nguồn thông báo", 140], nguon_ket_qua: ["Nguồn kết quả", 140], link_ket_qua: ["Link kết quả", 260], _cap_nhat_id: ["Cập nhật phiên (mã)", 300]};
+const SELECTS = {trang_thai: ["Sắp đấu giá", "Chờ kết quả", "Đã đấu giá", "Đấu giá lại", "Đã nộp tiền", "Hủy/bỏ cọc"], vi_tri: ["Gần đúng", "Ước lượng xã", "Theo thôn", "Chính xác", "Cần bổ sung"], loai_phien: ["Lần đầu", "Đấu lại"], con_hieu_luc: ["Có", "Không"],
   sau_dau_gia: ["Đang trong hạn nộp", "Đã nộp đủ tiền", "Đã nộp một phần", "Quá hạn chưa nộp", "Bỏ cọc", "Đã hủy kết quả", "Chưa rõ"]};
 const DATALISTS = {tinh: "dlTinh", loai_dat: "dlLoai", nguon: "dlNguon"};
 let FILT = {};   // bộ lọc theo cột: {cột: Set các giá trị được hiện}
 let GRID = [];   // [{r: rowObj, orig: index in ROWS or -1, del: bool}]
-const ORDER = ["id", "ngay", "trang_thai", "xa", "tinh", "khu", "dia_danh_cu", "so_thua", "so_thua_trung", "gia_khoi_diem", "gia_trung_min", "gia_trung_max", "tong_tien_ty", "nguoi_tham_gia", "loai_dat", "nguon", "link", "ghi_chu", "gia_nha_nuoc", "sau_dau_gia", "sau_dau_gia_ngay", "lat", "lng", "vi_tri"];
+const ORDER = ["id", "ngay", "trang_thai", "loai_phien", "con_hieu_luc", "phien_truoc", "phien_sau", "xa", "tinh", "khu", "dia_danh_cu", "so_thua", "so_thua_trung", "gia_khoi_diem", "gia_trung_min", "gia_trung_max", "tong_tien_ty", "nguoi_tham_gia", "loai_dat", "nguon", "link", "nguon_thong_bao", "link_thong_bao", "nguon_ket_qua", "link_ket_qua", "ghi_chu", "gia_nha_nuoc", "sau_dau_gia", "sau_dau_gia_ngay", "lat", "lng", "vi_tri"];
 const gCols = () => ORDER.filter(h => HEAD.includes(h)).concat(HEAD.filter(h => !ORDER.includes(h)));
 /* ---- ẩn / hiện cột (nhớ trong trình duyệt này, riêng cho từng bảng: grid, p1 = khung ①, p2 = khung ②) ---- */
 const HIDE = {};
@@ -693,12 +694,17 @@ const HALIAS = {id: ["ma", "ma phien", "ma so"], ngay: ["ngay dau gia", "ngay to
   xa: ["xa", "phuong", "xa/phuong (ten moi)", "xa phuong", "ten xa"], khu: ["khu", "khu dat", "vi tri khu dat", "dia diem"], so_thua: ["so thua dua ra", "so lo", "so thua dau gia"],
   so_thua_trung: ["so thua trung", "thua trung"], gia_khoi_diem: ["gia khoi diem", "gia kd", "khoi diem"], gia_trung_min: ["gia trung thap nhat", "trung thap nhat"],
   gia_trung_max: ["gia trung cao nhat", "trung cao nhat", "gia trung"], tong_tien_ty: ["tong tien", "tong (ty)", "tong tien (ty dong)"], nguoi_tham_gia: ["so nguoi tham gia", "nguoi tham gia"],
-  nguon: ["nguon", "ten nguon", "bao"], link: ["link", "link nguon", "duong dan", "url"], ghi_chu: ["ghi chu"], lat: ["vi do", "lat"], lng: ["kinh do", "lng", "lon"], vi_tri: ["do chinh xac vi tri", "vi tri"]};
+  nguon: ["nguon", "ten nguon", "bao"], link: ["link", "link nguon", "duong dan", "url"], ghi_chu: ["ghi chu"], lat: ["vi do", "lat"], lng: ["kinh do", "lng", "lon"], vi_tri: ["do chinh xac vi tri", "vi tri"], lien_quan: ["phien lien quan", "phien lien quan (ma)"], loai_phien: ["loai phien"], con_hieu_luc: ["con hieu luc", "hieu luc"], phien_truoc: ["phien truoc", "ma phien truoc"], phien_sau: ["phien sau", "ma phien sau", "dau gia lai o phien"],
+  nguon_thong_bao: ["nguon thong bao"], nguon_ket_qua: ["nguon ket qua"], link_ket_qua: ["link ket qua"], link_sau_dau_gia: ["link tin sau dau gia"], link_thong_bao: ["link thong bao (truoc phien)", "link thong bao"], sau_dau_gia: ["sau dau gia"], sau_dau_gia_ngay: ["cap nhat sau dg", "cap nhat sau dau gia"], gia_nha_nuoc: ["gia nha nuoc", "gia nha nuoc (tr/m2)"]};
 const hfold = s => String(s || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/đ/gi, "d").toLowerCase().replace(/\s+/g, " ").trim();
 function mapHeaders(hdr) {
   const known = [...new Set(HEAD.concat(EXTRA_STD))], dict = {};
   known.forEach(k => { dict[hfold(k)] = k; if (COL[k]) dict[hfold(COL[k][0])] = k; (HALIAS[k] || []).forEach(a => { if (!dict[a]) dict[a] = k; }); });
-  return hdr.map(h => { const f = hfold(String(h).replace(/^\uFEFF/, "")); return dict[f] || dict[f.replace(/\s*\(.*?\)\s*/g, " ").trim()] || ""; });
+  return hdr.map(h => { const raw = String(h ?? "").replace(/^\uFEFF/, "").trim(), f = hfold(raw); if (!f) return "";
+    const k = dict[f] || dict[f.replace(/\s*\(.*?\)\s*/g, " ").trim()]; if (k) return k;
+    /* cột mới chưa có trong admin → tạo khóa từ tên cột (VD "Nguồn kết quả" → nguon_ket_qua) để không bị bỏ qua */
+    const nk = f.replace(/[^a-z0-9]+/g, "_").replace(/^_+|_+$/g, ""); if (!nk) return "";
+    if (!COL[nk]) COL[nk] = [raw, 150]; return nk; });
 }
 /* một dòng file → object theo cột; chuẩn hóa ngày dd/mm/yyyy, số kiểu Việt */
 function fileRow(keys, cells) {
@@ -772,7 +778,7 @@ $("#gUpFile").addEventListener("change", async e => {
     const L = k => esc((COL[k] || [k])[0]);
     $("#gUp").hidden = false;
     $("#gUp").innerHTML = `<b>📤 ${esc(f.name)}</b> – sheet “${esc(best.sh.name)}”, ${rows.length} dòng dữ liệu<br>
-      <span class="muted">Nhận ${cols.length} cột: ${cols.map(L).join(", ")}${ignored.length ? ` · Bỏ qua cột không nhận ra: ${ignored.map(esc).join(", ")}` : ""}</span>
+      <span class="muted">Nhận ${cols.length} cột: ${cols.map(L).join(", ")}${ignored.length ? ` · Bỏ qua cột không có tên: ${ignored.length}` : ""}${cols.filter(k => !HEAD.includes(k)).length ? `<br><b>Cột mới sẽ được thêm vào data.csv:</b> ${cols.filter(k => !HEAD.includes(k)).map(L).join(", ")}` : ""}</span>
       <ul style="margin:8px 0 6px 18px;padding:0"><li><b>${upd}</b> phiên sẽ được cập nhật (khớp theo Mã)</li><li><b>${add}</b> phiên mới${rows.some(o => !o.id) ? " (dòng không có Mã sẽ được tự sinh mã)" : ""}</li><li>${same} phiên không đổi</li>
       ${missing ? `<li>${missing} phiên đang có trên bản đồ nhưng <b>không có trong file</b></li>` : ""}${dupIds ? `<li style="color:var(--bad)">${dupIds} dòng trùng Mã trong file – dòng sau sẽ đè dòng trước</li>` : ""}</ul>
       <label style="display:block;margin:4px 0"><input type="checkbox" id="gUpBlank" style="width:auto;height:auto"> Ô trống trong file thì <b>xóa</b> giá trị đang có (mặc định: giữ nguyên giá trị cũ)</label>
@@ -1018,7 +1024,7 @@ const frameOf = p => p._khung === "2" || p._cap_nhat_id || (p.trang_thai && p.tr
    Phiên "Chờ kết quả" (hoặc "Sắp đấu giá" đã qua ngày) → "Đã đấu giá" hoặc "Hủy/bỏ cọc".
    Phiên "Đã đấu giá" → giữ "Đã đấu giá" + cột Sau đấu giá (bỏ cọc một phần…) hoặc chuyển "Hủy/bỏ cọc".
    Không cho duyệt dòng khung ② còn để "Chờ kết quả" / "Sắp đấu giá". */
-const UPD_ST = ["Đã đấu giá", "Hủy/bỏ cọc"];
+const UPD_ST = ["Đã đấu giá", "Đấu giá lại", "Hủy/bỏ cọc"];   /* Đấu giá lại = phiên không thành / còn thửa ế, đưa ra đấu lại ở phiên sau */
 const todayVN = () => new Date(Date.now() + 7 * 3600e3).toISOString().slice(0, 10);
 const findRow = id => id ? ROWS.find(r => r.id === id) : null;
 const fold0 = s => String(s || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/đ/gi, "d").toLowerCase().replace(/\s+/g, " ").trim();
@@ -1045,6 +1051,7 @@ const rankTargets = p => updTargets().map(r => ({r, sc: matchScore(p, r)})).filt
 function guessStatus(p) {
   const t = fold0([p._tieu_de, p.ghi_chu, p.sau_dau_gia].join(" "));
   if (["Bỏ cọc", "Đã hủy kết quả"].includes(p.sau_dau_gia) || /bo coc|huy ket qua|huy phien|dung (to chuc )?dau gia|huy cuoc dau gia|tam dung dau gia/.test(t)) return "Hủy/bỏ cọc";
+  if (/dau gia lai|to chuc lai|dau gia khong thanh|khong co nguoi tham gia|khong co ai tham gia|lan 2|lan thu 2|lan 3/.test(t) && !p.gia_trung_max) return "Đấu giá lại";
   if (p.gia_trung_max || p.so_thua_trung || /trung dau gia|dau gia thanh cong|gia trung|ket qua dau gia/.test(t)) return "Đã đấu giá";
   return "";
 }
@@ -1067,6 +1074,7 @@ function lacks2(p) {
   if (!tgt) out.push(...lacks1(p).filter(x => x !== "Nguồn" && x !== "Link báo gốc"));   /* không ghép → phải đủ thông tin như một phiên mới */
   if (p.trang_thai === "Đã đấu giá" && !(tgt && tgt.trang_thai === "Đã đấu giá") && !v("gia_trung_max") && !v("so_thua_trung")) out.push("Giá trúng hoặc số thửa trúng");
   if (p.trang_thai === "Hủy/bỏ cọc" && !v("sau_dau_gia") && !v("ghi_chu")) out.push("Lý do (Sau đấu giá hoặc Ghi chú)");
+  if (p.trang_thai === "Đấu giá lại" && !v("phien_sau") && !v("lien_quan") && !v("ghi_chu")) out.push("Phiên sau (mã phiên đấu lại) hoặc Ghi chú");
   if (!v("nguon")) out.push("Nguồn");
   if (!/^https?:\/\//.test(v("link")) || /news\.google\./.test(v("link"))) out.push("Link báo gốc");
   return out.filter(Boolean);
@@ -1090,7 +1098,7 @@ function pendCell2(i, h, p) {
   }
   return cellHTML(i, h, p[h]).replace(/data-g=/, "data-pi=");
 }
-const PCOLS2 = ["_cap_nhat_id", "trang_thai", "sau_dau_gia", "so_thua_trung", "gia_trung_min", "gia_trung_max", "tong_tien_ty", "nguoi_tham_gia", "ngay", "tinh", "xa", "dia_danh_cu", "khu", "loai_dat", "so_thua", "gia_khoi_diem", "lat", "lng", "nguon", "ghi_chu"];
+const PCOLS2 = ["_cap_nhat_id", "trang_thai", "phien_sau", "sau_dau_gia", "so_thua_trung", "gia_trung_min", "gia_trung_max", "tong_tien_ty", "nguoi_tham_gia", "ngay", "tinh", "xa", "dia_danh_cu", "khu", "loai_dat", "so_thua", "gia_khoi_diem", "lat", "lng", "nguon", "ghi_chu"];
 const PF = {};
 function pendFilterOpts() {
   const opt = (id, key, label) => { const el = $(id), cur = el.value, vals = [...new Set(PROWS.map(p => String(p[key] || "").trim()).filter(Boolean))].sort((a, b) => a.localeCompare(b, "vi"));
@@ -1229,11 +1237,17 @@ $("#pOk").addEventListener("click", async () => {
       const v = h => { const x = String(p[h] ?? "").trim(); return x && NUMS.includes(h) ? normNum(x) : x; }, from = tgt.trang_thai;
       tgt.trang_thai = p.trang_thai;
       ["so_thua_trung", "gia_trung_min", "gia_trung_max", "tong_tien_ty", "nguoi_tham_gia", "sau_dau_gia"].forEach(h => { if (v(h)) tgt[h] = v(h); });
+      if (v("lien_quan")) { if (!HEAD.includes("lien_quan")) HEAD.push("lien_quan"); tgt.lien_quan = [...new Set([tgt.lien_quan, v("lien_quan")].join(" ").split(/[;, ]+/).filter(Boolean))].join(" "); }
+      ["loai_phien", "con_hieu_luc", "phien_truoc", "phien_sau"].forEach(h => { if (!HEAD.includes(h)) HEAD.push(h); });
+      if (p.trang_thai === "Đấu giá lại") {   /* phiên cũ hết hiệu lực; nối với phiên đấu lại (nếu đã có trong dữ liệu) */
+        tgt.con_hieu_luc = "Không";
+        if (v("phien_sau")) { tgt.phien_sau = v("phien_sau"); const nx = ROWS.find(x => x.id === tgt.phien_sau); if (nx) { nx.phien_truoc = tgt.id; nx.loai_phien = "Đấu lại"; nx.con_hieu_luc = nx.con_hieu_luc || "Có"; } }
+      } else if (UPD_ST.includes(p.trang_thai) && !tgt.con_hieu_luc) tgt.con_hieu_luc = "Có";
       ["so_thua", "gia_khoi_diem", "khu", "dia_danh_cu", "loai_dat", "lat", "lng", "vi_tri"].forEach(h => { if (v(h) && !String(tgt[h] ?? "").trim()) tgt[h] = v(h); });
       if (v("ghi_chu")) { const add = v("ghi_chu").split(/;\s*/).filter(x => x && !(tgt.ghi_chu || "").includes(x)); if (add.length) tgt.ghi_chu = [tgt.ghi_chu, ...add].filter(Boolean).join("; "); }
       if (v("sau_dau_gia") || p.trang_thai === "Hủy/bỏ cọc") tgt.sau_dau_gia_ngay = v("sau_dau_gia_ngay") || todayVN();
       /* tin kết quả → link bài thành nguồn chính, link thông báo cũ giữ ở link_thong_bao; tin bỏ cọc/hủy → link_sau_dau_gia */
-      const afterNews = p._giu_link === "1" || p.trang_thai === "Hủy/bỏ cọc" || from === "Đã đấu giá";
+      const afterNews = p._giu_link === "1" || p.trang_thai === "Hủy/bỏ cọc" || p.trang_thai === "Đấu giá lại" || from === "Đã đấu giá";
       if (p.link && p.link !== tgt.link) {
         if (afterNews) tgt.link_sau_dau_gia = p.link;
         else { if (!tgt.link_thong_bao && tgt.link) tgt.link_thong_bao = tgt.link; tgt.link = p.link; if (v("nguon")) tgt.nguon = v("nguon"); }
@@ -1449,7 +1463,7 @@ const DEFAULT_THEME = {
   light: {bg: "#ffffff", bg2: "#f3f4f2", ink: "#161a1d", mute: "#5c6670", line: "#dde1e0", acc: "#1f5f4a", card: "#ffffff"},
   dark: {bg: "#121417", bg2: "#1a1d21", ink: "#e9ecef", mute: "#9aa3ad", line: "#2b3137", acc: "#7fd1b0", card: "#181b1f"},
   bins: ["#fde68a", "#fbbf24", "#f97316", "#dc2626", "#7f1d1d"],
-  status: {"Sắp đấu giá": "#2563eb", "Chờ kết quả": "#64748b", "Hủy/bỏ cọc": "#111827"}
+  status: {"Sắp đấu giá": "#2563eb", "Chờ kết quả": "#64748b", "Đấu giá lại": "#d97706", "Hủy/bỏ cọc": "#111827"}
 };
 const PRESETS = {
   "Mặc định (xanh rêu)": {light: DEFAULT_THEME.light, dark: DEFAULT_THEME.dark},
