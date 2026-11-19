@@ -138,7 +138,6 @@ footer{padding:16px max(3vw,14px);font-size:13px;color:var(--mute);border-top:1p
    <label><span data-t="landType">Loại đất</span><select id="fLoai"><option value="" data-t="all">Tất cả</option></select></label>
    <label><span data-t="from">Từ ngày</span><input type="date" id="fFrom"></label>
    <label><span data-t="to">Đến ngày</span><input type="date" id="fTo"></label>
-   <label class="full"><span data-t="after">Sau đấu giá</span><select id="fSau"><option value="" data-t="all">Tất cả</option></select></label>
    <label class="full"><span data-t="search">Tìm xã, khu, địa danh cũ</span><input type="search" id="fQ"></label>
   </div>
   <div class="news" id="news"></div>
@@ -317,7 +316,7 @@ const T = {
   repTitle: "Báo cáo định kỳ", repSub: "Các báo cáo định kỳ dạng PDF, mới nhất ở trên. Bấm vào tên để mở.", repNone: "Chưa có báo cáo nào.",
   cRepDate: "Kỳ báo cáo", cRepName: "Báo cáo", cRepSize: "Dung lượng",
   repBtn: "Báo cáo", repNewTab: "Mở tab mới ↗", repDown: "Tải về", repNew: "MỚI", repPeriod: "Kỳ",
-  reAuc: "Đấu lại", reAucT: "Cùng khu đất đã đưa ra đấu giá ở phiên trước (đấu lại các thửa còn lại hoặc đợt tiếp theo)", pRel: "Phiên liên quan", round: "lần", pNotice: "Thông báo đấu giá", pResult: "Tin kết quả", locTodo: "chưa xác định (cần bổ sung)", pOld: "Phiên này đã được tổ chức lại – xem phiên sau", pAfterSrc: "Tin sau đấu giá (bỏ cọc / hủy / nộp tiền)", byThon: "theo thôn/khu (gần đúng)"
+  reAuc: "Đấu lại", reAucT: "Cùng khu đất đã đưa ra đấu giá ở phiên trước (đấu lại các thửa còn lại hoặc đợt tiếp theo)", pRel: "Phiên liên quan", round: "lần", pNotice: "Thông báo đấu giá", pResult: "Tin kết quả", locTodo: "chưa xác định (cần bổ sung)", pSuperseded: "Phiên này đã được tổ chức lại – xem phiên sau", pAfterSrc: "Tin sau đấu giá (bỏ cọc / hủy / nộp tiền)", byThon: "theo thôn/khu (gần đúng)"
  },
  en: {
   title: "Hanoi & Surrounding Areas Land Auction Map", docTitle: "Hanoi Land Auction Map",
@@ -354,7 +353,7 @@ const T = {
   repTitle: "Periodic reports", repSub: "Periodic reports in PDF (in Vietnamese), newest first. Click a title to open it.", repNone: "No reports yet.",
   cRepDate: "Period", cRepName: "Report", cRepSize: "Size",
   repBtn: "Reports", repNewTab: "Open in new tab ↗", repDown: "Download", repNew: "NEW", repPeriod: "Period",
-  reAuc: "Re-auction", reAucT: "Same site was auctioned in an earlier session (remaining plots re-offered or a later batch)", pRel: "Related auctions", round: "round", pNotice: "Auction notice", pResult: "Result report", locTodo: "not yet located", pOld: "Superseded by a later re-auction – see the next session", pAfterSrc: "Post-auction news (forfeit / cancel / payment)", byThon: "by village/site (approximate)"
+  reAuc: "Re-auction", reAucT: "Same site was auctioned in an earlier session (remaining plots re-offered or a later batch)", pRel: "Related auctions", round: "round", pNotice: "Auction notice", pResult: "Result report", locTodo: "not yet located", pSuperseded: "Superseded by a later re-auction – see the next session", pAfterSrc: "Post-auction news (forfeit / cancel / payment)", byThon: "by village/site (approximate)"
  }
 };
 /* Giá trị dữ liệu có bản dịch / Data values with translations (lọc vẫn dùng giá trị tiếng Việt) */
@@ -759,7 +758,7 @@ function linkRelated(rows) {
 }
 
 function filtered() {
-  const tn = $("#fTinh").value, l = $("#fLoai").value, f = $("#fFrom").value, to = $("#fTo").value, q = qfold($("#fQ").value), sau = $("#fSau").value;
+  const tn = $("#fTinh").value, l = $("#fLoai").value, f = $("#fFrom").value, to = $("#fTo").value, q = qfold($("#fQ").value), sau = "";   /* đã bỏ bộ lọc "Sau đấu giá" */
   return DATA.filter(d => (state.status === "Tất cả" || d.trang_thai === state.status) && (!tn || d.tinh === tn) && (!l || d.loai_dat === l) && (!sau || d.sau_dau_gia === sau)
     && (!f || d.ngay >= f) && (!to || d.ngay <= to)
     && (!q || d._q.includes(q)));
@@ -786,7 +785,7 @@ function popup(d) {
    ${d.link ? `<p style="margin:8px 0 0"><a href="${esc(d.link)}" target="_blank" rel="noopener">${t("pSrc")}: ${esc(tv("src", d.nguon) || t("seeArticle"))} ↗</a></p>` : ""}
    ${d.link_thong_bao && d.link_thong_bao !== d.link ? `<p style="margin:2px 0 0;font-size:13px"><a href="${esc(d.link_thong_bao)}" target="_blank" rel="noopener">${t("pNotice")}${d.nguon_thong_bao ? ": " + esc(tv("src", d.nguon_thong_bao)) : ""} ↗</a></p>` : ""}
    ${d.link_ket_qua && d.link_ket_qua !== d.link ? `<p style="margin:2px 0 0;font-size:13px"><a href="${esc(d.link_ket_qua)}" target="_blank" rel="noopener">${t("pResult")}${d.nguon_ket_qua ? ": " + esc(tv("src", d.nguon_ket_qua)) : ""} ↗</a></p>` : ""}
-   ${String(d.con_hieu_luc || "").toLowerCase() === "không" ? `<p style="margin:6px 0 0;font-size:12px;color:var(--mute)">↻ ${t("pOld")}${d.phien_sau ? ` (<a href="#" data-go="${esc(d.phien_sau)}">${esc(d.phien_sau)}</a>)` : ""}</p>` : ""}
+   ${String(d.con_hieu_luc || "").toLowerCase() === "không" ? `<p style="margin:6px 0 0;font-size:12px;color:var(--mute)">↻ ${t("pSuperseded")}${d.phien_sau ? ` (<a href="#" data-go="${esc(d.phien_sau)}">${esc(d.phien_sau)}</a>)` : ""}</p>` : ""}
    ${d.link_sau_dau_gia ? `<p style="margin:2px 0 0;font-size:13px"><a href="${esc(d.link_sau_dau_gia)}" target="_blank" rel="noopener">${t("pAfterSrc")} ↗</a></p>` : ""}</div>`;
 }
 
@@ -829,7 +828,7 @@ const areaOf = d => ana.by === "xa" ? (d.xa || t("other")) : huyenOf(d);
 const pv = v => useUSD() ? usdM2(v) : v;          // giá trị vẽ (tr/m² hoặc USD/m²)
 function anaBase() {
   const tn = $("#fTinh").value, l = $("#fLoai").value, f = $("#fFrom").value, to = $("#fTo").value, q = qfold($("#fQ").value);
-  const clean = $("#anaClean") ? $("#anaClean").checked : true, sau = $("#fSau").value;
+  const clean = $("#anaClean") ? $("#anaClean").checked : true, sau = "";   /* đã bỏ bộ lọc "Sau đấu giá" */
   return DATA.filter(d => d.max != null && d.ngay && (!clean || !BAD_AFTER.includes(d.sau_dau_gia)) && (!sau || d.sau_dau_gia === sau)
     && (!tn || d.tinh === tn) && (!l || d.loai_dat === l) && (!f || d.ngay >= f) && (!to || d.ngay <= to)
     && (!q || d._q.includes(q)));
@@ -956,7 +955,7 @@ function applyLang() {
     const last = DATA.filter(d => d.trang_thai === "Đã đấu giá" || d.trang_thai === "Đã nộp tiền").map(d => d.ngay).filter(Boolean).sort().pop();
     $("#updated").textContent = `${DATA.length} ${t("sessions")} · ${t("source")}: ${t(SRC)} · ${t("latest")}: ${fdate(last) || "—"}`
       + (lang === "en" ? (useUSD() ? ` · 1 USD = ${Math.round(RATE.usd_vnd).toLocaleString("en-US")} VND (Vietcombank, ${fdate(RATE.date)})` : "") : "");
-    fillSelect($("#fTinh"), "tinh", "prov"); fillSelect($("#fLoai"), "loai_dat", "land"); fillSelect($("#fSau"), "sau_dau_gia", "after");
+    fillSelect($("#fTinh"), "tinh", "prov"); fillSelect($("#fLoai"), "loai_dat", "land");
     const recent = DATA.filter(d => d.trang_thai === "Đã đấu giá").slice(0, 3);
     /* mỗi tin: bấm dòng chữ → tới điểm trên bản đồ; bấm tên báo → mở bài gốc */
     $("#news").innerHTML = `<b>${t("newsTitle")}</b>` + (recent.map(d => {
@@ -1027,7 +1026,7 @@ async function init() {
     lang = b.dataset.lang; try { localStorage.setItem("dgLang", lang); } catch (er) {} applyLang(); });
   $("#statusChips").addEventListener("click", e => { const b = e.target.closest(".chip"); if (!b) return; state.status = b.dataset.s;
     document.querySelectorAll(".chip").forEach(x => x.classList.toggle("on", x === b)); render(); });
-  ["#fTinh", "#fLoai", "#fSau", "#fFrom", "#fTo", "#fQ"].forEach(s => $(s).addEventListener("input", render));
+  ["#fTinh", "#fLoai", "#fFrom", "#fTo", "#fQ"].forEach(s => $(s).addEventListener("input", render));
   $("#anaClean").addEventListener("change", renderAna);
   $("#list").addEventListener("click", e => { const it = e.target.closest(".item"); if (!it) return; highlight(it.dataset.id);
     const m = markers[it.dataset.id]; if (m) { map.setView(m.getLatLng(), Math.max(map.getZoom(), 13)); m.openPopup(); } });
