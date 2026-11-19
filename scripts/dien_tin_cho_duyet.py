@@ -330,7 +330,7 @@ Trả về DUY NHẤT một JSON (không giải thích) với các khóa sau, gi
 - gia_trung_min, gia_trung_max: giá trúng thấp nhất / cao nhất, TRIỆU đồng/m² (không lấy số so sánh với năm trước)
 - tong_tien_ty: tổng tiền trúng đấu giá, TỶ đồng
 - nguoi_tham_gia: số người/hồ sơ tham gia
-- trang_thai: "Sắp đấu giá" | "Chờ kết quả" (đã diễn ra, chưa có kết quả) | "Đã đấu giá" (đã có kết quả) | "Hủy/bỏ cọc" (cả phiên bị hủy, hoặc mọi người trúng đều bỏ cọc)
+- trang_thai: "Sắp đấu giá" | "Chờ kết quả" (đã diễn ra, chưa có kết quả) | "Đã đấu giá" (đã có kết quả) | "Đấu giá lại" (phiên không thành / còn thửa ế, phải tổ chức đấu lại) | "Hủy/bỏ cọc" (cả phiên bị hủy, hoặc mọi người trúng đều bỏ cọc)
 - sau_dau_gia: tình hình SAU phiên của chính phiên này nếu bài nêu: "Bỏ cọc" (có người trúng bỏ cọc/không nộp tiền) | "Đã hủy kết quả" | "Đã nộp đủ tiền" | "Đã nộp một phần" | ""
 - ghi_chu: tối đa 5 ý cực ngắn cách nhau "; " – số thửa bị bỏ cọc nếu có, khoảng giá khởi điểm nếu nhiều mức, tổng diện tích, tổng giá khởi điểm, hạn nộp hồ sơ, tiền đặt trước, giờ phiên, điểm đáng chú ý. Tự viết lại, không chép nguyên văn.
 Chỉ ghi điều bài nêu rõ, không suy đoán. Hôm nay là {today}.

@@ -201,7 +201,7 @@ ngay (YYYY-MM-DD, ngày tổ chức phiên; năm mặc định {yr}), tinh (mộ
 dia_danh_cu (địa danh cũ, vd "xã Kim Nỗ, huyện Đông Anh"), khu (tên khu/điểm đấu giá), loai_dat ("Đất ở" | "Đất thương mại dịch vụ" | "Đất sản xuất kinh doanh" | "Đất nông nghiệp"),
 so_thua (số thửa đưa ra đấu giá), so_thua_trung (số thửa trúng), gia_khoi_diem, gia_trung_min, gia_trung_max (đều quy ra TRIỆU đồng/m², số thập phân dùng dấu chấm),
 tong_tien_ty (tổng tiền trúng, tỷ đồng), nguoi_tham_gia (số người/hồ sơ tham gia),
-trang_thai ("Sắp đấu giá" nếu phiên chưa diễn ra; "Đã đấu giá" nếu đã có kết quả; "Chờ kết quả" nếu đã diễn ra mà chưa có kết quả; "Hủy/bỏ cọc" nếu bị hủy hoặc người trúng bỏ cọc),
+trang_thai ("Sắp đấu giá" nếu phiên chưa diễn ra; "Đã đấu giá" nếu đã có kết quả; "Chờ kết quả" nếu đã diễn ra mà chưa có kết quả; "Đấu giá lại" nếu phiên không thành / phải đấu lại; "Hủy/bỏ cọc" nếu bị hủy hoặc người trúng bỏ cọc),
 ghi_chu (ngắn gọn, các ý cách nhau bằng "; ": khoảng giá khởi điểm nếu có nhiều mức, tổng diện tích, tổng giá khởi điểm, hạn nộp hồ sơ, giờ phiên, điểm đáng chú ý; tự viết lại, không chép nguyên văn bài).
 PHẢI điền ĐỦ mọi khóa mà bài có thông tin (đọc cả bảng số liệu trong bài); giá trị ngắn gọn, đúng như bài nêu, không suy đoán.
 Nếu bài không có phiên đấu giá đất phù hợp thì trả {{"phien":[]}}.
