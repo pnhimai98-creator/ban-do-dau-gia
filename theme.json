@@ -5,7 +5,7 @@
     "ink": "#161a1d",
     "mute": "#5c6670",
     "line": "#dde1e0",
-    "acc": "#1f5f4a",
+    "acc": "#1e5228",
     "card": "#ffffff"
   },
   "dark": {
@@ -27,6 +27,7 @@
   "status": {
     "Sắp đấu giá": "#1866af",
     "Chờ kết quả": "#e873c9",
+    "Đấu giá lại": "#d97706",
     "Hủy/bỏ cọc": "#111827"
   }
 }
