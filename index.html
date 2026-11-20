@@ -258,14 +258,10 @@ const CONFIG = {
   ROADS_URL: "layers/duong-bo.geojson",
   // Các tuyến metro chưa có trên OpenStreetMap, vẽ tay (5 tuyến ưu tiên 1, 2, 8, 10, 14). File này không bị workflow ghi đè
   PLANNED_METRO_URL: "layers/metro-quy-hoach.geojson",
-  // Hướng tuyến tổng thể 7 vành đai Hà Nội & Vùng Thủ đô (vẽ tay, nét chấm nhạt) để khép kín các đoạn OSM còn thiếu
   // Ga metro đang triển khai (tuyến 2, 5) theo vị trí báo chí mô tả; ga đã có trên OSM sẽ dùng bản OSM
   PLANNED_STATIONS_URL: "layers/ga-metro-trien-khai.geojson",
-  PLANNED_RING_URL: "",   // đã tắt theo yêu cầu – để "" là không vẽ
-  // Chỉ hiện vành đai của các nhóm này (vành đai riêng của tỉnh/đô thị khác bị bỏ)
-  RING_REGIONS: [],
   INFRA_URL: "layers/ha-tang.geojson",
-  // Lớp bật sẵn khi mở trang: "bound" (ranh giới), "vanh_dai" (mọi vành đai) hoặc "vanh_dai:Hà Nội", "cao_toc", "quoc_lo", "duong_tinh", "metro", "cau", "cau_xay", "san_bay", "tinh" (ranh giới tỉnh), "huyen" (huyện cũ)
+  // Lớp bật sẵn khi mở trang: "bound" (ranh giới), "cao_toc", "quoc_lo", "duong_tinh", "metro", "cau", "cau_xay", "san_bay", "tinh" (ranh giới tỉnh), "huyen" (huyện cũ)
   LAYERS_ON: ["bound", "tinh"],
   // Sân bay vẽ thêm bằng tay (OSM có thể thiếu). status: "hien_huu" | "dang_xay" | "quy_hoach"; approx: true = vị trí gần đúng
   AIRPORTS: [
@@ -560,7 +556,7 @@ const METRO_COLOR = {"1": "#1c4fd6", "2": "#1f9d55", "2A": "#74b816", "3": "#f59
 const INFRA_STYLE = {vanh_dai: {color: "#c2410c", weight: 3.5}, cao_toc: {color: "#0b7285", weight: 5}, quoc_lo: {color: "#b02525", weight: 3.5}, duong_tinh: {color: "#e0a100", weight: 2.5}, metro: {color: "#868e96", weight: 5}, cau: {color: "#1971c2", weight: 9}, cau_xay: {color: "#f08c00", weight: 9},
   san_bay: {color: "#495057", weight: 2, fillOpacity: 0.2}};
 /* Thứ tự lớp trong nút chọn lớp; vành đai được tách theo từng địa phương (vanh_dai:Hà Nội, vanh_dai:Vĩnh Yên…) */
-const INFRA_KEYS = [["vanh_dai", "lyRing"], ["cao_toc", "lyExp"], ["quoc_lo", "lyQL"], ["duong_tinh", "lyDT"], ["metro", "lyMetro"], ["cau", "lyBridge"], ["cau_xay", "lyBridgeB"], ["san_bay", "lyAir"]];
+const INFRA_KEYS = [["cao_toc", "lyExp"], ["quoc_lo", "lyQL"], ["duong_tinh", "lyDT"], ["metro", "lyMetro"], ["cau", "lyBridge"], ["cau_xay", "lyBridgeB"], ["san_bay", "lyAir"]];
 /* Vành đai được nhóm theo tỉnh/thành MỚI (sau sắp xếp đơn vị hành chính 1/7/2025); đô thị cũ chỉ ghi trong chú thích khi rê chuột */
 const CITY_PROV = {"Vĩnh Yên": "Phú Thọ", "Phúc Yên": "Phú Thọ", "Việt Trì": "Phú Thọ", "Hòa Bình": "Phú Thọ",
   "Bắc Giang": "Bắc Ninh", "Bắc Ninh": "Bắc Ninh", "Hải Dương": "Hải Phòng", "Hải Phòng": "Hải Phòng",
@@ -724,7 +720,7 @@ async function loadExtraLayers() {
   map.on("zoomend", zcls); zcls();
   let [bd, inf, pv, dt, hasRoads, pm, pr, ps] = await Promise.all([CONFIG.BOUNDARY_URL ? getJSON(CONFIG.BOUNDARY_URL) : null, CONFIG.INFRA_URL ? getJSON(CONFIG.INFRA_URL) : null,
     CONFIG.PROVINCE_URL ? getJSON(CONFIG.PROVINCE_URL) : null, CONFIG.DISTRICT_URL ? getJSON(CONFIG.DISTRICT_URL) : null, CONFIG.ROADS_URL ? exists(CONFIG.ROADS_URL) : false,
-    CONFIG.PLANNED_METRO_URL ? getJSON(CONFIG.PLANNED_METRO_URL) : null, CONFIG.PLANNED_RING_URL ? getJSON(CONFIG.PLANNED_RING_URL) : null,
+    CONFIG.PLANNED_METRO_URL ? getJSON(CONFIG.PLANNED_METRO_URL) : null, null,
     CONFIG.PLANNED_STATIONS_URL ? getJSON(CONFIG.PLANNED_STATIONS_URL) : null]);
   /* ga nhập tay: bỏ ga nào đã có trên OSM trong bán kính ~150 m / drop hand-placed stations already mapped in OSM */
   if (ps && ps.features) {
@@ -734,9 +730,8 @@ async function loadExtraLayers() {
   /* ghép các tuyến vẽ tay (metro, vành đai) vào trước dữ liệu OSM để đoạn OSM vẽ đè lên / hand-drawn lines go underneath OSM data */
   const hand = [...((pm && pm.features) || []), ...((pr && pr.features) || []), ...((ps && ps.features) || [])];
   if (hand.length || inf) inf = {type: "FeatureCollection", features: [...hand, ...((inf && inf.features) || [])]};
-  /* chỉ giữ vành đai Hà Nội & Vùng Thủ đô / keep only Hanoi & Capital Region ring roads */
-  const RR = CONFIG.RING_REGIONS || [];
-  if (inf && RR.length) inf.features = inf.features.filter(f => f.properties.kind !== "vanh_dai" || RR.includes(cityOf(f.properties)));
+  /* ĐÃ BỎ HẲN LỚP VÀNH ĐAI: loại mọi đối tượng vành đai, kể cả nếu file dữ liệu cũ còn sót / ring roads removed entirely */
+  if (inf) inf.features = inf.features.filter(f => f.properties.kind !== "vanh_dai");
   const where = p => (p.tinh ? ", " + esc(tv("prov", p.tinh)) : "");
   if (pv && pv.features) extraGroups.tinh = boundaryLayer(pv, "bound", {color: "#343a40", weight: 2.5, fill: false}, null, p => esc(tv("prov", p.name)));
   if (dt && dt.features) { DIST = dt;
