@@ -1,0 +1,32 @@
+name: Cập nhật dữ liệu dự án thấp tầng (từ file Excel báo cáo)
+
+on:
+  workflow_dispatch:          # bấm "Run workflow" trong tab Actions để chạy tay
+  push:
+    paths:
+      - "data/bao-cao-du-an.xlsx"   # tự chạy mỗi khi tải file Excel mới lên
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install openpyxl
+      - name: Tạo du-an.csv và du-an-huyen.csv
+        run: python scripts/nhap_du_an.py
+      - name: Lưu lên repo
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898333+github-actions[bot]@users.noreply.github.com"
+          git add du-an.csv du-an-huyen.csv
+          if git diff --cached --quiet; then echo "Không có thay đổi"; else
+            git commit -m "Cập nhật dữ liệu dự án thấp tầng"
+            git pull --rebase
+            git push
+          fi
