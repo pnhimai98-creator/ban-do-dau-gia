@@ -6,7 +6,7 @@ on:
     paths:
       - "data/bao-cao-du-an.xlsx"   # tự chạy mỗi khi tải file Excel mới lên
   schedule:
-    - cron: "17 20 * * *"     # 3:17 sáng (giờ VN) mỗi ngày: tìm tiếp toạ độ còn thiếu nếu hôm trước hết hạn mức Gemini
+    - cron: "17 20 * * *"     # 3:17 sáng (giờ VN) mỗi ngày: tìm tiếp địa chỉ dự án còn thiếu
 
 permissions:
   contents: write
@@ -24,6 +24,7 @@ jobs:
       - name: Tìm toạ độ theo tên dự án (Gemini + Google Search, OpenStreetMap) và tạo du-an.csv, du-an-huyen.csv
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GOOGLE_MAPS_API_KEY: ${{ secrets.GOOGLE_MAPS_API_KEY }}   # không bắt buộc: khoá Google Maps (Places API) để tra thêm trên Google Maps
         run: python scripts/nhap_du_an.py
       - name: Lưu lên repo
         run: |
