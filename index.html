@@ -119,16 +119,16 @@ footer{padding:16px max(3vw,14px);font-size:13px;color:var(--mute);border-top:1p
 #pdfDlg .bar a{font-size:13px;white-space:nowrap}
 #pdfDlg .bar button{border:1px solid var(--line);background:none;border-radius:8px;height:32px;min-width:36px;cursor:pointer}
 /* ---- Dự án thấp tầng / low-rise projects ---- */
-.pj-find{background:var(--card);border:1px solid var(--line);border-radius:10px;box-shadow:0 2px 8px #0002;font:14px/1.35 inherit;width:min(300px,70vw)}
-.pj-find .pj-bar{display:flex;align-items:center;gap:2px;padding:4px 6px 4px 4px}
-.pj-find button{all:unset;cursor:pointer;display:flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:8px;flex:none}
+.pj-find{position:relative;flex:0 1 280px;min-width:180px;background:var(--card);border:1px solid var(--line);border-radius:99px}
+.pj-find:focus-within{border-color:var(--acc)}
+.pj-find .pj-bar{display:flex;align-items:center;height:32px;padding:0 4px 0 2px}
+.pj-find button{all:unset;cursor:pointer;display:flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:99px;flex:none}
 .pj-find button:hover{background:var(--bg2)}
-.pj-find button svg{width:18px;height:18px;stroke:var(--ink)}
-.pj-find input{flex:1;min-width:0;height:32px;padding:0 8px;border:0;outline:0;background:transparent;color:var(--ink);font:inherit}
-.pj-find input::-webkit-search-cancel-button{cursor:pointer}
-.pj-find ul{list-style:none;margin:0;padding:0;max-height:300px;overflow:auto}
-.pj-find ul:not(:empty){border-top:1px solid var(--line);padding:4px 0 6px}
-.pj-find li{padding:6px 12px;cursor:pointer}.pj-find li:hover,.pj-find li.on{background:var(--bg2)}.pj-find li small{display:block;color:var(--mute)}
+.pj-find button svg{width:17px;height:17px;stroke:var(--ink)}
+.pj-find input{flex:1;min-width:0;height:30px;padding:0 6px;border:0;outline:0;background:transparent;color:var(--ink);font:inherit;font-size:13px}
+.pj-find ul{position:absolute;top:calc(100% + 6px);left:0;width:max(100%,min(380px,90vw));z-index:2000;list-style:none;margin:0;padding:0;max-height:340px;overflow:auto;background:var(--card);border-radius:10px;box-shadow:0 6px 20px #0003}
+.pj-find ul:not(:empty){border:1px solid var(--line);padding:4px 0}
+.pj-find li{padding:6px 12px;cursor:pointer;font-size:13px}.pj-find li:hover,.pj-find li.on{background:var(--bg2)}.pj-find li small{display:block;color:var(--mute)}
 .pj-ic i{display:block;border-radius:2px;box-sizing:border-box;box-shadow:0 0 0 1px #0003}
 .pj-sw{display:inline-block;width:12px;height:12px;border-radius:2px;margin:0 6px 0 2px;vertical-align:-1px;box-sizing:border-box}
 .legend i.sq{border-radius:2px}
@@ -144,7 +144,8 @@ footer{padding:16px max(3vw,14px);font-size:13px;color:var(--mute);border-top:1p
 <header>
  <div><div class="htop"><h1 data-t="title">Bản đồ đấu giá đất Hà Nội & vùng ven</h1>
   <div class="lang" role="group" aria-label="Ngôn ngữ / Language"><button data-lang="vi">VI</button><button data-lang="en">EN</button></div>
-  <a class="repbtn" id="repBtn" href="#reports" hidden></a></div>
+  <a class="repbtn" id="repBtn" href="#reports" hidden></a>
+  <div class="pj-find" id="pjFind" hidden></div></div>
   <p class="sub" id="updated">Đang tải dữ liệu… / Loading…</p></div>
  <div class="stats" id="stats"></div>
 </header>
@@ -274,6 +275,8 @@ const CONFIG = {
   PROJECTS_DISTRICT_URL: "du-an-huyen.csv",
   // Lớp dự án bật sẵn khi mở trang: "so_cap", "thu_cap", "tuong_lai"; [] = tắt hết
   PROJECTS_ON: [],
+  // Hiện ô chú thích (màu giá, trạng thái…) ở góc dưới trái bản đồ: true = hiện, false = ẩn
+  SHOW_LEGEND: false,
   // Tự dịch máy "Khu" và "Ghi chú" sang tiếng Anh khi xem bản EN (dịch vụ miễn phí MyMemory). false = tắt
   // Ô nào đã có cột khu_en / ghi_chu_en thì dùng bản bạn tự viết, không dịch máy
   AUTO_TRANSLATE: true,
@@ -916,15 +919,16 @@ function projPopup(p) {
    <p style="margin:8px 0 0;font-size:12px;color:var(--mute)">${esc(t(p.vi_tri === "Theo huyện" ? "pjApprox" : p.vi_tri === "Gần đúng theo địa danh" ? "pjLoc" : p.vi_tri === "Sửa tay" ? "pjManual" : p.vi_tri === "Theo địa chỉ" ? "pjWeb" : "pjOsm"))}${p.nguon ? "<br>" + esc(p.nguon) : ""}</p></div>`;
 }
 
-/* ô tìm dự án theo tên (góc trên trái bản đồ) */
+/* ô tìm dự án theo tên (trên đầu trang, cạnh nút Báo cáo) */
 function initProjFind() {
-  if (!map || map._pjFind || !PROJ.length) return; map._pjFind = true;
-  const ctl = L.control({position: "topleft"});
-  ctl.onAdd = () => { const d = L.DomUtil.create("div", "pj-find leaflet-bar");
+  const d = document.getElementById("pjFind");
+  if (!map || !d || !PROJ.length) return;
+  if (map._pjFind) { const i = d.querySelector("input"); if (i) { i.placeholder = t("pjFindPh"); i.setAttribute("aria-label", t("pjFind")); } return; }   /* đổi ngôn ngữ */
+  map._pjFind = true; d.hidden = false;
+  {
     d.innerHTML = `<div class="pj-bar"><button type="button" aria-label="${esc(t("pjFind"))}" title="${esc(t("pjFind"))}"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5 21 21"/></svg></button><input type="search" placeholder="${esc(t("pjFindPh"))}" aria-label="${esc(t("pjFind"))}"></div><ul></ul>`;
-    L.DomEvent.disableClickPropagation(d); L.DomEvent.disableScrollPropagation(d);
     const inp = d.querySelector("input"), ul = d.querySelector("ul"); let hits = [], cur = 0;
-    const go = p => { const g = projGroups[p.nhom]; if (g && !map.hasLayer(g)) map.addLayer(g);
+    const go = p => { ul.innerHTML = ""; inp.blur(); document.getElementById("map").scrollIntoView({block: "nearest", behavior: "smooth"}); const g = projGroups[p.nhom]; if (g && !map.hasLayer(g)) map.addLayer(g);
       map.setView([p.lat, p.lng], Math.max(map.getZoom(), 15)); setTimeout(() => p._mk && p._mk.openPopup(), 300); };
     const draw = () => { const q = fold(inp.value).trim(); if (!q) { ul.innerHTML = ""; hits = []; return; }
       const seen = new Set(); hits = PROJ.filter(p => p._mk && fold(p.ten + " " + (p.chu_dau_tu || "") + " " + (p.dia_chi || "")).includes(q))
@@ -938,8 +942,9 @@ function initProjFind() {
       if (e.key === "Enter") { e.preventDefault(); go(hits[cur]); }
       if (e.key === "Escape") { inp.value = ""; draw(); inp.blur(); } });
     ul.addEventListener("click", e => { const li = e.target.closest("[data-i]"); if (li) go(hits[+li.dataset.i]); });
-    return d; };
-  ctl.addTo(map);
+    document.addEventListener("click", e => { if (!d.contains(e.target)) ul.innerHTML = ""; });
+    inp.addEventListener("focus", () => { if (inp.value) draw(); });
+  }
 }
 /* quận/huyện cũ của một phiên → dòng tổng hợp dự án */
 function projDistOf(d) {
@@ -1238,7 +1243,7 @@ function applyLang() {
           .filter(([k]) => map.hasLayer(projGroups[k])).map(([k, lk]) => `<br><i class="sq" style="${pjStyle(k)};box-sizing:border-box"></i>${t(lk)}`).join(""))
       + (Object.keys(extraGroups).some(k => !["bound", "tinh", "huyen"].includes(k)) ? `<div style="margin-top:6px;padding-top:4px;border-top:1px solid var(--line)"><b>${t("lgInfra")}</b><br>`
         + `<span class="lg-line"></span>${t("lgBuilt")}<br><span class="lg-line" style="border-top-style:dashed"></span>${t("lgBuild")}<br><span class="lg-line" style="border-top-style:dotted"></span>${t("lgPlan")}</div>` : ""); return d; };
-    legendCtl.addTo(map);
+    if (CONFIG.SHOW_LEGEND) legendCtl.addTo(map);
   }
   render();
   renderReports();
