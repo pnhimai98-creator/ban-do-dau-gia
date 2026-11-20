@@ -54,6 +54,9 @@ details summary{cursor:pointer;font-weight:600}
 .seg button{border:0;background:none;padding:0 14px;height:34px;cursor:pointer}
 .seg button.on{background:var(--ink);color:var(--bg)}
 h3{font-size:14px;margin:14px 0 4px}
+.pjgrid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:16px;align-items:start}@media(max-width:900px){.pjgrid{grid-template-columns:1fr}}
+#pjTb tr{cursor:pointer}#pjTb tr.on td{background:var(--bg2)}#pjMap{height:300px;border-radius:10px;border:1px solid var(--line);margin-top:8px}
+.vt{display:inline-block;padding:1px 7px;border-radius:9px;font-size:11.5px;border:1px solid var(--line)}.vt.ok{background:#dcfce7;color:#166534}.vt.mid{background:#fef3c7;color:#92400e}.vt.lo{background:#fee2e2;color:#991b1b}
 .tabs{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 14px}
 .tabs button{height:40px;padding:0 16px;border-radius:99px;border:1px solid var(--line);background:none;cursor:pointer;font-weight:500}
 .tabs button.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
@@ -127,7 +130,7 @@ th .hbtn{border:0;background:none;color:var(--muted,#888);cursor:pointer;padding
  </section>
  <div id="msg" class="status" hidden></div>
 
- <div class="tabs" id="mainTabs" hidden><button class="on" data-tab="grid">Bảng tính dữ liệu</button><button data-tab="pend">Tin chờ duyệt<span class="badge" id="pendBadge" hidden>0</span></button><button data-tab="form">Form & chọn vị trí trên bản đồ</button><button data-tab="theme">Giao diện – màu sắc</button></div>
+ <div class="tabs" id="mainTabs" hidden><button class="on" data-tab="grid">Bảng tính dữ liệu</button><button data-tab="pend">Tin chờ duyệt<span class="badge" id="pendBadge" hidden>0</span></button><button data-tab="form">Form & chọn vị trí trên bản đồ</button><button data-tab="proj">Dự án thấp tầng</button><button data-tab="theme">Giao diện – màu sắc</button></div>
 
  <section class="card" id="gridCard" hidden>
   <div class="row" style="justify-content:space-between;margin-bottom:10px">
@@ -210,6 +213,36 @@ th .hbtn{border:0;background:none;color:var(--muted,#888);cursor:pointer;padding
    <p class="muted">Bấm vào bản đồ để đặt điểm; kéo điểm để chỉnh. Chuyển sang “Ảnh vệ tinh” để tìm khu đất.</p>
   </section>
  </div>
+
+ <section class="card" id="projCard" hidden>
+  <div class="row" style="justify-content:space-between;margin-bottom:6px"><h2 style="margin:0">Dự án thấp tầng – bổ sung thông tin</h2><span class="muted" id="pjState"></span></div>
+  <p class="muted" style="margin-top:0">Chọn một dự án để sửa địa chỉ, toạ độ, giá, link…; hoặc thêm dự án mới. Bấm <b>Lưu dự án</b> là bản đồ cập nhật sau khoảng 1 phút. Thông tin ở đây luôn được ưu tiên hơn dữ liệu tự tìm (lưu ở <code>data/du-an-bo-sung.json</code>). Giá trung vị theo huyện sẽ tính lại ở lần chạy workflow kế tiếp.</p>
+  <div class="row" style="margin-bottom:10px"><input id="pjQ" type="search" placeholder="Tìm tên dự án, chủ đầu tư, địa chỉ…" style="width:300px">
+   <select id="pjFv"><option value="">Mọi vị trí</option><option value="Theo huyện">Chưa có địa chỉ (theo huyện)</option><option>Gần đúng theo địa danh</option><option>Theo OSM</option><option>Theo địa chỉ</option><option>Sửa tay</option></select>
+   <button class="btn" id="pjNew">＋ Thêm dự án mới</button></div>
+  <div class="pjgrid">
+   <div class="scroll" style="max-height:72vh"><table><thead><tr><th>Dự án</th><th>Nhóm</th><th>Huyện</th><th>Vị trí</th></tr></thead><tbody id="pjTb"></tbody></table></div>
+   <form id="pjF" autocomplete="off" hidden>
+    <div class="grid" style="grid-template-columns:1fr 1fr">
+     <label style="grid-column:1/-1">Tên dự án<input name="ten" required></label>
+     <label>Nhóm<select name="nhom"><option value="so_cap">Sơ cấp</option><option value="thu_cap">Thứ cấp</option><option value="tuong_lai">Sắp triển khai</option></select></label>
+     <label>Quận/huyện cũ<select name="huyen_en" id="pjHuyen"></select></label>
+     <label style="grid-column:1/-1">Chủ đầu tư<input name="chu_dau_tu"></label>
+     <label style="grid-column:1/-1">Địa chỉ<input name="dia_chi" placeholder="VD: Đường Lê Trọng Tấn, xã An Khánh, huyện Hoài Đức"></label>
+     <div class="row" style="grid-column:1/-1;gap:6px"><button type="button" class="btn" id="pjGeo">📍 Đặt vị trí theo địa chỉ</button><a class="btn" id="pjGg" target="_blank" rel="noopener">🔎 Tìm địa chỉ trên Google</a><a class="btn" id="pjGm" target="_blank" rel="noopener">🗺 Mở Google Maps</a></div>
+     <label>Vĩ độ (lat)<input name="lat" inputmode="decimal"></label><label>Kinh độ (lng)<input name="lng" inputmode="decimal"></label>
+     <div style="grid-column:1/-1" class="muted">Bấm lên bản đồ để đặt vị trí, hoặc dán toạ độ từ Google Maps (chuột phải → bấm dòng toạ độ) vào ô Vĩ độ dạng “21.0991, 105.7151”.</div>
+     <div id="pjMap" style="grid-column:1/-1"></div>
+     <label>Giá biệt thự (tr/m²)<input name="gia_vl" inputmode="decimal"></label><label>Giá liền kề (tr/m²)<input name="gia_th" inputmode="decimal"></label>
+     <label>Giá shophouse (tr/m²)<input name="gia_sh" inputmode="decimal"></label><label>Tổng số căn<input name="can_tong" inputmode="numeric"></label>
+     <label>Dự kiến mở bán<input name="mo_ban"></label><label>Quy mô (ha)<input name="quy_mo_ha" inputmode="decimal"></label>
+     <label>Tình trạng<input name="tinh_trang"></label><label>Link (website / bài báo)<input name="link" type="url"></label>
+     <label style="grid-column:1/-1">Ghi chú<textarea name="ghi_chu" rows="2"></textarea></label>
+    </div>
+    <div class="row" style="margin-top:12px"><button class="btn pri" type="submit">Lưu dự án lên GitHub</button><button class="btn" type="button" id="pjCancel">Đóng</button><button class="btn" type="button" id="pjDel" title="Bỏ các thông tin đã sửa tay của dự án này">Bỏ phần sửa tay</button></div>
+   </form>
+  </div>
+ </section>
 
  <section class="card" id="themeCard" hidden>
   <div class="row" style="justify-content:space-between;margin-bottom:6px"><h2 style="margin:0">Giao diện – màu sắc</h2><span class="muted" id="themeState"></span></div>
@@ -1148,7 +1181,8 @@ $("#gFclr").addEventListener("click", () => { FILT = {}; renderGrid(); });
 /* ---------- chuyển tab ---------- */
 function showTab(t) {
   document.querySelectorAll("#mainTabs button").forEach(b => b.classList.toggle("on", b.dataset.tab === t));
-  $("#gridCard").hidden = t !== "grid"; $("#work").hidden = t !== "form"; $("#listCard").hidden = t !== "form"; $("#themeCard").hidden = t !== "theme"; $("#pendCard").hidden = t !== "pend";
+  $("#gridCard").hidden = t !== "grid"; $("#work").hidden = t !== "form"; $("#listCard").hidden = t !== "form"; $("#themeCard").hidden = t !== "theme"; $("#pendCard").hidden = t !== "pend"; $("#projCard").hidden = t !== "proj";
+  if (t === "proj") loadProjAdmin();
   if (t === "pend") { renderPending(); autoFill(); }
   if (t === "form") { renderList(); if (map) setTimeout(() => map.invalidateSize && map.invalidateSize(), 50); }
   if (t === "grid") renderGrid();
@@ -1700,6 +1734,124 @@ $("#btnTheme").addEventListener("click", async () => {
   } catch (e) { say("Chưa lưu được giao diện: " + explain(e), "err"); if (e.status === 409) THEME_SHA = null; }
   finally { b.disabled = false; }
 });
+
+/* ================= DỰ ÁN THẤP TẦNG (du-an.csv + data/du-an-bo-sung.json) ================= */
+const PJ_HUYEN = {"Ba Dinh": ["Ba Đình", 21.034, 105.814], "Hoan Kiem": ["Hoàn Kiếm", 21.029, 105.852], "Tay Ho": ["Tây Hồ", 21.070, 105.818], "Long Bien": ["Long Biên", 21.047, 105.889],
+  "Cau Giay": ["Cầu Giấy", 21.032, 105.790], "Dong Da": ["Đống Đa", 21.018, 105.829], "Hai Ba Trung": ["Hai Bà Trưng", 21.006, 105.858], "Hoang Mai": ["Hoàng Mai", 20.975, 105.861],
+  "Thanh Xuan": ["Thanh Xuân", 20.994, 105.809], "Nam Tu Liem": ["Nam Từ Liêm", 21.012, 105.765], "Bac Tu Liem": ["Bắc Từ Liêm", 21.070, 105.765], "Ha Dong": ["Hà Đông", 20.963, 105.770],
+  "Son Tay": ["Sơn Tây", 21.138, 105.505], "Ba Vi": ["Ba Vì", 21.200, 105.420], "Phuc Tho": ["Phúc Thọ", 21.105, 105.565], "Dan Phuong": ["Đan Phượng", 21.088, 105.668],
+  "Hoai Duc": ["Hoài Đức", 21.022, 105.705], "Quoc Oai": ["Quốc Oai", 20.990, 105.640], "Thach That": ["Thạch Thất", 21.030, 105.560], "Chuong My": ["Chương Mỹ", 20.900, 105.680],
+  "Thanh Oai": ["Thanh Oai", 20.860, 105.770], "Thuong Tin": ["Thường Tín", 20.858, 105.860], "Phu Xuyen": ["Phú Xuyên", 20.735, 105.905], "Ung Hoa": ["Ứng Hòa", 20.710, 105.780],
+  "My Duc": ["Mỹ Đức", 20.690, 105.730], "Thanh Tri": ["Thanh Trì", 20.940, 105.840], "Gia Lam": ["Gia Lâm", 21.010, 105.950], "Dong Anh": ["Đông Anh", 21.135, 105.850],
+  "Soc Son": ["Sóc Sơn", 21.255, 105.850], "Me Linh": ["Mê Linh", 21.180, 105.720]};
+const PJ_COLS = ["quy", "nhom", "ten", "chu_dau_tu", "huyen", "huyen_en", "lat", "lng", "vi_tri", "can_tong", "can_vl", "can_th", "can_sh", "hap_thu", "gia_vl", "gia_th", "gia_sh", "mo_ban", "quy_mo_ha", "tinh_trang", "dia_chi", "link", "ghi_chu", "nguon"];
+const PJ_EDIT = ["chu_dau_tu", "dia_chi", "lat", "lng", "gia_vl", "gia_th", "gia_sh", "can_tong", "mo_ban", "quy_mo_ha", "tinh_trang", "link", "ghi_chu"];
+const PJ_SHARED = ["chu_dau_tu", "dia_chi", "lat", "lng", "link", "ghi_chu"];   /* dùng chung cho mọi nhóm của cùng dự án */
+const PJ_NHOM = {so_cap: "Sơ cấp", thu_cap: "Thứ cấp", tuong_lai: "Sắp triển khai"};
+let PJ = [], PJ_SHA = null, PJB = {du_an: {}}, PJB_SHA = null, pjSel = null, pjMap = null, pjMk = null, pjVt = "";
+const pjKey = r => `${r.ten}|${r.huyen_en}|${r.nhom}`;
+const pjFold = s => String(s || "").normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/đ/gi, "d").toLowerCase();
+async function loadProjAdmin(force) {
+  if (PJ.length && !force) { renderProjAdmin(); return; }
+  if (!cfg().token) { say("Hãy kết nối GitHub trước.", "err"); return; }
+  $("#pjState").textContent = "đang tải…";
+  try {
+    const j = await gh("GET", null, "du-an.csv"); PJ = parseCSV(b64dec(j.content)).rows; PJ_SHA = j.sha;
+    try { const b = await gh("GET", null, "data/du-an-bo-sung.json"); PJB = JSON.parse(b64dec(b.content)); PJB.du_an = PJB.du_an || {}; PJB_SHA = b.sha; }
+    catch (e) { if (e.status !== 404) throw e; PJB = {du_an: {}}; PJB_SHA = null; }
+    $("#pjHuyen").innerHTML = Object.entries(PJ_HUYEN).map(([k, v]) => `<option value="${k}">${esc(v[0])}</option>`).join("");
+    $("#pjState").textContent = `${PJ.length} dòng · ${Object.keys(PJB.du_an).length} mục đã bổ sung`;
+    renderProjAdmin();
+  } catch (e) { $("#pjState").textContent = ""; say("Chưa tải được dữ liệu dự án: " + explain(e), "err"); }
+}
+function renderProjAdmin() {
+  const q = pjFold($("#pjQ").value.trim()), fv = $("#pjFv").value;
+  const rows = PJ.map((r, i) => ({r, i})).filter(({r}) => (!q || pjFold(r.ten + " " + r.chu_dau_tu + " " + r.dia_chi).includes(q)) && (!fv || r.vi_tri === fv)).slice(0, 400);
+  const cls = v => v === "Theo huyện" ? "lo" : v === "Gần đúng theo địa danh" ? "mid" : "ok";
+  $("#pjTb").innerHTML = rows.map(({r, i}) => `<tr data-pj="${i}" class="${pjSel === i ? "on" : ""}"><td><b>${esc(r.ten)}</b>${PJB.du_an[pjKey(r)] ? ' <span class="tag">đã sửa</span>' : ""}<div class="muted">${esc(r.dia_chi || r.chu_dau_tu || "")}</div></td>
+    <td>${esc(PJ_NHOM[r.nhom] || r.nhom)}</td><td>${esc(r.huyen)}</td><td><span class="vt ${cls(r.vi_tri)}">${esc(r.vi_tri === "Theo huyện" ? "Chưa có địa chỉ" : r.vi_tri)}</span></td></tr>`).join("")
+    || `<tr><td colspan="4" class="muted">Không có dự án phù hợp.</td></tr>`;
+}
+function pjLinks() { const f = $("#pjF").elements, h = PJ_HUYEN[f.huyen_en.value] || [""];
+  const q = `${f.ten.value} ${h[0]} Hà Nội`; $("#pjGg").href = "https://www.google.com/search?q=" + encodeURIComponent("địa chỉ dự án " + q); $("#pjGm").href = "https://www.google.com/maps/search/" + encodeURIComponent(q); }
+function pjSetMarker(fit) {
+  const f = $("#pjF").elements; let la = parseFloat(String(f.lat.value).replace(",", ".")), lo = parseFloat(String(f.lng.value).replace(",", "."));
+  if (!pjMap || isNaN(la) || isNaN(lo)) return;
+  if (!pjMk) pjMk = L.marker([la, lo], {draggable: true}).addTo(pjMap).on("dragend", e => { const p = e.target.getLatLng(); f.lat.value = p.lat.toFixed(6); f.lng.value = p.lng.toFixed(6); pjVt = "Sửa tay"; });
+  else pjMk.setLatLng([la, lo]);
+  if (fit) pjMap.setView([la, lo], 15);
+}
+function openProj(i) {
+  pjSel = i; const r = i == null ? {nhom: "tuong_lai", huyen_en: "Hoai Duc"} : PJ[i], f = $("#pjF"); f.hidden = false; f.reset(); pjVt = "";
+  ["ten", "nhom", "huyen_en", ...PJ_EDIT].forEach(k => { if (f.elements[k]) f.elements[k].value = r[k] ?? ""; });
+  f.elements.ten.readOnly = f.elements.nhom.disabled = f.elements.huyen_en.disabled = i != null;
+  $("#pjDel").hidden = i == null;
+  if (!pjMap && window.L) { pjMap = L.map("pjMap").setView([21.03, 105.8], 11);
+    L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {maxZoom: 19, attribution: "&copy; OpenStreetMap"}).addTo(pjMap);
+    pjMap.on("click", e => { f.elements.lat.value = e.latlng.lat.toFixed(6); f.elements.lng.value = e.latlng.lng.toFixed(6); pjVt = "Sửa tay"; pjSetMarker(); }); }
+  setTimeout(() => { pjMap && pjMap.invalidateSize(); if (r.lat) pjSetMarker(true); else { const h = PJ_HUYEN[r.huyen_en]; h && pjMap && pjMap.setView([h[1], h[2]], 13); } }, 60);
+  pjLinks(); renderProjAdmin(); f.scrollIntoView({behavior: "smooth", block: "nearest"});
+}
+$("#pjTb").addEventListener("click", e => { const tr = e.target.closest("[data-pj]"); if (tr) openProj(+tr.dataset.pj); });
+$("#pjQ").addEventListener("input", renderProjAdmin); $("#pjFv").addEventListener("input", renderProjAdmin);
+$("#pjNew").addEventListener("click", () => openProj(null));
+$("#pjCancel").addEventListener("click", () => { $("#pjF").hidden = true; pjSel = null; renderProjAdmin(); });
+["ten", "huyen_en"].forEach(k => $("#pjF").elements[k].addEventListener("input", pjLinks));
+$("#pjF").elements.lat.addEventListener("input", e => { const m = e.target.value.match(/^\s*(-?\d+[.,]\d+)\s*[,; ]\s*(-?\d+[.,]\d+)\s*$/);   /* dán "lat, lng" từ Google Maps */
+  if (m) { e.target.value = m[1].replace(",", "."); $("#pjF").elements.lng.value = m[2].replace(",", "."); }
+  pjVt = "Sửa tay"; pjSetMarker(true); });
+$("#pjF").elements.lng.addEventListener("input", () => { pjVt = "Sửa tay"; pjSetMarker(true); });
+$("#pjGeo").addEventListener("click", async () => {
+  const f = $("#pjF").elements, a = f.dia_chi.value.trim(), h = PJ_HUYEN[f.huyen_en.value];
+  if (!a) { say("Nhập địa chỉ trước.", "err"); return; }
+  say("Đang tìm vị trí theo địa chỉ…");
+  const box = h ? [h[2] - .15, h[1] + .15, h[2] + .15, h[1] - .15].map(x => x.toFixed(3)).join(",") : "105.3,21.4,106.1,20.6";
+  const tries = [a, a.split(",").slice(-3).join(","), a.split(",").slice(-2).join(",")].map(x => x.trim()).filter((x, i, arr) => x && arr.indexOf(x) === i);
+  for (const t of tries) {
+    try { const r = await fetch("https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&countrycodes=vn&bounded=1&viewbox=" + box + "&q=" + encodeURIComponent(t + ", Hà Nội")).then(x => x.json());
+      if (r && r[0]) { f.lat.value = (+r[0].lat).toFixed(6); f.lng.value = (+r[0].lon).toFixed(6); pjVt = t === a ? "Theo địa chỉ" : "Gần đúng theo địa danh"; pjSetMarker(true);
+        say(`Đã đặt vị trí: ${r[0].display_name}` + (t === a ? "" : " (chỉ khớp một phần địa chỉ – kéo ghim cho đúng nếu cần)"), "ok"); return; } } catch (e) {}
+    await new Promise(r => setTimeout(r, 1100));
+  }
+  say("Không tìm được địa chỉ này trên OpenStreetMap. Hãy bấm lên bản đồ hoặc dán toạ độ từ Google Maps.", "err");
+});
+function pjCSV() { return [PJ_COLS.join(",")].concat(PJ.map(r => PJ_COLS.map(h => q(r[h])).join(","))).join("\n") + "\n"; }
+async function pjSave(msg) {
+  const a = await gh("PUT", {message: msg, content: b64enc(pjCSV()), branch: cfg().branch, sha: PJ_SHA}, "du-an.csv"); PJ_SHA = a.content.sha;
+  const body = {message: msg + " (bổ sung)", content: b64enc(JSON.stringify(PJB, null, 1) + "\n"), branch: cfg().branch}; if (PJB_SHA) body.sha = PJB_SHA;
+  const b = await gh("PUT", body, "data/du-an-bo-sung.json"); PJB_SHA = b.content.sha;
+}
+$("#pjF").addEventListener("submit", async e => {
+  e.preventDefault(); const f = $("#pjF").elements, isNew = pjSel == null;
+  const base = isNew ? {quy: (PJ[0] || {}).quy || "", nhom: f.nhom.value, ten: f.ten.value.trim(), huyen_en: f.huyen_en.value, huyen: (PJ_HUYEN[f.huyen_en.value] || [""])[0], nguon: "Bổ sung thủ công"} : PJ[pjSel];
+  if (!base.ten) { say("Cần nhập tên dự án.", "err"); return; }
+  if (isNew && PJ.some(r => pjKey(r) === pjKey(base))) { say("Dự án này đã có trong danh sách – hãy chọn nó để sửa.", "err"); return; }
+  const item = {...(PJB.du_an[pjKey(base)] || {})}; if (isNew) item.moi = 1;
+  PJ_EDIT.forEach(k => { const v = String(f[k].value || "").trim(); if (v !== String(base[k] || "")) item[k] = v; });
+  const hasLL = f.lat.value && f.lng.value;
+  if (hasLL && (pjVt || isNew)) item.vi_tri = pjVt || "Sửa tay";
+  if (Object.keys(item).filter(k => k !== "moi").length === 0 && !isNew) { say("Chưa có thay đổi nào.", "err"); return; }
+  const row = isNew ? base : PJ[pjSel]; Object.assign(row, Object.fromEntries(Object.entries(item).filter(([k]) => PJ_COLS.includes(k))));
+  PJB.du_an[pjKey(row)] = item;
+  /* thông tin chung (địa chỉ, toạ độ, CĐT, link) áp cho các nhóm khác của cùng dự án */
+  PJ.filter(r => r !== row && r.ten === row.ten && r.huyen_en === row.huyen_en).forEach(r => {
+    const it = {...(PJB.du_an[pjKey(r)] || {})}; PJ_SHARED.forEach(k => { if (item[k] !== undefined) it[k] = r[k] = item[k]; });
+    if (item.vi_tri) it.vi_tri = r.vi_tri = item.vi_tri; if (Object.keys(it).length) PJB.du_an[pjKey(r)] = it; });
+  if (isNew) { if (!row.lat) { const h = PJ_HUYEN[row.huyen_en]; row.lat = h[1].toFixed(5); row.lng = h[2].toFixed(5); row.vi_tri = "Theo huyện"; } PJ.push(row); pjSel = PJ.length - 1; }
+  say("Đang lưu dự án…");
+  try { await pjSave(`Cập nhật dự án: ${row.ten}`); say(`Đã lưu “${row.ten}”. Bản đồ cập nhật sau khoảng 1 phút (Ctrl + F5).`, "ok");
+    $("#pjState").textContent = `${PJ.length} dòng · ${Object.keys(PJB.du_an).length} mục đã bổ sung`; renderProjAdmin(); }
+  catch (err) { say("Chưa lưu được: " + explain(err), "err"); if (err.status === 409) { PJ = []; loadProjAdmin(true); } }
+});
+$("#pjDel").addEventListener("click", async () => {
+  if (pjSel == null) return; const r = PJ[pjSel], k = pjKey(r);
+  if (!PJB.du_an[k]) { say("Dự án này chưa có phần sửa tay.", "err"); return; }
+  const moi = PJB.du_an[k].moi; delete PJB.du_an[k]; if (moi) { PJ.splice(pjSel, 1); pjSel = null; $("#pjF").hidden = true; }
+  say("Đang lưu…");
+  try { await pjSave(`Bỏ phần sửa tay: ${r.ten}`); say(moi ? "Đã xoá dự án thêm tay." : "Đã bỏ phần sửa tay – dữ liệu gốc sẽ được khôi phục ở lần chạy workflow kế tiếp.", "ok"); renderProjAdmin(); }
+  catch (err) { say("Chưa lưu được: " + explain(err), "err"); }
+});
+
 renderThemeForm();
 $("#btnThemeOnly").addEventListener("click", () => { $("#themeCard").hidden = false; $("#themeCard").scrollIntoView(); });
 

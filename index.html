@@ -119,6 +119,14 @@ footer{padding:16px max(3vw,14px);font-size:13px;color:var(--mute);border-top:1p
 #pdfDlg .bar a{font-size:13px;white-space:nowrap}
 #pdfDlg .bar button{border:1px solid var(--line);background:none;border-radius:8px;height:32px;min-width:36px;cursor:pointer}
 /* ---- Dự án thấp tầng / low-rise projects ---- */
+.pj-find{background:var(--card);border:1px solid var(--line);border-radius:10px;box-shadow:0 2px 8px #0002;font:14px/1.35 inherit;width:44px;transition:width .15s}
+.pj-find.open{width:min(300px,70vw)}
+.pj-find button{all:unset;cursor:pointer;display:flex;align-items:center;gap:6px;height:36px;padding:0 11px;font-weight:600;white-space:nowrap}
+.pj-find.open button span{display:inline}.pj-find button span{display:none}
+.pj-find input{display:none;width:calc(100% - 16px);margin:0 8px 8px;height:34px;padding:0 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);box-sizing:border-box}
+.pj-find.open input{display:block}
+.pj-find ul{list-style:none;margin:0;padding:0 0 6px;max-height:300px;overflow:auto}
+.pj-find li{padding:6px 12px;cursor:pointer}.pj-find li:hover,.pj-find li.on{background:var(--bg2)}.pj-find li small{display:block;color:var(--mute)}
 .pj-ic i{display:block;border-radius:2px;box-sizing:border-box;box-shadow:0 0 0 1px #0003}
 .pj-sw{display:inline-block;width:12px;height:12px;border-radius:2px;margin:0 6px 0 2px;vertical-align:-1px;box-sizing:border-box}
 .legend i.sq{border-radius:2px}
@@ -338,6 +346,7 @@ const T = {
   pjLoc: "Vị trí gần đúng theo tên thôn/xã/phường của dự án (OpenStreetMap). Giá tính theo diện tích đất.",
   pjManual: "Vị trí đã được chỉnh tay. Giá tính theo diện tích đất.",
   pjWeb: "Vị trí theo địa chỉ dự án tìm trên mạng (tên dự án + chủ đầu tư). Giá tính theo diện tích đất.", pjAddr: "Địa chỉ",
+  pjNote: "Ghi chú", pjLink: "Website / bài viết về dự án", pjFind: "Tìm dự án", pjFindPh: "Gõ tên dự án, chủ đầu tư…", pjFindNone: "Không thấy dự án phù hợp",
   pjVsTC: "So với liền kề thứ cấp ({h})", pjVsSC: "So với liền kề sơ cấp ({h})", pjWin: "giá trúng", pjStart: "giá khởi điểm", pjN: "dự án",
   pjLegend: "Dự án thấp tầng (màu theo giá liền kề)",
   cPjRel: "Độ tin cậy", relHi: "Cao", relMid: "Trung bình", relLo: "Thấp", pjMaxOnly: "* chỉ có giá trúng cao nhất", pjRange: "khoảng", pjWinRep: "giá trúng đại diện", pjNotRes: "Không so: phiên đất dự án",
@@ -389,6 +398,7 @@ const T = {
   pjLoc: "Approximate position from the project's village/commune name (OpenStreetMap). Prices per land area.",
   pjManual: "Position set manually. Prices per land area.",
   pjWeb: "Position from the project address found online (project name + developer). Prices per land area.", pjAddr: "Address",
+  pjNote: "Notes", pjLink: "Project website / article", pjFind: "Find project", pjFindPh: "Type a project or developer name…", pjFindNone: "No matching project",
   pjVsTC: "vs. secondary townhouses ({h})", pjVsSC: "vs. primary townhouses ({h})", pjWin: "winning bid", pjStart: "starting price", pjN: "projects",
   pjLegend: "Low-rise projects (colour = townhouse price)",
   cPjRel: "Reliability", relHi: "High", relMid: "Medium", relLo: "Low", pjMaxOnly: "* highest bid only", pjRange: "range", pjWinRep: "representative winning price", pjNotRes: "Not compared: project land",
@@ -885,21 +895,49 @@ function buildProjLayers() {
     const pr = projPrice(p), fut = p.nhom === "tuong_lai";
     const sz = fut ? Math.round(Math.max(10, Math.min(24, 8 + Math.sqrt(num(p.quy_mo_ha) || 1) * 1.3))) : 12;
     const st = pjStyle(p.nhom);
-    L.marker([p.lat, p.lng], {pane: "proj", icon: L.divIcon({className: "pj-ic", iconSize: [sz, sz], html: `<i style="width:${sz}px;height:${sz}px;${st}"></i>`})})
+    p._mk = L.marker([p.lat, p.lng], {pane: "proj", icon: L.divIcon({className: "pj-ic", iconSize: [sz, sz], html: `<i style="width:${sz}px;height:${sz}px;${st}"></i>`})})
       .bindPopup(() => projPopup(p), {maxWidth: 320}).bindTooltip(() => esc(p.ten) + (pr != null ? " · " + PU(pr) : ""))
       .addTo(projGroups[p.nhom]); });
   (was || CONFIG.PROJECTS_ON || []).forEach(k => projGroups[k] && projGroups[k].addTo(map));
+  initProjFind();
 }
 function projPopup(p) {
   const units = p.can_tong ? fmt(num(p.can_tong)) + ([["pjVL", p.can_vl], ["pjTH", p.can_th], ["pjSH", p.can_sh]].some(x => x[1]) ? " (" + [["pjVL", p.can_vl], ["pjTH", p.can_th], ["pjSH", p.can_sh]].filter(x => x[1]).map(x => `${t(x[0])} ${fmt(num(x[1]))}`).join(" · ") + ")" : "") : "";
   const rows = [[t("pjDev"), p.chu_dau_tu], [t("pjAddr"), p.dia_chi], [t("pjDist"), lang === "en" ? p.huyen_en : p.huyen], [t("pjUnits"), units],
     [t("pjAbs"), p.hap_thu ? Math.round(num(p.hap_thu) * 100) + "%" : ""],
     [t("pjVL"), p.vl != null ? PU(p.vl) : ""], [t("pjTH"), p.th != null ? PU(p.th) : ""], [t("pjSH"), p.sh != null ? PU(p.sh) : ""],
-    [t("pjLaunch"), p.mo_ban], [t("pjScale"), p.quy_mo_ha ? fmt(num(p.quy_mo_ha)) + " ha" : ""], [t("pjStatus"), p.tinh_trang], [t("pjQuarter"), p.quy]].filter(r => r[1]);
+    [t("pjLaunch"), p.mo_ban], [t("pjScale"), p.quy_mo_ha ? fmt(num(p.quy_mo_ha)) + " ha" : ""], [t("pjStatus"), p.tinh_trang], [t("pjNote"), p.ghi_chu], [t("pjQuarter"), p.quy]].filter(r => r[1]);
   const tag = t(p.nhom === "so_cap" ? "pjSC" : p.nhom === "thu_cap" ? "pjTC" : "pjTL");
   return `<div class="pop"><h3>${esc(p.ten)}</h3><span class="tag" style="margin:0 0 6px">${esc(tag)}</span>
    <table>${rows.map(r => `<tr><td>${r[0]}</td><td>${esc(r[1])}</td></tr>`).join("")}</table>
+   ${/^https?:\/\//.test(p.link || "") ? `<p style="margin:6px 0 0"><a href="${esc(p.link)}" target="_blank" rel="noopener">${esc(t("pjLink"))} ↗</a></p>` : ""}
    <p style="margin:8px 0 0;font-size:12px;color:var(--mute)">${esc(t(p.vi_tri === "Theo huyện" ? "pjApprox" : p.vi_tri === "Gần đúng theo địa danh" ? "pjLoc" : p.vi_tri === "Sửa tay" ? "pjManual" : p.vi_tri === "Theo địa chỉ" ? "pjWeb" : "pjOsm"))}${p.nguon ? "<br>" + esc(p.nguon) : ""}</p></div>`;
+}
+
+/* ô tìm dự án theo tên (góc trên trái bản đồ) */
+function initProjFind() {
+  if (!map || map._pjFind || !PROJ.length) return; map._pjFind = true;
+  const ctl = L.control({position: "topleft"});
+  ctl.onAdd = () => { const d = L.DomUtil.create("div", "pj-find leaflet-bar");
+    d.innerHTML = `<button type="button" aria-label="${esc(t("pjFind"))}" title="${esc(t("pjFind"))}">🔍<span>${esc(t("pjFind"))}</span></button><input type="search" placeholder="${esc(t("pjFindPh"))}"><ul></ul>`;
+    L.DomEvent.disableClickPropagation(d); L.DomEvent.disableScrollPropagation(d);
+    const inp = d.querySelector("input"), ul = d.querySelector("ul"); let hits = [], cur = 0;
+    const go = p => { const g = projGroups[p.nhom]; if (g && !map.hasLayer(g)) map.addLayer(g);
+      map.setView([p.lat, p.lng], Math.max(map.getZoom(), 15)); setTimeout(() => p._mk && p._mk.openPopup(), 300); };
+    const draw = () => { const q = fold(inp.value).trim(); if (!q) { ul.innerHTML = ""; hits = []; return; }
+      const seen = new Set(); hits = PROJ.filter(p => p._mk && fold(p.ten + " " + (p.chu_dau_tu || "") + " " + (p.dia_chi || "")).includes(q))
+        .sort((a, b) => (fold(a.ten).startsWith(q) ? 0 : 1) - (fold(b.ten).startsWith(q) ? 0 : 1) || ({so_cap: 0, thu_cap: 1, tuong_lai: 2}[a.nhom] - {so_cap: 0, thu_cap: 1, tuong_lai: 2}[b.nhom]))
+        .filter(p => { const k = p.ten + "|" + p.huyen_en + "|" + p.nhom; if (seen.has(k)) return false; seen.add(k); return true; }).slice(0, 12); cur = 0;
+      ul.innerHTML = hits.length ? hits.map((p, i) => `<li data-i="${i}" class="${i === cur ? "on" : ""}"><b>${esc(p.ten)}</b><small>${esc(t(p.nhom === "so_cap" ? "pjSC" : p.nhom === "thu_cap" ? "pjTC" : "pjTL"))} · ${esc(lang === "en" ? p.huyen_en : p.huyen)}${p.dia_chi ? " · " + esc(p.dia_chi) : ""}</small></li>`).join("") : `<li><small>${esc(t("pjFindNone"))}</small></li>`; };
+    d.querySelector("button").addEventListener("click", () => { d.classList.toggle("open"); if (d.classList.contains("open")) inp.focus(); });
+    inp.addEventListener("input", draw);
+    inp.addEventListener("keydown", e => { if (!hits.length) return;
+      if (e.key === "ArrowDown" || e.key === "ArrowUp") { e.preventDefault(); cur = (cur + (e.key === "ArrowDown" ? 1 : hits.length - 1)) % hits.length; ul.querySelectorAll("li").forEach((li, i) => li.classList.toggle("on", i === cur)); }
+      if (e.key === "Enter") { e.preventDefault(); go(hits[cur]); }
+      if (e.key === "Escape") { d.classList.remove("open"); } });
+    ul.addEventListener("click", e => { const li = e.target.closest("[data-i]"); if (li) go(hits[+li.dataset.i]); });
+    return d; };
+  ctl.addTo(map);
 }
 /* quận/huyện cũ của một phiên → dòng tổng hợp dự án */
 function projDistOf(d) {
