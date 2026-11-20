@@ -1146,7 +1146,11 @@ function applyLang() {
       if (!extraGroups[k]) return;
       const icon = k === "metro" ? metroSw : k === "san_bay" ? `<span style="display:inline-block;width:20px;margin:0 6px 0 2px;text-align:center">✈</span>` : sw(INFRA_STYLE[k].color, k.startsWith("cau") ? 6 : k === "duong_tinh" ? 3 : 4, k === "cau_xay");
       ex[icon + esc(t(lk))] = extraGroups[k]; });
-    [["so_cap", "lyPjSC", `background:${PJ_COLOR.so_cap};border:1.5px solid #fff`], ["thu_cap", "lyPjTC", `background:${PJ_COLOR.thu_cap}40;border:2px solid ${PJ_COLOR.thu_cap}`], ["tuong_lai", "lyPjTL", `background:${PJ_COLOR.tuong_lai}66;border:1.5px dashed #475569`]]
+    /* ô mẫu khớp với cách tô trên bản đồ: "theo giá" → dải màu thang giá; "theo loại" → màu đã chọn trong admin */
+    const pjGrad = `linear-gradient(135deg,${BINS.map(b => b[1]).join(",")})`, byType = PJ_COLOR.mode === "loai";
+    [["so_cap", "lyPjSC", byType ? `background:${PJ_COLOR.so_cap};border:1.5px solid #fff;box-shadow:0 0 0 1px #0003` : `background:${pjGrad};border:1.5px solid #fff;box-shadow:0 0 0 1px #0003`],
+     ["thu_cap", "lyPjTC", byType ? `background:${PJ_COLOR.thu_cap}40;border:2px solid ${PJ_COLOR.thu_cap}` : `background:#fff;border:2.5px solid ${BINS[3][1]};outline:1px solid ${BINS[1][1]};outline-offset:-5px`],
+     ["tuong_lai", "lyPjTL", `background:${PJ_COLOR.tuong_lai}66;border:1.5px dashed #475569`]]
       .forEach(([k, lk, st]) => { if (projGroups[k]) ex[`<i class="pj-sw" style="${st}"></i>` + esc(t(lk))] = projGroups[k]; });
     refreshRingLabels();
     layerCtl = L.control.layers(named, {...ex, ...ov}, {position: "topright"}).addTo(map);
@@ -1158,7 +1162,7 @@ function applyLang() {
       + `<br><i style="background:transparent;border:2px dashed ${STATUS_COLOR["Sắp đấu giá"]}"></i>${tv("status", "Sắp đấu giá")}<br><i style="background:transparent;border:2px dashed ${STATUS_COLOR["Chờ kết quả"]}"></i>${tv("status", "Chờ kết quả")}<br><i style="background:transparent;border:2px dashed ${STATUS_COLOR["Đấu giá lại"]}"></i>${tv("status", "Đấu giá lại")}`
       + (!Object.keys(projGroups).length ? "" : PJ_COLOR.mode === "loai"
         ? `<br><i class="sq" style="background:${PJ_COLOR.so_cap};border:1.5px solid #fff;box-shadow:0 0 0 1px #0003"></i>${t("lyPjSC")}<br><i class="sq" style="background:${PJ_COLOR.thu_cap}40;border:2px solid ${PJ_COLOR.thu_cap}"></i>${t("lyPjTC")}`
-        : `<br><i class="sq" style="background:${BINS[2][1]};border:1.5px solid #fff;box-shadow:0 0 0 1px #0003"></i>${t("pjLegend")}`)
+        : `<br><i class="sq" style="background:linear-gradient(135deg,${BINS.map(b => b[1]).join(",")});border:1.5px solid #fff;box-shadow:0 0 0 1px #0003"></i>${t("pjLegend")}`)
       + (Object.keys(extraGroups).some(k => !["bound", "tinh", "huyen"].includes(k)) ? `<div style="margin-top:6px;padding-top:4px;border-top:1px solid var(--line)"><b>${t("lgInfra")}</b><br>`
         + `<span class="lg-line"></span>${t("lgBuilt")}<br><span class="lg-line" style="border-top-style:dashed"></span>${t("lgBuild")}<br><span class="lg-line" style="border-top-style:dotted"></span>${t("lgPlan")}</div>` : ""); return d; };
     legendCtl.addTo(map);
