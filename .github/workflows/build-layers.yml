@@ -19,12 +19,6 @@ jobs:
           python-version: "3.12"
       - name: Tạo file GeoJSON từ OpenStreetMap
         run: python scripts/build_layers.py
-      - name: Nối vành đai (tải thêm đường OSM gắn vành đai, khung rộng cho VĐ5)
-        run: python scripts/noi_vanh_dai.py
-      - name: Vẽ lại vành đai thành một nét bám đường, khép kín VĐ2–5, để hở VĐ1–2.5–3.5
-        run: python scripts/khep_vanh_dai.py
-      - name: Khớp các đoạn hở còn lại vào đường thật bằng OSRM
-        run: python scripts/khop_osrm.py
       - name: Lưu lên repo
         run: |
           git config user.name "github-actions[bot]"
