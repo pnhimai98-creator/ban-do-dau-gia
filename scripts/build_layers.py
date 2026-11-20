@@ -5,7 +5,7 @@ Tạo 2 lớp bản đồ từ OpenStreetMap (qua Overpass API) cho trang bản 
   layers/ranh-gioi-tinh.geojson – ranh giới tỉnh/thành mới
   layers/ranh-gioi-huyen-cu.geojson – ranh giới huyện/quận cũ (nếu OpenStreetMap còn lưu)
   layers/duong-bo.geojson      – quốc lộ (QL) và đường tỉnh (ĐT)
-  layers/ha-tang.geojson       – vành đai Hà Nội & các đô thị lân cận; đường cao tốc; đường sắt đô thị; cầu qua sông Hồng; sân bay
+  layers/ha-tang.geojson       – đường cao tốc; đường sắt đô thị; cầu qua sông Hồng; sân bay
 
 Chạy tự động bằng GitHub Actions (.github/workflows/build-layers.yml) hoặc trên máy: python scripts/build_layers.py
 Chỉ dùng thư viện có sẵn của Python, không cần cài thêm.
@@ -370,10 +370,7 @@ out tags geom;"""
             gkey = label
         elif tg.get("bridge") and name.startswith("Cầu"):
             kind, gkey, extra = "cau", name, {"name": name}
-        elif ring and ring_region(ring, el["geometry"]) in ("Hà Nội", "Vùng Thủ đô"):   # bỏ vành đai riêng của tỉnh/đô thị khác
-            rg = ring_region(ring, el["geometry"])
-            kind, gkey, extra = "vanh_dai", f"{rg}|{ring}", {"name": f"Vành đai {ring}" + ("" if rg in ("Hà Nội", "Vùng Thủ đô") else f" ({rg})"), "ring": ring, "region": rg}
-        else:
+        else:   # ĐÃ BỎ lớp vành đai – không tạo đối tượng "vanh_dai" nữa
             kind = None
         # đường cao tốc (có thể trùng một phần với vành đai 3, 4 → vẽ ở cả hai lớp)
         if hw == "motorway" or tg.get("construction") == "motorway" or tg.get("proposed") == "motorway":
@@ -388,9 +385,6 @@ out tags geom;"""
             continue
         part = simplify([pt(p) for p in el["geometry"]], 0.00004)
         todo = [(kind, gkey, extra)]
-        if kind == "cau" and ring and ring_region(ring, el["geometry"]) in ("Hà Nội", "Vùng Thủ đô"):  # cầu nằm trên vành đai → vẽ cả vào vành đai để đường không bị đứt
-            rg = ring_region(ring, el["geometry"])
-            todo.append(("vanh_dai", f"{rg}|{ring}", {"name": f"Vành đai {ring}", "ring": ring, "region": rg}))
         for kd, gk, ex in todo:
             v = lines.setdefault((kd, gk, status), {"props": {"kind": kd, "status": status, **{k: x for k, x in ex.items() if x}}, "parts": []})
             v["parts"].append(part)
