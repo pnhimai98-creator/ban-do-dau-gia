@@ -139,6 +139,15 @@ footer{padding:16px max(3vw,14px);font-size:13px;color:var(--mute);border-top:1p
 .rk-pj .rel{display:inline-block;padding:1px 7px;border-radius:9px;font-size:11.5px;border:1px solid var(--line)}.rk-pj .rel.hi{background:#dcfce7;color:#166534;border-color:#bbf7d0}.rk-pj .rel.mid{background:#fef3c7;color:#92400e;border-color:#fde68a}.rk-pj .rel.lo{background:var(--bg2)}
 .rk-pj tr[data-h]{cursor:pointer}.rk-pj tr[data-h]:hover td{background:var(--bg2)}
 #pdfDlg iframe{width:100%;height:calc(100% - 49px);border:0;background:#525659}
+#repDlg{width:min(820px,96vw);max-height:88vh;padding:0;border:0;border-radius:12px;background:var(--card);color:var(--ink);overflow:hidden;display:none;flex-direction:column}
+#repDlg[open]{display:flex}
+#repDlg::backdrop{background:#0008}
+#repDlg .bar{display:flex;align-items:center;gap:10px;padding:12px 16px;border-bottom:1px solid var(--line);height:auto;width:auto;margin:0;background:none;opacity:1;border-radius:0;vertical-align:baseline}
+#repDlg .bar b{flex:1;font-size:16px}
+#repDlg .bar button{border:1px solid var(--line);background:none;color:var(--ink);border-radius:8px;height:32px;min-width:36px;cursor:pointer}
+#repDlgBody{overflow:auto;padding:4px 16px 18px}
+#repDlgBody h3{font-size:14px;margin:16px 0 8px;display:flex;align-items:center;gap:8px}
+#repDlgBody h3 span{font-weight:400;font-size:12px;color:var(--mute)}
 </style>
 </head>
 <body>
@@ -190,6 +199,10 @@ footer{padding:16px max(3vw,14px);font-size:13px;color:var(--mute);border-top:1p
 <dialog id="pdfDlg" aria-labelledby="pdfTitle">
  <div class="bar"><b id="pdfTitle"></b><a id="pdfOpen" target="_blank" rel="noopener"></a><a id="pdfDown" download></a><button id="pdfClose" type="button" aria-label="Đóng / Close">✕</button></div>
  <iframe id="pdfFrame" title="PDF"></iframe>
+</dialog>
+<dialog id="repDlg" aria-labelledby="repDlgT">
+ <div class="bar"><b id="repDlgT"></b><button id="repDlgClose" type="button" aria-label="Đóng / Close">✕</button></div>
+ <div id="repDlgBody"></div>
 </dialog>
 <footer>
  <p data-t="footer"></p>
@@ -359,7 +372,7 @@ const T = {
   pjTitle: "So sánh giá đấu giá với giá dự án thấp tầng", pjSub: "Theo quận/huyện cũ (Hà Nội), chỉ tính phiên đất ở đã có kết quả (không tính đất dự án, phiên hủy/bỏ cọc). Giá trúng đại diện của mỗi phiên = trung bình giá trúng thấp nhất và cao nhất (chỉ có giá cao nhất thì dùng giá đó, đánh dấu *); giá của huyện = bình quân theo số thửa trúng, nên phiên nhiều thửa có trọng số lớn hơn. Giá dự án = giá liền kề trung vị theo diện tích đất, kỳ {q}. Độ tin cậy thấp: ít phiên, ít thửa hoặc ít dự án để so – chỉ nên tham khảo.",
   cPjDist: "Quận/huyện cũ", cPjN: "Phiên · thửa trúng", cPjWin: "Giá trúng đại diện", cPjTC: "Liền kề thứ cấp", cPjRTC: "Giá đấu giá / giá thứ cấp", cPjSC: "Liền kề sơ cấp", cPjRSC: "Giá đấu giá / giá sơ cấp",
   cPjUp: "Phiên sắp tới", cPjFut: "Dự án sắp triển khai", pjFutTxt: "{n} dự án · {c} căn", pjNone: "Chưa có dữ liệu dự án (du-an-huyen.csv).",
-  repBtn: "Báo cáo", repNewTab: "Mở tab mới ↗", repDown: "Tải về", repNew: "MỚI", repPeriod: "Kỳ",
+  repBtn: "Báo cáo", repNewTab: "Mở tab mới ↗", repDown: "Tải về", repNew: "MỚI", repPeriod: "Kỳ", repDlgT: "Báo cáo định kỳ theo quý", repQ: "Quý {q}/{y}", repCount: "{n} báo cáo", repOther: "Khác",
   reAuc: "Đấu lại", reAucT: "Cùng khu đất đã đưa ra đấu giá ở phiên trước (đấu lại các thửa còn lại hoặc đợt tiếp theo)", pRel: "Phiên liên quan", round: "lần", pNotice: "Thông báo đấu giá", pResult: "Tin kết quả", locTodo: "chưa xác định (cần bổ sung)", pSuperseded: "Phiên này đã được tổ chức lại – xem phiên sau", pAfterSrc: "Tin sau đấu giá (bỏ cọc / hủy / nộp tiền)", byThon: "theo thôn/khu (gần đúng)"
  },
  en: {
@@ -411,7 +424,7 @@ const T = {
   pjTitle: "Auction prices vs. low-rise project prices", pjSub: "By former district (Hanoi), residential-land sessions with results only (project land and cancelled/forfeited sessions excluded). Each session's representative price = midpoint of lowest and highest winning bid (highest only when that is all we have, marked *); the district price is weighted by plots won, so larger sessions count more. Project price = median townhouse price per land area, period {q}. Low reliability = few sessions, plots or comparable projects – treat as indicative only.",
   cPjDist: "Former district", cPjN: "Sessions · plots won", cPjWin: "Representative winning price", cPjTC: "Secondary townhouse", cPjRTC: "Auction price / secondary price", cPjSC: "Primary townhouse", cPjRSC: "Auction price / primary price",
   cPjUp: "Upcoming sessions", cPjFut: "Upcoming projects", pjFutTxt: "{n} projects · {c} units", pjNone: "No project data yet (du-an-huyen.csv).",
-  repBtn: "Reports", repNewTab: "Open in new tab ↗", repDown: "Download", repNew: "NEW", repPeriod: "Period",
+  repBtn: "Reports", repNewTab: "Open in new tab ↗", repDown: "Download", repNew: "NEW", repPeriod: "Period", repDlgT: "Periodic reports by quarter", repQ: "Q{q} {y}", repCount: "{n} report(s)", repOther: "Other",
   reAuc: "Re-auction", reAucT: "Same site was auctioned in an earlier session (remaining plots re-offered or a later batch)", pRel: "Related auctions", round: "round", pNotice: "Auction notice", pResult: "Result report", locTodo: "not yet located", pSuperseded: "Superseded by a later re-auction – see the next session", pAfterSrc: "Post-auction news (forfeit / cancel / payment)", byThon: "by village/site (approximate)"
  }
 };
@@ -484,11 +497,18 @@ function renderReports() {
   const size = n => !n ? "" : n > 1048576 ? (n / 1048576).toFixed(1) + " MB" : Math.round(n / 1024) + " KB";
   const btn = $("#repBtn"); btn.hidden = !REPORTS.length;
   btn.innerHTML = `📄 ${esc(t("repBtn"))}<span>${REPORTS.length}</span>`;
-  box.innerHTML = REPORTS.length ? `<div class="replist">${REPORTS.map((r, i) => `<a class="repcard${i === 0 ? " new" : ""}" href="${esc(r.file)}" target="_blank" rel="noopener" data-rep="${i}">
+  const card = (r, i) => `<a class="repcard${i === 0 ? " new" : ""}" href="${esc(r.file)}" target="_blank" rel="noopener" data-rep="${i}">
       <span class="ic">PDF</span><b>${esc(r.title)}</b>
       <span class="k">${esc(t("repPeriod"))} ${esc(per(r.date))}${r.size ? " · " + size(r.size) : ""}${i === 0 ? ` · <strong style="color:var(--acc)">${esc(t("repNew"))}</strong>` : ""}</span>
-      ${r.desc ? `<span class="k">${esc(r.desc)}</span>` : "<span></span>"}</a>`).join("")}</div>`
-    : `<p class="noda">${t("repNone")}</p>`;
+      ${r.desc ? `<span class="k">${esc(r.desc)}</span>` : "<span></span>"}</a>`;
+  box.innerHTML = REPORTS.length ? `<div class="replist">${REPORTS.map(card).join("")}</div>` : `<p class="noda">${t("repNone")}</p>`;
+  /* cửa sổ "Báo cáo": nhóm theo quý (lấy từ trường date YYYY-MM), quý mới nhất ở trên */
+  const qOf = d => { const [y, m] = String(d || "").split("-"); return y && +m ? `${y}-${Math.ceil(+m / 3)}` : ""; };
+  const groups = {}; REPORTS.forEach((r, i) => (groups[qOf(r.date)] = groups[qOf(r.date)] || []).push(i));
+  $("#repDlgT").textContent = t("repDlgT");
+  $("#repDlgBody").innerHTML = !REPORTS.length ? `<p class="noda">${t("repNone")}</p>` : Object.keys(groups).sort((a, b) => !a ? 1 : !b ? -1 : b.localeCompare(a)).map(k => {
+    const [y, q] = k.split("-"), ids = groups[k];
+    return `<h3>${esc(k ? t("repQ").replace("{q}", q).replace("{y}", y) : t("repOther"))}<span>${esc(t("repCount").replace("{n}", ids.length))}</span></h3><div class="replist">${ids.map(i => card(REPORTS[i], i)).join("")}</div>`; }).join("");
 }
 /* Đọc PDF ngay trên trang (máy tính); điện thoại mở tab mới vì trình duyệt di động thường không hiện PDF trong khung */
 function openReport(r) {
@@ -499,9 +519,15 @@ function openReport(r) {
   if (dlg.showModal) dlg.showModal(); else window.open(r.file, "_blank");
 }
 function initReports() {
-  $("#repList").addEventListener("click", e => { const a = e.target.closest("[data-rep]"); if (!a) return;
+  const pick = e => { const a = e.target.closest("[data-rep]"); if (!a) return;
     if (matchMedia("(max-width: 860px)").matches || !$("#pdfDlg").showModal) return;   // để link tự mở tab mới
-    e.preventDefault(); openReport(REPORTS[+a.dataset.rep]); });
+    e.preventDefault(); openReport(REPORTS[+a.dataset.rep]); };
+  $("#repList").addEventListener("click", pick);
+  $("#repDlgBody").addEventListener("click", pick);
+  /* nút "Báo cáo" trên đầu trang → mở cửa sổ danh sách báo cáo theo quý */
+  $("#repBtn").addEventListener("click", e => { if (!$("#repDlg").showModal) return; e.preventDefault(); $("#repDlg").showModal(); });
+  $("#repDlgClose").addEventListener("click", () => $("#repDlg").close());
+  $("#repDlg").addEventListener("click", e => { if (e.target === $("#repDlg")) $("#repDlg").close(); });
   $("#pdfClose").addEventListener("click", () => $("#pdfDlg").close());
   $("#pdfDlg").addEventListener("close", () => { $("#pdfFrame").src = "about:blank"; });
   $("#pdfDlg").addEventListener("click", e => { if (e.target === $("#pdfDlg")) $("#pdfDlg").close(); });
