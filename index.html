@@ -119,22 +119,23 @@ footer{padding:16px max(3vw,14px);font-size:13px;color:var(--mute);border-top:1p
 #pdfDlg .bar a{font-size:13px;white-space:nowrap}
 #pdfDlg .bar button{border:1px solid var(--line);background:none;border-radius:8px;height:32px;min-width:36px;cursor:pointer}
 /* ---- Dự án thấp tầng / low-rise projects ---- */
-.pj-find{position:relative;flex:0 1 280px;min-width:180px;background:var(--card);border:1px solid var(--line);border-radius:99px}
+.pj-wrap{font-size:12px;color:var(--mute);display:grid;gap:3px}
+.pj-find{position:relative;height:40px;border:1px solid var(--line);border-radius:8px;background:var(--bg2);color:var(--ink)}
 .pj-find:focus-within{border-color:var(--acc)}
-.pj-find .pj-bar{display:flex;align-items:center;height:32px;padding:0 4px 0 2px}
-.pj-find button{all:unset;cursor:pointer;display:flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:99px;flex:none}
-.pj-find button:hover{background:var(--bg2)}
+.pj-find .pj-bar{display:flex;align-items:center;height:100%;padding:0 4px}
+.pj-find button{all:unset;cursor:pointer;display:flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:6px;flex:none}
+.pj-find button:hover{background:var(--line)}
 .pj-find button svg{width:17px;height:17px;stroke:var(--ink)}
-.pj-find input{flex:1;min-width:0;height:30px;padding:0 6px;border:0;outline:0;background:transparent;color:var(--ink);font:inherit;font-size:13px}
-.pj-find ul{position:absolute;top:calc(100% + 6px);left:0;width:max(100%,min(380px,90vw));z-index:2000;list-style:none;margin:0;padding:0;max-height:340px;overflow:auto;background:var(--card);border-radius:10px;box-shadow:0 6px 20px #0003}
+.pj-find .pj-bar input{flex:1;min-width:0;height:38px;padding:0 6px;border:0;outline:0;background:transparent;color:var(--ink);font-size:16px}
+.pj-find ul{position:absolute;top:calc(100% + 4px);left:0;right:0;z-index:2000;list-style:none;margin:0;padding:0;max-height:340px;overflow:auto;background:var(--card);border-radius:10px;box-shadow:0 6px 20px #0003}
 .pj-find ul:not(:empty){border:1px solid var(--line);padding:4px 0}
-.pj-find li{padding:6px 12px;cursor:pointer;font-size:13px}.pj-find li:hover,.pj-find li.on{background:var(--bg2)}.pj-find li small{display:block;color:var(--mute)}
+.pj-find li{padding:6px 12px;cursor:pointer;font-size:13px;color:var(--ink)}.pj-find li:hover,.pj-find li.on{background:var(--bg2)}.pj-find li small{display:block;color:var(--mute)}
 .pj-ic i{display:block;border-radius:2px;box-sizing:border-box;box-shadow:0 0 0 1px #0003}
 .pj-sw{display:inline-block;width:12px;height:12px;border-radius:2px;margin:0 6px 0 2px;vertical-align:-1px;box-sizing:border-box}
 .legend i.sq{border-radius:2px}
 .rk-pj td.r b{display:inline-block;min-width:44px;text-align:right}
 .rk-pj .lo{color:#15803d}.rk-pj .mid{color:#b45309}.rk-pj .hi{color:#b91c1c}
-.rk-pj tr.low td{color:var(--mute)}.rk-pj tr.low td b{opacity:.55}
+/* dòng độ tin cậy thấp không làm mờ nữa – đã có nhãn "Thấp" ở cột Độ tin cậy */
 .rk-pj .rel{display:inline-block;padding:1px 7px;border-radius:9px;font-size:11.5px;border:1px solid var(--line)}.rk-pj .rel.hi{background:#dcfce7;color:#166534;border-color:#bbf7d0}.rk-pj .rel.mid{background:#fef3c7;color:#92400e;border-color:#fde68a}.rk-pj .rel.lo{background:var(--bg2)}
 .rk-pj tr[data-h]{cursor:pointer}.rk-pj tr[data-h]:hover td{background:var(--bg2)}
 #pdfDlg iframe{width:100%;height:calc(100% - 49px);border:0;background:#525659}
@@ -144,8 +145,7 @@ footer{padding:16px max(3vw,14px);font-size:13px;color:var(--mute);border-top:1p
 <header>
  <div><div class="htop"><h1 data-t="title">Bản đồ đấu giá đất Hà Nội & vùng ven</h1>
   <div class="lang" role="group" aria-label="Ngôn ngữ / Language"><button data-lang="vi">VI</button><button data-lang="en">EN</button></div>
-  <a class="repbtn" id="repBtn" href="#reports" hidden></a>
-  <div class="pj-find" id="pjFind" hidden></div></div>
+  <a class="repbtn" id="repBtn" href="#reports" hidden></a></div>
   <p class="sub" id="updated">Đang tải dữ liệu… / Loading…</p></div>
  <div class="stats" id="stats"></div>
 </header>
@@ -159,6 +159,7 @@ footer{padding:16px max(3vw,14px);font-size:13px;color:var(--mute);border-top:1p
    <label><span data-t="from">Từ ngày</span><input type="date" id="fFrom"></label>
    <label><span data-t="to">Đến ngày</span><input type="date" id="fTo"></label>
    <label class="full"><span data-t="search">Tìm xã, khu, địa danh cũ</span><input type="search" id="fQ"></label>
+   <div class="full pj-wrap" id="pjWrap" hidden><span data-t="pjFind">Tìm dự án</span><div class="pj-find" id="pjFind"></div></div>
   </div>
   <div class="news" id="news"></div>
   <div class="list" id="list" aria-live="polite"></div>
@@ -275,8 +276,8 @@ const CONFIG = {
   PROJECTS_DISTRICT_URL: "du-an-huyen.csv",
   // Lớp dự án bật sẵn khi mở trang: "so_cap", "thu_cap", "tuong_lai"; [] = tắt hết
   PROJECTS_ON: [],
-  // Hiện ô chú thích (màu giá, trạng thái…) ở góc dưới trái bản đồ: true = hiện, false = ẩn
-  SHOW_LEGEND: false,
+  // Hiện ô chú thích giá đấu giá & trạng thái phiên ở góc dưới trái bản đồ: true = hiện, false = ẩn
+  SHOW_LEGEND: true,
   // Tự dịch máy "Khu" và "Ghi chú" sang tiếng Anh khi xem bản EN (dịch vụ miễn phí MyMemory). false = tắt
   // Ô nào đã có cột khu_en / ghi_chu_en thì dùng bản bạn tự viết, không dịch máy
   AUTO_TRANSLATE: true,
@@ -316,7 +317,7 @@ const T = {
   srcSheet: "Google Sheets", srcFile: "file data.csv", srcSeed: "dữ liệu mẫu trong trang",
   province: "Tỉnh/thành", landType: "Loại đất", from: "Từ ngày", to: "Đến ngày", all: "Tất cả",
   search: "Tìm xã, khu, địa danh cũ", searchPh: "VD: Đông Anh, Thanh Oai, thôn Văn Quán",
-  stDone: "phiên có kết quả", stWon: "thửa trúng", stMax: "giá trúng cao nhất (tr/m²)", stMed: "trung vị giá cao nhất mỗi phiên", stUp: "phiên sắp tới / chờ KQ",
+  stDone: "phiên có kết quả", stWon: "thửa trúng", stMax: "giá trúng cao nhất (tr/m²)", stMed: "trung vị giá mỗi phiên (tr/m²)", stUp: "phiên sắp tới / chờ KQ", stNext: "sắp đấu giá + đấu giá lại", stWait: "chờ kết quả",
   newsTitle: "Kết quả mới nhất", newsLine: (d, x, p) => `${d} — ${x}: trúng cao nhất ${p}`, newsLine2: (d, x, n) => `${d} — ${x}: đấu giá thành công${n ? " " + n + " thửa" : ""}, chưa công bố giá trúng`, newsGo: "Xem trên bản đồ", none: "Chưa có",
   empty: "Không có phiên nào khớp bộ lọc.", mapErr: "Không tải được thư viện bản đồ. Kiểm tra kết nối mạng.", mapLabel: "Bản đồ các phiên đấu giá", statusGroup: "Trạng thái",
   topWin: "trúng cao nhất", startP: "khởi điểm", plots: "thửa", unit: "tr/m²", bn: "tỷ", won: "trúng", highest: "cao nhất",
@@ -367,7 +368,7 @@ const T = {
   srcSheet: "Google Sheets", srcFile: "data.csv file", srcSeed: "built-in sample data",
   province: "Province/City", landType: "Land type", from: "From", to: "To", all: "All",
   search: "Search commune, site, former place name", searchPh: "e.g. Đông Anh, Thanh Oai, Văn Quán village",
-  stDone: "auctions with results", stWon: "plots sold", stMax: "highest winning bid ({u})", stMed: "median top bid per auction", stUp: "upcoming / awaiting results",
+  stDone: "auctions with results", stWon: "plots sold", stMax: "highest winning bid ({u})", stMed: "median price per auction ({u})", stUp: "upcoming / awaiting results", stNext: "upcoming + re-auctioned", stWait: "awaiting results",
   newsTitle: "Latest results", newsLine: (d, x, p) => `${d} — ${x}: top bid ${p}`, newsLine2: (d, x, n) => `${d} — ${x}: ${n ? n + " plots " : ""}sold, winning bids not yet published`, newsGo: "Show on map", none: "None yet",
   empty: "No auctions match the filters.", mapErr: "Could not load the map library. Please check your connection.", mapLabel: "Map of land auctions", statusGroup: "Status",
   topWin: "top bid", startP: "starting price", plots: "plots", unit: "M VND/m²", bn: "bn VND", won: "sold", highest: "highest",
@@ -893,7 +894,7 @@ function buildProjLayers() {
   const was = Object.keys(projGroups).length ? Object.keys(projGroups).filter(k => map.hasLayer(projGroups[k])) : null;   /* giữ lớp đang bật khi vẽ lại */
   Object.values(projGroups).forEach(g => map.removeLayer(g));
   if (!map._pjLegendHook) { map._pjLegendHook = true;   /* chú giải chỉ liệt kê lớp dự án đang bật */
-    map.on("overlayadd overlayremove", e => { if (Object.values(projGroups).includes(e.layer) && legendCtl && legendCtl._map) { legendCtl.remove(); legendCtl.addTo(map); } }); }
+    }
   if (!map.getPane("proj")) { map.createPane("proj"); map.getPane("proj").style.zIndex = 395; }   /* dưới chấm đấu giá */
   ["so_cap", "thu_cap", "tuong_lai"].forEach(k => projGroups[k] = L.layerGroup());
   PROJ.forEach(p => { if (p.lat == null || p.lng == null || !projGroups[p.nhom]) return;
@@ -919,12 +920,12 @@ function projPopup(p) {
    <p style="margin:8px 0 0;font-size:12px;color:var(--mute)">${esc(t(p.vi_tri === "Theo huyện" ? "pjApprox" : p.vi_tri === "Gần đúng theo địa danh" ? "pjLoc" : p.vi_tri === "Sửa tay" ? "pjManual" : p.vi_tri === "Theo địa chỉ" ? "pjWeb" : "pjOsm"))}${p.nguon ? "<br>" + esc(p.nguon) : ""}</p></div>`;
 }
 
-/* ô tìm dự án theo tên (trên đầu trang, cạnh nút Báo cáo) */
+/* ô tìm dự án theo tên (khung lọc bên phải, dưới ô tìm xã) */
 function initProjFind() {
   const d = document.getElementById("pjFind");
   if (!map || !d || !PROJ.length) return;
   if (map._pjFind) { const i = d.querySelector("input"); if (i) { i.placeholder = t("pjFindPh"); i.setAttribute("aria-label", t("pjFind")); } return; }   /* đổi ngôn ngữ */
-  map._pjFind = true; d.hidden = false;
+  map._pjFind = true; document.getElementById("pjWrap").hidden = false;
   {
     d.innerHTML = `<div class="pj-bar"><button type="button" aria-label="${esc(t("pjFind"))}" title="${esc(t("pjFind"))}"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5 21 21"/></svg></button><input type="search" placeholder="${esc(t("pjFindPh"))}" aria-label="${esc(t("pjFind"))}"></div><ul></ul>`;
     const inp = d.querySelector("input"), ul = d.querySelector("ul"); let hits = [], cur = 0;
@@ -1039,9 +1040,10 @@ function render() {
   const done = list.filter(d => d.trang_thai === "Đã đấu giá" || d.trang_thai === "Đã nộp tiền");
   const maxs = done.map(d => d.max).filter(v => v != null).sort((a, b) => a - b);
   const med = maxs.length ? (maxs.length % 2 ? maxs[(maxs.length - 1) / 2] : (maxs[maxs.length / 2 - 1] + maxs[maxs.length / 2]) / 2) : null;
-  $("#stats").innerHTML = `<div><b>${done.length}</b><span>${t("stDone")}</span></div><div><b>${fmt(done.reduce((s, d) => s + (d.won || 0), 0))}</b><span>${t("stWon")}</span></div>
-   <div><b>${maxs.length ? P(maxs[maxs.length - 1]) : "—"}</b><span>${U("stMax")}</span></div><div><b>${P(med)}</b><span>${t("stMed")}</span></div>
-   <div><b>${list.filter(d => UPCOMING.includes(d.trang_thai)).length}</b><span>${t("stUp")}</span></div>`;
+  $("#stats").innerHTML = `<div><b>${done.length}</b><span>${t("stDone")}</span></div>
+   <div><b>${maxs.length ? P(maxs[maxs.length - 1]) : "—"}</b><span>${U("stMax")}</span></div><div><b>${P(med)}</b><span>${U("stMed")}</span></div>
+   <div><b>${list.filter(d => d.trang_thai === "Sắp đấu giá" || d.trang_thai === "Đấu giá lại").length}</b><span>${t("stNext")}</span></div>
+   <div><b>${list.filter(d => d.trang_thai === "Chờ kết quả").length}</b><span>${t("stWait")}</span></div>`;
   if (map) {
     layer.clearLayers(); markers = {};
     const pts = [];
@@ -1239,10 +1241,7 @@ function applyLang() {
       return i === 0 ? "< " + hi : hi ? lo + " – " + hi : "≥ " + lo; };
     legendCtl.onAdd = () => { const d = L.DomUtil.create("div", "legend"); d.innerHTML = `<b>${U("legendTitle")}</b><br>` + BINS.map((b, i) => `<i style="background:${b[1]}"></i>${binLabel(b, i)}`).join("<br>")
       + `<br><i style="background:transparent;border:2px dashed ${STATUS_COLOR["Sắp đấu giá"]}"></i>${tv("status", "Sắp đấu giá")}<br><i style="background:transparent;border:2px dashed ${STATUS_COLOR["Chờ kết quả"]}"></i>${tv("status", "Chờ kết quả")}<br><i style="background:transparent;border:2px dashed ${STATUS_COLOR["Đấu giá lại"]}"></i>${tv("status", "Đấu giá lại")}`
-      + (!Object.keys(projGroups).length ? "" : [["so_cap", "lyPjSC"], ["thu_cap", "lyPjTC"], ["tuong_lai", "lyPjTL"]]
-          .filter(([k]) => map.hasLayer(projGroups[k])).map(([k, lk]) => `<br><i class="sq" style="${pjStyle(k)};box-sizing:border-box"></i>${t(lk)}`).join(""))
-      + (Object.keys(extraGroups).some(k => !["bound", "tinh", "huyen"].includes(k)) ? `<div style="margin-top:6px;padding-top:4px;border-top:1px solid var(--line)"><b>${t("lgInfra")}</b><br>`
-        + `<span class="lg-line"></span>${t("lgBuilt")}<br><span class="lg-line" style="border-top-style:dashed"></span>${t("lgBuild")}<br><span class="lg-line" style="border-top-style:dotted"></span>${t("lgPlan")}</div>` : ""); return d; };
+      + `<br><i style="background:${STATUS_COLOR["Hủy/bỏ cọc"]};border:1px solid #0006"></i>${tv("status", "Hủy/bỏ cọc")}`; return d; };
     if (CONFIG.SHOW_LEGEND) legendCtl.addTo(map);
   }
   render();
