@@ -124,6 +124,8 @@ footer{padding:16px max(3vw,14px);font-size:13px;color:var(--mute);border-top:1p
 .legend i.sq{border-radius:2px}
 .rk-pj td.r b{display:inline-block;min-width:44px;text-align:right}
 .rk-pj .lo{color:#15803d}.rk-pj .mid{color:#b45309}.rk-pj .hi{color:#b91c1c}
+.rk-pj tr.low td{color:var(--mute)}.rk-pj tr.low td b{opacity:.55}
+.rk-pj .rel{display:inline-block;padding:1px 7px;border-radius:9px;font-size:11.5px;border:1px solid var(--line)}.rk-pj .rel.hi{background:#dcfce7;color:#166534;border-color:#bbf7d0}.rk-pj .rel.mid{background:#fef3c7;color:#92400e;border-color:#fde68a}.rk-pj .rel.lo{background:var(--bg2)}
 .rk-pj tr[data-h]{cursor:pointer}.rk-pj tr[data-h]:hover td{background:var(--bg2)}
 #pdfDlg iframe{width:100%;height:calc(100% - 49px);border:0;background:#525659}
 </style>
@@ -331,11 +333,16 @@ const T = {
   lyPjSC: "Dự án thấp tầng – sơ cấp", lyPjTC: "Dự án thấp tầng – thứ cấp", lyPjTL: "Dự án thấp tầng – sắp triển khai",
   pjSC: "Sơ cấp", pjTC: "Thứ cấp", pjTL: "Sắp triển khai", pjDev: "Chủ đầu tư", pjDist: "Quận/huyện cũ", pjUnits: "Số căn", pjAbs: "Tỷ lệ hấp thụ",
   pjVL: "Biệt thự", pjTH: "Liền kề", pjSH: "Shophouse", pjLaunch: "Dự kiến mở bán", pjScale: "Quy mô", pjStatus: "Tình trạng", pjQuarter: "Kỳ báo cáo",
-  pjApprox: "Vị trí chỉ gần đúng theo quận/huyện cũ, không phải vị trí thật của dự án. Giá tính theo diện tích đất.",
+  pjApprox: "Chưa tìm được địa chỉ dự án – đang đặt gần đúng quanh trung tâm quận/huyện cũ. Giá tính theo diện tích đất.",
+  pjOsm: "Vị trí theo OpenStreetMap (khớp theo tên dự án, có thể lệch nếu trùng tên). Giá tính theo diện tích đất.",
+  pjLoc: "Vị trí gần đúng theo tên thôn/xã/phường của dự án (OpenStreetMap). Giá tính theo diện tích đất.",
+  pjManual: "Vị trí đã được chỉnh tay. Giá tính theo diện tích đất.",
+  pjWeb: "Vị trí theo địa chỉ dự án tìm trên mạng (tên dự án + chủ đầu tư). Giá tính theo diện tích đất.", pjAddr: "Địa chỉ",
   pjVsTC: "So với liền kề thứ cấp ({h})", pjVsSC: "So với liền kề sơ cấp ({h})", pjWin: "giá trúng", pjStart: "giá khởi điểm", pjN: "dự án",
   pjLegend: "Dự án thấp tầng (màu theo giá liền kề)",
-  pjTitle: "So sánh giá đấu giá với giá dự án thấp tầng", pjSub: "Theo quận/huyện cũ (Hà Nội). Giá dự án là giá liền kề trung vị theo diện tích đất, kỳ {q}. Tỷ lệ thấp: đất đấu giá đang rẻ so với dự án quanh đó. Từ 100% trở lên: giá đấu đã ngang hoặc vượt giá dự án có sẵn hạ tầng. Bấm một dòng để lọc các phiên của huyện đó.",
-  cPjDist: "Quận/huyện cũ", cPjN: "Phiên có KQ", cPjWin: "Giá trúng TV", cPjTC: "Liền kề thứ cấp", cPjRTC: "Đấu giá / thứ cấp", cPjSC: "Liền kề sơ cấp", cPjRSC: "Đấu giá / sơ cấp",
+  cPjRel: "Độ tin cậy", relHi: "Cao", relMid: "Trung bình", relLo: "Thấp", pjMaxOnly: "* chỉ có giá trúng cao nhất", pjRange: "khoảng", pjWinRep: "giá trúng đại diện", pjNotRes: "Không so: phiên đất dự án",
+  pjTitle: "So sánh giá đấu giá với giá dự án thấp tầng", pjSub: "Theo quận/huyện cũ (Hà Nội), chỉ tính phiên đất ở đã có kết quả (không tính đất dự án, phiên hủy/bỏ cọc). Giá trúng đại diện của mỗi phiên = trung bình giá trúng thấp nhất và cao nhất (chỉ có giá cao nhất thì dùng giá đó, đánh dấu *); giá của huyện = bình quân theo số thửa trúng, nên phiên nhiều thửa có trọng số lớn hơn. Giá dự án = giá liền kề trung vị theo diện tích đất, kỳ {q}. Độ tin cậy thấp: ít phiên, ít thửa hoặc ít dự án để so – chỉ nên tham khảo.",
+  cPjDist: "Quận/huyện cũ", cPjN: "Phiên · thửa trúng", cPjWin: "Giá trúng đại diện", cPjTC: "Liền kề thứ cấp", cPjRTC: "Giá đấu giá / giá thứ cấp", cPjSC: "Liền kề sơ cấp", cPjRSC: "Giá đấu giá / giá sơ cấp",
   cPjUp: "Phiên sắp tới", cPjFut: "Dự án sắp triển khai", pjFutTxt: "{n} dự án · {c} căn", pjNone: "Chưa có dữ liệu dự án (du-an-huyen.csv).",
   repBtn: "Báo cáo", repNewTab: "Mở tab mới ↗", repDown: "Tải về", repNew: "MỚI", repPeriod: "Kỳ",
   reAuc: "Đấu lại", reAucT: "Cùng khu đất đã đưa ra đấu giá ở phiên trước (đấu lại các thửa còn lại hoặc đợt tiếp theo)", pRel: "Phiên liên quan", round: "lần", pNotice: "Thông báo đấu giá", pResult: "Tin kết quả", locTodo: "chưa xác định (cần bổ sung)", pSuperseded: "Phiên này đã được tổ chức lại – xem phiên sau", pAfterSrc: "Tin sau đấu giá (bỏ cọc / hủy / nộp tiền)", byThon: "theo thôn/khu (gần đúng)"
@@ -377,11 +384,16 @@ const T = {
   lyPjSC: "Low-rise projects – primary", lyPjTC: "Low-rise projects – secondary", lyPjTL: "Low-rise projects – upcoming",
   pjSC: "Primary", pjTC: "Secondary", pjTL: "Upcoming", pjDev: "Developer", pjDist: "Former district", pjUnits: "Dwellings", pjAbs: "Absorption",
   pjVL: "Villa", pjTH: "Townhouse", pjSH: "Shophouse", pjLaunch: "Expected launch", pjScale: "Scale", pjStatus: "Status", pjQuarter: "Report period",
-  pjApprox: "Position is approximate (former district), not the actual project site. Prices per land area.",
+  pjApprox: "Project address not found yet – placed approximately around the former district centre. Prices per land area.",
+  pjOsm: "Position from OpenStreetMap (matched by project name; may be off if names clash). Prices per land area.",
+  pjLoc: "Approximate position from the project's village/commune name (OpenStreetMap). Prices per land area.",
+  pjManual: "Position set manually. Prices per land area.",
+  pjWeb: "Position from the project address found online (project name + developer). Prices per land area.", pjAddr: "Address",
   pjVsTC: "vs. secondary townhouses ({h})", pjVsSC: "vs. primary townhouses ({h})", pjWin: "winning bid", pjStart: "starting price", pjN: "projects",
   pjLegend: "Low-rise projects (colour = townhouse price)",
-  pjTitle: "Auction prices vs. low-rise project prices", pjSub: "By former district (Hanoi). Project price = median townhouse price per land area, period {q}. A low ratio means auction land is cheap relative to nearby projects; 100% or more means bids already match or exceed serviced project land. Click a row to filter that district's sessions.",
-  cPjDist: "Former district", cPjN: "Sessions with results", cPjWin: "Median winning bid", cPjTC: "Secondary townhouse", cPjRTC: "Auction / secondary", cPjSC: "Primary townhouse", cPjRSC: "Auction / primary",
+  cPjRel: "Reliability", relHi: "High", relMid: "Medium", relLo: "Low", pjMaxOnly: "* highest bid only", pjRange: "range", pjWinRep: "representative winning price", pjNotRes: "Not compared: project land",
+  pjTitle: "Auction prices vs. low-rise project prices", pjSub: "By former district (Hanoi), residential-land sessions with results only (project land and cancelled/forfeited sessions excluded). Each session's representative price = midpoint of lowest and highest winning bid (highest only when that is all we have, marked *); the district price is weighted by plots won, so larger sessions count more. Project price = median townhouse price per land area, period {q}. Low reliability = few sessions, plots or comparable projects – treat as indicative only.",
+  cPjDist: "Former district", cPjN: "Sessions · plots won", cPjWin: "Representative winning price", cPjTC: "Secondary townhouse", cPjRTC: "Auction price / secondary price", cPjSC: "Primary townhouse", cPjRSC: "Auction price / primary price",
   cPjUp: "Upcoming sessions", cPjFut: "Upcoming projects", pjFutTxt: "{n} projects · {c} units", pjNone: "No project data yet (du-an-huyen.csv).",
   repBtn: "Reports", repNewTab: "Open in new tab ↗", repDown: "Download", repNew: "NEW", repPeriod: "Period",
   reAuc: "Re-auction", reAucT: "Same site was auctioned in an earlier session (remaining plots re-offered or a later batch)", pRel: "Related auctions", round: "round", pNotice: "Auction notice", pResult: "Result report", locTodo: "not yet located", pSuperseded: "Superseded by a later re-auction – see the next session", pAfterSrc: "Post-auction news (forfeit / cancel / payment)", byThon: "by village/site (approximate)"
@@ -544,7 +556,7 @@ function applyTheme(th) {
   if (Array.isArray(th.bins)) th.bins.forEach((c, i) => { if (BINS[i] && isColor(c)) BINS[i][1] = c; });
   if (th.status) Object.keys(STATUS_COLOR).forEach(k => { if (isColor(th.status[k])) STATUS_COLOR[k] = th.status[k]; });
   if (th.proj) { ["so_cap", "thu_cap", "tuong_lai"].forEach(k => { if (isColor(th.proj[k])) PJ_COLOR[k] = th.proj[k]; });
-    if (["gia", "loai"].includes(th.proj.mode)) PJ_COLOR.mode = th.proj.mode; }
+  }
   if (PROJ.length) buildProjLayers();
 }
 async function loadTheme() {
@@ -840,7 +852,11 @@ function filtered() {
 /* ======== DỰ ÁN THẤP TẦNG & SO SÁNH GIÁ / LOW-RISE PROJECTS & PRICE COMPARISON ======== */
 let PROJ = [], PROJD = {}, projGroups = {}, PJQ = "";
 /* màu dự án – đổi trong admin (Giao diện → Màu dự án thấp tầng), lưu ở theme.json mục "proj" */
-const PJ_COLOR = {mode: "gia", so_cap: "#f97316", thu_cap: "#f97316", tuong_lai: "#94a3b8"};
+const PJ_COLOR = {so_cap: "#2563eb", thu_cap: "#0e7490", tuong_lai: "#64748b"};
+/* MỘT kiểu vẽ dùng chung cho ô trên bản đồ, ô mẫu trong bảng chọn lớp và chú giải → luôn khớp màu */
+const pjStyle = nhom => { const c = PJ_COLOR[nhom];
+  return nhom === "so_cap" ? `background:${c};border:1.5px solid #fff;box-shadow:0 0 0 1px #0004`
+    : nhom === "thu_cap" ? `background:${c}40;border:2.5px solid ${c}` : `background:${c}55;border:1.5px dashed ${c}`; };
 const hkey = s => fold(s).replace(/\b(huyen|quan|thi xa|thanh pho|tp)\b\.?/g, " ").replace(/\bcu\b/g, " ").replace(/[^a-z ]/g, " ").replace(/\s+/g, " ").trim();
 const medOf = a => { const v = a.filter(x => x != null).sort((x, y) => x - y); if (!v.length) return null; const m = v.length >> 1; return v.length % 2 ? v[m] : (v[m - 1] + v[m]) / 2; };
 async function loadCSVFile(u) {
@@ -861,13 +877,14 @@ function buildProjLayers() {
   if (!map || !PROJ.length) return;
   const was = Object.keys(projGroups).length ? Object.keys(projGroups).filter(k => map.hasLayer(projGroups[k])) : null;   /* giữ lớp đang bật khi vẽ lại */
   Object.values(projGroups).forEach(g => map.removeLayer(g));
+  if (!map._pjLegendHook) { map._pjLegendHook = true;   /* chú giải chỉ liệt kê lớp dự án đang bật */
+    map.on("overlayadd overlayremove", e => { if (Object.values(projGroups).includes(e.layer) && legendCtl && legendCtl._map) { legendCtl.remove(); legendCtl.addTo(map); } }); }
   if (!map.getPane("proj")) { map.createPane("proj"); map.getPane("proj").style.zIndex = 395; }   /* dưới chấm đấu giá */
   ["so_cap", "thu_cap", "tuong_lai"].forEach(k => projGroups[k] = L.layerGroup());
   PROJ.forEach(p => { if (p.lat == null || p.lng == null || !projGroups[p.nhom]) return;
     const pr = projPrice(p), fut = p.nhom === "tuong_lai";
-    const c = fut ? PJ_COLOR.tuong_lai : PJ_COLOR.mode === "loai" ? PJ_COLOR[p.nhom] : pr != null ? colorOf(pr) : "#cbd5e1";
     const sz = fut ? Math.round(Math.max(10, Math.min(24, 8 + Math.sqrt(num(p.quy_mo_ha) || 1) * 1.3))) : 12;
-    const st = p.nhom === "so_cap" ? `background:${c};border:1.5px solid #fff` : p.nhom === "thu_cap" ? `background:${c}40;border:2.5px solid ${c}` : `background:${c}66;border:1.5px dashed #475569`;
+    const st = pjStyle(p.nhom);
     L.marker([p.lat, p.lng], {pane: "proj", icon: L.divIcon({className: "pj-ic", iconSize: [sz, sz], html: `<i style="width:${sz}px;height:${sz}px;${st}"></i>`})})
       .bindPopup(() => projPopup(p), {maxWidth: 320}).bindTooltip(() => esc(p.ten) + (pr != null ? " · " + PU(pr) : ""))
       .addTo(projGroups[p.nhom]); });
@@ -875,14 +892,14 @@ function buildProjLayers() {
 }
 function projPopup(p) {
   const units = p.can_tong ? fmt(num(p.can_tong)) + ([["pjVL", p.can_vl], ["pjTH", p.can_th], ["pjSH", p.can_sh]].some(x => x[1]) ? " (" + [["pjVL", p.can_vl], ["pjTH", p.can_th], ["pjSH", p.can_sh]].filter(x => x[1]).map(x => `${t(x[0])} ${fmt(num(x[1]))}`).join(" · ") + ")" : "") : "";
-  const rows = [[t("pjDev"), p.chu_dau_tu], [t("pjDist"), lang === "en" ? p.huyen_en : p.huyen], [t("pjUnits"), units],
+  const rows = [[t("pjDev"), p.chu_dau_tu], [t("pjAddr"), p.dia_chi], [t("pjDist"), lang === "en" ? p.huyen_en : p.huyen], [t("pjUnits"), units],
     [t("pjAbs"), p.hap_thu ? Math.round(num(p.hap_thu) * 100) + "%" : ""],
     [t("pjVL"), p.vl != null ? PU(p.vl) : ""], [t("pjTH"), p.th != null ? PU(p.th) : ""], [t("pjSH"), p.sh != null ? PU(p.sh) : ""],
     [t("pjLaunch"), p.mo_ban], [t("pjScale"), p.quy_mo_ha ? fmt(num(p.quy_mo_ha)) + " ha" : ""], [t("pjStatus"), p.tinh_trang], [t("pjQuarter"), p.quy]].filter(r => r[1]);
   const tag = t(p.nhom === "so_cap" ? "pjSC" : p.nhom === "thu_cap" ? "pjTC" : "pjTL");
   return `<div class="pop"><h3>${esc(p.ten)}</h3><span class="tag" style="margin:0 0 6px">${esc(tag)}</span>
    <table>${rows.map(r => `<tr><td>${r[0]}</td><td>${esc(r[1])}</td></tr>`).join("")}</table>
-   <p style="margin:8px 0 0;font-size:12px;color:var(--mute)">${esc(t("pjApprox"))}${p.nguon ? "<br>" + esc(p.nguon) : ""}</p></div>`;
+   <p style="margin:8px 0 0;font-size:12px;color:var(--mute)">${esc(t(p.vi_tri === "Theo huyện" ? "pjApprox" : p.vi_tri === "Gần đúng theo địa danh" ? "pjLoc" : p.vi_tri === "Sửa tay" ? "pjManual" : p.vi_tri === "Theo địa chỉ" ? "pjWeb" : "pjOsm"))}${p.nguon ? "<br>" + esc(p.nguon) : ""}</p></div>`;
 }
 /* quận/huyện cũ của một phiên → dòng tổng hợp dự án */
 function projDistOf(d) {
@@ -891,34 +908,55 @@ function projDistOf(d) {
   for (const c of [m && m[1], d.xa]) { const k = c && hkey(c); if (k && PROJD[k]) return k; }
   return null;
 }
+/* giá trúng đại diện của một phiên: trung bình min–max (chỉ có max thì dùng max) */
+const repPrice = d => d.max == null ? null : d.min != null ? (d.min + d.max) / 2 : d.max;
+const isResWin = d => d.loai_dat === "Đất ở" && d.max != null && !BAD_AFTER.includes(d.sau_dau_gia) && (d.trang_thai === "Đã đấu giá" || d.trang_thai === "Đã nộp tiền");
 function projCompareRows(d) {
   const k = projDistOf(d); if (!k) return [];
-  const h = PROJD[k], base = d.max ?? d.start; if (base == null) return [];
-  const bl = t(d.max != null ? "pjWin" : "pjStart"), out = [];
+  if (d.loai_dat !== "Đất ở") return d.loai_dat === "Dự án" ? [[t("pjVsTC").replace("{h}", pjName(PROJD[k])), t("pjNotRes")]] : [];
+  const h = PROJD[k], rp = repPrice(d), base = rp ?? d.start; if (base == null) return [];
+  const bl = rp != null ? t("pjWinRep") + (d.min == null ? "*" : "") : t("pjStart"), out = [];
   [["pjVsTC", h.tcTH, h.thu_cap_th_n], ["pjVsSC", h.scTH, h.so_cap_th_n]].forEach(([lk, ref, n]) => { if (ref) out.push([t(lk).replace("{h}", pjName(h)),
-    `${PU(ref)} (${n} ${t("pjN")}) · ${bl} = ${Math.round(base / ref * 100)}%`]); });
+    `${PU(ref)} (${n} ${t("pjN")}) · ${bl} ${P(base)} = ${Math.round(base / ref * 100)}%`]); });
   return out;
+}
+/* độ tin cậy: đủ phiên/thửa đấu giá VÀ đủ dự án để so */
+function relOf(nS, nP, nProj) {
+  if (!nS || !nProj) return 0;
+  if (nS >= 3 && nP >= 50 && nProj >= 5) return 3;
+  if ((nS >= 2 || nP >= 20) && nProj >= 2) return 2;
+  return 1;
 }
 function renderProjCmp() {
   const box = $("#pjTable"), sec = $("#pjcmp"); if (!box || !sec) return;
   sec.hidden = !Object.keys(PROJD).length; if (sec.hidden) return;
   $("#pjSub").textContent = t("pjSub").replace("{q}", PJQ);
-  const g = {}; Object.keys(PROJD).forEach(k => g[k] = {k, h: PROJD[k], win: [], up: 0});
+  const g = {}; Object.keys(PROJD).forEach(k => g[k] = {k, h: PROJD[k], ss: [], up: 0});
   DATA.forEach(d => { const k = projDistOf(d); if (!k) return;
-    if (d.max != null && !BAD_AFTER.includes(d.sau_dau_gia) && (d.trang_thai === "Đã đấu giá" || d.trang_thai === "Đã nộp tiền")) g[k].win.push(d.max);
+    if (isResWin(d)) g[k].ss.push(d);
     if (UPCOMING.includes(d.trang_thai)) g[k].up++; });
-  const rows = Object.values(g).map(x => { const w = medOf(x.win);
-    return {...x, w, rTC: w != null && x.h.tcTH ? w / x.h.tcTH : null, rSC: w != null && x.h.scTH ? w / x.h.scTH : null}; })
-    .filter(x => x.win.length || x.up || x.h.tcTH || x.h.scTH || +x.h.tuong_lai_du_an)
-    .sort((a, b) => (a.rTC ?? a.rSC ?? 9) - (b.rTC ?? b.rSC ?? 9) || b.up - a.up || (+b.h.tuong_lai_can || 0) - (+a.h.tuong_lai_can || 0));
+  const rows = Object.values(g).map(x => {
+    let sw = 0, sp = 0, nP = 0, lo = null, hi = null, maxOnly = false;
+    x.ss.forEach(d => { const w = d.won || d.lots || 1, p = repPrice(d); sw += w; sp += w * p; nP += d.won || d.lots || 0;
+      lo = Math.min(lo ?? Infinity, d.min ?? d.max); hi = Math.max(hi ?? -Infinity, d.max); if (d.min == null) maxOnly = true; });
+    const w = sw ? sp / sw : null;
+    const rTC = w != null && x.h.tcTH ? w / x.h.tcTH : null, rSC = w != null && x.h.scTH ? w / x.h.scTH : null;
+    const relTC = relOf(x.ss.length, nP, +x.h.thu_cap_th_n || 0), relSC = relOf(x.ss.length, nP, +x.h.so_cap_th_n || 0);
+    return {...x, w, nP, lo, hi, maxOnly, rTC, rSC, rel: Math.max(relTC, relSC)}; })
+    .filter(x => x.ss.length || x.up || x.h.tcTH || x.h.scTH || +x.h.tuong_lai_du_an)
+    .sort((a, b) => b.rel - a.rel || (a.rTC ?? a.rSC ?? 9) - (b.rTC ?? b.rSC ?? 9) || b.up - a.up || (+b.h.tuong_lai_can || 0) - (+a.h.tuong_lai_can || 0));
   const rc = r => r == null ? "—" : `<b class="${r < .5 ? "lo" : r < .8 ? "mid" : "hi"}">${Math.round(r * 100)}%</b>`;
+  const relTag = r => r ? `<span class="rel ${["", "lo", "mid", "hi"][r]}">${t(["", "relLo", "relMid", "relHi"][r])}</span>` : "—";
   box.innerHTML = `<table><thead><tr><th>${t("cPjDist")}</th><th class="n">${t("cPjN")}</th><th class="n">${t("cPjWin")}<br><span class="k">${UN()}</span></th>
-    <th class="n">${t("cPjTC")}</th><th class="n">${t("cPjRTC")}</th><th class="n">${t("cPjSC")}</th><th class="n">${t("cPjRSC")}</th><th class="n">${t("cPjUp")}</th><th>${t("cPjFut")}</th></tr></thead><tbody>`
-    + rows.map(x => `<tr data-h="${esc(x.h.huyen)}"><td><b>${esc(pjName(x.h))}</b></td><td class="n">${x.win.length || "—"}</td><td class="n">${P(x.w)}</td>
+    <th class="n">${t("cPjTC")}</th><th class="n">${t("cPjRTC")}</th><th class="n">${t("cPjSC")}</th><th class="n">${t("cPjRSC")}</th><th>${t("cPjRel")}</th><th class="n">${t("cPjUp")}</th><th>${t("cPjFut")}</th></tr></thead><tbody>`
+    + rows.map(x => `<tr data-h="${esc(x.h.huyen)}"${x.rel === 1 ? ' class="low"' : ""}><td><b>${esc(pjName(x.h))}</b></td>
+      <td class="n">${x.ss.length ? `${x.ss.length} · ${fmt(x.nP)}` : "—"}</td>
+      <td class="n">${x.w != null ? P(x.w) + (x.maxOnly ? "*" : "") + (x.ss.length > 1 ? `<br><span class="k">${t("pjRange")} ${P(x.lo)}–${P(x.hi)}</span>` : "") : "—"}</td>
       <td class="n">${x.h.tcTH ? P(x.h.tcTH) + ` <span class="k">(${x.h.thu_cap_th_n})</span>` : "—"}</td><td class="n r">${rc(x.rTC)}</td>
       <td class="n">${x.h.scTH ? P(x.h.scTH) + ` <span class="k">(${x.h.so_cap_th_n})</span>` : "—"}</td><td class="n r">${rc(x.rSC)}</td>
+      <td>${relTag(x.rel)}</td>
       <td class="n">${x.up || "—"}</td><td class="k">${+x.h.tuong_lai_du_an ? esc(t("pjFutTxt").replace("{n}", x.h.tuong_lai_du_an).replace("{c}", fmt(+x.h.tuong_lai_can || 0))) : "—"}</td></tr>`).join("")
-    + `</tbody></table>`;
+    + `</tbody></table>` + (rows.some(x => x.maxOnly) ? `<p class="k" style="margin:6px 0 0">${t("pjMaxOnly")}</p>` : "");
 }
 function initProjCmp() {
   $("#pjTable").addEventListener("click", e => { const tr = e.target.closest("tr[data-h]"); if (!tr) return;
@@ -1146,12 +1184,8 @@ function applyLang() {
       if (!extraGroups[k]) return;
       const icon = k === "metro" ? metroSw : k === "san_bay" ? `<span style="display:inline-block;width:20px;margin:0 6px 0 2px;text-align:center">✈</span>` : sw(INFRA_STYLE[k].color, k.startsWith("cau") ? 6 : k === "duong_tinh" ? 3 : 4, k === "cau_xay");
       ex[icon + esc(t(lk))] = extraGroups[k]; });
-    /* ô mẫu khớp với cách tô trên bản đồ: "theo giá" → dải màu thang giá; "theo loại" → màu đã chọn trong admin */
-    const pjGrad = `linear-gradient(135deg,${BINS.map(b => b[1]).join(",")})`, byType = PJ_COLOR.mode === "loai";
-    [["so_cap", "lyPjSC", byType ? `background:${PJ_COLOR.so_cap};border:1.5px solid #fff;box-shadow:0 0 0 1px #0003` : `background:${pjGrad};border:1.5px solid #fff;box-shadow:0 0 0 1px #0003`],
-     ["thu_cap", "lyPjTC", byType ? `background:${PJ_COLOR.thu_cap}40;border:2px solid ${PJ_COLOR.thu_cap}` : `background:#fff;border:2.5px solid ${BINS[3][1]};outline:1px solid ${BINS[1][1]};outline-offset:-5px`],
-     ["tuong_lai", "lyPjTL", `background:${PJ_COLOR.tuong_lai}66;border:1.5px dashed #475569`]]
-      .forEach(([k, lk, st]) => { if (projGroups[k]) ex[`<i class="pj-sw" style="${st}"></i>` + esc(t(lk))] = projGroups[k]; });
+    [["so_cap", "lyPjSC"], ["thu_cap", "lyPjTC"], ["tuong_lai", "lyPjTL"]]
+      .forEach(([k, lk]) => { if (projGroups[k]) ex[`<i class="pj-sw" style="${pjStyle(k)}"></i>` + esc(t(lk))] = projGroups[k]; });
     refreshRingLabels();
     layerCtl = L.control.layers(named, {...ex, ...ov}, {position: "topright"}).addTo(map);
     if (legendCtl) legendCtl.remove();
@@ -1160,9 +1194,8 @@ function applyLang() {
       return i === 0 ? "< " + hi : hi ? lo + " – " + hi : "≥ " + lo; };
     legendCtl.onAdd = () => { const d = L.DomUtil.create("div", "legend"); d.innerHTML = `<b>${U("legendTitle")}</b><br>` + BINS.map((b, i) => `<i style="background:${b[1]}"></i>${binLabel(b, i)}`).join("<br>")
       + `<br><i style="background:transparent;border:2px dashed ${STATUS_COLOR["Sắp đấu giá"]}"></i>${tv("status", "Sắp đấu giá")}<br><i style="background:transparent;border:2px dashed ${STATUS_COLOR["Chờ kết quả"]}"></i>${tv("status", "Chờ kết quả")}<br><i style="background:transparent;border:2px dashed ${STATUS_COLOR["Đấu giá lại"]}"></i>${tv("status", "Đấu giá lại")}`
-      + (!Object.keys(projGroups).length ? "" : PJ_COLOR.mode === "loai"
-        ? `<br><i class="sq" style="background:${PJ_COLOR.so_cap};border:1.5px solid #fff;box-shadow:0 0 0 1px #0003"></i>${t("lyPjSC")}<br><i class="sq" style="background:${PJ_COLOR.thu_cap}40;border:2px solid ${PJ_COLOR.thu_cap}"></i>${t("lyPjTC")}`
-        : `<br><i class="sq" style="background:linear-gradient(135deg,${BINS.map(b => b[1]).join(",")});border:1.5px solid #fff;box-shadow:0 0 0 1px #0003"></i>${t("pjLegend")}`)
+      + (!Object.keys(projGroups).length ? "" : [["so_cap", "lyPjSC"], ["thu_cap", "lyPjTC"], ["tuong_lai", "lyPjTL"]]
+          .filter(([k]) => map.hasLayer(projGroups[k])).map(([k, lk]) => `<br><i class="sq" style="${pjStyle(k)};box-sizing:border-box"></i>${t(lk)}`).join(""))
       + (Object.keys(extraGroups).some(k => !["bound", "tinh", "huyen"].includes(k)) ? `<div style="margin-top:6px;padding-top:4px;border-top:1px solid var(--line)"><b>${t("lgInfra")}</b><br>`
         + `<span class="lg-line"></span>${t("lgBuilt")}<br><span class="lg-line" style="border-top-style:dashed"></span>${t("lgBuild")}<br><span class="lg-line" style="border-top-style:dotted"></span>${t("lgPlan")}</div>` : ""); return d; };
     legendCtl.addTo(map);

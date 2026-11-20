@@ -225,9 +225,8 @@ th .hbtn{border:0;background:none;color:var(--muted,#888);cursor:pointer;padding
     <h3>Màu chấm theo giá trúng cao nhất</h3><div id="binColors"></div>
     <h3>Màu theo trạng thái</h3><div id="stColors"></div>
     <h3>Màu dự án thấp tầng</h3>
-    <label>Cách tô màu ô dự án trên bản đồ<select id="pjMode"><option value="gia">Theo giá liền kề (dùng thang màu giá ở trên)</option><option value="loai">Theo loại dự án (dùng 3 màu bên dưới)</option></select></label>
     <div id="pjColors"></div>
-    <p class="muted" style="margin:4px 0 0">Màu sơ cấp và thứ cấp chỉ có tác dụng khi chọn <b>“Theo loại dự án”</b>; khi chọn “Theo giá liền kề”, ô dự án (và ô mẫu trong bảng chọn lớp) dùng thang màu giá. Màu dự án sắp triển khai luôn được dùng.</p>
+    <p class="muted" style="margin:4px 0 0">Ô dự án trên bản đồ, ô mẫu trong bảng chọn lớp và chú giải dùng chung 3 màu này. Giá của dự án xem khi rê chuột hoặc bấm vào ô.</p>
     <div class="row" style="margin-top:14px"><button class="btn pri" id="btnTheme">Lưu giao diện lên GitHub</button><button class="btn" id="btnThemeReset">Về màu mặc định</button></div>
    </div>
    <div><iframe id="prev" title="Xem trước bản đồ" src="index.html"></iframe>
@@ -1625,7 +1624,7 @@ const DEFAULT_THEME = {
   dark: {bg: "#121417", bg2: "#1a1d21", ink: "#e9ecef", mute: "#9aa3ad", line: "#2b3137", acc: "#7fd1b0", card: "#181b1f"},
   bins: ["#fde68a", "#fbbf24", "#f97316", "#dc2626", "#7f1d1d"],
   status: {"Sắp đấu giá": "#2563eb", "Chờ kết quả": "#64748b", "Đấu giá lại": "#d97706", "Hủy/bỏ cọc": "#111827"},
-  proj: {mode: "gia", so_cap: "#f97316", thu_cap: "#f97316", tuong_lai: "#94a3b8"}
+  proj: {so_cap: "#2563eb", thu_cap: "#0e7490", tuong_lai: "#64748b"}
 };
 const PJ_LABELS = {so_cap: ["Dự án sơ cấp", "ô đặc"], thu_cap: ["Dự án thứ cấp", "ô viền"], tuong_lai: ["Dự án sắp triển khai", "ô nét đứt"]};
 const PRESETS = {
@@ -1652,7 +1651,6 @@ function renderThemeForm() {
   $("#binColors").innerHTML = THEME.bins.map((c, i) => crow("b." + i, BIN_LABELS[i], "", c)).join("");
   $("#stColors").innerHTML = Object.keys(THEME.status).map(k => crow("s." + k, k, "", THEME.status[k])).join("");
   $("#pjColors").innerHTML = Object.keys(PJ_LABELS).map(k => crow("j." + k, PJ_LABELS[k][0], PJ_LABELS[k][1], THEME.proj[k])).join("");
-  $("#pjMode").value = THEME.proj.mode;
 }
 function setColor(key, val) {
   const [g, k] = [key.slice(0, 1), key.slice(2)];
@@ -1663,7 +1661,6 @@ function setColor(key, val) {
 let pvReady = false;
 function preview() { const w = $("#prev").contentWindow; if (w && pvReady) { w.postMessage({type: "dg-theme", theme: THEME}, "*"); w.postMessage({type: "dg-mode", mode: editMode}, "*"); } }
 $("#prev").addEventListener("load", () => { pvReady = true; setTimeout(preview, 300); setTimeout(preview, 1500); });
-$("#pjMode").addEventListener("input", e => { THEME.proj.mode = e.target.value; preview(); });
 ["#pageColors", "#binColors", "#stColors", "#pjColors"].forEach(sel => $(sel).addEventListener("input", e => {
   const el = e.target; if (!el.dataset.k) return;
   let v = el.value.trim(); if (el.type === "text") { if (!v.startsWith("#")) v = "#" + v; if (!okHex(v)) return; }
@@ -1680,7 +1677,7 @@ function mergeTheme(t) { const m = clone(DEFAULT_THEME); if (!t) return m;
   ["light", "dark"].forEach(md => Object.keys(m[md]).forEach(k => { if (t[md] && okHex(t[md][k])) m[md][k] = t[md][k].toLowerCase(); }));
   if (Array.isArray(t.bins)) t.bins.forEach((c, i) => { if (i < 5 && okHex(c)) m.bins[i] = c.toLowerCase(); });
   if (t.status) Object.keys(m.status).forEach(k => { if (okHex(t.status[k])) m.status[k] = t.status[k].toLowerCase(); });
-  if (t.proj) { Object.keys(PJ_LABELS).forEach(k => { if (okHex(t.proj[k])) m.proj[k] = t.proj[k].toLowerCase(); }); if (["gia", "loai"].includes(t.proj.mode)) m.proj.mode = t.proj.mode; }
+  if (t.proj) { Object.keys(PJ_LABELS).forEach(k => { if (okHex(t.proj[k])) m.proj[k] = t.proj[k].toLowerCase(); }); }
   return m; }
 async function loadThemeAdmin() {
   if (cfg().token) {
