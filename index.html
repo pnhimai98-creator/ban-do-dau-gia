@@ -370,7 +370,7 @@ const T = {
   pjLegend: "Dự án thấp tầng (màu theo giá liền kề)",
   cPjRel: "Độ tin cậy", relHi: "Cao", relMid: "Trung bình", relLo: "Thấp", pjMaxOnly: "* chỉ có giá trúng cao nhất", pjRange: "khoảng", pjWinRep: "giá trúng đại diện", pjNotRes: "Không so: phiên đất dự án",
   pjTitle: "So sánh giá đấu giá với giá dự án thấp tầng", pjSub: "Theo quận/huyện cũ (Hà Nội), chỉ tính phiên đất ở đã có kết quả (không tính đất dự án, phiên hủy/bỏ cọc). Giá trúng đại diện của mỗi phiên = trung bình giá trúng thấp nhất và cao nhất (chỉ có giá cao nhất thì dùng giá đó, đánh dấu *); giá của huyện = bình quân theo số thửa trúng, nên phiên nhiều thửa có trọng số lớn hơn. Giá dự án = giá liền kề trung vị theo diện tích đất, kỳ {q}. Độ tin cậy thấp: ít phiên, ít thửa hoặc ít dự án để so – chỉ nên tham khảo.",
-  cPjDist: "Quận/huyện cũ", cPjN: "Phiên · thửa trúng", cPjWin: "Giá trúng đại diện", cPjTC: "Liền kề thứ cấp", cPjRTC: "Giá đấu giá / giá thứ cấp", cPjSC: "Liền kề sơ cấp", cPjRSC: "Giá đấu giá / giá sơ cấp",
+  cPjDist: "Quận/huyện cũ", cPjN: "Phiên · thửa trúng", cPjWin: "Giá trúng đại diện", cPjTC: "Liền kề thứ cấp", cPjRTC: "Giá đấu giá / giá thứ cấp", cPjSC: "Liền kề sơ cấp", cPjRSC: "Giá đấu giá / giá sơ cấp", cPjTS: "Giá thứ cấp / giá sơ cấp", pjTip: "{a} / {b} tr/m² · {n} dự án",
   cPjUp: "Phiên sắp tới", cPjFut: "Dự án sắp triển khai", pjFutTxt: "{n} dự án · {c} căn", pjNone: "Chưa có dữ liệu dự án (du-an-huyen.csv).",
   repBtn: "Báo cáo", repNewTab: "Mở tab mới ↗", repDown: "Tải về", repNew: "MỚI", repPeriod: "Kỳ", repDlgT: "Báo cáo định kỳ theo quý", repQ: "Quý {q}/{y}", repCount: "{n} báo cáo", repOther: "Khác",
   reAuc: "Đấu lại", reAucT: "Cùng khu đất đã đưa ra đấu giá ở phiên trước (đấu lại các thửa còn lại hoặc đợt tiếp theo)", pRel: "Phiên liên quan", round: "lần", pNotice: "Thông báo đấu giá", pResult: "Tin kết quả", locTodo: "chưa xác định (cần bổ sung)", pSuperseded: "Phiên này đã được tổ chức lại – xem phiên sau", pAfterSrc: "Tin sau đấu giá (bỏ cọc / hủy / nộp tiền)", byThon: "theo thôn/khu (gần đúng)"
@@ -422,7 +422,7 @@ const T = {
   pjLegend: "Low-rise projects (colour = townhouse price)",
   cPjRel: "Reliability", relHi: "High", relMid: "Medium", relLo: "Low", pjMaxOnly: "* highest bid only", pjRange: "range", pjWinRep: "representative winning price", pjNotRes: "Not compared: project land",
   pjTitle: "Auction prices vs. low-rise project prices", pjSub: "By former district (Hanoi), residential-land sessions with results only (project land and cancelled/forfeited sessions excluded). Each session's representative price = midpoint of lowest and highest winning bid (highest only when that is all we have, marked *); the district price is weighted by plots won, so larger sessions count more. Project price = median townhouse price per land area, period {q}. Low reliability = few sessions, plots or comparable projects – treat as indicative only.",
-  cPjDist: "Former district", cPjN: "Sessions · plots won", cPjWin: "Representative winning price", cPjTC: "Secondary townhouse", cPjRTC: "Auction price / secondary price", cPjSC: "Primary townhouse", cPjRSC: "Auction price / primary price",
+  cPjDist: "Former district", cPjN: "Sessions · plots won", cPjWin: "Representative winning price", cPjTC: "Secondary townhouse", cPjRTC: "Auction price / secondary price", cPjSC: "Primary townhouse", cPjRSC: "Auction price / primary price", cPjTS: "Secondary price / primary price", pjTip: "{a} / {b} · {n} project(s)",
   cPjUp: "Upcoming sessions", cPjFut: "Upcoming projects", pjFutTxt: "{n} projects · {c} units", pjNone: "No project data yet (du-an-huyen.csv).",
   repBtn: "Reports", repNewTab: "Open in new tab ↗", repDown: "Download", repNew: "NEW", repPeriod: "Period", repDlgT: "Periodic reports by quarter", repQ: "Q{q} {y}", repCount: "{n} report(s)", repOther: "Other",
   reAuc: "Re-auction", reAucT: "Same site was auctioned in an earlier session (remaining plots re-offered or a later batch)", pRel: "Related auctions", round: "round", pNotice: "Auction notice", pResult: "Result report", locTodo: "not yet located", pSuperseded: "Superseded by a later re-auction – see the next session", pAfterSrc: "Post-auction news (forfeit / cancel / payment)", byThon: "by village/site (approximate)"
@@ -1018,14 +1018,16 @@ function renderProjCmp() {
     .filter(x => x.ss.length || x.up || x.h.tcTH || x.h.scTH || +x.h.tuong_lai_du_an)
     .sort((a, b) => b.rel - a.rel || (a.rTC ?? a.rSC ?? 9) - (b.rTC ?? b.rSC ?? 9) || b.up - a.up || (+b.h.tuong_lai_can || 0) - (+a.h.tuong_lai_can || 0));
   const rc = r => r == null ? "—" : `<b class="${r < .5 ? "lo" : r < .8 ? "mid" : "hi"}">${Math.round(r * 100)}%</b>`;
+  const tip = (a, b, n) => t("pjTip").replace("{a}", P(a)).replace("{b}", P(b)).replace("{n}", n);
   const relTag = r => r ? `<span class="rel ${["", "lo", "mid", "hi"][r]}">${t(["", "relLo", "relMid", "relHi"][r])}</span>` : "—";
   box.innerHTML = `<table><thead><tr><th>${t("cPjDist")}</th><th class="n">${t("cPjN")}</th><th class="n">${t("cPjWin")}<br><span class="k">${UN()}</span></th>
-    <th class="n">${t("cPjTC")}</th><th class="n">${t("cPjRTC")}</th><th class="n">${t("cPjSC")}</th><th class="n">${t("cPjRSC")}</th><th>${t("cPjRel")}</th><th class="n">${t("cPjUp")}</th><th>${t("cPjFut")}</th></tr></thead><tbody>`
+    <th class="n">${t("cPjRTC")}</th><th class="n">${t("cPjRSC")}</th><th class="n">${t("cPjTS")}</th><th>${t("cPjRel")}</th><th class="n">${t("cPjUp")}</th><th>${t("cPjFut")}</th></tr></thead><tbody>`
     + rows.map(x => `<tr data-h="${esc(x.h.huyen)}"${x.rel === 1 ? ' class="low"' : ""}><td><b>${esc(pjName(x.h))}</b></td>
       <td class="n">${x.ss.length ? `${x.ss.length} · ${fmt(x.nP)}` : "—"}</td>
       <td class="n">${x.w != null ? P(x.w) + (x.maxOnly ? "*" : "") + (x.ss.length > 1 ? `<br><span class="k">${t("pjRange")} ${P(x.lo)}–${P(x.hi)}</span>` : "") : "—"}</td>
-      <td class="n">${x.h.tcTH ? P(x.h.tcTH) + ` <span class="k">(${x.h.thu_cap_th_n})</span>` : "—"}</td><td class="n r">${rc(x.rTC)}</td>
-      <td class="n">${x.h.scTH ? P(x.h.scTH) + ` <span class="k">(${x.h.so_cap_th_n})</span>` : "—"}</td><td class="n r">${rc(x.rSC)}</td>
+      <td class="n r"${x.rTC != null ? ` title="${esc(tip(x.w, x.h.tcTH, x.h.thu_cap_th_n))}"` : ""}>${rc(x.rTC)}</td>
+      <td class="n r"${x.rSC != null ? ` title="${esc(tip(x.w, x.h.scTH, x.h.so_cap_th_n))}"` : ""}>${rc(x.rSC)}</td>
+      <td class="n"${x.h.tcTH && x.h.scTH ? ` title="${esc(tip(x.h.tcTH, x.h.scTH, Math.min(+x.h.thu_cap_th_n || 0, +x.h.so_cap_th_n || 0)))}"` : ""}>${x.h.tcTH && x.h.scTH ? `<b>${Math.round(x.h.tcTH / x.h.scTH * 100)}%</b>` : "—"}</td>
       <td>${relTag(x.rel)}</td>
       <td class="n">${x.up || "—"}</td><td class="k">${+x.h.tuong_lai_du_an ? esc(t("pjFutTxt").replace("{n}", x.h.tuong_lai_du_an).replace("{c}", fmt(+x.h.tuong_lai_can || 0))) : "—"}</td></tr>`).join("")
     + `</tbody></table>` + (rows.some(x => x.maxOnly) ? `<p class="k" style="margin:6px 0 0">${t("pjMaxOnly")}</p>` : "");
