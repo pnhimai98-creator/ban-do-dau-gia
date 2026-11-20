@@ -5,6 +5,8 @@ on:
   push:
     paths:
       - "data/bao-cao-du-an.xlsx"   # tự chạy mỗi khi tải file Excel mới lên
+  schedule:
+    - cron: "17 20 * * *"     # 3:17 sáng (giờ VN) mỗi ngày: tìm tiếp toạ độ còn thiếu nếu hôm trước hết hạn mức Gemini
 
 permissions:
   contents: write
@@ -12,19 +14,22 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 120
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
       - run: pip install openpyxl
-      - name: Tạo du-an.csv và du-an-huyen.csv
+      - name: Tìm toạ độ theo tên dự án (Gemini + Google Search, OpenStreetMap) và tạo du-an.csv, du-an-huyen.csv
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: python scripts/nhap_du_an.py
       - name: Lưu lên repo
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898333+github-actions[bot]@users.noreply.github.com"
-          git add du-an.csv du-an-huyen.csv
+          git add du-an.csv du-an-huyen.csv data/bao-cao-du-an.xlsx
           if git diff --cached --quiet; then echo "Không có thay đổi"; else
             git commit -m "Cập nhật dữ liệu dự án thấp tầng"
             git pull --rebase
