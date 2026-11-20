@@ -29,5 +29,11 @@
     "Chờ kết quả": "#e873c9",
     "Đấu giá lại": "#d97706",
     "Hủy/bỏ cọc": "#111827"
+  },
+  "proj": {
+    "mode": "gia",
+    "so_cap": "#3182d8",
+    "thu_cap": "#135c7c",
+    "tuong_lai": "#677589"
   }
 }
