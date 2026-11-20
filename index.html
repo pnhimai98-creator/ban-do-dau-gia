@@ -543,6 +543,9 @@ function applyTheme(th) {
   st.textContent = css + "}";
   if (Array.isArray(th.bins)) th.bins.forEach((c, i) => { if (BINS[i] && isColor(c)) BINS[i][1] = c; });
   if (th.status) Object.keys(STATUS_COLOR).forEach(k => { if (isColor(th.status[k])) STATUS_COLOR[k] = th.status[k]; });
+  if (th.proj) { ["so_cap", "thu_cap", "tuong_lai"].forEach(k => { if (isColor(th.proj[k])) PJ_COLOR[k] = th.proj[k]; });
+    if (["gia", "loai"].includes(th.proj.mode)) PJ_COLOR.mode = th.proj.mode; }
+  if (PROJ.length) buildProjLayers();
 }
 async function loadTheme() {
   if (!location.protocol.startsWith("http") || !CONFIG.THEME_URL) return null;
@@ -836,6 +839,8 @@ function filtered() {
 
 /* ======== DỰ ÁN THẤP TẦNG & SO SÁNH GIÁ / LOW-RISE PROJECTS & PRICE COMPARISON ======== */
 let PROJ = [], PROJD = {}, projGroups = {}, PJQ = "";
+/* màu dự án – đổi trong admin (Giao diện → Màu dự án thấp tầng), lưu ở theme.json mục "proj" */
+const PJ_COLOR = {mode: "gia", so_cap: "#f97316", thu_cap: "#f97316", tuong_lai: "#94a3b8"};
 const hkey = s => fold(s).replace(/\b(huyen|quan|thi xa|thanh pho|tp)\b\.?/g, " ").replace(/\bcu\b/g, " ").replace(/[^a-z ]/g, " ").replace(/\s+/g, " ").trim();
 const medOf = a => { const v = a.filter(x => x != null).sort((x, y) => x - y); if (!v.length) return null; const m = v.length >> 1; return v.length % 2 ? v[m] : (v[m - 1] + v[m]) / 2; };
 async function loadCSVFile(u) {
@@ -854,17 +859,19 @@ const projPrice = p => p.th ?? p.sh ?? p.vl;
 const pjName = h => lang === "en" ? (h.huyen_en || h.huyen) : h.huyen;
 function buildProjLayers() {
   if (!map || !PROJ.length) return;
+  const was = Object.keys(projGroups).length ? Object.keys(projGroups).filter(k => map.hasLayer(projGroups[k])) : null;   /* giữ lớp đang bật khi vẽ lại */
+  Object.values(projGroups).forEach(g => map.removeLayer(g));
   if (!map.getPane("proj")) { map.createPane("proj"); map.getPane("proj").style.zIndex = 395; }   /* dưới chấm đấu giá */
   ["so_cap", "thu_cap", "tuong_lai"].forEach(k => projGroups[k] = L.layerGroup());
   PROJ.forEach(p => { if (p.lat == null || p.lng == null || !projGroups[p.nhom]) return;
     const pr = projPrice(p), fut = p.nhom === "tuong_lai";
-    const c = fut ? "#94a3b8" : pr != null ? colorOf(pr) : "#cbd5e1";
+    const c = fut ? PJ_COLOR.tuong_lai : PJ_COLOR.mode === "loai" ? PJ_COLOR[p.nhom] : pr != null ? colorOf(pr) : "#cbd5e1";
     const sz = fut ? Math.round(Math.max(10, Math.min(24, 8 + Math.sqrt(num(p.quy_mo_ha) || 1) * 1.3))) : 12;
     const st = p.nhom === "so_cap" ? `background:${c};border:1.5px solid #fff` : p.nhom === "thu_cap" ? `background:${c}40;border:2.5px solid ${c}` : `background:${c}66;border:1.5px dashed #475569`;
     L.marker([p.lat, p.lng], {pane: "proj", icon: L.divIcon({className: "pj-ic", iconSize: [sz, sz], html: `<i style="width:${sz}px;height:${sz}px;${st}"></i>`})})
       .bindPopup(() => projPopup(p), {maxWidth: 320}).bindTooltip(() => esc(p.ten) + (pr != null ? " · " + PU(pr) : ""))
       .addTo(projGroups[p.nhom]); });
-  (CONFIG.PROJECTS_ON || []).forEach(k => projGroups[k] && projGroups[k].addTo(map));
+  (was || CONFIG.PROJECTS_ON || []).forEach(k => projGroups[k] && projGroups[k].addTo(map));
 }
 function projPopup(p) {
   const units = p.can_tong ? fmt(num(p.can_tong)) + ([["pjVL", p.can_vl], ["pjTH", p.can_th], ["pjSH", p.can_sh]].some(x => x[1]) ? " (" + [["pjVL", p.can_vl], ["pjTH", p.can_th], ["pjSH", p.can_sh]].filter(x => x[1]).map(x => `${t(x[0])} ${fmt(num(x[1]))}`).join(" · ") + ")" : "") : "";
@@ -1139,7 +1146,7 @@ function applyLang() {
       if (!extraGroups[k]) return;
       const icon = k === "metro" ? metroSw : k === "san_bay" ? `<span style="display:inline-block;width:20px;margin:0 6px 0 2px;text-align:center">✈</span>` : sw(INFRA_STYLE[k].color, k.startsWith("cau") ? 6 : k === "duong_tinh" ? 3 : 4, k === "cau_xay");
       ex[icon + esc(t(lk))] = extraGroups[k]; });
-    [["so_cap", "lyPjSC", "background:#f97316;border:1.5px solid #fff"], ["thu_cap", "lyPjTC", "background:#f9731640;border:2px solid #f97316"], ["tuong_lai", "lyPjTL", "background:#94a3b866;border:1.5px dashed #475569"]]
+    [["so_cap", "lyPjSC", `background:${PJ_COLOR.so_cap};border:1.5px solid #fff`], ["thu_cap", "lyPjTC", `background:${PJ_COLOR.thu_cap}40;border:2px solid ${PJ_COLOR.thu_cap}`], ["tuong_lai", "lyPjTL", `background:${PJ_COLOR.tuong_lai}66;border:1.5px dashed #475569`]]
       .forEach(([k, lk, st]) => { if (projGroups[k]) ex[`<i class="pj-sw" style="${st}"></i>` + esc(t(lk))] = projGroups[k]; });
     refreshRingLabels();
     layerCtl = L.control.layers(named, {...ex, ...ov}, {position: "topright"}).addTo(map);
@@ -1149,7 +1156,9 @@ function applyLang() {
       return i === 0 ? "< " + hi : hi ? lo + " – " + hi : "≥ " + lo; };
     legendCtl.onAdd = () => { const d = L.DomUtil.create("div", "legend"); d.innerHTML = `<b>${U("legendTitle")}</b><br>` + BINS.map((b, i) => `<i style="background:${b[1]}"></i>${binLabel(b, i)}`).join("<br>")
       + `<br><i style="background:transparent;border:2px dashed ${STATUS_COLOR["Sắp đấu giá"]}"></i>${tv("status", "Sắp đấu giá")}<br><i style="background:transparent;border:2px dashed ${STATUS_COLOR["Chờ kết quả"]}"></i>${tv("status", "Chờ kết quả")}<br><i style="background:transparent;border:2px dashed ${STATUS_COLOR["Đấu giá lại"]}"></i>${tv("status", "Đấu giá lại")}`
-      + (Object.keys(projGroups).length ? `<br><i class="sq" style="background:#f97316;border:1.5px solid #fff;box-shadow:0 0 0 1px #0003"></i>${t("pjLegend")}` : "")
+      + (!Object.keys(projGroups).length ? "" : PJ_COLOR.mode === "loai"
+        ? `<br><i class="sq" style="background:${PJ_COLOR.so_cap};border:1.5px solid #fff;box-shadow:0 0 0 1px #0003"></i>${t("lyPjSC")}<br><i class="sq" style="background:${PJ_COLOR.thu_cap}40;border:2px solid ${PJ_COLOR.thu_cap}"></i>${t("lyPjTC")}`
+        : `<br><i class="sq" style="background:${BINS[2][1]};border:1.5px solid #fff;box-shadow:0 0 0 1px #0003"></i>${t("pjLegend")}`)
       + (Object.keys(extraGroups).some(k => !["bound", "tinh", "huyen"].includes(k)) ? `<div style="margin-top:6px;padding-top:4px;border-top:1px solid var(--line)"><b>${t("lgInfra")}</b><br>`
         + `<span class="lg-line"></span>${t("lgBuilt")}<br><span class="lg-line" style="border-top-style:dashed"></span>${t("lgBuild")}<br><span class="lg-line" style="border-top-style:dotted"></span>${t("lgPlan")}</div>` : ""); return d; };
     legendCtl.addTo(map);
