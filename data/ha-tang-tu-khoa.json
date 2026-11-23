@@ -1,0 +1,20 @@
+[
+  {"ten": "Cầu Trần Hưng Đạo", "tu_khoa": ["cầu Trần Hưng Đạo"]},
+  {"ten": "Cầu Tứ Liên", "tu_khoa": ["cầu Tứ Liên"]},
+  {"ten": "Cầu Thượng Cát", "tu_khoa": ["cầu Thượng Cát"]},
+  {"ten": "Cầu Ngọc Hồi", "tu_khoa": ["cầu Ngọc Hồi"]},
+  {"ten": "Cầu Vân Phúc", "tu_khoa": ["cầu Vân Phúc"]},
+  {"ten": "Cầu Hồng Hà", "tu_khoa": ["cầu Hồng Hà"]},
+  {"ten": "Cầu Mễ Sở", "tu_khoa": ["cầu Mễ Sở"]},
+  {"ten": "Cầu Thăng Long", "tu_khoa": ["cầu Thăng Long"]},
+  {"ten": "Vành đai 4", "tu_khoa": ["vành đai 4", "đường Vành đai 4"]},
+  {"ten": "Vành đai 3.5", "tu_khoa": ["vành đai 3,5", "vành đai 3.5"]},
+  {"ten": "Vành đai 2.5", "tu_khoa": ["vành đai 2,5", "vành đai 2.5"]},
+  {"ten": "Metro số 2 Nam Thăng Long – Trần Hưng Đạo", "tu_khoa": ["metro Nam Thăng Long - Trần Hưng Đạo", "đường sắt đô thị số 2"]},
+  {"ten": "Metro Nhổn – ga Hà Nội", "tu_khoa": ["metro Nhổn - ga Hà Nội", "tuyến Nhổn - ga Hà Nội"]},
+  {"ten": "Metro Văn Cao – Hòa Lạc", "tu_khoa": ["tuyến Văn Cao - Hòa Lạc", "đường sắt đô thị số 5"]},
+  {"ten": "Đại lộ Thăng Long", "tu_khoa": ["Đại lộ Thăng Long"]},
+  {"ten": "Trục Tây Thăng Long", "tu_khoa": ["trục Tây Thăng Long"]},
+  {"ten": "Sân bay Gia Bình", "tu_khoa": ["sân bay Gia Bình"]},
+  {"ten": "Đường Nam Thăng Long", "tu_khoa": ["đường Nam Thăng Long"]}
+]
