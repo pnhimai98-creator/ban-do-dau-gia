@@ -6,7 +6,7 @@
 (function () {
   var URL = "data/tin-ha-tang.json", DATA = null, ds = [], box = null;
   var fold = function (s) {
-    return String(s || "").normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/đ/gi, "d")
+    return String(s || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/đ/gi, "d")
       .toLowerCase().replace(/[–—]/g, "-").replace(/,/g, ".").replace(/\s+/g, " ").trim();
   };
   var esc = function (s) { return String(s || "").replace(/[&<>"]/g, function (c) { return {"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;"}[c]; }); };
@@ -25,7 +25,7 @@
 
   function khoiTin(ten) {
     var m = DATA.muc[ten], tin = (m.tin || []).slice(0, 5);
-    return '<b>📰 Tin mới nhất' + (tin.length ? "" : "") + '</b>' +
+    return '<b>📰 Tin mới nhất</b>' +
       (tin.length ? '<ul style="margin:4px 0 0;padding-left:16px">' + tin.map(function (t) {
         return '<li style="margin-bottom:4px"><a href="' + esc(t.link) + '" target="_blank" rel="noopener">' + esc(t.tieu_de) + '</a>' +
           '<br><span style="color:#777">' + esc(t.nguon) + (t.ngay ? " · " + vn(t.ngay) : "") + '</span></li>';
@@ -41,10 +41,12 @@
     el.insertAdjacentHTML("beforeend", '<div class="tin-ha-tang" style="margin-top:8px;padding-top:6px;border-top:1px solid #ddd;font-size:12px;line-height:1.4">' + khoiTin(ten) + '</div>');
     dongKhung();
   }
+  var tipMoi = null, tipLuc = 0;   /* nhãn rê chuột vừa hiện gần nhất */
   new MutationObserver(function (ms) {
     ms.forEach(function (m) {
       m.addedNodes.forEach(function (n) {
         if (n.nodeType !== 1) return;
+        if (n.classList && n.classList.contains("leaflet-tooltip")) { tipMoi = n; tipLuc = Date.now(); }
         if (n.classList && n.classList.contains("leaflet-popup-content")) ganPopup(n);
         n.querySelectorAll && n.querySelectorAll(".leaflet-popup-content").forEach(ganPopup);
       });
@@ -68,6 +70,14 @@
     box.style.top = Math.max(8, Math.min(y + 12, innerHeight - h - 8)) + "px";
     box.querySelector("button").onclick = dongKhung;
   }
+  function moKhungTim(nhan, x, y) {
+    var q = encodeURIComponent(nhan);
+    DATA.muc["__tam__"] = {tin: [], tim_them: "https://news.google.com/search?q=" + q + "&hl=vi&gl=VN&ceid=VN:vi"};
+    moKhung("__tam__", x, y);
+    box.querySelector("div").textContent = nhan;
+    var ul = box.querySelector("div[style*='color:#777']"); if (ul) ul.textContent = "Chưa có trong danh sách tự cập nhật – bấm “Tìm thêm tin” để xem tin mới.";
+    delete DATA.muc["__tam__"];
+  }
   document.addEventListener("click", function (e) {
     if (!DATA) return;
     if (box && box.contains(e.target)) return;
@@ -76,11 +86,22 @@
     var x = e.clientX, y = e.clientY;
     setTimeout(function () {
       if (document.querySelector(".leaflet-popup .tin-ha-tang")) { dongKhung(); return; }   /* đã có popup kèm tin */
-      var tips = [].slice.call(document.querySelectorAll(".leaflet-tooltip")).filter(function (t) { return t.offsetParent !== null && getComputedStyle(t).opacity !== "0"; });
-      var ten = null;
-      for (var i = 0; i < tips.length && !ten; i++) ten = timTen(tips[i].textContent);
-      if (!ten) ten = timTen(hitEl.getAttribute("title") || hitEl.getAttribute("aria-label") || "");
-      if (ten) moKhung(ten, x, y); else dongKhung();
+      var hien = function (t) { return t && t.isConnected && t.offsetParent !== null && getComputedStyle(t).opacity !== "0"; };
+      /* ưu tiên nhãn vừa hiện khi rê chuột; nếu không có thì lấy nhãn gần chỗ bấm nhất (≤120px) */
+      var tip = hien(tipMoi) && Date.now() - tipLuc < 15000 ? tipMoi : null;
+      if (!tip) {
+        var best = 121;
+        [].slice.call(document.querySelectorAll(".leaflet-tooltip")).filter(hien).forEach(function (t) {
+          var r = t.getBoundingClientRect(), dx = Math.max(r.left - x, 0, x - r.right), dy = Math.max(r.top - y, 0, y - r.bottom), d = Math.sqrt(dx * dx + dy * dy);
+          if (d < best) { best = d; tip = t; }
+        });
+      }
+      var chu = tip ? tip.textContent : (hitEl.getAttribute("title") || hitEl.getAttribute("aria-label") || "");
+      var ten = timTen(chu);
+      if (ten) { moKhung(ten, x, y); return; }
+      /* hạ tầng chưa có trong danh sách tin: vẫn mở khung với link tìm tin */
+      var nhan = (tip ? (tip.querySelector("b,strong") || tip).textContent : chu).split(/\s[–—-]\s|\n/)[0].replace(/\([^)]*\)/g, "").trim();
+      if (tip && nhan && !document.querySelector(".leaflet-popup")) moKhungTim(nhan, x, y); else dongKhung();
     }, 80);
   }, true);
   document.addEventListener("keydown", function (e) { if (e.key === "Escape") dongKhung(); });
