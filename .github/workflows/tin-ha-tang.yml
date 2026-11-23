@@ -1,0 +1,33 @@
+name: Cập nhật tin hạ tầng
+
+on:
+  schedule:
+    - cron: "37 23 * * *"   # 6h37 sáng giờ Việt Nam, mỗi ngày
+  workflow_dispatch:        # cho phép bấm chạy tay trong tab Actions
+
+permissions:
+  contents: write
+
+concurrency:
+  group: ghi-repo
+  cancel-in-progress: false
+
+jobs:
+  tin-ha-tang:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Gom tin
+        run: python scripts/tin_ha_tang.py
+      - name: Lưu lên repo
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898699+github-actions[bot]@users.noreply.github.com"
+          git add data/tin-ha-tang.json
+          if git diff --cached --quiet; then echo "Không có tin mới"; exit 0; fi
+          git commit -m "Cập nhật tin hạ tầng $(date -u +%F)"
+          for i in 1 2 3; do git pull --rebase && git push && exit 0; sleep 5; done
+          exit 1
