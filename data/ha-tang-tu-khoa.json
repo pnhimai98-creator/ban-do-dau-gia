@@ -1,20 +1,294 @@
 [
-  {"ten": "Cầu Trần Hưng Đạo", "tu_khoa": ["cầu Trần Hưng Đạo"]},
-  {"ten": "Cầu Tứ Liên", "tu_khoa": ["cầu Tứ Liên"]},
-  {"ten": "Cầu Thượng Cát", "tu_khoa": ["cầu Thượng Cát"]},
-  {"ten": "Cầu Ngọc Hồi", "tu_khoa": ["cầu Ngọc Hồi"]},
-  {"ten": "Cầu Vân Phúc", "tu_khoa": ["cầu Vân Phúc"]},
-  {"ten": "Cầu Hồng Hà", "tu_khoa": ["cầu Hồng Hà"]},
-  {"ten": "Cầu Mễ Sở", "tu_khoa": ["cầu Mễ Sở"]},
-  {"ten": "Cầu Thăng Long", "tu_khoa": ["cầu Thăng Long"]},
-  {"ten": "Vành đai 4", "tu_khoa": ["vành đai 4", "đường Vành đai 4"]},
-  {"ten": "Vành đai 3.5", "tu_khoa": ["vành đai 3,5", "vành đai 3.5"]},
-  {"ten": "Vành đai 2.5", "tu_khoa": ["vành đai 2,5", "vành đai 2.5"]},
-  {"ten": "Metro số 2 Nam Thăng Long – Trần Hưng Đạo", "tu_khoa": ["metro Nam Thăng Long - Trần Hưng Đạo", "đường sắt đô thị số 2"]},
-  {"ten": "Metro Nhổn – ga Hà Nội", "tu_khoa": ["metro Nhổn - ga Hà Nội", "tuyến Nhổn - ga Hà Nội"]},
-  {"ten": "Metro Văn Cao – Hòa Lạc", "tu_khoa": ["tuyến Văn Cao - Hòa Lạc", "đường sắt đô thị số 5"]},
-  {"ten": "Đại lộ Thăng Long", "tu_khoa": ["Đại lộ Thăng Long"]},
-  {"ten": "Trục Tây Thăng Long", "tu_khoa": ["trục Tây Thăng Long"]},
-  {"ten": "Sân bay Gia Bình", "tu_khoa": ["sân bay Gia Bình"]},
-  {"ten": "Đường Nam Thăng Long", "tu_khoa": ["đường Nam Thăng Long"]}
+ {
+  "ten": "Cầu Trần Hưng Đạo",
+  "tu_khoa": [
+   "cầu Trần Hưng Đạo"
+  ]
+ },
+ {
+  "ten": "Cầu Tứ Liên",
+  "tu_khoa": [
+   "cầu Tứ Liên"
+  ]
+ },
+ {
+  "ten": "Cầu Thượng Cát",
+  "tu_khoa": [
+   "cầu Thượng Cát"
+  ]
+ },
+ {
+  "ten": "Cầu Ngọc Hồi",
+  "tu_khoa": [
+   "cầu Ngọc Hồi"
+  ]
+ },
+ {
+  "ten": "Cầu Vân Phúc",
+  "tu_khoa": [
+   "cầu Vân Phúc"
+  ]
+ },
+ {
+  "ten": "Cầu Hồng Hà",
+  "tu_khoa": [
+   "cầu Hồng Hà"
+  ]
+ },
+ {
+  "ten": "Cầu Mễ Sở",
+  "tu_khoa": [
+   "cầu Mễ Sở"
+  ]
+ },
+ {
+  "ten": "Cầu Thăng Long",
+  "tu_khoa": [
+   "cầu Thăng Long"
+  ]
+ },
+ {
+  "ten": "Vành đai 4",
+  "tu_khoa": [
+   "vành đai 4",
+   "đường Vành đai 4"
+  ]
+ },
+ {
+  "ten": "Vành đai 3.5",
+  "tu_khoa": [
+   "vành đai 3,5",
+   "vành đai 3.5"
+  ]
+ },
+ {
+  "ten": "Vành đai 2.5",
+  "tu_khoa": [
+   "vành đai 2,5",
+   "vành đai 2.5"
+  ]
+ },
+ {
+  "ten": "Metro số 2 Nam Thăng Long – Trần Hưng Đạo",
+  "tu_khoa": [
+   "metro Nam Thăng Long - Trần Hưng Đạo",
+   "đường sắt đô thị số 2"
+  ]
+ },
+ {
+  "ten": "Metro Nhổn – ga Hà Nội",
+  "tu_khoa": [
+   "metro Nhổn - ga Hà Nội",
+   "tuyến Nhổn - ga Hà Nội"
+  ]
+ },
+ {
+  "ten": "Metro Văn Cao – Hòa Lạc",
+  "tu_khoa": [
+   "tuyến Văn Cao - Hòa Lạc",
+   "đường sắt đô thị số 5"
+  ]
+ },
+ {
+  "ten": "Đại lộ Thăng Long",
+  "tu_khoa": [
+   "Đại lộ Thăng Long"
+  ]
+ },
+ {
+  "ten": "Trục Tây Thăng Long",
+  "tu_khoa": [
+   "trục Tây Thăng Long"
+  ]
+ },
+ {
+  "ten": "Sân bay Gia Bình",
+  "tu_khoa": [
+   "sân bay Gia Bình"
+  ]
+ },
+ {
+  "ten": "Đường Nam Thăng Long",
+  "tu_khoa": [
+   "đường Nam Thăng Long"
+  ]
+ },
+ {
+  "ten": "Sân bay Nội Bài",
+  "tu_khoa": [
+   "sân bay Nội Bài",
+   "nhà ga T2 Nội Bài"
+  ]
+ },
+ {
+  "ten": "Quốc lộ 5",
+  "tu_khoa": [
+   "quốc lộ 5",
+   "QL5"
+  ],
+  "loai_tru": [
+   "quốc lộ 50",
+   "quốc lộ 51",
+   "quốc lộ 53",
+   "quốc lộ 55",
+   "quốc lộ 57"
+  ]
+ },
+ {
+  "ten": "Quốc lộ 6",
+  "tu_khoa": [
+   "quốc lộ 6",
+   "QL6"
+  ],
+  "loai_tru": [
+   "quốc lộ 61",
+   "quốc lộ 63"
+  ]
+ },
+ {
+  "ten": "Quốc lộ 32",
+  "tu_khoa": [
+   "quốc lộ 32",
+   "QL32"
+  ]
+ },
+ {
+  "ten": "Quốc lộ 38",
+  "tu_khoa": [
+   "quốc lộ 38",
+   "QL38"
+  ]
+ },
+ {
+  "ten": "Quốc lộ 21B",
+  "tu_khoa": [
+   "quốc lộ 21B",
+   "QL21B"
+  ]
+ },
+ {
+  "ten": "Quốc lộ 18",
+  "tu_khoa": [
+   "quốc lộ 18",
+   "QL18"
+  ]
+ },
+ {
+  "ten": "Đường gom Từ Sơn",
+  "tu_khoa": [
+   "đường gom Từ Sơn"
+  ]
+ },
+ {
+  "ten": "ĐT.283",
+  "tu_khoa": [
+   "ĐT283",
+   "ĐT.283"
+  ]
+ },
+ {
+  "ten": "ĐT.387",
+  "tu_khoa": [
+   "ĐT387",
+   "ĐT.387"
+  ]
+ },
+ {
+  "ten": "ĐT.379",
+  "tu_khoa": [
+   "ĐT379",
+   "ĐT.379"
+  ]
+ },
+ {
+  "ten": "Cao tốc Pháp Vân – Cầu Giẽ",
+  "tu_khoa": [
+   "cao tốc Pháp Vân - Cầu Giẽ"
+  ]
+ },
+ {
+  "ten": "Cao tốc Hà Nội – Hải Phòng",
+  "tu_khoa": [
+   "cao tốc Hà Nội - Hải Phòng"
+  ]
+ },
+ {
+  "ten": "Cao tốc Nội Bài – Lào Cai",
+  "tu_khoa": [
+   "cao tốc Nội Bài - Lào Cai"
+  ]
+ },
+ {
+  "ten": "Cao tốc Hà Nội – Thái Nguyên",
+  "tu_khoa": [
+   "cao tốc Hà Nội - Thái Nguyên"
+  ]
+ },
+ {
+  "ten": "Đường sắt tốc độ cao Bắc – Nam",
+  "tu_khoa": [
+   "đường sắt tốc độ cao Bắc - Nam"
+  ]
+ },
+ {
+  "ten": "Đường sắt Lào Cai – Hà Nội – Hải Phòng",
+  "tu_khoa": [
+   "đường sắt Lào Cai - Hà Nội - Hải Phòng"
+  ]
+ },
+ {
+  "ten": "Đường Võ Nguyên Giáp",
+  "tu_khoa": [
+   "đường Võ Nguyên Giáp"
+  ]
+ },
+ {
+  "ten": "Cầu Đuống",
+  "tu_khoa": [
+   "cầu Đuống"
+  ]
+ },
+ {
+  "ten": "Cầu Phú Xuyên",
+  "tu_khoa": [
+   "cầu Phú Xuyên"
+  ]
+ },
+ {
+  "ten": "Đường Vành đai 1",
+  "tu_khoa": [
+   "vành đai 1"
+  ],
+  "loai_tru": [
+   "vành đai 1.5"
+  ]
+ },
+ {
+  "ten": "Đường Vành đai 3",
+  "tu_khoa": [
+   "vành đai 3"
+  ],
+  "loai_tru": [
+   "vành đai 3.5",
+   "vành đai 3,5"
+  ]
+ },
+ {
+  "ten": "Khu công nghiệp VSIP Bắc Ninh",
+  "tu_khoa": [
+   "VSIP Bắc Ninh"
+  ]
+ },
+ {
+  "ten": "Đường 70",
+  "tu_khoa": [
+   "đường 70"
+  ]
+ },
+ {
+  "ten": "Cầu Hưng Hà",
+  "tu_khoa": [
+   "cầu Hưng Hà"
+  ]
+ }
 ]
