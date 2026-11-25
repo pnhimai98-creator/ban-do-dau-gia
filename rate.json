@@ -4,9 +4,9 @@
   "buy": 25560.0,
   "transfer": 25590.0,
   "sell": 25970.0,
-  "bank_time": "11/25/2026 9:17:33 AM",
+  "bank_time": "11/25/2026 12:20:00 PM",
   "date": "2026-11-25",
-  "fetched_at": "2026-11-25T09:29:37+07:00",
+  "fetched_at": "2026-11-25T12:21:26+07:00",
   "source": "Vietcombank",
   "source_url": "https://portal.vietcombank.com.vn/UserControls/TVPortal.TyGia/pXML.aspx"
 }
