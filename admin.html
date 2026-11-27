@@ -100,8 +100,12 @@ th .hbtn{border:0;background:none;color:var(--muted,#888);cursor:pointer;padding
 #gridCard.fs{position:fixed;inset:0;z-index:5000;margin:0;border-radius:0;overflow:auto;padding:14px 18px}
 #gridCard.fs .gwrap{max-height:calc(100vh - 90px)}
 #pendCard.fs{position:fixed;inset:0;z-index:5000;margin:0;border-radius:0;overflow:auto;padding:14px 18px}
-#pendCard.fs .pwrap{max-height:calc(50vh - 120px)}
+#pendCard.fs .pwrap{max-height:calc(100vh - 230px)}
+#pendCard.one .pwrap{max-height:80vh}#pendCard.fs.one .pwrap{max-height:calc(100vh - 200px)}
 .sheet select.need{outline:2px solid var(--bad);outline-offset:-2px}
+.sheet td.need{box-shadow:inset 0 0 0 2px var(--bad)}.sheet td.need input::placeholder{color:var(--bad);opacity:.8}
+.pbody td{cursor:text}.pbody td.ck,.pbody td.pend-t{cursor:auto}
+.pend-t .req{margin:4px 0 0;font-size:12px;color:var(--acc)}
 .okb{display:inline-block;font-size:12px;border-radius:99px;padding:0 8px;line-height:20px;margin:2px 0}.okb.y{background:light-dark(#dcfce7,#14361f);color:var(--ok)}.okb.n{background:light-dark(#fff1e6,#3a2615);color:var(--bad)}
 .xbtn{border:0;background:none;color:var(--bad);cursor:pointer;width:100%;height:34px;font-size:16px}
 </style>
@@ -153,7 +157,7 @@ th .hbtn{border:0;background:none;color:var(--muted,#888);cursor:pointer;padding
   </div>
   <div class="row pbar">
    <button class="btn" id="pAll" title="Chọn / bỏ chọn mọi dòng đang hiện">Chọn tất cả</button><button class="btn" id="pAllOk" title="Chọn các dòng đang hiện đã đủ điều kiện duyệt">✓ Chọn dòng đủ điều kiện</button>
-   <button class="btn" id="pFill" title="Đọc lại bài gốc và điền vào các ô còn trống (dòng đã chọn, hoặc mọi dòng nếu chưa chọn)">🔎 Đọc bài &amp; điền chỗ trống</button><button class="btn" id="pSaveP" title="Lưu các ô đã điền/sửa vào cho-duyet.csv mà chưa duyệt">Lưu bảng chờ</button>
+   <button class="btn" id="pFill" title="Đọc lại bài gốc và điền vào các ô còn trống (dòng đã chọn, hoặc mọi dòng nếu chưa chọn)">🔎 Đọc bài &amp; điền chỗ trống</button><button class="btn" id="pReq" title="Chọn cột cần điền (VD Xã) → workflow dùng Gemini đọc lại bài và điền cho các dòng đã chọn (hoặc mọi dòng đang hiện)">🤖 Yêu cầu điền cột…</button><button class="btn" id="pSaveP" title="Lưu các ô đã điền/sửa vào cho-duyet.csv mà chưa duyệt">Lưu bảng chờ</button>
    <button class="btn danger" id="pSkip">Bỏ qua dòng đã chọn</button><button class="btn pri" id="pOk">Duyệt dòng đã chọn → data.csv</button>
   </div>
   <div class="row pbar" id="pFilt">
@@ -512,7 +516,9 @@ async function load() {
   } catch (e) { say("Không tải được: " + explain(e), "err"); }
 }
 
+let LAST_CONFLICT = false;
 async function commit(message) {
+  LAST_CONFLICT = false;
   const btns = [$("#btnSave"), $("#btnDel")]; btns.forEach(b => b.disabled = true);
   say("Đang lưu lên GitHub…");
   try {
@@ -522,7 +528,7 @@ async function commit(message) {
     return true;
   } catch (e) {
     say("Chưa lưu được: " + explain(e), "err");
-    if (e.status === 409 || e.status === 422) { const keep = ROWS; try { const j = await gh("GET"); SHA = j.sha; ROWS = parseCSV(b64dec(j.content)).rows; } catch (er) { ROWS = keep; } renderList(); }
+    if (e.status === 409 || e.status === 422) { const keep = ROWS; try { const j = await gh("GET"); SHA = j.sha; ROWS = parseCSV(b64dec(j.content)).rows; LAST_CONFLICT = true; } catch (er) { ROWS = keep; } renderList(); }
     return false;
   } finally { btns.forEach(b => b.disabled = false); }
 }
@@ -669,8 +675,8 @@ function hideCol(k, h, on) { const s = hid(k); on ? s.add(h) : s.delete(h); save
 function colsLabel() { document.querySelectorAll("[data-cols]").forEach(b => { const k = b.dataset.cols, n = colsOf(k).filter(h => hid(k).has(h)).length; b.textContent = n ? `☰ Cột (${n} ẩn)` : "☰ Cột"; b.classList.toggle("on", !!n); }); }
 document.addEventListener("click", e => {
   const b = e.target.closest("[data-cols]"); if (!b) return; e.stopImmediatePropagation(); e.preventDefault();
-  const k = b.dataset.cols; if ($("#fpop") && $("#fpop").dataset.cols === k) { closeFpop(); return; } closeFpop();
-  const p = document.createElement("div"); p.id = "fpop"; p.dataset.cols = k;
+  const k = b.dataset.cols; if ($("#fpop") && $("#fpop").dataset.pk === k) { closeFpop(); return; } closeFpop();
+  const p = document.createElement("div"); p.id = "fpop"; p.dataset.pk = k;   /* KHÔNG dùng data-cols cho khung bật lên, nếu không mỗi lần bấm tích sẽ bị coi là bấm nút ☰ Cột → khung đóng, tích bị hủy */
   const draw = () => { const cols = colsOf(k);
     p.innerHTML = `<b>Hiện các cột</b> <span class="muted">(bỏ tích để ẩn)</span><div class="fl" style="max-height:340px">${cols.map(h => `<label><input type="checkbox" value="${esc(h)}"${hid(k).has(h) ? "" : " checked"}> ${esc((COL[h] || [h])[0])}</label>`).join("")}</div>
       <div class="act"><button class="btn" data-sh="all">Hiện tất cả</button><button class="btn" data-sh="none">Ẩn tất cả</button></div>`; };
@@ -1210,7 +1216,9 @@ async function loadPending() {
 function updPendBadge() { const b = $("#pendBadge"); b.textContent = PROWS.length; b.hidden = !PROWS.length; }
 /* ---- điều kiện duyệt, phân khung, lọc ---- */
 const NEED = [["ngay", "Ngày"], ["xa", "Xã"], ["loai_dat", "Loại đất"], ["gia_khoi_diem", "Giá KĐ"], ["nguon", "Nguồn"], ["link", "Link báo gốc"]];
-const lacks1 = p => NEED.filter(([k]) => { const v = String(p[k] ?? "").trim(); return !v || (k === "link" && (/news\.google\./.test(v) || !/^https?:\/\//.test(v))) || (k === "ngay" && !/^\d{4}-\d{2}(-\d{2})?$/.test(v)); }).map(([, l]) => l);
+/* ngày gõ kiểu 17/5/2026, 17-05-2026, 17.5.2026 → 2026-05-17 */
+const normDate = v => { const x = String(v ?? "").trim(), m = x.match(/^(\d{1,2})[\/.\-](\d{1,2})[\/.\-](\d{4})$/); return m ? `${m[3]}-${m[2].padStart(2, "0")}-${m[1].padStart(2, "0")}` : x; };
+const lacks1 = p => NEED.filter(([k]) => { const v = k === "ngay" ? normDate(p[k]) : String(p[k] ?? "").trim(); return !v || (k === "link" && (/news\.google\./.test(v) || !/^https?:\/\//.test(v))) || (k === "ngay" && !/^\d{4}-\d{2}(-\d{2})?$/.test(v)); }).map(([, l]) => l);
 const frameOf = p => p._khung === "2" || p._cap_nhat_id || (p.trang_thai && p.trang_thai !== "Sắp đấu giá") ? 2 : 1;
 /* ---- KHUNG ②: tin cập nhật phải GHÉP vào một phiên đã có và CHUYỂN trạng thái ----
    Phiên "Chờ kết quả" (hoặc "Sắp đấu giá" đã qua ngày) → "Đã đấu giá" hoặc "Hủy/bỏ cọc".
@@ -1305,7 +1313,11 @@ function pendVisible() {
     && (!ng || p.nguon === ng) && (!dup || (dup === "dup") === !!d))
     .sort((a, b) => (a.miss.length ? 1 : 0) - (b.miss.length ? 1 : 0) || a.miss.length - b.miss.length || String(b.p.ngay || "").localeCompare(String(a.p.ngay || "")));
 }
+/* nhãn “Thiếu: …” → cột cần tô đỏ để nhập */
+const NEEDKEY = [["Ngày", "ngay"], ["Xã", "xa"], ["Loại đất", "loai_dat"], ["Giá KĐ", "gia_khoi_diem"], ["Nguồn", "nguon"], ["Giá trúng", "gia_trung_max"], ["Lý do", "sau_dau_gia"], ["Phiên sau", "phien_sau"]];
+const needKeys = miss => new Set(miss.map(m => (NEEDKEY.find(([l]) => m.startsWith(l)) || [])[1]).filter(Boolean));
 function pendRow({p, i, miss, d}, cols, f2) {
+  const nk = needKeys(miss);
   return `<tr data-p="${i}" class="${d ? "err" : ""}"><td class="ck rn"><input type="checkbox" data-pc="${i}"${PSEL.has(i) ? " checked" : ""} aria-label="Chọn dòng"></td>
     <td class="pend-t">${miss.length ? `<span class="okb n" title="Chưa đủ điều kiện duyệt">Thiếu: ${esc(miss.join(", "))}</span>` : `<span class="okb y">✓ Đủ điều kiện</span>`}<br>
     ${p.link ? `<a href="${esc(p.link)}" target="_blank" rel="noopener">${esc(p._tieu_de || p.link)}</a>` : esc(p._tieu_de || "")}
@@ -1314,8 +1326,12 @@ function pendRow({p, i, miss, d}, cols, f2) {
       if (frameOf(p) === 2) return `<div class="warn">Chưa ghép với phiên nào – chọn ở cột “Cập nhật phiên”, hoặc để trống nếu đây là phiên mới chưa có trong dữ liệu</div>`;
       return ""; })()}
     ${p.xa && p._tieu_de && !findRow(p._cap_nhat_id) && !fold0(p._tieu_de).includes(fold0(p.xa)) ? `<div class="warn">⚠ Xã “${esc(p.xa)}” không có trong tiêu đề bài – có thể đọc nhầm địa danh</div>` : ""}
+    ${p._can_dien ? `<div class="req">⏳ Đã yêu cầu workflow đọc lại bài để điền: ${esc(p._can_dien.split(",").map(h => (COL[h] || [h])[0]).join(", "))} – bấm “Tải lại” sau vài phút</div>` : ""}
     ${p.link ? `<div class="rd ${PSTAT[p.link] ? PSTAT[p.link][0] : ""}"><button class="fbtn" style="margin:0 6px 0 0" data-rd="${i}" type="button">🔎 Đọc bài</button>${PSTAT[p.link] ? esc(PSTAT[p.link][1]) : p._loi_doc ? esc(p._loi_doc) : ""}</div>` : ""}</td>
-    ${cols.map(h => `<td${(PAUTO[p.link] && PAUTO[p.link].has(h)) || String(p._tu_dien || "").split(",").includes(h) ? ' class="auto" title="Tự điền / tự ghép – hãy soát lại"' : ""}>${f2 ? pendCell2(i, h, p) : cellHTML(i, h, p[h]).replace(/data-g=/, "data-pi=")}</td>`).join("")}</tr>`;
+    ${cols.map(h => { const au = (PAUTO[p.link] && PAUTO[p.link].has(h)) || String(p._tu_dien || "").split(",").includes(h), nd = nk.has(h) && !String(p[h] ?? "").trim();
+      let c = f2 ? pendCell2(i, h, p) : cellHTML(i, h, p[h]).replace(/data-g=/, "data-pi=");
+      if (nd) c = c.replace(/^<input /, '<input placeholder="cần điền" ');
+      return `<td class="${[au ? "auto" : "", nd ? "need" : ""].join(" ").trim()}"${au ? ' title="Tự điền / tự ghép – hãy soát lại"' : nd ? ' title="Ô bắt buộc để duyệt – bấm vào để nhập"' : ""}>${c}</td>`; }).join("")}</tr>`;
 }
 function renderPending() {
   pendFilterOpts();
@@ -1328,6 +1344,7 @@ function renderPending() {
   colsLabel(); RSEL.paint();
   const cnt = a => `(${a.length} dòng · ${a.filter(v => !v.miss.length).length} đủ điều kiện)`;
   $("#pc1").textContent = cnt(f1); $("#pc2").textContent = cnt(f2);
+  $("#pendCard").classList.toggle("one", !f1.length || !f2.length);   /* một khung trống → khung còn lại được cao gần hết màn hình */
   renderPendInfo();
 }
 const renderPendInfo = () => {
@@ -1344,7 +1361,53 @@ document.querySelectorAll(".pbody").forEach(tb => tb.addEventListener("input", e
       p._tu_dien = String(p._tu_dien || "").split(",").filter(x => x && x !== h).join(",");
       if (h === "_cap_nhat_id") p._khong_ghep = el.value ? "" : "1";
       renderPending();
-    } } }));
+    } else refreshPendLabel(+el.dataset.pi); } }));
+/* gõ ngày kiểu dd/mm/yyyy → tự đổi sang YYYY-MM-DD khi rời ô */
+document.querySelectorAll(".pbody").forEach(tb => tb.addEventListener("change", e => { const el = e.target;
+  if (el.dataset.pi == null || el.dataset.h !== "ngay") return; const p = PROWS[+el.dataset.pi], v = normDate(el.value);
+  if (v !== el.value) { el.value = v; p.ngay = v; refreshPendLabel(+el.dataset.pi); } }));
+/* bấm vào bất kỳ chỗ nào trong ô (kể cả phần trống khi dòng cao) → con trỏ vào ô nhập */
+document.querySelectorAll(".pbody").forEach(tb => tb.addEventListener("click", e => {
+  if (e.shiftKey || e.target.closest("input, select, a, button, textarea, .pend-t, .ck")) return;
+  const td = e.target.closest("td"), el = td && td.querySelector("input[data-h], select[data-h]"); if (el) { el.focus(); if (el.select && el.tagName === "INPUT") el.setSelectionRange(el.value.length, el.value.length); }
+}));
+/* ---- 🤖 yêu cầu điền theo cột: ghi cột cần điền vào _can_dien → lưu cho-duyet.csv → workflow “Tự đọc bài & điền tin chờ duyệt” chạy ngay (Gemini) ---- */
+const REQCOLS = ["xa", "ngay", "dia_danh_cu", "khu", "loai_dat", "so_thua", "gia_khoi_diem", "so_thua_trung", "gia_trung_min", "gia_trung_max", "tong_tien_ty", "nguoi_tham_gia"];
+$("#pReq").addEventListener("click", e => {
+  e.stopPropagation(); if ($("#fpop") && $("#fpop").dataset.req) { closeFpop(); return; } closeFpop();
+  const rows = (PSEL.size ? [...PSEL] : pendVisible().map(v => v.i)).filter(i => PROWS[i]);
+  if (!rows.length) { say("Không có dòng nào.", "err"); return; }
+  const emptyN = h => rows.filter(i => !String(PROWS[i][h] ?? "").trim()).length;
+  const p = document.createElement("div"); p.id = "fpop"; p.dataset.req = "1";
+  p.innerHTML = `<b>Điền cột nào?</b> <span class="muted">(${PSEL.size ? rows.length + " dòng đã chọn" : "mọi " + rows.length + " dòng đang hiện"})</span>
+    <div class="fl" style="max-height:340px">${REQCOLS.map(h => { const n = emptyN(h); return `<label><input type="checkbox" value="${h}"${n ? "" : " disabled"}${h === "xa" && n ? " checked" : ""}> ${esc((COL[h] || [h])[0])} <span class="muted">(${n} ô trống)</span></label>`; }).join("")}</div>
+    <div class="muted" style="font-size:12px;margin-bottom:6px">Chỉ điền ô đang trống. Xã: tra bảng xã cũ → mới trước, không có thì Gemini tra theo sáp nhập 2025 (có ghi chú để soát).</div>
+    <div class="act"><button class="btn pri" data-go="1">Gửi yêu cầu</button></div>`;
+  document.body.appendChild(p);
+  const r = e.currentTarget.getBoundingClientRect(); p.style.top = Math.max(8, Math.min(r.bottom + 4, innerHeight - p.offsetHeight - 8)) + "px"; p.style.left = Math.max(8, Math.min(r.left, innerWidth - 270)) + "px";
+  p.querySelector("[data-go]").addEventListener("click", async () => {
+    const cols = [...p.querySelectorAll("input:checked")].map(x => x.value); if (!cols.length) { say("Chưa chọn cột nào.", "err"); return; }
+    let n = 0;
+    rows.forEach(i => { const q = PROWS[i], need = cols.filter(h => !String(q[h] ?? "").trim()); if (!need.length) return;
+      q._can_dien = [...new Set(String(q._can_dien || "").split(",").filter(Boolean).concat(need))].join(","); q._so_lan_doc = "0"; q._da_doc = ""; n++; });
+    closeFpop();
+    if (!n) { say("Các dòng này không còn ô trống ở cột đã chọn.", "ok"); return; }
+    renderPending();
+    if (await savePending(`Yêu cầu điền ${cols.join(", ")} cho ${n} dòng chờ duyệt`))
+      say(`Đã gửi yêu cầu điền ${cols.map(h => (COL[h] || [h])[0]).join(", ")} cho ${n} dòng. Workflow “Tự đọc bài & điền tin chờ duyệt” tự chạy (khoảng 2–10 phút, Gemini giãn ~6 giây/bài). Xong thì bấm “Tải lại” – ô vừa điền tô xanh để soát.`, "ok");
+  });
+});
+/* cập nhật ngay nhãn “Đủ điều kiện / Thiếu” của một dòng khi sửa ô (không vẽ lại cả bảng để không mất con trỏ) */
+function refreshPendLabel(i) {
+  const p = PROWS[i]; if (!p) return; const miss = lacks(p);
+  const nk = needKeys(miss);
+  document.querySelectorAll(`.pbody tr[data-p="${i}"] [data-h]`).forEach(el => { const td = el.closest("td"), on = nk.has(el.dataset.h) && !String(p[el.dataset.h] ?? "").trim(); if (td && !td.classList.contains("pend-t")) td.classList.toggle("need", on); });
+  document.querySelectorAll(`.pbody tr[data-p="${i}"] .pend-t > .okb`).forEach(sp => sp.outerHTML = miss.length
+    ? `<span class="okb n" title="Chưa đủ điều kiện duyệt">Thiếu: ${esc(miss.join(", "))}</span>` : `<span class="okb y">✓ Đủ điều kiện</span>`);
+  const vis = pendVisible(), cnt = a => `(${a.length} dòng · ${a.filter(v => !v.miss.length).length} đủ điều kiện)`;
+  $("#pc1").textContent = cnt(vis.filter(v => frameOf(v.p) === 1)); $("#pc2").textContent = cnt(vis.filter(v => frameOf(v.p) === 2));
+  renderPendInfo();
+}
 ["#pfQ", "#pfOkS", "#pfSt", "#pfTinh", "#pfLoai", "#pfNguon", "#pfDup"].forEach(id => $(id).addEventListener("input", () => { PF[id] = $(id).value; renderPending(); }));
 $("#pfClr").addEventListener("click", () => { ["#pfQ", "#pfOkS", "#pfSt", "#pfTinh", "#pfLoai", "#pfNguon", "#pfDup"].forEach(id => { $(id).value = ""; PF[id] = ""; }); renderPending(); });
 $("#pAll").addEventListener("click", () => { const ids = pendVisible().map(v => v.i), all = ids.every(i => PSEL.has(i)); ids.forEach(i => all ? PSEL.delete(i) : PSEL.add(i)); renderPending(); });
@@ -1400,26 +1463,43 @@ $("#gXlsx").addEventListener("click", async () => {
   }
 });
 $("#pReload").addEventListener("click", async () => { await loadPending(); renderPending(); say("Đã tải lại tin chờ duyệt.", "ok"); });
-async function savePending(message) {
+async function savePending(message, removed = []) {
+  const pkey = r => String(r.link || "") + "|" + String(r._tieu_de || "") + "|" + String(r._cap_nhat_id || "");
   const hs = new Set(PHEAD.length ? PHEAD : STD); PCOLS.concat(["link", "vi_tri"]).forEach(h => hs.add(h)); PROWS.forEach(r => Object.keys(r).forEach(h => hs.add(h)));
   PHEAD = [...hs];
   const body = {message, content: b64enc(toCSVOf(PHEAD, PROWS)), branch: cfg().branch}; if (PSHA) body.sha = PSHA;
   try { const j = await gh("PUT", body, PEND_PATH); PSHA = j.content.sha; return true; }
-  catch (e) { say("Đã lưu data.csv nhưng chưa cập nhật được danh sách chờ: " + explain(e) + " Bấm “Tải lại” rồi bỏ qua các dòng đã duyệt.", "err"); return false; }
+  catch (e) {
+    if (e.status === 409 || e.status === 422) {   /* workflow vừa ghi thêm tin vào cho-duyet.csv → gộp tin mới của workflow rồi lưu lại */
+      try {
+        const f = await gh("GET", null, PEND_PATH), fr = parseCSV(b64dec(f.content)), have = new Set(PROWS.map(pkey)), gone = new Set(removed.map(pkey));
+        const extra = fr.rows.filter(r => !have.has(pkey(r)) && !gone.has(pkey(r)));
+        PROWS = PROWS.concat(extra); fr.head.forEach(h => { if (!PHEAD.includes(h)) PHEAD.push(h); }); PROWS.forEach(r => Object.keys(r).forEach(h => { if (!PHEAD.includes(h)) PHEAD.push(h); }));
+        const j = await gh("PUT", {message, content: b64enc(toCSVOf(PHEAD, PROWS)), branch: cfg().branch, sha: f.sha}, PEND_PATH); PSHA = j.content.sha;
+        if (extra.length) { autoLink(); updPendBadge(); }
+        return true;
+      } catch (e2) { e = e2; }
+    }
+    say("Đã lưu data.csv nhưng chưa cập nhật được danh sách chờ: " + explain(e) + " Bấm “Tải lại” rồi bỏ qua các dòng đã duyệt.", "err"); return false; }
 }
 $("#pSkip").addEventListener("click", async () => {
   if (!PSEL.size) { say("Chưa chọn dòng nào.", "err"); return; }
-  const keep = PROWS, n = PSEL.size; PROWS = PROWS.filter((_, i) => !PSEL.has(i));
-  if (await savePending(`Bỏ qua ${n} tin chờ duyệt`)) { PSEL = new Set(); say(`Đã bỏ qua ${n} dòng.`, "ok"); } else PROWS = keep;
+  const keep = PROWS, n = PSEL.size, gone = PROWS.filter((_, i) => PSEL.has(i)); PROWS = PROWS.filter((_, i) => !PSEL.has(i));
+  if (await savePending(`Bỏ qua ${n} tin chờ duyệt`, gone)) { PSEL = new Set(); say(`Đã bỏ qua ${n} dòng.`, "ok"); } else PROWS = keep;
   updPendBadge(); renderPending();
 });
 $("#pOk").addEventListener("click", async () => {
   if (!PSEL.size) { say("Chưa chọn dòng nào để duyệt.", "err"); return; }
   if (GRID.some(rowChanged)) { say("Tab Bảng tính còn thay đổi chưa lưu – hãy lưu hoặc hủy trước khi duyệt tin.", "err"); return; }
-  /* khung ②: chỉ duyệt dòng đã chọn trạng thái mới (Đã đấu giá / Hủy-bỏ cọc) và đủ điều kiện */
-  const blocked = [...PSEL].filter(i => frameOf(PROWS[i]) === 2 && lacks2(PROWS[i]).length);
+  /* chỉ duyệt dòng có nhãn “✓ Đủ điều kiện” – dùng đúng hàm lacks() như nhãn hiển thị, ở cả hai khung */
+  PSEL = new Set([...PSEL].filter(i => PROWS[i]));
+  PSEL.forEach(i => { const p = PROWS[i]; if (p && p.ngay) p.ngay = normDate(p.ngay); });
+  const blocked = [...PSEL].filter(i => lacks(PROWS[i]).length);
+  const visSet = new Set(pendVisible().map(v => v.i)), hiddenN = blocked.filter(i => !visSet.has(i)).length;
+  const why = blocked.slice(0, 5).map(i => `“${String(PROWS[i]._tieu_de || PROWS[i].xa || "dòng " + (i + 1)).slice(0, 45)}” thiếu ${lacks(PROWS[i]).join(", ")}`).join("; ") + (blocked.length > 5 ? `; … và ${blocked.length - 5} dòng khác` : "");
+  const blockMsg = blocked.length ? `${blocked.length} dòng chưa đủ điều kiện nên bị bỏ chọn${hiddenN ? ` (${hiddenN} dòng đang bị bộ lọc ẩn)` : ""}: ${why}.` : "";
   blocked.forEach(i => PSEL.delete(i));
-  if (!PSEL.size) { renderPending(); say(`Không duyệt được: ${blocked.length} dòng ở khung ② chưa đủ điều kiện (chưa chọn trạng thái mới Đã đấu giá / Hủy-bỏ cọc, chưa ghép mã phiên hoặc thiếu kết quả/lý do).`, "err"); return; }
+  if (!PSEL.size) { renderPending(); say("Không duyệt được: " + blockMsg, "err"); return; }
   const keep = ROWS.map(r => ({...r})), keepHead = HEAD.slice(), picked = PROWS.filter((_, i) => PSEL.has(i)), warns = [], added = [];
   let merged = 0;
   picked.forEach(p => {
@@ -1448,7 +1528,7 @@ $("#pOk").addEventListener("click", async () => {
     }
     const r = Object.fromEntries(HEAD.map(h => [h, String(p[h] ?? "").trim()]));
     NUMS.forEach(k => { if (r[k]) r[k] = normNum(r[k]); });
-    if (r.ngay && /^\d{1,2}\/\d{1,2}\/\d{4}$/.test(r.ngay)) { const [d, m, y] = r.ngay.split("/"); r.ngay = `${y}-${m.padStart(2, "0")}-${d.padStart(2, "0")}`; }
+    if (r.ngay) r.ngay = normDate(r.ngay);
     r.tinh = r.tinh || "Hà Nội"; r.trang_thai = r.trang_thai || "Sắp đấu giá"; r.vi_tri = r.vi_tri || "Gần đúng";
     r.id = nextId(r.tinh, r.ngay || new Date().toISOString().slice(0, 10));
     r._tieu_de = p._tieu_de || "";
@@ -1457,11 +1537,17 @@ $("#pOk").addEventListener("click", async () => {
   });
   const clsLog = classifySessions(ROWS, added); added.forEach(r => delete r._tieu_de);
   const ok = await commit(`Duyệt ${picked.length} tin từ báo` + (merged ? ` (${merged} cập nhật kết quả phiên cũ)` : ""));
-  if (!ok) { ROWS = keep; HEAD = keepHead; return; }
+  if (!ok) {
+    if (LAST_CONFLICT) {   /* data.csv vừa bị workflow sửa trên GitHub: commit() đã tải bản mới nhất – giữ bản mới, KHÔNG quay về bản cũ */
+      gridFromRows(); renderList(); autoLink(); renderPending();
+      say("data.csv vừa được workflow cập nhật trên GitHub nên lần lưu này bị từ chối. Admin đã tải lại dữ liệu mới nhất và giữ nguyên các dòng đã chọn – bấm “Duyệt” lần nữa.", "err");
+    } else { ROWS = keep; HEAD = keepHead; }
+    return;
+  }
   PROWS = PROWS.filter((_, i) => !PSEL.has(i)); PSEL = new Set();
-  const ok2 = await savePending(`Đã duyệt ${picked.length} tin`);
+  const ok2 = await savePending(`Đã duyệt ${picked.length} tin`, picked);
   gridFromRows(); updPendBadge(); renderPending();
-  if (ok2) say(`Đã duyệt ${picked.length} tin vào data.csv${merged ? ` – trong đó ${merged} tin cập nhật trạng thái phiên cũ` : ""}. Bản đồ cập nhật sau khoảng 1 phút.` + (clsLog.length ? ` Tự phân loại: ${clsLog.join("; ")}.` : "") + (blocked.length ? ` ${blocked.length} dòng khung ② chưa đủ điều kiện nên chưa duyệt.` : "") + (warns.length ? " Lưu ý: " + warns.join("; ") : ""), "ok");
+  if (ok2) say(`Đã duyệt ${picked.length} tin vào data.csv${merged ? ` – trong đó ${merged} tin cập nhật trạng thái phiên cũ` : ""}. Bản đồ cập nhật sau khoảng 1 phút.` + (clsLog.length ? ` Tự phân loại: ${clsLog.join("; ")}.` : "") + (blockMsg ? " " + blockMsg : "") + (warns.length ? " Lưu ý: " + warns.join("; ") : ""), "ok");
 });
 
 /* ---------- Đọc bài báo & trích dữ liệu phiên đấu giá / read an article and extract auction fields ---------- */
