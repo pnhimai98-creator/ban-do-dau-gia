@@ -1,12 +1,12 @@
 {
-  "usd_vnd": 25630.0,
+  "usd_vnd": 25650.0,
   "type": "transfer",
-  "buy": 25600.0,
-  "transfer": 25630.0,
-  "sell": 26010.0,
-  "bank_time": "11/27/2026 9:23:39 AM",
+  "buy": 25620.0,
+  "transfer": 25650.0,
+  "sell": 26030.0,
+  "bank_time": "11/27/2026 12:09:12 PM",
   "date": "2026-11-27",
-  "fetched_at": "2026-11-27T09:29:40+07:00",
+  "fetched_at": "2026-11-27T12:22:35+07:00",
   "source": "Vietcombank",
   "source_url": "https://portal.vietcombank.com.vn/UserControls/TVPortal.TyGia/pXML.aspx"
 }
