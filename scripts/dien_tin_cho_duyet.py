@@ -17,12 +17,15 @@ Các ô được điền ghi vào cột _tu_dien (để admin tô màu cho bạn
 
 Không cần thư viện ngoài (chỉ Python 3 chuẩn).
 """
-import csv, html, io, json, os, re, sys, time, urllib.parse, urllib.request
+import csv, html, io, json, os, re, sys, time, unicodedata, urllib.parse, urllib.request
 from datetime import date
 from html.parser import HTMLParser
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PEND = os.path.join(ROOT, "cho-duyet.csv")
+XAMAP = os.path.join(ROOT, "data", "xa-cu-moi.json")   # tên xã cũ → xã mới (sáp nhập 7/2025), dùng chung với quét lịch sử
+# Cột _can_dien (admin ghi khi bấm "Yêu cầu điền cột"): danh sách cột cần đọc lại, VD "xa,gia_khoi_diem".
+# Dòng có yêu cầu được đọc lại NGAY (không tính giới hạn 3 lần / mỗi ngày một lần), xong thì xóa yêu cầu.
 UA = {"User-Agent": "Mozilla/5.0 (ban-do-dau-gia; +https://github.com)"}
 KEYF = ["ngay", "xa", "dia_danh_cu", "khu", "so_thua", "gia_khoi_diem", "gia_trung_max",
         "so_thua_trung", "tong_tien_ty", "nguoi_tham_gia"]
@@ -38,6 +41,40 @@ AI_MODELS = [m.strip() for m in os.environ.get("GEMINI_MODEL", "gemini-flash-lit
 AI_NAME = "Gemini"
 AI_GAP_S = float(os.environ.get("GEMINI_GAP_S", "6"))   # giãn cách giữa 2 lần gọi để nằm trong hạn mức miễn phí (~10 lượt/phút)
 _ai_state = {"last": 0.0, "off": False, "model": 0, "calls": 0}
+
+def fold(s):
+    s = unicodedata.normalize("NFD", str(s or "")).replace("đ", "d").replace("Đ", "D")
+    s = "".join(c for c in s if unicodedata.category(c) != "Mn").lower()
+    s = re.sub(r"^(xa|phuong|thi tran|dac khu|huyen|quan|thi xa|tinh|thanh pho|tp\.?)\s+", "", s.strip())
+    return re.sub(r"\s+", " ", s)
+
+def old_names(p):
+    """Tên xã/phường cũ của dòng: từ ghi chú "Cần điền xã mới (tên cũ: X)" và cột địa danh cũ."""
+    out = [m.strip() for m in re.findall(r"tên cũ:\s*([^);]+)", p.get("ghi_chu") or "")]
+    out += [m.strip() for m in re.findall(r"(?:xã|phường|thị trấn)\s+([^,;()]+)", p.get("dia_danh_cu") or "", re.I)]
+    return [x for x in dict.fromkeys(out) if x and x != "?"]
+
+def xa_from_map(p, xmap):
+    tinh = fold(p.get("tinh") or "Hà Nội")
+    for o in old_names(p):
+        v = xmap.get(f"{tinh}|{fold(o)}")
+        if v: return v
+    return ""
+
+XA_PROMPT = """Ngày 1/7/2025 Việt Nam sắp xếp lại đơn vị hành chính cấp xã (bỏ cấp huyện). Cho biết TÊN XÃ/PHƯỜNG MỚI hiện nay
+bao gồm địa bàn cũ sau: {old}, {tinh}. Chỉ trả lời khi chắc chắn theo nghị quyết sắp xếp của Ủy ban Thường vụ Quốc hội;
+không chắc thì để "". Trả về DUY NHẤT JSON: {{"xa_moi": "<tên, không kèm chữ xã/phường>", "can_cu": "<số nghị quyết nếu biết>"}}"""
+
+def xa_from_ai(p):
+    olds = old_names(p)
+    if not olds or not AI_KEY or _ai_state["off"]: return "", ""
+    huyen = re.findall(r"(?:huyện|quận|thị xã)\s+[^,;()]+", p.get("dia_danh_cu") or "", re.I)
+    out = _gemini(XA_PROMPT.format(old=", ".join(["xã " + olds[0]] + huyen[:1]), tinh=p.get("tinh") or "Hà Nội"))
+    m = re.search(r"\{.*\}", out or "", re.S)
+    try: d = json.loads(m.group(0)) if m else {}
+    except Exception: d = {}
+    v = re.sub(r"^(xã|phường|thị trấn)\s+", "", str(d.get("xa_moi") or "").strip(), flags=re.I)
+    return v, str(d.get("can_cu") or "").strip()
 
 def missing_keys(p):
     need = BASIC + (RESULT if p.get("trang_thai") in ("Đã đấu giá", "Đã nộp tiền") else [])
@@ -371,10 +408,12 @@ def ai_extract(text, title, row=None):
     """AI đọc bài, trả dict các ô (chỉ ô có giá trị) + '_khop' (True/False). Không có AI / lỗi → None."""
     if not AI_KEY or _ai_state["off"]: return None
     hint = ""
+    req = [k for k in (row or {}).get("_can_dien", "").split(",") if k]
     if row and (row.get("xa") or row.get("khu")):
         hint = ("Phiên cần tìm (bài có thể nói nhiều phiên – CHỈ lấy số liệu của phiên này): "
                 f"xã/phường {row.get('xa', '')}; địa danh cũ {row.get('dia_danh_cu', '')}; khu {row.get('khu', '')}; "
                 f"ngày {row.get('ngay', '') or 'chưa rõ'}; số thửa {row.get('so_thua', '') or 'chưa rõ'}; giá khởi điểm {row.get('gia_khoi_diem', '') or 'chưa rõ'} tr/m².")
+    if req: hint += "\nNgười dùng ĐANG CẦN các ô sau, hãy đọc kỹ toàn bài để tìm: " + ", ".join(req) + "."
     out = _gemini(AI_PROMPT.format(hint=hint, yr=date.today().year, today=date.today().isoformat(), title=title, text=text[:12000]))
     if not out: return None
     m = re.search(r"\{.*\}", out, re.S)
@@ -430,6 +469,21 @@ def fill_row(p, raw):
             p[k] = v; done.append(k)
         elif not cur:
             p[k] = v; done.append(k)
+    return done
+
+def fill_xa(p, xmap):
+    """Xã mới còn trống: tra bảng xã cũ → mới; không có thì hỏi Gemini (ghi chú để soát lại)."""
+    if (p.get("xa") or "").strip(): return []
+    v = xa_from_map(p, xmap); how = "bảng xã cũ → mới"
+    if not v: v, cc = xa_from_ai(p); how = f"Gemini tra sáp nhập 2025{' – ' + cc if cc else ''}, cần soát"
+    if not v: return []
+    p["xa"] = v
+    note = f"Xã mới {v}: {how}"
+    p["ghi_chu"] = "; ".join(x for x in [re.sub(r"Cần điền xã mới \(tên cũ: [^)]*\);?\s*", "", p.get("ghi_chu") or "").strip("; "), note] if x)
+    return ["xa", "ghi_chu"]
+
+def fill_geo(p):
+    done = []
     if (not (p.get("lat") or "").strip() or not (p.get("lng") or "").strip()) and p.get("xa"):
         g = geocode(p["xa"], p.get("tinh")); time.sleep(1.1)
         if g: p["lat"], p["lng"] = g; p["vi_tri"] = p.get("vi_tri") or "gần đúng"; done += ["lat", "lng"]
@@ -441,30 +495,46 @@ def main():
     rd = csv.DictReader(io.StringIO(txt)); head = list(rd.fieldnames or []); rows = list(rd)
     for h in ["link", "vi_tri", "_tu_dien", "_da_doc", "_so_lan_doc", "_loi_doc", "_cach_doc"]:
         if h not in head: head.append(h)
+    if "_can_dien" not in head: head.append("_can_dien")
+    xmap = {}
+    try: xmap = json.load(open(XAMAP, encoding="utf-8"))
+    except Exception: pass
     force = "--all" in sys.argv; n_read = n_cells = 0
-    for p in rows:
+    order = sorted(rows, key=lambda p: 0 if (p.get("_can_dien") or "").strip() else 1)   # dòng có yêu cầu làm trước, file giữ nguyên thứ tự
+    for p in order:
         if "news.google." in (p.get("link") or ""):   # tin cũ còn link Google News → đổi sang link báo gốc
             real = decode_google(p["link"]); time.sleep(1)
             if real:
                 print(f"Link gốc: {real}"); p["link"] = real; p["nguon"] = src_name(real, p.get("nguon")); p["_da_doc"] = ""
         if time.monotonic() - T0 > BUDGET_MIN * 60:
             print(f"⏱ Hết {BUDGET_MIN:g} phút – dừng, lần sau đọc tiếp."); break
-        miss = missing_keys(p)
+        req = [k for k in (p.get("_can_dien") or "").split(",") if k]
+        miss = missing_keys(p) + [k for k in req if not (p.get(k) or "").strip()]
         tries = int(p.get("_so_lan_doc") or 0)
-        # đọc khi còn thiếu ô cơ bản; đã đọc rồi mà vẫn thiếu thì thử lại (tối đa 3 lần, mỗi ngày một lần)
-        if not p.get("link") or "news.google." in p["link"] or not miss: continue
-        if not force and (tries >= MAX_TRIES or p.get("_da_doc") == date.today().isoformat()): continue
-        print(f"Đọc: {p['link']} (thiếu {len(miss)} ô)")
+        if req and not [k for k in req if not (p.get(k) or "").strip()]: p["_can_dien"] = ""; continue   # ô yêu cầu đã có giá trị
+        # đọc khi còn thiếu ô cơ bản; đã đọc rồi mà vẫn thiếu thì thử lại (tối đa 3 lần, mỗi ngày một lần) – trừ dòng có yêu cầu
+        if not p.get("link") or "news.google." in p["link"] or not miss:
+            if req and "xa" in req:   # không có link đọc được vẫn tra xã cũ → mới
+                done = fill_xa(p, xmap); n_cells += len(done)
+                p["_tu_dien"] = ",".join(sorted(set(filter(None, (p.get("_tu_dien") or "").split(",") + done))))
+            p["_can_dien"] = ""; continue
+        if not req and not force and (tries >= MAX_TRIES or p.get("_da_doc") == date.today().isoformat()): continue
+        print(f"Đọc: {p['link']} (thiếu {len(miss)} ô{', yêu cầu: ' + ','.join(req) if req else ''})")
         try:
             raw = fetch_text(p["link"]); done = fill_row(p, raw)
+            if "xa" in req or not (p.get("xa") or "").strip(): done += fill_xa(p, xmap)
+            done += fill_geo(p)
             p["_tu_dien"] = ",".join(sorted(set(filter(None, (p.get("_tu_dien") or "").split(",") + done))))
             print(f"    điền {len(done)} ô: {', '.join(done) or '—'}"); n_cells += len(done)
             p["_da_doc"] = date.today().isoformat(); n_read += 1
-            left = missing_keys(p)
+            left = missing_keys(p) + [k for k in req if not (p.get(k) or "").strip() and k not in missing_keys(p)]
             if not p.get("_loi_doc", "").startswith("AI:"): p["_loi_doc"] = ("bài không nêu: " + ", ".join(left)) if left else ""
         except Exception as ex:
             print(f"    không đọc được bài (sẽ thử lại lần sau): {ex}"); p["_loi_doc"] = f"không tải được bài: {str(ex)[:80]}"
-        p["_so_lan_doc"] = str(tries + 1)
+            if "xa" in req:
+                d2 = fill_xa(p, xmap); n_cells += len(d2)
+                p["_tu_dien"] = ",".join(sorted(set(filter(None, (p.get("_tu_dien") or "").split(",") + d2))))
+        p["_so_lan_doc"] = str(tries + 1); p["_can_dien"] = ""
         time.sleep(1.5 if JINA_KEY else 3.5)   # không có khóa Jina: giữ dưới ~20 bài/phút
     buf = io.StringIO(); w = csv.DictWriter(buf, fieldnames=head, extrasaction="ignore", lineterminator="\n")
     w.writeheader(); [w.writerow({h: p.get(h, "") for h in head}) for p in rows]
