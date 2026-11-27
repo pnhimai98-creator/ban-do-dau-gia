@@ -1255,7 +1255,9 @@ function applyLang() {
   if (map) {
     /* nút chọn nền & chú giải dựng lại theo ngôn ngữ */
     if (layerCtl) layerCtl.remove();
-    const named = {}; [["baseCarto", "carto"], ["baseOSM", "osm"], ["baseHOT", "hot"], ["baseEsri", "esri"], ["baseSat", "sat"]].forEach(([k, id]) => named[t(k)] = bases[id]);
+    const named = {}; [["baseCarto", "carto"], ["baseOSM", "osm"], ["baseHOT", "hot"], ["baseEsri", "esri"], ["baseSat", "sat"]]
+      .filter(([, id]) => location.protocol.startsWith("http") || id !== "osm")   /* mở file trên máy: OpenStreetMap chặn (ô "Access blocked") → ẩn lựa chọn này */
+      .forEach(([k, id]) => named[t(k)] = bases[id]);
     const ov = {}; Object.keys(decvGroups).forEach(k => { const f = decvGroups[k].getLayers()[0]; const c = (f && f.feature.properties.color) || "#7c3aed";
       ov[`<i style="display:inline-block;width:10px;height:10px;border-radius:2px;background:${c};margin:0 5px 0 2px;vertical-align:-1px"></i>${esc(t("decv"))} · ${esc(k)}`] = decvGroups[k]; });
     const sw = (c, line, dash) => `<i style="display:inline-block;width:20px;height:${line ? 0 : 12}px;${line ? `border-top:${line}px ${dash ? "dashed" : "solid"} ${c}` : `background:${c}`};border-radius:2px;margin:0 6px 0 2px;vertical-align:${line ? 4 : -1}px"></i>`;
@@ -1304,6 +1306,12 @@ async function init() {
     };
     /* OpenStreetMap chặn trang mở trực tiếp từ ổ đĩa (file://) → khi mở file trên máy dùng nền Esri, khi lên web dùng OpenStreetMap */
     (location.protocol.startsWith("http") ? bases.carto : bases.esri).addTo(map);
+    /* nền lỗi tải nhiều ô (máy chủ chặn / sập) → tự chuyển sang nền khác; OSM không cho dùng khi mở file trên máy */
+    const FALLBACK = {carto: "esri", osm: "carto", hot: "carto", esri: "carto"};
+    let switched = 0;   /* chỉ tự đổi tối đa 2 lần – mất mạng hẳn thì không đổi qua lại mãi */
+    Object.entries(bases).forEach(([id, b]) => { let err = 0;
+      b.on("tileerror", () => { if (++err === 6 && map.hasLayer(b) && FALLBACK[id] && switched++ < 2) { map.removeLayer(b); bases[FALLBACK[id]].addTo(map); } });
+      b.on("add", () => { err = 0; if (id === "osm" && !location.protocol.startsWith("http")) setTimeout(() => { map.removeLayer(b); bases.esri.addTo(map); }, 0); }); });
     layer = L.layerGroup().addTo(map);
     map.on("zoomend", spreadMarkers);
     map.on("popupopen", e => { const el = e.popup.getElement(); translatePopup(el);
