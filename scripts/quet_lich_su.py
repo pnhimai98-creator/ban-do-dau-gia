@@ -67,6 +67,29 @@ QUERIES = [
 RESULT_TITLE = r"trung dau gia|gia trung|ket qua dau gia|dau gia thanh cong|thu ve|trieu dong ?/ ?m|tr/m|bo coc|huy ket qua|\be\b|that bai|khong co nguoi|cao gap|chenh|kich san|ty dong|nghin ty"
 NOT_LAND = r"bien so|o to|xe may|khoang san|\bmo cat\b|co phan|tai san thi hanh an|tau bien|tang vat"
 RESULT_KEYS = ["so_thua_trung", "gia_trung_min", "gia_trung_max", "tong_tien_ty", "nguoi_tham_gia"]
+# tiêu đề kiểu thông báo trước phiên / tin tổng hợp / tin chính sách → không phải kết quả MỘT phiên
+ANNOUNCE = r"\b(sap|chuan bi|du kien|ke hoach|se dau gia|len ke hoach|tung)\b.{0,40}dau gia|de xuat|sua luat|nghi dinh|thong tu|chuyen gia|vi sao|tu vu|\d+ du an|\d+ ha dat|nghin ty|trung thau"
+# tỉnh/thành ngoài vùng dự án hay lẫn vào tin
+OTHER_PLACES = ["Khánh Hòa", "Nha Trang", "TP.HCM", "TPHCM", "Hồ Chí Minh", "Thủ Thiêm", "Thủ Đức", "Đà Nẵng", "Hải Phòng", "Hải Dương",
+                "Thanh Hóa", "Nghệ An", "Hà Tĩnh", "Quảng Ninh", "Lâm Đồng", "Đồng Nai", "Bình Dương", "Long An", "Cần Thơ", "Quảng Nam",
+                "Quảng Ngãi", "Bình Định", "Phú Yên", "Đắk Lắk", "Gia Lai", "Kiên Giang", "Phú Quốc", "Lạng Sơn", "Lào Cai", "Yên Bái",
+                "Tuyên Quang", "Sơn La", "Điện Biên", "Cao Bằng", "Hà Giang", "Quảng Bình", "Quảng Trị", "Huế", "Bà Rịa", "Vũng Tàu"]
+
+
+def valid_iso(d):
+    try: date.fromisoformat(d); return True
+    except Exception: return False
+
+
+def reject_reason(title, text, tinh, how):
+    """Lý do loại một bài/dòng quét lịch sử (dùng cả để dọn các dòng cũ đã thêm nhầm). '' = giữ."""
+    ft, fti = fold(text), fold(title)
+    if any(fold(p) in fti for p in OTHER_PLACES): return "tin tỉnh khác"
+    if re.search(ANNOUNCE, fti) and not re.search(r"thanh cong|trung (cao nhat|gia|dau gia)|gia trung", fti): return "tin thông báo / tổng hợp"
+    if tinh == "Hà Nội" and not ("ha noi" in ft or any(fold(h) in ft for h in HN_OLD)): return "không thấy Hà Nội trong bài"
+    if tinh and tinh != "Hà Nội" and fold(tinh) not in ft and not any(fold(o) in ft for o, n in OLD_PROV.items() if n == tinh): return "không thấy tên tỉnh trong bài"
+    if how == "quy tắc" and re.search(r"\b(tong hop|loat|don dap|nhieu xa|cac xa|vung ven)\b", fti): return "tin tổng hợp nhiều phiên (quy tắc không tách được)"
+    return ""
 
 
 def log(*a): print(*a, flush=True)
@@ -147,17 +170,18 @@ def learn_map(drows, xmap):
 
 
 def fix_year(d, pub):
-    """Bài kết quả đăng SAU phiên. Năm AI/quy tắc đoán sai (thường lấy năm nay) → lấy năm của ngày đăng."""
+    """Bài thường chỉ ghi "ngày 5/11" không kèm năm → AI/quy tắc hay lấy năm nay (2026).
+    Chọn năm (năm đăng bài −1 / = / +1) sao cho ngày phiên GẦN ngày đăng bài nhất,
+    trong khoảng 1 năm trước đến 3 tháng sau ngày đăng. Không chọn được → bỏ trống."""
     if not d or not pub: return d
     try: d, p = date.fromisoformat(d), date.fromisoformat(pub)
     except Exception: return d
-    if d <= p + timedelta(days=2): return d.isoformat()
-    for y in (p.year, p.year - 1):
-        try:
-            c = d.replace(year=y)
-            if c <= p + timedelta(days=2): return c.isoformat()
-        except ValueError: pass
-    return ""
+    best = None
+    for y in (p.year - 1, p.year, p.year + 1):
+        try: c = d.replace(year=y)
+        except ValueError: continue
+        if p - timedelta(days=366) <= c <= p + timedelta(days=92) and (best is None or abs((c - p).days) < abs((best - p).days)): best = c
+    return best.isoformat() if best else ""
 
 
 def dup_key(r):
@@ -200,7 +224,9 @@ def build_row(it, link, raw, xmap):
         if not has_res: return None, "không có kết quả"
         st = "Đã đấu giá"
     if st == "Đã đấu giá" and not has_res: return None, "không có số liệu kết quả"
-    ngay = fix_year(ex.get("ngay", ""), it.get("pub"))
+    ngay = fix_year(ex.get("ngay", "") if valid_iso(ex.get("ngay", "")) else "", it.get("pub"))
+    if ngay and it.get("pub") and ngay > (date.fromisoformat(it["pub"]) + timedelta(days=1)).isoformat():
+        return None, "bài đăng trước ngày phiên (thông báo, chưa có kết quả)"
     ref = ngay or it.get("pub") or ""
     if not ref or not (START.isoformat() <= ref <= END.isoformat()): return None, f"ngoài khoảng ({ref or 'không rõ ngày'})"
     # tỉnh
@@ -214,6 +240,10 @@ def build_row(it, link, raw, xmap):
         tinh = OLD_PROV[tinh]
     if not tinh and any(fold(h) in ft for h in HN_OLD): tinh = "Hà Nội"
     if tinh not in PROVINCES: return None, f"ngoài vùng ({tinh or 'không rõ tỉnh'})"
+    why = reject_reason(title, text, tinh, how)
+    if why: return None, why
+    if how == "quy tắc" and (not ngay or not ex.get("gia_trung_max")):   # quy tắc dễ đọc nhầm → đòi đủ ngày + giá trúng
+        return None, "quy tắc: thiếu ngày phiên hoặc giá trúng"
     # xã
     xa = (ex.get("xa") or "").strip()
     if ref < MERGE_DAY.isoformat():
@@ -231,7 +261,7 @@ def build_row(it, link, raw, xmap):
     src = D.src_name(link, it.get("src") or "")
     r.update({"link": link, "nguon": src, "link_ket_qua": link, "nguon_ket_qua": src, "vi_tri": "gần đúng",
               "_khung": "2", "_tieu_de": title, "_ngay_lay": TODAY.isoformat(), "_cach_lay": f"quét lịch sử ({how})",
-              "_tu_dien": ",".join(k for k in ex if k != "ghi_chu"), "_da_doc": TODAY.isoformat(), "_so_lan_doc": "3"})
+              "_tu_dien": ",".join(k for k in ex if k != "ghi_chu"), "_da_doc": TODAY.isoformat(), "_so_lan_doc": "3", "_ngay_dang": it.get("pub") or ""})
     # tọa độ: thử xã mới rồi xã cũ
     for q in filter(None, [xa, re.sub(r"^(xã|phường|thị trấn)\s+", "", old.split(";")[0]).strip() if old else ""]):
         g = D.geocode(q, tinh); time.sleep(1.1)
@@ -280,12 +310,24 @@ def process(st, drows, prows, xmap):
 
 def main():
     st = load_json(STATE, {})
-    scope = f"{START.isoformat()}|{END.isoformat()}|{WINDOW}"
-    if st.get("pham_vi") != scope:                     # đổi khoảng quét → quét khung lại, giữ danh sách bài đã đọc
-        st = {"pham_vi": scope, "khung_da_quet": [], "hang_doi": [], "da_xu_ly": st.get("da_xu_ly", {}), "thong_ke": {}}
+    scope = f"v2|{START.isoformat()}|{END.isoformat()}|{WINDOW}"
+    if st.get("pham_vi") != scope:
+        # v2: sửa lỗi năm phiên → quét và đọc lại từ đầu; đổi khoảng quét thì giữ danh sách bài đã đọc
+        keep = st.get("da_xu_ly", {}) if str(st.get("pham_vi", "")).startswith("v2|") else {}
+        st = {"pham_vi": scope, "khung_da_quet": [], "hang_doi": [], "da_xu_ly": keep, "thong_ke": {}}
     for k, v in (("khung_da_quet", []), ("hang_doi", []), ("da_xu_ly", {}), ("thong_ke", {})): st.setdefault(k, v)
     dhead, drows = read_csv(DATA)
     phead, prows = read_csv(PEND)
+    # dọn các dòng quét lịch sử đã thêm nhầm ở lượt trước (chỉ dòng do script này tạo, chưa duyệt)
+    before = len(prows)
+    def bad(p):
+        if not (p.get("_cach_lay") or "").startswith("quét lịch sử"): return False
+        if not p.get("_ngay_dang"): return True          # dòng do bản cũ thêm (có thể sai năm) → xóa, bản mới đọc lại
+        how = "quy tắc" if "quy tắc" in p["_cach_lay"] else D.AI_NAME
+        if reject_reason(p.get("_tieu_de", ""), (p.get("_tieu_de", "") + " " + p.get("tinh", "")), p.get("tinh", ""), how) not in ("", "không thấy Hà Nội trong bài", "không thấy tên tỉnh trong bài"): return True
+        return how == "quy tắc" and (not p.get("ngay") or not p.get("gia_trung_max"))
+    prows = [p for p in prows if not bad(p)]
+    if before - len(prows): log(f"Đã dọn {before - len(prows)} dòng quét lịch sử thêm nhầm ở lượt trước")
     xmap = load_json(XAMAP, {})
     nl = learn_map(drows + prows, xmap)
     log(f"Khoảng quét {START} → {END} · bảng xã cũ→mới: {len(xmap)} mục (+{nl} học từ dữ liệu)")
@@ -295,7 +337,7 @@ def main():
     log(f"Đã tìm {len(st['khung_da_quet'])}/{total_w} khung · hàng đợi {len(st['hang_doi'])} bài")
     added, n = process(st, drows, prows, xmap)
     head = phead or dhead
-    for h in dhead + ["link_ket_qua", "nguon_ket_qua", "_khung", "_tieu_de", "_ngay_lay", "_cach_lay", "_tu_dien", "_da_doc", "_so_lan_doc"]:
+    for h in dhead + ["link_ket_qua", "nguon_ket_qua", "_khung", "_tieu_de", "_ngay_lay", "_cach_lay", "_tu_dien", "_da_doc", "_so_lan_doc", "_ngay_dang"]:
         if h not in head: head.append(h)
     write_csv(PEND, head, prows)
     save_json(STATE, st); save_json(XAMAP, xmap)
