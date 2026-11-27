@@ -1,0 +1,55 @@
+name: Quét lịch sử đấu giá (1/2024 – 5/2026)
+
+on:
+  workflow_dispatch:          # Actions → "Quét lịch sử đấu giá" → Run workflow
+    inputs:
+      tu_ngay:
+        description: "Từ ngày (YYYY-MM-DD)"
+        default: "2024-01-01"
+      den_ngay:
+        description: "Đến ngày (YYYY-MM-DD)"
+        default: "2026-05-29"
+      max_bai:
+        description: "Số bài đọc tối đa mỗi lượt"
+        default: "80"
+  schedule:                   # chạy 3 lượt/ngày cho đến khi quét xong (log báo "ĐÃ QUÉT XONG" thì tắt workflow)
+    - cron: "41 2 * * *"      # 09:41 giờ VN
+    - cron: "41 6 * * *"      # 13:41 giờ VN
+    - cron: "41 15 * * *"     # 22:41 giờ VN
+
+permissions:
+  contents: write
+
+concurrency:
+  group: fetch-news           # chung nhóm với các workflow gom tin để không ghi đè cho-duyet.csv của nhau
+  cancel-in-progress: false
+
+jobs:
+  backfill:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Tìm và đọc bài kết quả đấu giá cũ
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          JINA_API_KEY: ${{ secrets.JINA_API_KEY }}
+          QUET_TU: ${{ github.event.inputs.tu_ngay || '2024-01-01' }}
+          QUET_DEN: ${{ github.event.inputs.den_ngay || '2026-05-29' }}
+          MAX_ARTICLES: ${{ github.event.inputs.max_bai || '80' }}
+          TIME_BUDGET_MIN: "32"
+        run: python scripts/quet_lich_su.py
+      - name: Lưu lên repo
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898333+github-actions[bot]@users.noreply.github.com"
+          git add cho-duyet.csv data/quet-lich-su.json data/xa-cu-moi.json
+          if git diff --cached --quiet; then echo "Không có thay đổi"; else
+            git commit -m "Quét lịch sử: phiên đã đấu giá chờ duyệt"
+            git pull --rebase
+            git push
+          fi
