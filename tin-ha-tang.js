@@ -1,7 +1,7 @@
 /* Tin mới nhất cho hạ tầng (cầu, đường, metro…).
    - Bấm vào hạ tầng có popup  → thêm mục "📰 Tin mới nhất" vào cuối popup.
    - Bấm vào hạ tầng chỉ có nhãn rê chuột (tooltip) → mở khung tin nhỏ cạnh chỗ bấm.
-   Dữ liệu: data/tin-ha-tang.json (workflow "Cập nhật tin hạ tầng" tạo mỗi sáng).
+   Dữ liệu: data/tin-ha-tang.json (workflow "Cập nhật tin hạ tầng" tạo mỗi sáng; chỉ gom tin hạ tầng đang xây / quy hoạch, lọc bằng Gemini).
    Không cần sửa code bản đồ – chỉ cần nhúng file này vào index.html. */
 (function () {
   var URL = "data/tin-ha-tang.json", DATA = null, ds = [], box = null;
@@ -25,6 +25,8 @@
 
   function khoiTin(ten) {
     var m = DATA.muc[ten], tin = (m.tin || []).slice(0, 5);
+    if (m.van_hanh) return '<b>📰 Tin hạ tầng</b><div style="color:#777">Đã đi vào vận hành – không theo dõi tin tự động.</div>' +
+      '<a href="' + esc(m.tim_them) + '" target="_blank" rel="noopener" style="color:#777">Tìm tin ↗</a>';
     return '<b>📰 Tin mới nhất</b>' +
       (tin.length ? '<ul style="margin:4px 0 0;padding-left:16px">' + tin.map(function (t) {
         return '<li style="margin-bottom:4px"><a href="' + esc(t.link) + '" target="_blank" rel="noopener">' + esc(t.tieu_de) + '</a>' +
