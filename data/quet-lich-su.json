@@ -47,16 +47,27 @@
 "2024-03-26",
 "2024-02-10",
 "2024-01-26",
-"2024-01-11"
+"2024-01-11",
+"2026-04-15",
+"2026-03-01",
+"2026-02-14",
+"2025-09-02",
+"2025-08-03",
+"2024-12-06",
+"2024-08-08",
+"2024-04-10",
+"2024-03-11",
+"2024-02-25",
+"2024-01-01"
 ],
 "pham_vi": "v3|2024-01-01|2026-05-29|15",
 "thong_ke": {
-"bài không nêu ngày phiên": 38,
-"không có giá trúng cao nhất": 3,
-"ngoài khoảng quét": 3,
+"bài không nêu ngày phiên": 60,
+"không có giá trúng cao nhất": 7,
+"ngoài khoảng quét": 5,
 "ngoài vùng": 1,
 "ngày phiên cách ngày đăng hơn 1 năm (nghi nhầm)": 2,
-"phiên hợp lệ": 78
+"phiên hợp lệ": 147
 },
 "ung_vien": {
 "https://news.google.com/rss/articles/CBMi0AFBVV95cUxOQVd2ZGEwckU5YXJ2aHZLYVNHZ20tLVdqR2Z2clo5cHFHQnM4UlJVX0lwSzBpdmpmLW42UHZXRmlxMHlXT2N4R1d6OF81V3U3U3hJa2NHQ0ZkeFFmRlVaaVJJd0U3Y3JseWhSY1ROWnpaMk9TUlJsS1VJRkFvWW03aWthaUpaU0t3eHVGLWNEMkF3VTFHWFY1bG1MUkQ0WGNCdHlUSGVwejdiT01IR2Rsc1NsaU4ycjNYdVpyZUVCY2dyTGhSeGZfaUJURVpiWGFS?oc=5": {
@@ -92,11 +103,29 @@
 "title": "Xã Mỹ Đức đấu giá thành công quyền sử dụng đất tại 2 thôn Hà Xá và Vài Mới"
 },
 "https://news.google.com/rss/articles/CBMi0wFBVV95cUxOcnJrT1dwd3NEd3FXWkM5V2VObWV5WlEtSHV3M254Tnd3ZEVtM2ZUZ2pBOVJjTkxybS1YZk1RanZMVkVzSy1IUHpKdjV3am1qSEZYVzZocG9NeFJuOHFJamN2Z1BKbEVmcUFzRkpVdi1LU200MmRkM0hNblNoNWsxTVdyZl9BQURDTzVoVW9kOGRLNDJKQWF1X0VXRGczalFqRXJwWVcwbGZxWGZkU1ZoR042enVxNjFZbXFpWnkzTUp6aFBiTldTWWdVTFpkdWhpTDY0?oc=5": {
+"doc": "xong",
 "khung": "2024-11-06",
+"link_goc": "https://suckhoedoisong.vn/dau-gia-dat-o-thanh-oai-ha-noi-vot-len-hon-90-trieu-dong-m2-co-dat-rao-ban-chenh-tien-ty-169241116194148288.htm",
 "loai": "co",
 "pub": "2024-11-16",
 "src": "Báo Sức khỏe & Đời sống",
 "title": "Đấu giá đất ở Thanh Oai, Hà Nội: Vọt lên hơn 90 triệu đồng/m2, \"cò đất\" rao bán chênh tiền tỷ"
+},
+"https://news.google.com/rss/articles/CBMi1AFBVV95cUxOOUJiLUpZX1BXM2xFVmd6MTZ2eklvTlJ0dHY5ZHhheFZDZHF2a2RsUnQ5Q195Y2h6cnViWFpPQmNBdWNuaHFTU21sbGNrMFpaZmpqRDhzM0RtTWtxTXd4T09RZVVySUVReFNHM1ZXdXZ6YVJvdkJnV2ZNVFV6RDRFQ0lKekIyUS14RXZ4RldReWVYYW5YZW92c3pBVjZSVUZfaVlPZlB0ZElwc1ctY0dRajM1ZFprLUNwMDd5UXViaWZhZTQwQkg4dnZaS2llTjVIZFQtSA?oc=5": {
+"doc": "xong",
+"khung": "2024-08-08",
+"link_goc": "https://phapluatphattrien.vn/dau-gia-dat-hoai-duc-cao-gap-18-lan-gia-khoi-diem-bo-coc-chay-lay-nguoi-co-the-bi-xu-ly-nhu-the-nao-d959.html",
+"loai": "co",
+"pub": "2024-08-21",
+"src": "phapluatphattrien.vn",
+"title": "Đấu giá đất Hoài Đức: Cao gấp 18 lần giá khởi điểm, bỏ cọc chạy lấy người có thể bị xử lý như thế nào?"
+},
+"https://news.google.com/rss/articles/CBMi1AFBVV95cUxOa0JKd0JodUxtYkpUS1RYY0lsZVRiclBQbnc1QVdmT1VHOWRIRVplRkVMWGxrSjNhM05UTkFsRmhVRDV4aFhHUHJXUF9SVHY3VmdLakY4Y1hfdUViTldPeFVBUWUtV3dxLWlIb0NGWENRLXpSQ1JsTmt5emk0cmp3OFh2eC1rcmt1WERuU2t2aTFVRFpHdGZZbmJ1aG9lZnVNemVmcGNrcUlkZENXakJtc3JrdFpJODNWZDJGSXlqU1BFQjV1SExlRkFkWTFCaVVLckpGQg?oc=5": {
+"khung": "2026-03-01",
+"loai": "khong",
+"pub": "2026-03-13",
+"src": "batdongsan.baoxaydung.vn",
+"title": "Tái đấu giá 8 lô đất Thủ Thiêm, nhiều khu từng trúng giá hơn 37.000 tỷ đồng năm 2021"
 },
 "https://news.google.com/rss/articles/CBMi1AFBVV95cUxOc0ZNWDI1YjRyeDhaR290bFpmWXlSVmxNOXc4S2RKMjBaeWVFUFFkZjlLQS1jV1UyQmtPb0NoYXJ1X2N4T093MjF1ZW1kQTlwZGtEZVJuRWJjX3FJT0I2R1lmX21QODQ5ejVEZ2o3NDYxUGFmZmhSZV96NlNLOWk5SDk3TkJkdng4QnI5b1NURGtaa0JoaHZBb2otUVVUbmhxZ2lySVpQNUtIalc4S1dCbU9sLWpaSHNuSlJxNm5DOGE3TW1JZjN5RnlXeHV4LTZUYUhRNA?oc=5": {
 "khung": "2026-04-30",
@@ -120,7 +149,9 @@
 "title": "Aeon Mall sắp xây trung tâm thương mại 4.000 tỷ đồng tại \"siêu thủ phủ công nghiệp\" hàng đầu miền Bắc"
 },
 "https://news.google.com/rss/articles/CBMi2AFBVV95cUxNTk0tRVc2YUJZWWpVWi1XSWg3UHhmdC16ajQ5WEl2TVNLSk1MODc2Mm1jQ2J2cGFGSlNGR25Md0FhNkZERTVsOC0xQUdwNmNQNlZfTHFTQzNBZ2hyMEVDTWdRcnlZZk1mZUE5Y244enlxM3owUFo0SkpFeVc3V2poeWhra1UxTnNMT09OaThYQ3pVQVpPS3ozMWNXNlVKRU5sTFMxTWRCeHlXSzVidnh2ank2Z0c1d3lYUm5sMWFBVkFhajN2QWMtLU1XT2t1S2Uzcmtac0lpV0Y?oc=5": {
+"doc": "xong",
 "khung": "2024-09-07",
+"link_goc": "https://phapluat.suckhoedoisong.vn/ninh-binh-thu-ve-gan-400-ty-dong-sau-3-phien-dau-gia-co-phien-thu-hut-so-luong-ho-so-cao-ky-luc-90004.html",
 "loai": "co",
 "pub": "2024-09-12",
 "src": "phapluat.suckhoedoisong.vn",
@@ -155,6 +186,13 @@
 "pub": "2025-02-28",
 "src": "Báo Thanh tra",
 "title": "TP Hồ Chí Minh dự kiến đấu giá đất Thủ Thiêm quý 2/2025 với giá khởi điểm 5.000 tỷ đồng"
+},
+"https://news.google.com/rss/articles/CBMi2wFBVV95cUxQeGZ1cThSNHd2QnByTzhNVUNHY0VqVm5EMlowZG5HT1BnQm82RXA4ZVV5SVpranlEUDNrZmZ2WGFYS1FzcVdqeXpPZ3paY3E3SHVwbUVXUXJDZEt6SWNCWVItMmZKaVc0ZWNUN0pyUklvRTh5aVVvV2RUbFFaSDRyOXNnemppQzQyREZJSDJyb3UzUHZXMUN4VXhuV3dqZDZVSUZpWm1qMG9DRERQQXoybThJbXVCbElFRWdkenpEQVV5NzhnaEVRS1lPbGF3Y1RyOGp4SDlxbVNnZWc?oc=5": {
+"khung": "2024-04-10",
+"loai": "khong",
+"pub": "2024-04-11",
+"src": "Báo Đồng Nai điện tử",
+"title": "Cấp giấy chứng nhận quyền sử dụng đất cho người mua trúng đấu giá thi hành án: Còn vướng mắc"
 },
 "https://news.google.com/rss/articles/CBMi3AFBVV95cUxQcHdkVmZkTnRQQnFTaHRUdUU4elRucWMzSlFZWTlNeTlLOTRNMERSdVU5NnJveVNpV2MxNEw2NWZCRFhlN0pxa3A1d2lKUXAtYWJsUTVxaUlLY1NyeU9XVmVINUx2LUFuOURCcEF4eTAwb0NqUXdfVzI2a0owaG5NNGpvVkVXMFdmWUhLU3ZkWXBGc3U0eWRzSXB1LXhCSS04My1reWVBajFzSkZJSHRKSF9qY08xY2s3VWltcUg4RE05VTBOQkVsWFdUSU9nbjUwNnBmTk8yOVl2RE1L?oc=5": {
 "khung": "2025-11-16",
@@ -293,8 +331,10 @@
 "title": "Đất trúng đấu giá Hưng Yên giảm hơn 50%"
 },
 "https://news.google.com/rss/articles/CBMihgFBVV95cUxOc1JCLVk2S1VUWE1xeE5NejlWLXRGR3FoQWpIbG9UcktyZnE1WXdjX2hreERlaVQ1V2VWVndONUxZd3otMWkwM05VcVVVek1pX2FZUUJaMlE2bGxYSjUweHZuSzI5ajZjWDVsV3N4SkprWW1KMEd0VXctd1RvaDROSllQZnVJQQ?oc=5": {
+"doc": "xong",
 "khung": "2025-02-19",
 "lan": 1,
+"link_goc": "https://baodautu.vn/dat-dau-gia-thanh-oai-mat-moc-100-trieu-dongm2-d250222.html",
 "loai": "co",
 "pub": "2025-03-02",
 "src": "baodautu",
@@ -391,7 +431,9 @@
 "title": "Đà Nẵng đấu giá khu đất 'kim cương' hơn 616 tỷ đồng"
 },
 "https://news.google.com/rss/articles/CBMijAFBVV95cUxQVmNMMmZsWU1YQjdqbWF4MlN0NlRyTEx0UHc3SkVOeDVaal9qb0tIYmVCamtBWkhmTGdocDBHVFN5VG5TcjlBTVMxQTZMc3lDbll2UUFkUzF4OUY0UE9RVWVsZXZrdUU4UUVCaVhRUnpiRUpPZms0aTF4cjNwNDFTOWUyanYxeTNWWGExMQ?oc=5": {
+"doc": "xong",
 "khung": "2024-07-24",
+"link_goc": "https://laodong.vn/bat-dong-san/can-canh-lo-dat-dau-gia-133-trieu-dongm2-1382305.ldo",
 "loai": "co",
 "pub": "2024-08-20",
 "src": "Laodong.vn",
@@ -497,7 +539,9 @@
 "title": "Đấu giá đất Sóc Sơn trúng cao nhất 120 triệu đồng một m2"
 },
 "https://news.google.com/rss/articles/CBMilgFBVV95cUxOWTR3RGJXd0x2RkZEWHZmTWFKOE9ZT25VN2FTM05zR1pYZWl1S21QZ2Jlb1R5M1RmZkprb3lqUUlKbnNyNFlPSkNNWHR1SlNqTXdncTZhdF9xZUxrRVVMTkotTHlIdFRLc2ZmT09WWEktbnZNbUZyYnBnaDUxVDJKbURhMGZIUFJma1Ftd0dRQUFPbEJuSlE?oc=5": {
+"doc": "xong",
 "khung": "2024-04-25",
+"link_goc": "https://hanoimoi.vn/quoc-oai-dau-gia-thanh-cong-34-thua-dat-thu-gan-153-ty-dong-664595.html",
 "loai": "co",
 "pub": "2024-04-25",
 "src": "Báo Hànộimới",
@@ -532,8 +576,10 @@
 "title": "Hà Nội sẽ phát triển 7 trung tâm mua sắm outlet ở ngoại ô"
 },
 "https://news.google.com/rss/articles/CBMilwFBVV95cUxQVjBWTWZUOTI4UUQxM2JJN0NRWGRGa2xqR2MwcXE5VEZfaEVyVUJ1WUEtSlExcDRKdmtGSVNybGttOV94aXBISTRpQk90bVNUc2dnY3FWeVB1S3FqSWpIZHpJTkNZN2I3LXQ0SFNwYmp4R190bU9DSWJ1dWpPY3ZMOGRWRXBLVnFfd0hLNVdzYlp6d1h1ZjZz?oc=5": {
+"doc": "xong",
 "khung": "2026-02-14",
 "lan": 1,
+"link_goc": "https://vnexpress.net/dat-dau-gia-phia-tay-ha-noi-trung-cao-nhat-gan-16-ty-dong-5048126.html",
 "loai": "co",
 "pub": "2026-03-09",
 "src": "VnExpress",
@@ -650,7 +696,9 @@
 "title": "Đẩy giá rồi bỏ cọc đấu giá đất có bị xử lý hình sự?"
 },
 "https://news.google.com/rss/articles/CBMimgFBVV95cUxPaXFUVzBNSUl4NlhQSGJlTDljTHZjd1NQZkdkZFlET2ZuM1hmZGpWb2xSWFhGZkQ5c09sUC12aVB4a3Ayb2dqN0VEVm5tUUJQd0poU2M4TjVkM1ZjMFJGSzJUWVNwS1FiZmN3UUp6RGU4V0tOT3NxRGtUSko1SUJIcTduWUFTZDczRGVTQmhJbGd1WUg0UXpnSFR3?oc=5": {
+"doc": "xong",
 "khung": "2024-11-21",
+"link_goc": "https://thanhnien.vn/dat-hung-yen-co-lo-trung-dau-gia-110-trieu-dong-m2-185241127140457871.htm",
 "loai": "co",
 "pub": "2024-11-27",
 "src": "Thanh Niên",
@@ -678,6 +726,13 @@
 "pub": "2025-03-20",
 "src": "Laodong.vn",
 "title": "Đất đấu giá Sóc Sơn bất ngờ lên hơn 93 triệu đồng/m2"
+},
+"https://news.google.com/rss/articles/CBMimwFBVV95cUxPNDZtT2E2R3l2M3dmU1dXUFdoSzcxa2NfaVQtNUhaQzVLWFJpM016ZUJ6WjF3NHIyQ3RGMVJ2QkIwZmdoOWdEZWJHY3pOeTlUbGozbmlLYWtQOUVsQ1BXMmxTT2M3b0NrUlVnSXFOb1ZTSXJjbDNONnpUdEh0S3R3WmhxR1o4QUZLMFh3R2xnejBKRGtuSmNPTHhkdw?oc=5": {
+"khung": "2024-12-06",
+"loai": "khong",
+"pub": "2024-12-10",
+"src": "Báo VietNamNet",
+"title": "Nam Định sắp đấu giá 682 lô đất, khởi điểm thấp nhất gần 600 triệu đồng"
 },
 "https://news.google.com/rss/articles/CBMimwFBVV95cUxPNEdwcTdvNGdPLUhBR0EtZlJmamJmOXFwbXAzOUY0cmVTSXJMclo4S1lsZzRRWUNhVklMaHVDQTVzckZKbnl1NC11eVMzRjFadDBBTUNHcGNCU0J6MGNKV1hDVk04VWg0WERUb2wtaDFZcklvTUIyV1locmVNT2JpSHhrcVJlREoyTUhKVFo3RzUxTXE2RGZhMEV0dw?oc=5": {
 "doc": "xong",
@@ -712,7 +767,9 @@
 "title": "An Khang land trúng đấu giá khu đất rộng 2,1ha ở Hải Phòng"
 },
 "https://news.google.com/rss/articles/CBMinAFBVV95cUxOaWpET21jc3ByNUUwQTk4dmJVZXdnb192aGpGdXl6aXVEMWFkMlhZb3Zhc09yaHhDLXNzYWpoakR1MmlzZ0tIUzBOSHg3aWltN1RmQ0cwckFDaHd3MkYxQTNwSXd6eTdmTlVFN2c3ZG5USXNSeUdNSS1yakRqZF9iaGNzMnR1dE1Ia1RISWphSkdvQS1FZnpWNExvYUU?oc=5": {
+"doc": "xong",
 "khung": "2024-09-22",
+"link_goc": "https://laodong.vn/ban-doc/ha-noi-huy-ket-qua-dau-gia-1-thua-dat-tai-huyen-thanh-oai-1400013.ldo",
 "loai": "co",
 "pub": "2024-09-27",
 "src": "Laodong.vn",
@@ -735,14 +792,18 @@
 "title": "Quảng Ninh sắp đấu giá 103 lô đất, khởi điểm từ 6,3 triệu đồng"
 },
 "https://news.google.com/rss/articles/CBMinAFBVV95cUxPYl9xc0ZfbXB2cUF4eGZKTlBnZ05mSDctZW9PbGV6X1lxZVZlelFfdXhNSUFuRk5LNU9USXpFZWFUSXJHeXNwN1N3NVFtUFMtN1FjZVVEMWhaOG9Ua3JCb1lYZ0RkUXlRWDBqTE05SXAzNmhrcTdCOWM3Qkl3N1hucExSMlJudWpPTWkzbXIxQ0JjWUZNQTVydUxqSUQ?oc=5": {
+"doc": "xong",
 "khung": "2024-07-24",
+"link_goc": "https://laodong.vn/bat-dong-san/thua-dat-ven-do-ha-noi-trung-dau-gia-gan-100-trieum2-1372877.ldo",
 "loai": "co",
 "pub": "2024-07-29",
 "src": "Laodong.vn",
 "title": "Thửa đất ven đô Hà Nội trúng đấu giá gần 100 triệu/m2"
 },
 "https://news.google.com/rss/articles/CBMinAFBVV95cUxQMnBzcUFGZ0pLeEJWcW5oRS1PRkltcEJiZmVRM3VNNWNkUXZPY3ZQUHFocjZPNlUwREpYNGVZaGxBSXVxOTEtbjk4ajZuT0lyMEIteGpTVjlWWGNGTUZrX19WWlhWN1lQSWFiTzR6dnZ6WjRrd2kwRTFISzZiMUxnbnQyNVhOYjEzbXFoNllLbTBWLTE3X3RRbUhuYnI?oc=5": {
+"doc": "xong",
 "khung": "2024-11-06",
+"link_goc": "https://nhadautu.vn/ha-noi-dau-gia-dat-hoai-duc-trung-cao-nhat-hon-100-trieu-dong-m2-d90427.html",
 "loai": "co",
 "pub": "2024-11-05",
 "src": "Nhadautu.vn",
@@ -836,7 +897,9 @@
 "title": "Kinderworld Việt Nam trúng đấu giá dự án trường học liên cấp tại Hải Phòng"
 },
 "https://news.google.com/rss/articles/CBMioAFBVV95cUxNby1UV2VDOEtvLTFsWnVqaHJMN3FYd1QwLXVRZGkxeTQ3ck8xd2NZd2JWVDBWSE9PaHNleFRvekdBN1cwNlFrdG1ZSlBjakRORmhyVXpxYy1FblJQOWlKNDY0X005Z3ZrcVVqcENRM1JNZHM0akI3LXhod3lVRFhON2dtV3ZDdEZ2NmxHWVlOLVBVb0N2b3FZZkRfSUZZalVP?oc=5": {
+"doc": "xong",
 "khung": "2024-07-24",
+"link_goc": "https://laodong.vn/bat-dong-san/ha-noi-dau-gia-dat-xuyen-dem-gia-trung-133-trieu-dongm2-1382052.ldo",
 "loai": "co",
 "pub": "2024-08-20",
 "src": "Laodong.vn",
@@ -920,6 +983,13 @@
 "src": "VnExpress",
 "title": "Đất đấu giá vùng ven Hà Nội trúng cao nhất 164 triệu đồng một m2"
 },
+"https://news.google.com/rss/articles/CBMioAFBVV95cUxQU2c2di1hMENZY1dSSFRfRVc3aVRyMkJ3VDVpLWpKQWRndlBYMk5pdjM1ajV0cENUa0o4TmpTdktjRGkzUl9EYmlJWXQwdlVFSTlEa1VhemlDUWE2X1Q3VE5vdjZnMlAzQTZra3JhLV9Nb2Z1U2VKOWkwa3FDSmJIZVF0WXVnVU1ZV2R1cktTcmo2VVVqVnN3VlZkRkg3TDZQ?oc=5": {
+"khung": "2025-08-03",
+"loai": "khong",
+"pub": "2025-08-12",
+"src": "Báo VietNamNet",
+"title": "Phú Thọ chuẩn bị đấu giá 33 ô đất, cao nhất hơn 5,2 tỷ đồng mỗi ô"
+},
 "https://news.google.com/rss/articles/CBMioAFBVV95cUxQYmFiVmkzQ3NGNWo4czIzTGJGRzhOcGFLeFBMcks5dkx5YTJEUl91Z1JUTkVUZzFqbU5vT0dHdkhlX2M5QWtjdHhXZVlfN3dUWjh5c1d2VjZ0aElnSHNiSWI0dG9DVExMbUJsZlNDVC1wVWZoV1F2dWg5R3dpVHV3VDdqam13SUN6NThadHNhQkM0X0pua1Y3TFZkUGlxSTJs?oc=5": {
 "khung": "2025-12-16",
 "loai": "khong",
@@ -958,7 +1028,9 @@
 "title": "Đấu giá đất Thanh Oai 90 triệu đồng/m2, lo bỏ cọc tái diễn"
 },
 "https://news.google.com/rss/articles/CBMiogFBVV95cUxOXzdKbkJLLXZXSVU3NzBsNVpXb2NzRnNTZU5OS1ZOalFYbVBNQmxxY25qTEpDVm9MNVhHZWZBdjJsZmZ3eVN6aFBpYUVPOFNiSFJrZDZ0NzVrN0VpT3k5aUI4V0EwTWVjTEFzdGZhMEdWdWxRSUJQbUhHZWROZ1BzV0gtb2hlcEt0eEZTb3ZXRm1jZlRtYVZRZ1loTFgyREhPX3c?oc=5": {
+"doc": "xong",
 "khung": "2024-11-06",
+"link_goc": "https://laodong.vn/bat-dong-san/ram-ro-ban-chenh-1-ti-donglo-dat-dau-gia-huyen-thanh-oai-1422410.ldo",
 "loai": "co",
 "pub": "2024-11-16",
 "src": "Laodong.vn",
@@ -972,7 +1044,9 @@
 "title": "Cấm đấu giá đất tới 5 năm nếu bỏ cọc theo nghị quyết mới"
 },
 "https://news.google.com/rss/articles/CBMiogFBVV95cUxPMjdQMUQ4NzdtU283WFZVNWJ6bTVYZzlfUUFUTTdEblhQczR4LXpDczFvd0FGVmJoYnBYODVHTDMyeFpqejIyZWdMZlhWS1U2bHhaRXA3c3BZNjBabVBOWTJYeWhCSUNMRDlyLXN4Qzg5T2MzMDhvb0tieGZsTkhEeDBqejZCUmtJVFh6eWpfd1VPdEdpQk5QVlFNcDNfSXhYdWc?oc=5": {
+"doc": "xong",
 "khung": "2024-07-24",
+"link_goc": "https://laodong.vn/bat-dong-san/bat-ngo-1-lo-dat-tai-thanh-oai-trung-dau-gia-100-trieum2-1378815.ldo",
 "loai": "co",
 "pub": "2024-08-10",
 "src": "Laodong.vn",
@@ -1064,14 +1138,18 @@
 "title": "Đấu giá đất Thanh Oai 79,9 triệu đồng/m2, cò thổi chênh 1 tỉ"
 },
 "https://news.google.com/rss/articles/CBMiowFBVV95cUxOOFlISUUzNG96QzlvbzROV0g1V1l3azFZOU1icDlUQ3B0UEJQR3Rwd2Zob2lqckxnTkFQS01JenpIaElJSml1c3ZFTVVPWXB0UWUxR3ZHRVZQWS1QOHp4bWxubVdMX2xPLVRsTXBFbnliNmNxQzg4ZUVVaHhKYktETVAtWGdmV2NFbVB1TXVPcVdEdVRtdHdXZzdMWVpJS2NrOUs0?oc=5": {
+"doc": "xong",
 "khung": "2024-10-22",
+"link_goc": "https://znews.vn/can-canh-khu-dat-sat-nghia-trang-dau-gia-262-trieu-dongm2-o-ha-dong-post1505867.html",
 "loai": "co",
 "pub": "2024-10-23",
 "src": "Znews",
 "title": "Cận cảnh khu đất sát nghĩa trang đấu giá 262 triệu đồng/m2 ở Hà Đông"
 },
 "https://news.google.com/rss/articles/CBMiowFBVV95cUxOcHIwa1VzXzM5enAtbFRZOWxtako1Q0hMNjJ0MDdaVXgwVWoyLWlib2l4TmltWlFwdllJaHZhcU11Yk5ldF8xSUF1VWliLWVDSkFLSzJxVUttS205UXZDWFdkX3ZNcllDUk1lNEdWSzdsNjA2aFZ5TDh1VGd2b2ZSZGdPMDhfS0JWMWN1NUVYdUpQY0l0RDNGT1lxN2RXUkxVRVVn?oc=5": {
+"doc": "xong",
 "khung": "2024-10-07",
+"link_goc": "https://laodong.vn/bat-dong-san/dau-gia-dat-ha-dong-lo-cao-nhat-cham-muc-252-trieu-dongm2-1410017.ldo",
 "loai": "co",
 "pub": "2024-10-19",
 "src": "Laodong.vn",
@@ -1148,15 +1226,19 @@
 "title": "Chủ mưu vụ lũng đoạn đấu giá đất 30 tỷ đồng một m2 bị tuyên 3 năm tù"
 },
 "https://news.google.com/rss/articles/CBMipAFBVV95cUxNeXVMWU5UZExfWGdQOVNZY2d6TUUzc2ZDTXZQYWFBS0JCTE1FMFgzZjQwWWlZcGctODVPSmFSLXdPanREcTBTdEdkY2FndVdsakJOVnlmeXBkYU14QkVURGRKNmNRcTd6LV9oVC1UYlFxSHBlc3cxVFEyYi1nQTBYekljZmJIQ2NNdTROdlpkLUVUZzRrTEpYWk1LNGhOYk14TUtJZQ?oc=5": {
+"doc": "xong",
 "khung": "2026-03-31",
 "lan": 1,
+"link_goc": "https://cafeland.vn/tin-tuc/dau-gia-dat-quoc-oai-soi-dong-lo-cao-nhat-hon-125-trieu-dongm2-150989.html",
 "loai": "co",
 "pub": "2026-04-27",
 "src": "CafeLand",
 "title": "Đấu giá đất Quốc Oai sôi động: Lô cao nhất hơn 125 triệu đồng/m2"
 },
 "https://news.google.com/rss/articles/CBMipAFBVV95cUxONGI0Q3hUZ3J4VGNiaDdEOXhKRmY4dFpuNmtOVFFVZ2ZvSU55WlJHd0wxbm9DLWZ5WWktM1h1dV96ajJqd2hvWC05bDNBZFhmUU9WYmlMSlRfVml4Zm1lSEZWanRwcnBncEtVLUFjTEliUXJCbWEyNENUVDI2WTh1bnV2WThTUlZkXzJaMGtQcGRRRE5TdU5QT2NBQnI0eXVFUlVnMw?oc=5": {
+"doc": "xong",
 "khung": "2024-11-06",
+"link_goc": "https://laodong.vn/giao-thong/vanh-dai-4-ha-noi-di-qua-lo-dat-dau-gia-gap-14-lan-khoi-diem-1417152.ldo",
 "loai": "co",
 "pub": "2024-11-06",
 "src": "Laodong.vn",
@@ -1226,7 +1308,9 @@
 "title": "Đất đấu giá ở Bảo Lộc, Lâm Đồng trúng cao nhất 179 triệu đồng một m2"
 },
 "https://news.google.com/rss/articles/CBMipgFBVV95cUxNMkJOVndNbDJ1eXRsbG83QjRBXzRWa3JBeHJCUkNSWi1BMW9hSzhNVnViNG1TdW0xWVFJbXpGUENtbU1aMWVNNzJnYkRpaVY4Z0Q4SVJkanA5NVo4LW1kT08tQ2ZKdXp4Y3dHZEhMWG5XVVBHLVRUNnMwWGktVVpNZHhyNng1WlBSNENTTkhranpnbDdPMzZHRkg4S3dyVGZoLUxhMVJ3?oc=5": {
+"doc": "xong",
 "khung": "2024-11-06",
+"link_goc": "https://cafef.vn/lo-dat-vua-trung-dau-gia-hon-103-trieu-dong-m2-o-hoai-duc-co-gi-188241105140256465.chn",
 "loai": "co",
 "pub": "2024-11-05",
 "src": "CafeF",
@@ -1348,7 +1432,9 @@
 "title": "Bán chênh đến 500 triệu đồng đất đấu giá Thanh Oai trên mạng"
 },
 "https://news.google.com/rss/articles/CBMipwFBVV95cUxPZ2lvTS15UjFlcENDQkFlQzZ6WTFLc0cyWldSRzZSWUppT3RfTTJicnBENmxNRWJkWmF1Uk1HVUptdHlaR3d4TlQyU3p3TE1fTkxNNUhFeDdqZ0JLT0UzZWswTjF1NTgtTWZrMGQ0cUI0N001RVpqeUxMOVE0YnhmdTFORE10QnFKQjhadFBCX1d5SGhobWRibVMyTENBb2Y2V2FieFAybw?oc=5": {
+"doc": "xong",
 "khung": "2024-09-07",
+"link_goc": "https://laodong.vn/bat-dong-san/lo-dat-trung-dau-gia-hon-100-trieu-dongm2-o-ha-noi-bi-bo-coc-1395152.ldo",
 "loai": "co",
 "pub": "2024-09-16",
 "src": "Laodong.vn",
@@ -1385,7 +1471,9 @@
 "title": "Dự án Luật Đấu giá tài sản sửa đổi: Siết bỏ cọc, chặn \"quân xanh - quân đỏ\""
 },
 "https://news.google.com/rss/articles/CBMipwFBVV95cUxQZTBtWTFWZzZyMGVyMV94ZjlvMlQ0dkdyeEVSRG9yZDhJY2ZJN3dneEVzOGp4VUc1aERCMy1fckZ5TjBEMHhRMUI5ZkxsejIxM3JIMl9sbUpXZVVJbThiT3RuSnYwOXRjYTRoeVZQTWw5VG96a1VuMkppTlRrMlA3elNBdnB5NVI1ZjRYM2c0Q2FwNGs4UEJYM2hpdVVWc0dIaVpqR2dGRQ?oc=5": {
+"doc": "xong",
 "khung": "2024-12-06",
+"link_goc": "https://laodong.vn/bat-dong-san/nguoi-trung-dau-gia-262-trieu-dongm2-dat-ha-dong-da-nop-tien-1434631.ldo",
 "loai": "co",
 "pub": "2024-12-13",
 "src": "Laodong.vn",
@@ -1524,7 +1612,9 @@
 "title": "Đấu giá 13 thửa đất xã Quốc Oai bất ngờ vượt 155 triệu đồng/m2"
 },
 "https://news.google.com/rss/articles/CBMiqAFBVV95cUxQa3k4WjloRlcxUVdGRUU5RFBONmVFZHZpWGZhSjVKYlV1MDRSZkNaTUJmYnhva3JHa2RKbXJraFpXSUFGTGl3Z3hNTEgySHlTN2hYTFFmNm5YUnBoZjdkMWZwOTFNTU84cUwxaUl2S3RqS1JocG5rTlVFRVIzSjVWZVhRQ3llLXEwTVAxZmtTM3VMMjV5ZEVvbGFrLXg0SzNMcXFDa1VCcU4?oc=5": {
+"doc": "xong",
 "khung": "2024-10-07",
+"link_goc": "https://laodong.vn/bat-dong-san/dau-gia-dat-ha-dong-len-262-trieu-dongm2-gap-2-lan-thi-truong-1410127.ldo",
 "loai": "co",
 "pub": "2024-10-20",
 "src": "Laodong.vn",
@@ -1539,6 +1629,7 @@
 },
 "https://news.google.com/rss/articles/CBMiqgFBVV95cUxNUmIwQy1VS1QxWUdGN3BkcTBGdzJPbFd3d2d1RFlEc2F1ZXZNRjRlWHBYbUFZdW9NaUMxZDI4NFh0RzJ4dklmQ0ZsZExYdVNPX3VLUkE2WkpRbGUwc0VIV0xaanhfU08zMzNpOTB6SF9BSG90VXZkVlhBTy1zaWducVdkRE9reEpwVXNSQUNqREJzdHlYMUdZSDJVZHpUV1pVSXJ2Y1ozaVkwdw?oc=5": {
 "khung": "2024-12-21",
+"lan": 1,
 "loai": "co",
 "pub": "2025-01-02",
 "src": "Laodong.vn",
@@ -1639,14 +1730,18 @@
 "title": "Hà Nội sắp đấu giá khu đất 3,2 ha với giá khởi điểm hơn 1.100 tỷ đồng"
 },
 "https://news.google.com/rss/articles/CBMiqwFBVV95cUxQLUc4aXNCeFhwcjNfb2NyTHpyZ0c3cTU4R3I3dmRDNE8tVDBWaUpnS2luSnViaVNpa2tNbUZNcVY5RTJ6aGxIRU5waUs5SkRzaTU0QmNnR2RnLU5vekFoXzlUOVJVUlVhMzRGejNiTjM0b21hVGttcVJRemxTeDBvV25SYnJmdjIycXBCcTJIa05Ibl9xS2JxVzZNTFJGWXpCUUZsNkJIdFFmdVE?oc=5": {
+"doc": "xong",
 "khung": "2025-01-20",
+"link_goc": "https://cafef.vn/danh-tinh-doanh-nghiep-trung-dau-gia-lo-dat-1800-ty-dong-o-linh-dam-188250202172605116.chn",
 "loai": "co",
 "pub": "2025-02-02",
 "src": "CafeF",
 "title": "Danh tính doanh nghiệp trúng đấu giá lô đất 1.800 tỷ đồng ở Linh Đàm"
 },
 "https://news.google.com/rss/articles/CBMiqwFBVV95cUxQNWRIeHdQTVRiQ1d3dHdHTEdUNkZmaFBsOG15clQ3YzBEX1FGZXZWNU5fdE5HMmgzT3d5TWpqYk9kWXpsTjVVR0N0bkdqN3JDR241Y2NnalFHTDVhcTAyWjV5a0lvZUZYQXFvaEVFclFsUFhjZ2dwS1R1TEl4Y3QzbWY5SDlWWk1aWHpsUXNhYnB5d2paS05rRUVlaVhjUHRQaV9Tc0Rwc0FFVVU?oc=5": {
+"doc": "xong",
 "khung": "2024-05-10",
+"link_goc": "https://laodong.vn/bat-dong-san/mot-huyen-o-ha-noi-dau-gia-dat-thang-lon-thu-ve-gan-380-ti-dong-1337827.ldo",
 "loai": "co",
 "pub": "2024-05-09",
 "src": "Laodong.vn",
@@ -1667,7 +1762,9 @@
 "title": "Đấu giá 15 thửa đất tại Hà Nội, giá khởi điểm hơn 12 triệu đồng/m2"
 },
 "https://news.google.com/rss/articles/CBMirAFBVV95cUxOSTBURC00d0tvcHh1Vm1oV0JxcU5HT0xYZV9zNjA1bjQxelZhUDZsNmV4WnN4ODJmNzkwenNMSDlxZkVWQTduLTk5eV9jOEt4b3REVXY4Vkh5RmlVTjFMaG91bzA4ZkJOYXJkay1YaHhBNGtvNVlLZDRnTzlUTVlPclVETjllTFBuOFBUZUZmSUx6V0xCbHpoMHdwd1J2VWxtb2U1ZzlyR1VZWVVR?oc=5": {
+"doc": "xong",
 "khung": "2024-11-21",
+"link_goc": "https://laodong.vn/bat-dong-san/1300-ho-so-dau-gia-dat-huyen-o-ha-noi-lo-cao-nhat-gan-60-trieum2-1426584.ldo",
 "loai": "co",
 "pub": "2024-11-26",
 "src": "Laodong.vn",
@@ -1686,6 +1783,15 @@
 "pub": "2025-11-26",
 "src": "VnExpress",
 "title": "Thanh tra Hải Phòng: Nhiều người mua nhà ở xã hội kê khai không trung thực"
+},
+"https://news.google.com/rss/articles/CBMirAFBVV95cUxPY1YtaVVtcThweXR2c1RKSEpzdUZzRE04TFZhVHhFN2szQVdjZlNoQndKT2hPLTk1bWZvV19mMHh1VFV4MzRzU2k2U09uMi1DX1U0WDB3b0V1cldTNHBqemZodUU3LXpIZWM4eHV3ZWVoUW5XMGo0a2otb3ZSVFh1TE1qV3EwZkotQmhEc1RQWGhMNEtFOVNudnZ1WllGYWF6YklCSkU1VDJIb1VF?oc=5": {
+"doc": "xong",
+"khung": "2024-08-08",
+"link_goc": "https://vtv.vn/kinh-te/dau-gia-dat-thanh-oai-hon-100-trieu-dong-m2-co-phai-do-thoi-gia-20240817112110914.htm",
+"loai": "co",
+"pub": "2024-08-17",
+"src": "VTV.vn",
+"title": "Đấu giá đất Thanh Oai: Hơn 100 triệu đồng/m2, có phải do \"thổi giá\"?"
 },
 "https://news.google.com/rss/articles/CBMirAFBVV95cUxPbWxFWHlTNmU0MjRlc0RFbEdrMmRybXBCWGpleHB6bkNRTzN1VVIzX3hUa3RTZkdvTnBlRjkzaUNnWGY2b1N4ZEZHVGFRa0hJZGdNMU9NLWVHNXR1SFJEM216U2NrdHRJNWZxNDNyUzJ1YXNtZUR1UlJUMlM1c1ZXcF9vWFhDY2dIbjR6LUFDVTRtZmNHV0RGQ05SemU1czA3ZTRNRTZKLWNJMXQx?oc=5": {
 "khung": "2025-02-19",
@@ -1759,6 +1865,15 @@
 "src": "VnExpress",
 "title": "Hiện trạng khu đất đấu giá huyện ven Hà Nội được trả cao nhất 30 tỷ một m2"
 },
+"https://news.google.com/rss/articles/CBMirgFBVV95cUxPY1R6UURxbnd3VlV6YnJjeVVmVjcyZVZQZ1U5V1BGLXNkMnJka0FlTnUtTEk2b2k2TVp4eThKRUZLcXNZb0dxTUpMYXdJdWwtYTd2UXk0MzVNMW9jQWNtcDZrT3ZmVXJ1RXZBT2lZeEpVZjF6Y2s5aU9xelZVZ2JXMzA5VDFfQjl3MnhERGxqWHRmSWR5ZG5ydGhGVW5fTVE3ckVTS2Z6Qk9qeWNPV0E?oc=5": {
+"doc": "xong",
+"khung": "2024-08-08",
+"link_goc": "https://thanhnien.vn/xuyen-dem-dau-gia-dat-ngoai-thanh-ha-noi-gap-18-lan-gia-khoi-diem-185240820060319472.htm",
+"loai": "co",
+"pub": "2024-08-20",
+"src": "Thanh Niên",
+"title": "Xuyên đêm đấu giá đất ngoại thành Hà Nội, gấp 18 lần giá khởi điểm"
+},
 "https://news.google.com/rss/articles/CBMirgFBVV95cUxPYW5wdlBGbXpFa2VwaDl1SDQ3akVncnVXMmtDN2YxbXlVTWYxQXNwc0FQZGhkNU1XOENBaU9zN00tWm1HN0FDcFNOMUVRcDYyX1NXNzZhaHlqYkVsOFNKZzJwS05WWGVBR085OEdCWUx6d0ZfWW53TXJzYS12VGxfRkx5RDlPZGxtRW9Dc3NfejJ3cGdua1ZPN0pqWDlmWTVNQUtObWxRNmMyb2QwOXc?oc=5": {
 "khung": "2024-08-23",
 "loai": "khong",
@@ -1802,14 +1917,18 @@
 "title": "Đấu giá dự án sinh thái gần 3.600 tỷ đồng ở Hội An để ngân hàng thu hồi nợ"
 },
 "https://news.google.com/rss/articles/CBMirgFBVV95cUxQbkI2eGZjbnlpc0dVUDV0b0NRRHhaT2hXRVFDcFJaMUxpYVItZWxESjBxTkdLejh1UU5WOUN2SERnTTFlYUlPa2RmNlVkdFZOUlhNdF9JQzZtSnIzaVNiRFhJbG1qZ1VlWG5wWDYtbGJsV3pZbjhRLVNESVFVcm50dV9IeUlDZjB3a2V1RWlGVGpaSzNLdkxzUWhxRXo1T05zMDBUNUVRbzZrc3dBMVE?oc=5": {
+"doc": "xong",
 "khung": "2024-06-09",
+"link_goc": "https://laodong.vn/bat-dong-san/2-huyen-o-ha-noi-bat-ngo-thu-61-ti-dong-tien-chenh-tu-dau-gia-dat-1351665.ldo",
 "loai": "co",
 "pub": "2024-06-11",
 "src": "Laodong.vn",
 "title": "2 huyện ở Hà Nội bất ngờ thu 61 tỉ đồng tiền chênh từ đấu giá đất"
 },
 "https://news.google.com/rss/articles/CBMirwFBVV95cUxNNERpcExraXNvQWZlZG1NbURnQTNfMFpHMFRsUVF1SkVJTjFka0hkM1ZsSTQ1WWxIZE0yaHFXZTdUTkVtWVNWYkNtQXo3OXI4Z1ZoN1lJM3g0bUNWX2FpQzNOaXFfalprR2xYV1ZfOW5UREJLZ3ZPb2IxNjQwYlpCT3EwVzU0SVcxakUtVGZRQWlYX0loVWxxSE45ZE1VSkg1UF85TXgyMTVmMjhHeFhN?oc=5": {
+"doc": "xong",
 "khung": "2024-07-24",
+"link_goc": "https://phapluatphattrien.vn/tim-hieu-nguyen-nhan-dat-dau-gia-thanh-oai-ha-noi-hon-100-trieu-dong-m2-d833.html",
 "loai": "co",
 "pub": "2024-08-13",
 "src": "phapluatphattrien.vn",
@@ -1862,7 +1981,9 @@
 "title": "Đất đấu giá xã ngoại thành Hà Nội trúng cao nhất hơn 164 triệu đồng/m2"
 },
 "https://news.google.com/rss/articles/CBMirwFBVV95cUxORlo5OTZIUlpFVHJ1QnZfOHhPaFI3ajBtUWFhcGJYSUZGcllOaGttMDdXYTIxdFpiWmNGU3RpWlRDeGNBU0k3Q0RJdGNhR3EycWJ1THd2aGlHVEtiUUkweU8yVTByOENMTThwdkdJeGtXZzZHZjlQYlEtdUJwWVpDUENzOVFVVG1aU2MtRkJJSjJ2dHp3RHFUdEdGdWpGMUQwOEszb291aThOdU1VcGVj?oc=5": {
+"doc": "xong",
 "khung": "2024-09-07",
+"link_goc": "https://tapchicongthuong.vn/huyen-me-linh-dau-gia-32-lo-dat--gia-trung-cao-nhat-gap-2-lan-khoi-diem-126884.htm",
 "loai": "co",
 "pub": "2024-09-20",
 "src": "Tạp chí Công Thương",
@@ -1891,6 +2012,15 @@
 "src": "CafeF",
 "title": "Đấu giá thành công, TTC Land chính thức sở hữu 100% dự án Cù Lao Tân Vạn"
 },
+"https://news.google.com/rss/articles/CBMirwFBVV95cUxPWHB4NjF4UlhnUm1kVGxnRVBHYkNUMXM5ejdmejRZT2ZzUXVGQi1vM0ViUHNKdE9BTGpPdWd1eVBlczQybXpfcFFPU2dzZnctZ2pLbWI1RVAtcUdhODM0aUVROTJhRDgwUlMtbHBudERRNlhlR1lvbWZNMmVlX2dHVnZEejktZ3VSU3o3dkdyTG1ZVlo2U1FQWXdXeHlrYllxd0Q4MEtZRlRzWmZ3b3Uw?oc=5": {
+"doc": "xong",
+"khung": "2024-08-08",
+"link_goc": "https://vietnamnet.vn/khu-dat-dau-gia-hoai-duc-co-gi-ma-gia-len-133-trieu-m2-gap-18-lan-khoi-diem-2313683.html",
+"loai": "co",
+"pub": "2024-08-20",
+"src": "Báo VietNamNet",
+"title": "Khu đất đấu giá Hoài Đức có gì mà giá lên 133 triệu/m2, gấp 18 lần khởi điểm?"
+},
 "https://news.google.com/rss/articles/CBMirwFBVV95cUxQM2xyQXRwOENRLTZ6OXpNTDNRLVFTZUdNZ3NrVVhTbTdFVjZPM1pqdDlxVk0ySTR1QXh0a3JsX0t0SGk5VFhFMGhkQ05WZnVrREFGenVLZmo3U0pvTktSOHppN1VhTHRoS3hyT2JNTGZTdzJkN05MUzNyWmc3RjdFdzJHRG9oek81emFRaEcxendTbDVVUldpNFkzbDY4NWdTTWJUOWRhQ1kyanR6YlNN?oc=5": {
 "khung": "2026-04-30",
 "loai": "khong",
@@ -1906,7 +2036,9 @@
 "title": "Hà Nội sắp đấu giá khu đất hơn 567 tỷ đồng để xây 93 căn nhà thấp tầng"
 },
 "https://news.google.com/rss/articles/CBMirwFBVV95cUxQRHBEUGZTTTV0Z0wyMllLOEwxM0FhRWMyMm1qWVNVRlViN1hwamxvdGpYbzdESG84V0Z0VW5IdTlzMEJDYzJqVVZySWhnekJfUjFxeUU0UkNGUTRqMFJLM2tlUV8yNVBtOXpidVdISG90SXNMcnVmRHJWeVJQZlkwWVZHLWhqNHlGTll0aEZhX1c3bWw0NDRDV2Z6V0pQQVRrdFp3VlNaNmFOeHB5WUo0?oc=5": {
+"doc": "xong",
 "khung": "2024-04-10",
+"link_goc": "https://laodong.vn/bat-dong-san/dau-gia-lai-thanh-cong-128-lo-dat-vo-chong-duong-nhue-tung-rao-ban-1327415.ldo",
 "loai": "co",
 "pub": "2024-04-14",
 "src": "Laodong.vn",
@@ -1918,6 +2050,15 @@
 "pub": "2025-09-30",
 "src": "Báo VietNamNet",
 "title": "Muốn đấu giá lô đất 1 tỷ, đặt cọc tối đa 500 triệu: Liều thuốc trị thổi giá, bỏ cọc?"
+},
+"https://news.google.com/rss/articles/CBMirwFBVV95cUxQZDRmZ2xjcUJ5SDVEV3NUUFRTd0ZZdXlXaWthWXhkcy1ueklFT0lrQUZJQXJKNWhtREdrUXU4dEEzb2VITlZWejRaRmpjLV9QcGFxTG51Qlh0ZUFzSTV3QXNEZ0h4clpKbDNiRDgwSUlOSENPNXI4aTFYR242dFkwbGpYX214LWJYWXhhVURYajFQeUxJUVd4Q0lLN1NkWHFPUWJ6VldJdER0MS00TlJB?oc=5": {
+"doc": "xong",
+"khung": "2024-08-08",
+"link_goc": "https://tuoitre.vn/choang-voi-khu-dat-dau-gia-hon-100-trieu-dong-m2-o-ngoai-thanh-ha-noi-20240814075127844.htm",
+"loai": "co",
+"pub": "2024-08-14",
+"src": "Báo Tuổi Trẻ",
+"title": "Choáng với khu đất đấu giá hơn 100 triệu đồng/m² ở ngoại thành Hà Nội"
 },
 "https://news.google.com/rss/articles/CBMirwFBVV95cUxQZF9YRVlHMkZFSS1ST3pyZ0VmVE9qM0NxV3NCTEtkX09RQ3NwaUl3SHN1cU1GR1JoZlNJdS1UQURtTk5rNjkxUmdEWFV0SjlyTGJURHUzSHdHUkVQbzcySzVuakhPd2VsVzd6N0dvV2ZMRFRNYUJodEZYWUstby13d2FYQUNoTnhKbWdaNjBGSEhmZTk3MlctU1UtWUFXVVo5bVpnWGN2YnRYV2JGU1RF?oc=5": {
 "khung": "2025-04-05",
@@ -2010,7 +2151,9 @@
 "title": "Đấu giá 34 thửa đất ở Hạ Bằng, giá trúng cao nhất hơn 90 triệu đồng/m²"
 },
 "https://news.google.com/rss/articles/CBMisAFBVV95cUxOcGdxcHBfX1p0SDBLUGd5cEZRRGRDdmRCendrNlNCUmlBLWpUYjljN3NnU1dMdjF6cWRzMU1HZ25wTWd2Yi1BVU1UTEdRM040ZHhKM3Z3cUNCbGNEdVFNVld3eU9RellTOFM0bzhRRE5oMXpiQVcybzJXSzNPbG1CTlJMZEgwNGVUNERRRUdXbEdTRXI2bGk3S0xVU2lpNl9MTzM0bnI1b0hMdWFYdDIwTA?oc=5": {
+"doc": "xong",
 "khung": "2024-12-21",
+"link_goc": "https://laodong.vn/bat-dong-san/long-bien-dau-gia-thanh-cong-10081m2-dat-cao-nhat-1012-trieu-dongm2-1442208.ldo",
 "loai": "co",
 "pub": "2024-12-28",
 "src": "Laodong.vn",
@@ -2075,7 +2218,9 @@
 "title": "Đấu giá 4 mặt bằng kinh doanh tại Đền Hùng, khởi điểm 680 triệu đồng"
 },
 "https://news.google.com/rss/articles/CBMisAFBVV95cUxQMUphRlItRmZxSzFkUzlnZTVtZTgwRnBSV3BGaDlEbXNuZDU2bmN0TG9RZ0pOU1RSYllqajlVVzVmTmVpeGpkY2g1dFJEcGIwYmlJdk0wQnQwZzdhcHNBd3FEeElLbWlBdUZoWFIzdDA4VTdQQmp4bVA2VnRSNGJTLXBxVUtITmUxTnVRQnltSWNzNnJ2WVYwZ0p6bC1tV09UQmdXb29jQ0FPTk5RM19rYw?oc=5": {
+"doc": "xong",
 "khung": "2024-08-23",
+"link_goc": "https://thanhnien.vn/ha-noi-dau-gia-dat-vung-ven-sau-2-dot-song-gia-cao-nhat-60-trieu-m2-185240829131059265.htm",
 "loai": "co",
 "pub": "2024-08-29",
 "src": "Thanh Niên",
@@ -2101,6 +2246,15 @@
 "pub": "2025-11-07",
 "src": "Báo Pháp Luật Việt Nam",
 "title": "Cưỡng chế bàn giao tài sản của Công ty CP Hoàng Long Steel cho đơn vị trúng đấu giá"
+},
+"https://news.google.com/rss/articles/CBMisgFBVV95cUxNN2pMbFdjRWpWSkU3MzhacHdxSlhBemVRVDYydTBVZVlCNFdqMFFtMU5nbjdpTlVvbUhMUV9xdlU0OEVNRmVDQldiUTBOcXkyODF6VkxwUTJGaHlVaU1kd1A0QV9tWmtJS3FHVHU0N2RaYmppU0JpUG1weU9NUHYtcHcxMTB4cWhuaXEzWjIwaC11VUVycVJ0ZWtxLTR1dEZ2emgxREFCYURaRDJzMl9UdGZ3?oc=5": {
+"doc": "xong",
+"khung": "2024-08-08",
+"link_goc": "https://cafef.vn/chao-lua-dau-gia-dat-thanh-oai-gia-trung-binh-chi-o-muc-27-trieu-dong-m2-188240814081547998.chn",
+"loai": "co",
+"pub": "2024-08-14",
+"src": "CafeF",
+"title": "\"Chảo lửa\" đấu giá đất Thanh Oai, giá trung bình chỉ ở mức 27 triệu đồng/m2"
 },
 "https://news.google.com/rss/articles/CBMisgFBVV95cUxNOXJ4ZXRpNEdnZkhZQUlEQWdwSHdCQVE0cG1od2NTLVljZmRIMnJubEFoWkJDN0xqZWNkRlJuRkZtSG1VdVV4eG1XbmdDaXdJbEIzMXdSaW13bEE0T3AycEVrd2l5czEtM1ptMThMUWxyZmxpZ09IcXhvTEJiMzUyYjFvN0ViOFJOemRTMjBISHhmbzR5M1E2R0lGUGVudXFUNU14cmVlRXBiVGpMMVY3M1FB?oc=5": {
 "khung": "2025-02-19",
@@ -2131,7 +2285,9 @@
 "title": "Vai trò của các đô thị khi Đồng Nai trở thành thành phố trực thuộc Trung ương"
 },
 "https://news.google.com/rss/articles/CBMisgFBVV95cUxOTGt3bE1YY190N0VqcUlJZ25GVmhjLW9lNjJrS1ZBa0NPclNlQ3B1VWpzN0N6eDhEUkFDZGQwYjdYdTUxY19vRzJMUUhtbEdhMWp3Z2hNb0ZobmlzazVaUjdOSmJKVkx4Sl9JcEdkblQzQm1wN2lZWE5uclFPU0hmUnV5LUVPaHhjbl9UWWwyZ0ljYk1IZUtKRVM4ODVzYUtPOGRlamdCQkphRE1HMno2UlV3?oc=5": {
+"doc": "xong",
 "khung": "2024-12-06",
+"link_goc": "https://cafef.vn/nguoi-trung-dau-gia-lo-dat-view-nghia-trang-262-trieu-dong-m2-da-nop-tien-18824121315521417.chn",
 "loai": "co",
 "pub": "2024-12-13",
 "src": "CafeF",
@@ -2159,6 +2315,13 @@
 "pub": "2026-02-10",
 "src": "Laodong.vn",
 "title": "Đấu giá 33 lô đất vùng ven Hà Nội, giá trúng cao nhất 50 triệu đồng/m2"
+},
+"https://news.google.com/rss/articles/CBMisgFBVV95cUxPOEJSRjMyeWZDSDNaVlc3Yndydkg2QU0tSXFQWkxFMGJCMG83cjJLVE5wRFpQX19WN180dENTaGJMUlBzNG05b2QzdVN1N0pObmE4dFFSeVNoVm5uT1pJSHRsOWpFWmQ0c2VWcUM0ZDAzZjBLWkp1bTlza0JxVnMybzdTUGEtZU9URTJ3c2RvZ3ppTEZlY3ZMdURON2hOV1lZUHhjOHdaT2kyeU0ybnR4U0JR?oc=5": {
+"khung": "2024-02-25",
+"loai": "khong",
+"pub": "2024-03-02",
+"src": "Báo Dân trí",
+"title": "Đấu giá khu du lịch ở đảo Cát Bà có giá từ 3.000 tỷ đồng"
 },
 "https://news.google.com/rss/articles/CBMisgFBVV95cUxPRHJQY0l3bjN6RTg2QldjRmVkSS1HR3RaQVVNV1FmVmprQ1ZTdnVBb1F4UVlqUU1aREtwWk5ZajZfWnQ5N0oxNHpGOEJRZVVtNkdCb3A5RDJDU24ybWNxdDZVV0pUS2EtR19CalRuU1Nkb1pVQV9nbEZzN3R5R2NtMHZvd3dMMUlkWUFPUlZQTjNuQmpiVkl2bUgwNVJJb0lkNUQ4S1B4QmppUWFoM2N2NTZR?oc=5": {
 "khung": "2026-05-15",
@@ -2276,6 +2439,13 @@
 "src": "Báo VietNamNet",
 "title": "Bà Rịa - Vũng Tàu đấu giá 2 khu đất xây bệnh viện, giá khởi điểm hơn 500 tỷ đồng"
 },
+"https://news.google.com/rss/articles/CBMisgFBVV95cUxQcjRUbnA3U2xjMnRoRXdRZUlUNUo4bTB5RHhZWXhSMGFYcy1ialhEdlQ4TVpCaF8wUWZRRnE0QWRIWUN6VkprbXZoOENWRVcyTkE4LUhxNXlHRnpBTjNiV044UTl1a1FPU3pZWVM1eFNyYm5CNkhydUVWQ0lCQzZaUVlEYjNuY1lCdjFYc29PVFJUTy1BMGV4a0U4dW9waUV0Y01MWUhjU29ERER6aDNRdGFR?oc=5": {
+"khung": "2026-03-01",
+"loai": "khong",
+"pub": "2026-03-13",
+"src": "Laodong.vn",
+"title": "TPHCM đấu giá 8 lô đất Thủ Thiêm, có 4 lô từng bị doanh nghiệp bỏ cọc"
+},
 "https://news.google.com/rss/articles/CBMiswFBVV95cUxNNjVoMm9nR2V6eWJ5bFgxajVobkNuei1FUVNsaUdubnFOYmxzUXAxV2ljRUlXSFVFcWpZOFVKVUNKQ2tla3V3X2t6ZS1rWFo2ME9odEJQeV9jWW5hZExTcEVEcl9vZWZhSXZsV2dFNHl3blhmejFDcFVnVl81WUtjNkE0TDlNaVY2VUF4Z2RzYm9zeG5fVVZtb1diejBLQUU5djJkQUFGSkM1RnJXaFdWQ0IyWQ?oc=5": {
 "doc": "xong",
 "khung": "2025-03-21",
@@ -2286,14 +2456,18 @@
 "title": "Một lô đất hơn 150m2 ở Thái Bình được đấu giá 23 tỷ đồng"
 },
 "https://news.google.com/rss/articles/CBMiswFBVV95cUxNNlVDbGh1UWVDdEFmOU1YT3N0Q3llNUQxX0NwdnFVbEZQT2JYdXlsbnZ1SWhTTVBvZTRRUUZPdG9RZHRkZ0JVMUd5LWlMaHRnQ0xpTHZ5ZnJHaXd6bk9EYWc5Q3p2dU94Z29fNWwzU0xtandFSnR4aHJYUHZRNHZyR0JnNDdtS2VzZGl1bVI5OEdmNFMwVEdINlNwNFo1UjNlVTFmXzZNZzVoamVVcDFYQTRidw?oc=5": {
+"doc": "xong",
 "khung": "2024-02-10",
+"link_goc": "https://laodong.vn/bat-dong-san/nguoi-trung-dau-gia-dat-hon-4-ti-dongm2-o-ha-noi-se-duoc-tra-tien-coc-1307287.ldo",
 "loai": "co",
 "pub": "2024-02-23",
 "src": "Laodong.vn",
 "title": "Người trúng đấu giá đất hơn 4 tỉ đồng/m2 ở Hà Nội sẽ được trả tiền cọc"
 },
 "https://news.google.com/rss/articles/CBMiswFBVV95cUxNOU1UQ3dfWjdRRFhGR3lzQnJ6YnF6dVkycWNLNzk2OFRtZzlDWGk2Y2NULU85THhUcUxLcHdjZW5tVHFaNXBxdFZlaWo3SXpGU182dVE0blVKT0cxZThTQlN1azRaaGkyVlE1Ui1vUW5XUWxScjAtTmpUVmctLUZRMGhVUHBuV1FtWEd2azIzNGVZN0xQUEdpTkpsbUVfdHhXa2h3bGd6eWtnYWQyUmtqbjRvdw?oc=5": {
+"doc": "xong",
 "khung": "2024-11-06",
+"link_goc": "https://cafef.vn/dau-gia-dat-thanh-oai-ha-noi-cao-nhat-90-trieu-m2-co-rao-chenh-ca-ty-dong-188241117082421894.chn",
 "loai": "co",
 "pub": "2024-11-17",
 "src": "CafeF",
@@ -2316,7 +2490,9 @@
 "title": "Hưng Yên đấu giá đất, giá trúng cao nhất 158 triệu đồng/m2"
 },
 "https://news.google.com/rss/articles/CBMiswFBVV95cUxOODFMeU1FcTFQcWg1WUdjTEhxT2tkckNCdzlqWjltcFVPd0FJWVRELW9KZ1VTOThlUnVHNVUzaFU2ZmJpdGZ3bnc1RXhOR2Z5TDhQNUhLbEEwdDAxMjZsd1BwY1FPTzVVQ3N2cUMzUlV0eXBfSlpLcEFfVGZkaVNOVXppcHFwSEZoN04tYkY2b0o5ZGgyZk41ZW1Jdmh5aUhhMFVlU0c3eHZVRUh5WUlHalJkOA?oc=5": {
+"doc": "xong",
 "khung": "2024-07-09",
+"link_goc": "https://baodautu.vn/dau-gia-dat-thanh-oai-ha-noi-ven-man-ly-do-khien-gia-bi-day-len-100-trieu-dongm2-d222521.html",
 "loai": "co",
 "pub": "2024-08-16",
 "src": "baodautu",
@@ -2330,7 +2506,9 @@
 "title": "Hưng Yên đấu giá 68 suất đất ở xã Đoàn Đào, khởi điểm từ 12 triệu đồng/m2"
 },
 "https://news.google.com/rss/articles/CBMiswFBVV95cUxOaHZRenVXakdxZnhDTnJ4eHlIOUZ3SGMtVzV6aHhxU202cjNyOEtDbFFQYW9RcUdUem9ONUhVbzBYbUViUmVJc3dLb29PSGlVdFM4eU9GZmo0OEw2TDFIcE92YUtfSzNHLVctaF94NlE5RXVseGdsc0pWMUx3LUEybEIzN2ozNzZCXzlDM0U3TmlyakYtcVd6MVlpQmdvSV8yY1BXODNhYmFuVFFudGlSSzdMcw?oc=5": {
+"doc": "xong",
 "khung": "2024-10-22",
+"link_goc": "https://cafef.vn/can-canh-lo-dat-view-nghia-trang-trung-dau-gia-262-trieu-dong-m2-o-ha-noi-188241022094345521.chn",
 "loai": "co",
 "pub": "2024-10-22",
 "src": "CafeF",
@@ -2383,7 +2561,9 @@
 "title": "Sắp đấu giá 29 thửa đất tại xã Thanh Oai, giá khởi điểm 14 triệu đồng/m2"
 },
 "https://news.google.com/rss/articles/CBMitAFBVV95cUxOVEt4QnJYOEdDbkMzb2dSc1JBUG1tLUhWWTNZWU9HTnhQYmZBd2t2M1V5UGM5N2IyOXdLMlZENnZfemhjRElmR3BZWUQ5Y0hlQzNNYUtzUEh4enVhMUVUV0ZpUDItZjd4RjJCM05SclFGWEpzYXpNaUFfTDZhaVVnQUhpRFZsQ2o4OUppWXFUM2pqLVVVWDNWYk9LWGZodHdnd05mRzRxaXFweWlYNnFXaVV5Ri0?oc=5": {
+"doc": "xong",
 "khung": "2024-02-10",
+"link_goc": "https://tuoitre.vn/tra-lai-tien-coc-vu-trung-dau-gia-dat-hon-4-ti-m-dat-o-ha-noi-vi-nham-lan-20240223175505698.htm",
 "loai": "co",
 "pub": "2024-02-23",
 "src": "Báo Tuổi Trẻ",
@@ -2413,7 +2593,9 @@
 "title": "Đấu giá 76 thửa đất huyện Phú Xuyên, giá trúng cao nhất 62 triệu đồng/m2"
 },
 "https://news.google.com/rss/articles/CBMitAFBVV95cUxPa0VwVWNxa2ZxcXU5N2hSTXpzanpUNXNJdWItTllsYjc0TXBoNHpTSnFaX3dSZ0JGcWd3SFI3NDFmbGd6eDVrVFlLaXNLNWJMVHphSFdUY3FOSjRFZ3hHUjMzMnlTUUd5OWhmVlBvY2trNEhhUXV6LWNHcG9YN0VJeXpqQ0Vkc2Fmenc2U0xfdFRsZnNidTRfYzJva3E0alFHbENBcGhZUW0zdlg0RFJaY05LRDY?oc=5": {
+"doc": "xong",
 "khung": "2024-11-06",
+"link_goc": "https://laodong.vn/bat-dong-san/dau-gia-dat-thanh-oai-lo-cao-nhat-116-ti-dong-gap-17-lan-gia-khoi-diem-1422436.ldo",
 "loai": "co",
 "pub": "2024-11-16",
 "src": "Laodong.vn",
@@ -2432,6 +2614,13 @@
 "pub": "2025-10-13",
 "src": "Laodong.vn",
 "title": "Sắp đấu giá 72 suất đất tại Hưng Yên đợt 2, khởi điểm từ 6 triệu đồng/m2"
+},
+"https://news.google.com/rss/articles/CBMitAFBVV95cUxQUzhSU1JURTkxMXVBUUZvbXp0UkU0WU9XNHFzNmx2dTd4RjdCTk1MQVhTMzk5SUhCMDBpNDA5N1NhX1lCOU16bFpicUVRSGxncE5MbEx5UmdGUXVIbjFEVHljMzFDcFZLcHhWVEQ1NHNwY19QU3dHZHFSdndWYkducWw4MzMtZTgxM3BzX2dzOFl4S1lVWGhfbWxTaE9ndWo4LVlpSEFGakRHay1STjA1QXRPZ1I?oc=5": {
+"khung": "2024-08-08",
+"loai": "khong",
+"pub": "2024-08-20",
+"src": "Báo Dân Việt",
+"title": "Huyện Hoài Đức lý giải vì sao đấu giá đất phải qua tối thiểu 6 vòng, bước giá tối thiểu 6 triệu đồng/m2"
 },
 "https://news.google.com/rss/articles/CBMitAFBVV95cUxQanpfQVN1RFdQRGgwMWgxQkN5ekJuSGhVbWVIb2F1UXZmTmFQSjk5S3FUM0V4UlRCd2p0SmRvQTNmZFBlOUVqcWhJZk5HOXNPdlJXSmZ4ZGdGQ0hZQmtFaHNFZUJjTGdNSW1HakZaTWZMSURod2RaTnUydUF4TkZNcVJuR3E1Ulo5cDRvN1dmQjNpM1FMN3hJdTFINEVxS3ZoUmFxbmlnZXdyOFdpNGNjRkxOSjY?oc=5": {
 "khung": "2026-03-16",
@@ -2464,7 +2653,9 @@
 "title": "Đấu giá 19 thửa đất huyện Chương Mỹ, có lô bất ngờ vượt 115 triệu đồng/m2"
 },
 "https://news.google.com/rss/articles/CBMitgFBVV95cUxQMEJQdUduSjBjWjM1QUowcWlDRllaVVpLYUdRMExvMWlKSVdRcmxsTGlVRzlEUnF6NWROUHJERDdfWGNqVmwtSU1KWDhHZmFFcGxmanhMOTl2U2xCeUl3Q3laa0xvN1hTUlV3R1FDaHBreUZtUlo0S3d5ZTVIOWZzSlZ1MTQ5Y1hQSmFJRVZwcHZ3RDBYSGFDNzNFVGtlam1TZWZuQW1rUW5laG5NeGVrREtBWGt5QQ?oc=5": {
+"doc": "xong",
 "khung": "2024-10-07",
+"link_goc": "https://thoibaotaichinhvietnam.vn/ha-noi-dat-dau-gia-tai-ha-dong-co-gia-trung-cao-nhat-262-trieu-dongm2-162113.html",
 "loai": "co",
 "pub": "2024-10-20",
 "src": "Thời báo Tài chính Việt Nam",
@@ -2472,6 +2663,7 @@
 },
 "https://news.google.com/rss/articles/CBMitgFBVV95cUxQQUFqdXFkRUlrWGl6QUhBbXdkUDNvblBXeXJIdFJyQWt2WUFVRVg3NllkWnV6dG5zbzdZV2tfSDkyLVNmV1MwZnFaZDZlNFRGOG91eW5CZ2dKMzg3dHRGTnJwbDhlOHA2SGhjaUpZMF9RM1ZVbE9Da3RpS0RBRFhkVDM5TzlWUllNNmlmeDc1RVlXdV9kOTJZQ0lSVWJwRmUxcTRpaW1oZWw5SUdETGk3TmtMenhwdw?oc=5": {
 "khung": "2025-01-20",
+"lan": 1,
 "loai": "co",
 "pub": "2025-01-31",
 "src": "CafeF",
@@ -2507,7 +2699,7 @@
 },
 "https://news.google.com/rss/articles/CBMitwFBVV95cUxOME5Gb2Vzci1Eazlidm5GMU9wY08wdWF5RnFXVkNPZnByVjJVRHpXUkhTaDF3NWc4WGs1NzNGRFRLM1dSLTdyMjlrZndsZXJEQ005cS0zT2U3cVdzNnNFWVJ0YVRZQjYwMWtZbHdUakFuUmRidi1aUkRSOEdTSjBTaHNISl9KUzVPWkNDdHpucHRVaVpGSzVJbUM3RFB6WWwtOVFkYm5lSHdtbzZKR3lfOFZEdWJVZVk?oc=5": {
 "khung": "2026-01-30",
-"lan": 1,
+"lan": 2,
 "loai": "co",
 "pub": "2026-02-09",
 "src": "Trang TTĐT Xã Phú Xuyên",
@@ -2572,7 +2764,9 @@
 "title": "Hé lộ thời điểm vận hành trung tâm thương mại gần 5.200 tỷ đồng tại Quảng Ninh"
 },
 "https://news.google.com/rss/articles/CBMiuAFBVV95cUxNS29STHFWUERoa1RfMV9TZ09aajVBUGt4c21jRFdMRWtZRTVoZjFyR0xpUm5abEFoM0kwVEdJX2dYbGFRdnY4TXRHOEJrcFYtSGFnMFR4ZlRNb1FOcjY5NlB3U3JJdlZ2bGdXa1FwRzU0b2dhVjNidDVWc2U2Qzg3SGFqaTk0U2RJR3hQVDd0QTMwdGlLellpZjZ2WDUwQkh6YlBnUk41V3JSWVVESE1XYUxEV3hCUWJO?oc=5": {
+"doc": "xong",
 "khung": "2024-11-06",
+"link_goc": "https://cafef.vn/dau-gia-dat-hoai-duc-cao-nhat-1093-trieu-dong-m2-gap-gan-15-lan-gia-khoi-diem-188241112073639398.chn",
 "loai": "co",
 "pub": "2024-11-12",
 "src": "CafeF",
@@ -2636,6 +2830,15 @@
 "src": "CafeF",
 "title": "Đất đấu giá Chương Mỹ cao nhất 115 triệu/m², môi giới bán chênh 50 triệu đồng/lô"
 },
+"https://news.google.com/rss/articles/CBMiugFBVV95cUxOVDRjX1lSRmx6SlB5emNNbFFfbzJldllianNyUGdhM3BMVTJ1WWh5eFV3TUUwNHZHMDY1TW5ka3lrT0RnazVYU2IzLWR0dlQ0UU5hb3JOcm15UGhTUGFxMGljNFZIeGtGck83NTVCU05YUkRjc1ZDT0JmdzFuNUFMTEQyalVZZHppWXVQclY3UGN2bHZNS2xfdHNhNnp5Ni1IWHlFQ0M4MGg1Ty1kUmpPU3lxSmRDX2wzYUE?oc=5": {
+"doc": "xong",
+"khung": "2024-08-08",
+"link_goc": "https://tuoitre.vn/nld/xuyen-dem-dau-gia-dat-ngoai-thanh-gia-cao-ngat-nguong-1333-trieu-dong-m2-196240820072227064.htm",
+"loai": "co",
+"pub": "2024-08-20",
+"src": "Báo Tuổi Trẻ",
+"title": "Xuyên đêm đấu giá đất ngoại thành, giá cao ngất ngưởng 133,3 triệu đồng/m2"
+},
 "https://news.google.com/rss/articles/CBMiuwFBVV95cUxORXlpX3B6MXREc1hJYklmWmJVSFNrYnAwNFpTSTQwM0szdThuQmYwYXU2UFNqVXdETzJXZThBYUs3QlhWNm9xZzhNZ3lGWUlzTHJ3c0ZjSDRSR3hrSVlXN1psRHk5MVFDQnRCUTdEa0ZMOWdsMzBFYzA5eXpxbXdFcDNFUTFDWkxGVFRfOTFxWGNid1d4ei01a2RrM0pWc2ZFUUZBMUJSdHhNMU5YUjMyQ19uUWtJbkFfR1J3?oc=5": {
 "khung": "2025-08-03",
 "loai": "khong",
@@ -2672,7 +2875,9 @@
 "title": "Hà Nội sắp đấu giá 15 thửa đất tại xã Hát Môn, khởi điểm từ 11,3 triệu đồng/m2"
 },
 "https://news.google.com/rss/articles/CBMiuwFBVV95cUxPcV9ScGdySnNac1VfbHlLZjZGQmNQNG9ySkxyNzFVUG1IcENKUGdCNGg4cXR5TXpJZjQxY0FPd1N0YnFINmhhcFF4bkNOTzB1M3ZabXkxSDJqU2t5TENXdzNNNGVabkotWFA3dkpHX1Q0LW1pN3BoWXAyaVJJYVdtdEkwM3JCdHBkMHhzOHg3bXhhYlY5SDlTRFU2d2QzdzlwcllWRmtBS2xZWnJvblNzU1lTWDZoWFFDRFFV0gG6AUFVX3lxTE9qR1FwRG1OWUhJV1ZiMnZqN3VZeHpORnRHSmN2TkV0UXAxMk9HUkFKMGhWMnJ1bXJyUWVIcEcxX2Rzb2FfMEVaWlFXSTg3Ri1Eay1HRnl4UkcwV19FX0xrWmFQQ25sOGFDelpyUnU5Mm5WV0FkQlBRNG5Kd25KaXE1NUNhbnhiMllnZk1fdWhiRkJyQ1h0ZExEWXNWVnVjdXB6UThxdkhxVkhRRHppdFduZXdCd3FUbXlRUQ?oc=5": {
+"doc": "xong",
 "khung": "2024-09-22",
+"link_goc": "https://thuonggiaonline.vn/huyen-phu-xuyen-dau-gia-42-lo-dat-gia-trung-cao-nhat-len-den-60-trieu-dongm2-post554803.html",
 "loai": "co",
 "pub": "2024-09-22",
 "src": "Thương gia",
@@ -2680,7 +2885,7 @@
 },
 "https://news.google.com/rss/articles/CBMiuwFBVV95cUxQU0JXRGtkWFdXNkNLczVmSy05MTRmREJyR0Z4OWs0VEVNZVRwSmhfSDNMc3BUeDZEV1BRV0E0M2xQamx2aC1hczRlYzBtY3hBd1ZWcHZHM2xWZDJydW9XdnRwcUJZNFZHY3BPVVl2c05KS2MzVzZBRmFRMlBjZ1RYNDY2YndRRWxIcC1GTGF4TUkwMW56WmZjREtLZU9VSlpubHpONjY5XzQxWmZrVGxURGloNWlVZWtGZHNv?oc=5": {
 "khung": "2026-04-15",
-"lan": 1,
+"lan": 2,
 "loai": "co",
 "pub": "2026-06-01",
 "src": "Trang TTĐT Xã Phú Xuyên",
@@ -2717,7 +2922,9 @@
 "title": "Liên tiếp xuất hiện việc người dân tập trung phản đối khai thác cát ở Thái Nguyên"
 },
 "https://news.google.com/rss/articles/CBMivAFBVV95cUxPaWYwbmpRem9XVEFhaUttSU9vdlZvb3k5TDlwSlQ3b0d4cE50ZDlYSWpOeHlVS19WNEZSRFVuUXFkallqVVY0d0ZxZEp6YmFyU0g3elo0ZndkWFl6dnZESzZiYTVOT3BNNWhkT2M4VGJvVzQxVFcxa2ItX1QzWnVTd2EyTXo2bUh1eHVwNFVaNER5NW9ZZE5nX25rb2RMSGZJQndNTHlJMV9UMWVacTRrYWlTLXpxczJmYTFWbA?oc=5": {
+"doc": "xong",
 "khung": "2024-07-24",
+"link_goc": "https://vietnamnet.vn/dat-dau-gia-thanh-oai-ha-noi-trung-100-trieu-m2-dat-gap-2-3-gia-quanh-vung-ai-du-dinh-2310735.html",
 "loai": "co",
 "pub": "2024-08-12",
 "src": "Báo VietNamNet",
@@ -2794,18 +3001,29 @@
 "title": "Hưng Yên chuẩn bị đấu giá 130 lô đất, giá khởi điểm từ 12 triệu đồng/m2"
 },
 "https://news.google.com/rss/articles/CBMivgFBVV95cUxQN3NxOEpJRGdhVHo0LVpfRTVqVlFUaXVmMU9SZWFFS3hZWHQzb1pLTUhjdjRUelNnc2ludG05NjdUbFE0d1BBejZCRTY5dkVmTzZCeTBzbWFEa2FieWJ2TzlJT21Kbkg0cHlzbjExLW9CRmFKTVVhZGtqbkJhLVIwMF9JY1hNeGJDTnpDakxVQmM0SDZUOVUwMFlEX2NkRzZmZHlfQVFhZjJiRWRKV1VnU1ZrT0YyZm5yWkZQaEp3?oc=5": {
+"doc": "xong",
 "khung": "2025-02-04",
+"link_goc": "https://dantri.com.vn/bat-dong-san/danh-tinh-doanh-nghiep-trung-dau-gia-44ha-dat-tai-quan-hoang-mai-20250206165056155.htm",
 "loai": "co",
 "pub": "2025-02-06",
 "src": "Báo Dân trí",
 "title": "Danh tính doanh nghiệp trúng đấu giá 4,4ha đất tại quận Hoàng Mai"
 },
 "https://news.google.com/rss/articles/CBMivwFBVV95cUxNY3VFNnBUUlJxZGI0dnVUaEVGMkgydjZsZGZ2VWZqNWJrU2w5WDd1d0Y2alV0bjBMbm44bG5FRzVyN2FpVFlvb055eVAzUllaaVNjdklWRXFpUFFMY2NObklUS29yNU9DZUFHendqdjRLMmtYb3BWSU5heWY3U3NNWnlyUlBUMVBjLUh0Q2l0N0NFbGo3RmlSNzNFVUhqb2NsbEZ5YVBURktGSkVoR0REakZMci1LQmdaUmxCWG1wdw?oc=5": {
+"doc": "xong",
 "khung": "2024-10-22",
+"link_goc": "https://thanhnien.vn/vu-dau-gia-dat-ha-noi-xuyen-dem-nguoi-trung-thua-133-trieu-dong-m2-da-nop-tien-185241022103139149.htm",
 "loai": "co",
 "pub": "2024-10-22",
 "src": "Báo Thanh Niên",
 "title": "Vụ đấu giá đất Hà Nội xuyên đêm: Người trúng thửa 133 triệu đồng/m2 đã nộp tiền"
+},
+"https://news.google.com/rss/articles/CBMivwFBVV95cUxOUDZONzZhOFA4TjJhUS0xUWJlemFBMHJUREVXelVkY1lScmJVcElyQnktbGlsUUtWSWgwaG53RmNTbDFYbDBteTZPaDlyRVBWQUVubTFpYjZ3a2NrUFZFNmxBTGNxbmtBS2lTUURQZWY1YU9lS1VhVm1HaWZIYkhtX0ZPZHlBNUNva1R0U3hyQkhNOEgtT00tdzZiT3draHNzUy04YVVLd3Jkd2RFWGwtUkJvYjNJNWwyYXZoWjVIcw?oc=5": {
+"khung": "2026-03-01",
+"loai": "khong",
+"pub": "2026-03-14",
+"src": "Báo Dân Việt",
+"title": "Hà Nội đấu giá loạt lô đất ở xã Phượng Dực, giá khởi điểm 3,5 triệu đồng/m2"
 },
 "https://news.google.com/rss/articles/CBMivwFBVV95cUxPb1dDVW9SbjBERTB6TkV6LWFIdm1qdGI3VEcyTE80bUxnV3ZxTHgtRXNlemVDOTdpbWl1TmJqMDNTbjJrTjBwZnh3OTc2ZEFwR2JPMExTNUF6WTFGNTl5ZG1VU1VwU3VPZWpISkdNSkNlT2FuQmNiNDdzN0R1UV9IZXpVaE1JYTlYLW8zV0pnVllLdE5KVFE5cVlqOHNlLUpmZ3FrdmkzcW5Vb1loT0xxTnVlU1hxczRVZm90Ums1bw?oc=5": {
 "khung": "2026-03-31",
@@ -2841,6 +3059,15 @@
 "pub": "2026-09-06",
 "src": "Tin tức 24h",
 "title": "Hà Nội sắp đấu giá gần 30 thửa đất, giá khởi điểm từ hơn 9 triệu đồng/m2"
+},
+"https://news.google.com/rss/articles/CBMiwAFBVV95cUxOZ1Y3TWE5VVRRLVhwM1B6YjVKb3JmX2hNSExVcWMySk0tUDlHTlFuTEtTLWkzNGFsN05VajNzMGlNUl9pTEFJR0pXa0M1UldVeDJrRjZjcGZKVGVIZHBqWEZQUkI1MEpYQ3o1RUo3ckVKcldvb296WTVUNmpWOHVnWW94SFEyOHA4ZG5VYTI2bXFsdEs1bExocnJOcERyTDZ6Ul93dnZacWxwVE93djhXWEhjSElYNmU2US1WZ3h5YWw?oc=5": {
+"doc": "xong",
+"khung": "2024-08-08",
+"link_goc": "https://dantri.com.vn/bat-dong-san/dau-gia-dat-huyen-hoai-duc-bong-tay-voi-gia-trung-133-trieu-dongm2-20240820074007398.htm",
+"loai": "co",
+"pub": "2024-08-20",
+"src": "Báo Dân trí",
+"title": "Đấu giá đất huyện Hoài Đức: \"Bỏng tay\" với giá trúng 133 triệu đồng/m2"
 },
 "https://news.google.com/rss/articles/CBMiwAFBVV95cUxOemsxeDRQamNDWk9EMmp0ZHVPVXFyT0hiTnhvUHZDaWpqallZRkxTSVN1QzVkNTBkSzJOZ1g0dWpSSGRJNDdhcFJLc1BIc3NCMENUWDBaVnFscngtbjhhMk4teUowbW5TOExVejJnOWEycy05VzkyX0VHM3Zmb3QtTDdjM1lfRGNITGtjLVg5VndNbWdVdHRqb0JxSmozUG9XZDY1a1VyMHlScXNWMFhPWllBSFZGbm1qN3Bud0VzOTQ?oc=5": {
 "khung": "2026-01-30",
@@ -2895,12 +3122,32 @@
 "src": "Laodong.vn",
 "title": "Nhà đất 24h: Doanh nghiệp xin bỏ cọc \"đất vàng\" trúng đấu giá 1.379 tỉ đồng ở Hà Nội"
 },
+"https://news.google.com/rss/articles/CBMiwgFBVV95cUxNbElIWjlQRlJWc1ZQMkVlUk1YOW84S2x6aWlBaHljSWttRElzMDdobEpIM3cyMmxGc0pnelpxTWdwVE5wOEdsVmdEdFVfaHF4RlhNd0xGV1hXcExIMXRQWTlxUjkteUVrM2ltTWJxcEtCYWRaM2lZX1lLcEUyWUVpZTN5SXd3TjBid2NURlAwN21YSFAxaW1LRzdUQ1F4ZVlqZGNJMVBTUEpoZjFFVFJBeTBkSlVrY1Q2TExVQ2lqOXhmUQ?oc=5": {
+"doc": "xong",
+"khung": "2026-03-01",
+"link_goc": "https://daibieunhandan.vn/bac-ninh-phe-duyet-ket-qua-dau-gia-khu-nha-o-tai-phuong-que-vo-gia-trung-545-ty-dong-10408654.html",
+"loai": "co",
+"pub": "2026-03-05",
+"src": "Báo Đại biểu Nhân dân",
+"title": "Bắc Ninh phê duyệt kết quả đấu giá khu nhà ở tại phường Quế Võ, giá trúng 545 tỷ đồng"
+},
 "https://news.google.com/rss/articles/CBMiwgFBVV95cUxPQkpsdEJJVHRaTlVuNjF6YU1INFhjT2lMeEZPdjNwMVZ6X2U4d1V4MUJNWTNrMGtkLUdhOUZpempNUmNUeUdZSWJrcDVvVDBzbHpFRUlNdHVJT3NoSlJPX001MFZMb0Rjd1VJdEZ3YUxwbWRpOHFqYnRSOGstSzdMaDVWQk9qV3FnZmp2c09UTXhHdzgyXzVDRW51NjRRRnlvR01vYVdfLVRRclZiOVdZRHh6R2V6c1ppWllDZnlobDk2dw?oc=5": {
+"doc": "xong",
 "khung": "2024-11-06",
+"link_goc": "https://vtv.vn/kinh-te/dau-gia-dat-tai-hoai-duc-ha-noi-gia-trung-van-o-muc-cao-tu-79-109-trieu-dong-m2-20241111201339727.htm",
 "loai": "co",
 "pub": "2024-11-11",
 "src": "VTV.vn",
 "title": "Đấu giá đất tại Hoài Đức (Hà Nội): Giá trúng vẫn ở mức cao, từ 79 - 109 triệu đồng/m2"
+},
+"https://news.google.com/rss/articles/CBMiwgFBVV95cUxQMFIwMEtVMmVFUFpCOFBiTF9IT3JQU0pHeC03ZnVTdWdwSVN1YVJvYS1CZl9rM2l1SDFOT0ZNT09sZEFZUW1xeloxWVllZGozcWlSSENEZzZNN0ljV0s2RVFjWjJhanQwN0lwTUN1TFBweFNicWJrT1E0bzNEREZNQW8yRDQ4TWZHOGxPZ0R0YUtLOWVQanFtY2cwSkc2eHZ2aXh6ay1jalhwQi0ycDBOZFpJdHFsN3FudWtGTGVCMHVldw?oc=5": {
+"doc": "xong",
+"khung": "2024-08-08",
+"link_goc": "https://dantri.com.vn/bat-dong-san/chao-lua-dau-gia-dat-thanh-oai-100-trieu-dongm2-da-xuat-hien-cat-lo-20240811213127066.htm",
+"loai": "co",
+"pub": "2024-08-11",
+"src": "Báo Dân trí",
+"title": "\"Chảo lửa\" đấu giá đất Thanh Oai 100 triệu đồng/m2: Đã xuất hiện cắt lỗ"
 },
 "https://news.google.com/rss/articles/CBMiwgFBVV95cUxQTlF0cFB4RnVlczlxVC12VEp0MGR4M2QxNlI4MXEzaTlXTkVaRHM5QklCbTlTZ1loU3YxN3dpbnE1eWRZdDUxanltNXNmWkRPY0wyY1JaNFdsWWlNLUU1d1M0dmszZWNZbHgwcXBoU1hZTGVFODlsSlVmakxKVVRBM3NwdEhtMkt5cGpBekxUTUZxT3hnT0VTSE1PS3NvRTJEYnFBTFhlMF9kajJUV3dQaU02STlJc2s5SFJ0LU1Mb2xBdw?oc=5": {
 "khung": "2025-10-17",
@@ -2926,19 +3173,30 @@
 "title": "Lộ diện doanh nghiệp trúng đấu giá lô \"đất vàng\" gần 2.300m2 ở Đà Nẵng"
 },
 "https://news.google.com/rss/articles/CBMiwwFBVV95cUxNR05NSW9VWl9OQXpzZU9rcnc4QklwbFZDaW5ZeWxOUTlBalZGMmVfcUZKZHpXb2VwWEFBbldydnE3R3VVN2VsOS04RHFXbXFpVWJQRFpBVE9mUl9sUHFWWnRtSk9hQVRhSzRUbGpqMm9HUVJpbzlpZDVMQlBzOVR0VFVYaHBocWU2MTAySGp4c0xBMTVpdnZWakJINllhS1VBcV8waDZXU216UU14a1JXOThXR0dNTXhYbnJOZzNaZFczelk?oc=5": {
+"doc": "xong",
 "khung": "2024-07-24",
+"link_goc": "https://dantri.com.vn/bat-dong-san/mot-huyen-vung-ven-ha-noi-dau-gia-dat-gia-trung-gan-100-trieu-dongm2-20240728224858077.htm",
 "loai": "co",
 "pub": "2024-07-29",
 "src": "Báo Dân trí",
 "title": "Một huyện vùng ven Hà Nội đấu giá đất, giá trúng gần 100 triệu đồng/m2"
 },
 "https://news.google.com/rss/articles/CBMiwwFBVV95cUxNSkRNTHkzNnFkc1lUSTc0ZU1sdHBFUUhjYVczX1FIMWNoMzRkcnluMXV6cWtMZHJDbjRNQ241UTJvSWxFSWxZaTJyc3c2Nm4wQ3NydXB2RHVFNWY4SWJ1dUpNTTFVcGM3NFFNeVR5dmZCVEV4Ui1uck9UYWZJM2otcS00Z2ZkYkhxaEJ1TWdXa1h5bGh5WHBHdHk4YUhVT3h4b0planl0RlExSlF1X054TGZlSlY4TzhaSFVQdGZqRlh1U3M?oc=5": {
+"doc": "xong",
 "khung": "2026-02-14",
 "lan": 1,
+"link_goc": "https://dantri.com.vn/bat-dong-san/chen-nhau-dau-gia-dat-vung-ven-ha-noi-co-lo-trung-gia-gan-16-ty-dong-20260309143550456.htm",
 "loai": "co",
 "pub": "2026-03-09",
 "src": "Báo Dân trí",
 "title": "Chen nhau đấu giá đất vùng ven Hà Nội, có lô trúng giá gần 16 tỷ đồng"
+},
+"https://news.google.com/rss/articles/CBMiwwFBVV95cUxNU0dMaDZXUFZpaW1rWHpncmF2Y1dIMEgycVBBekk5eXJ0VmdvZ0F5RU5hNG1GbGk1M0lURVktTjRicWt4Tkg2dHZNdFlwaWhJU3h3RFF6WXBMeUw4X3JpMXdXdmZXZkk4d3RPQ3pJOGNKYXM5UXVLSjdoaElkNkpqQXhiNFY1TV9OWUlCcDBrckRpQUZENVZ1SHc3dFFDQXNDTVl1UnRQMUhRQ2ZiRVV0U1cyZXkzU0hUT0pXUGpWNTh1N0U?oc=5": {
+"khung": "2024-01-01",
+"loai": "khong",
+"pub": "2024-01-06",
+"src": "Reatimes.vn",
+"title": "Khu đô thị Nam thành phố Thanh Hóa (Bài 2): Chân dung \"giới chủ\" CTCP Miền Trung Nam Thành Phố"
 },
 "https://news.google.com/rss/articles/CBMiwwFBVV95cUxNdjhGUzhKSGJKSWJpdEJlakRPbV83TTE5ZTMzRklGeXd2b0t2b0RCS2F0OEhraUljUGdpTWRnNkJnRGg3T0cxM0Z0QkVBVVgzSmxCZmp6QzVUX014NzAxd0RuNkpBdktua1JoYlFuMnBRcHlVTU5ZX05uR1p2Mnkzdk5XQkwxU2tXdFpjRkFMQWZNVWJzQWhiaXNlOUgyeFJpZUlsT2xJSms0X083RnVpNWZTM0VqbHBseU5pQkxMSUNwSG8?oc=5": {
 "khung": "2025-12-16",
@@ -2948,7 +3206,9 @@
 "title": "Tá hỏa khi lô đất trúng đấu giá không có thật, nhiều năm đòi đất bất thành"
 },
 "https://news.google.com/rss/articles/CBMiwwFBVV95cUxNeGttWGFiS3VQN2FCaWhzYXJjZjVwdVdieDk1OTZubU1FM3lHSWRZMlp4RXFVSXNST3l2RDNKNmp4WHNpRU04S3NvZHpwMmpvald6TUhzVi1TUnJ6SFp6TmZBYmpweHRGTUpfM25SOUNaQl9HM3E4RGczUk5uS0RILUxMcTRlaWJWakZuMnlIT3BtYkswNW5SZGJTdmptemgyRENfVmIwNzV1YUt3X0Z6Vml4V1pmTF83NjA4azRkUXlNOWs?oc=5": {
+"doc": "xong",
 "khung": "2024-09-07",
+"link_goc": "https://thanglong.chinhphu.vn/ket-qua-ban-dau-ve-qua-trinh-dau-gia-dat-tai-huyen-thanh-oai-va-hoai-duc-103240906092406181.htm",
 "loai": "co",
 "pub": "2024-09-06",
 "src": "thanglong.chinhphu.vn",
@@ -2960,6 +3220,13 @@
 "pub": "2025-10-02",
 "src": "Báo Dân trí",
 "title": "Đấu giá thành công 2 khu đất hơn 6.700 tỷ đồng gần sân bay Long Thành"
+},
+"https://news.google.com/rss/articles/CBMiwwFBVV95cUxOcUgwNXZuRmNGTXAtUGkxY2RJc1NjbkgtMndmWTc3bmxUUGtQcXVoOG9LR19oWEJYbTB2QXcwOWpNVTk5c09WLVUzVGxIb20xd1ItV0hxSDltb2UzOHdZQTNaTl9FZFNBczFhVjJxdWhIOWk5ZVpja2ZpT0cza25jcTVGbENIdU5qekZKOWdRZ01weGpwQ0RraFlzWkhQRlhvZUo0N0hWcWg0WTlER0pYNDdpcENIZGdZU0NEM19vc0dXcUE?oc=5": {
+"khung": "2026-03-01",
+"loai": "khong",
+"pub": "2026-03-04",
+"src": "Laodong.vn",
+"title": "Hà Nội tổ chức nhiều phiên đấu giá đất trong tháng 3, khởi điểm từ 7,1 triệu đồng/m2"
 },
 "https://news.google.com/rss/articles/CBMiwwFBVV95cUxPRWRyck5ELXBXQWFwckJNSDBvazVtN1VqaWd3dmdOSnRqVk9fX3dSbjVMRzhWYzNXSEpDbF80TW9TZXRiejdPLVZKcWpqYTUyb29vR2hGS0dXSnIyVDdGRzNDRzhKZUdCVWZzSGUwY3ozVFllM0hRMlN2ZVN1OXd4R0dCRjdKaTNjVDc2OWJFQkJWNTQwMGpwWFBEN29KdG16cEE4LUlkdC1jSy1uOGxpRGt1Z3NLRXVjZWVQU2IzQmc4VlU?oc=5": {
 "khung": "2025-11-01",
@@ -2983,7 +3250,9 @@
 "title": "Aeon Mall tiết lộ quy mô khổng lồ của trung tâm thương mại 3.900 tỷ đồng tại Bắc Giang"
 },
 "https://news.google.com/rss/articles/CBMiwwFBVV95cUxQTlQweWZobDZ6SXNXa01HckZBVVVmekJJVmF2TWstR0diM3U1VldYa292RDF1QTdIZ25pRUswbFJCVGoyX3U5RHFDYVFydzduZENzdlBNalJ1WEliUUJnX1I3SXNoRWRPeDI0bUIwdDd2YVpIRXlXQXhfVm5IRDVacEZZbmRlenB4ZURJcWJTYklWbHZQYmhjaWFsT2NoS0oxbmFZY0JTVDZwV0tacTJMTVYyWEkzQzRKaGVRTFBUbWYxXzg?oc=5": {
+"doc": "xong",
 "khung": "2024-11-21",
+"link_goc": "https://dantri.com.vn/bat-dong-san/dau-gia-28-lo-dat-tai-huyen-thach-that-cao-nhat-gan-186-trieu-dongm2-20241204004714843.htm",
 "loai": "co",
 "pub": "2024-12-04",
 "src": "Báo Dân trí",
@@ -3019,6 +3288,15 @@
 "src": "CafeLand",
 "title": "Vị trí sẽ đầu tư dự án khu trung tâm thương mại hơn 2.000 tỷ đồng tại thành phố Đà Nẵng"
 },
+"https://news.google.com/rss/articles/CBMixAFBVV95cUxQY2QwV1JadElrRTlYR2RhbGpOdFpuX3RpOV9samF4eHRaX1QzLVNMYUNRWTZmYzVWc2ZKMjVOc21wR3VLQVBVaWNwR0xTSHRBUTZHX2d2Z0VycDJqRlVlQlh0cnhVWTZHQUJfNWhaOE1ad2RRbWROYU45U1JEZ21XbWJRWjF2STNMc0k0UjJDQmpWLXVXMk5pOXFUeVFqb1dtS29GLUQ2YTJzSG1Dc0pUNEVkSDloaElRSldqQVI1b0RQeGE5?oc=5": {
+"doc": "xong",
+"khung": "2024-08-08",
+"link_goc": "https://www.24h.com.vn/kinh-doanh/choang-voi-muc-trung-dau-gia-so-voi-bang-gia-dat-cua-cac-quan-huyen-ha-noi-c161a1595686.html",
+"loai": "co",
+"pub": "2024-08-21",
+"src": "Tin tức 24h",
+"title": "'Choáng' với mức trúng đấu giá so với bảng giá đất của các quận, huyện Hà Nội"
+},
 "https://news.google.com/rss/articles/CBMixgFBVV95cUxNT05QcHBFZHdZNnZubGFRamp4S3Fsa0U5bmIyRDdlRUhscjYzNWpUbzIwbjR4ZVFJOHRFUmMyaDJubWVLMUh5MlpKQU5vMjVjWGNNa0lZdktHT1ZIOWFuWEFxUGFvamlyT3IxTlkwemNQUDdOVE0yVWdPZ2NsRlFtcHc2TmJ2V1ZZVUd6OVFTY1hJcTBQbWswLWk2TldXSlNtdEJPZVEzOVdmYTNYRFNSOTc2Ull0Q2kySWsxMkRrNDI0eXR3QXc?oc=5": {
 "khung": "2024-11-21",
 "loai": "khong",
@@ -3036,11 +3314,22 @@
 "title": "Đấu giá đất huyện Thanh Oai: Cao nhất gần 80 triệu/m2, rao bán chênh 1 tỷ"
 },
 "https://news.google.com/rss/articles/CBMixgFBVV95cUxNcnVsV0dLXzRRaHZJX3U2UTM5WjNGYlo4UHl0YjIxaHhOdElLelZvWDJhdjVRal9majNrY2hlYU11SDBrSHQwaEhlTENJTDJINEpEdzNzUXMtZC1DdXFVeEpkY0ZnMGlpTU0wR0hwVmRENXZ4UURkU2hEVG05STJ2UmVETXJDaTdlck8xOTJuRWJBUTJsY3pDUFVESGoyckZHN2xsV1hCNVNnNHBwVjVycW1GazdxbEluNWM4Vnd0M2NLZXoySnc?oc=5": {
+"doc": "xong",
 "khung": "2025-02-04",
+"link_goc": "https://etime.danviet.vn/chan-dung-bds-song-loc-vua-trung-dau-gia-lo-dat-1800-ty-dong-xay-nha-o-thap-tang-linh-dam-d137230.html",
 "loai": "co",
 "pub": "2025-02-07",
 "src": "Báo Dân Việt",
 "title": "Chân dung BĐS Song Lộc vừa trúng đấu giá lô đất 1.800 tỷ đồng xây nhà ở thấp tầng Linh Đàm"
+},
+"https://news.google.com/rss/articles/CBMixgFBVV95cUxOcDFkV1M0WTI4LTdOQjRqNklLVmxHQzl6MUxjSFZ2VDR6Q29xbk44Y1IyUmlhR2JOWlpib0pNczdWNk9nMEhPVjNEM0JHN0ZKODV6U1FDcEZUenJwSEdHbHVReUhnVHQ1VmRpM2NmMmpIRWNZV3NJdkRiWkVjbUVnYlkxLXBCU2xLRlpwTG1EMTVsczU3SnJidzhhX2hreVgzWkZvYkdMbC1wRmJmNl9UTFZLNUFoR0MtUHBCY0Jia19PY1FCZlE?oc=5": {
+"doc": "xong",
+"khung": "2024-08-08",
+"link_goc": "https://dantri.com.vn/bat-dong-san/xuyen-dem-dau-gia-dat-huyen-hoai-duc-rao-ban-chenh-luon-800-trieu-dong-20240820143501721.htm",
+"loai": "co",
+"pub": "2024-08-20",
+"src": "Báo Dân trí",
+"title": "Xuyên đêm đấu giá đất huyện Hoài Đức: Rao bán chênh luôn 800 triệu đồng"
 },
 "https://news.google.com/rss/articles/CBMixgFBVV95cUxPRUVQZnhUR2ozT0t6R2hBZXJ2V1RTVUJfMUNUWE5qOWdLTWU0R21OMFZfVjhzV3JGdXVUZUtpVEF1a1hQNElvMENGRVFjQWV2MUx1OU1uai14VXV3cDdkbmFzdEY4REtuNGYxMkU1cUlRV3dCQnVuZU5wTlRWS0c2SGZOS2hrclhKYmRoMGhINk5NdmlXa2RMbVFGcGhUOVlBcWUxXzc1MWVVY3FMMkk1QlY5TlE1Q0o1ZVNBV0RPQVV4cjR2ZVE?oc=5": {
 "doc": "xong",
@@ -3075,11 +3364,20 @@
 "title": "Người đàn ông ở TPHCM đấu giá trúng 16 lô đất rồi “bỏ của chạy lấy người”"
 },
 "https://news.google.com/rss/articles/CBMixwFBVV95cUxOd3oyVjMtc2hscF9Ua0ZrZzM4UlJxTG9TcGJCWWdMNXVKZ21KelhCOTl4aW4wMlhqVno2dlNpVk1iZDA2blNHR3M5clJQcjdIbGxjWGpmdXhqM2JMc0F3X1pJOVhoa2Q3cUNmbnZ4QnlXYmNfMVBlb0F6RUp4cXN0dWJwVUw5UzhGb2tSM1dDbDdDelNFTXVyNndvMTJpa3V3QWJSSFBLSm1KdVB0SnV3Y2lnaERXWTFXZW9qdURVWDZ5ZEhMaUg0?oc=5": {
+"doc": "xong",
 "khung": "2024-08-23",
+"link_goc": "https://dantri.com.vn/bat-dong-san/dau-gia-dat-huyen-phuc-tho-gia-len-60-trieu-dongm2-trung-ban-chenh-ngay-20240829115232583.htm",
 "loai": "co",
 "pub": "2024-08-29",
 "src": "Báo Dân trí",
 "title": "Đấu giá đất huyện Phúc Thọ: Giá lên 60 triệu đồng/m2, trúng bán chênh ngay"
+},
+"https://news.google.com/rss/articles/CBMixwFBVV95cUxPS2hCa0Z3bXJ1dEl1bUttdXFpR1R3V3laM0o0WVJVNVM0M2dTOGJQNGRtQUlxa0hRTnh6XzFEaURTemltRHhBbjd2T2lsdzQyOUhMdFNBLW1IVkVTNFllQ3NsMmUzNVRjV19YQXVYc1lidEFSZElxTVlUWlZmMnFGbVZaUXVINEo4WGloNk5hRDZ6U0l6VzB5RmVQVVF1aUsxdkE1MTktQzlGN3U1VktjUkUxXzBueGtxWUlBcHZ0NlJfYlZzNVN3?oc=5": {
+"khung": "2024-04-10",
+"loai": "khong",
+"pub": "2024-04-23",
+"src": "Laodong.vn",
+"title": "Hủy kết quả trúng thầu, nhà đầu tư có thể nhận lại phần ứng trước giải phóng mặt bằng"
 },
 "https://news.google.com/rss/articles/CBMixwFBVV95cUxQUFZDdU5nQV9WUGw3NW1zNW96bVpvTlJqUS00UGFuUG41WGIxYlkwem9HVzk0cHBQeC13SzdXZDBXMVdQZjdyeGZTczI5T0ZlYTZucWpPNXBtMFhPeUxreUpFY0c4Um1FODE2d3Q1TEd6OENGUVBFeEltOFZMNk02WXQtRHlXUzZIV2p4czVSZ2NoV05pRC1ScUdDbFEtUDVDYlMzUW5mMVlENVljb0hDUkFaMEpidWVCaHhqUGJFUzdNOGlNbUtB?oc=5": {
 "khung": "2024-05-10",
@@ -3096,7 +3394,9 @@
 "title": "Bỏ 3,3 tỷ trúng đấu giá tượng vàng 24K, đại gia \"điếng người\" soi ra 80% là... đồng thau"
 },
 "https://news.google.com/rss/articles/CBMiyAFBVV95cUxNRmlTeGhLV3RFOE1mMkMtdVhkdzU2dFBqUUJoczZZbG1KODhUUi1FNU1ZbGRkRFRuOERvYnkxZlRhc1JhRW1ZSThlT2VIdXlkYkNEalZsOE5KOWhwdl9PTWJkaXpNTTlGcVlnRDdrRS1hTjM2ajV2ay1vd0tUU1ZGc0gzVkpEa1JoRnhLZTFHZXBJUjlzcV9lZ21pb3E0ZV9Na0d6MnVQbl9uZWZKejRobW9kT1FaV3BYYjROUEpIUjMxNzZuUEtlWQ?oc=5": {
+"doc": "xong",
 "khung": "2024-09-07",
+"link_goc": "https://www.24h.com.vn/kinh-doanh/dat-dau-gia-thanh-oai-55-68-lo-bo-coc-gom-ca-lo-gia-cao-nhat-hon-100-trieu-m2-c161a1603222.html",
 "loai": "co",
 "pub": "2024-09-17",
 "src": "Tin tức 24h",
@@ -3184,6 +3484,14 @@
 "pub": "2026-06-23",
 "src": "Laodong.vn",
 "title": "Trúng đấu giá đất vàng 1.379 tỉ đồng, Công ty TNHH Duyên Hà bất ngờ xin bỏ cọc 135 tỉ đồng"
+},
+"https://news.google.com/rss/articles/CBMizAFBVV95cUxPTHcydldySFRWRzUtNGt5RHBlT1kzNndmS3IwUkVDb3BHQWhEX1BFUTVuUlBZOFplZWRzOWxMWGVWY3Z3UXQxNWYxTEtpc1FPMUFXd2trUmc5TUR5SjRGWmlOVVFRdUk0Mmo1ZFhFa0dYV2ZYX0V6ZS1taHZ6b0dUMDhGYmhSY2dTVEZZYmFuLURvY2l5ZjViSlJMbWdKY29DREU1T05uZlIyX2xOVFN3cmxJLW9aa2kzTTlSb0ZlV1VuZGx3dHpQQk01Z1A?oc=5": {
+"doc": "bài quá ngắn",
+"khung": "2024-08-08",
+"loai": "co",
+"pub": "2024-08-20",
+"src": "Vietstock",
+"title": "Kết quả đấu giá đất huyện Hoài Đức ảnh hưởng ra sao đến thị trường bất động sản Hà Nội?"
 },
 "https://news.google.com/rss/articles/CBMizAFBVV95cUxPVXRMSUZVZHhmNUtZY29uSThBdHdIZzMwM3l3UmNNTV9HTTJNcUhUMEZfWF9aUDBzRTc4bG9tQ2FlUi1TeGVWYVIzMlh6cV94Ym44Q1Z0ZTU5Y3MwVk5DckZ6Q0U1OFhJQjI2eDNZdWQ3c2Uyd2t1VUNxaG05ZEVFOGhVdG52NXlPWElWVzdfN0g1MVM4UFI2SGY3dWtVRDZSREdHTEgxQUI3cWE0SXRwdkgxcjVhR1ZBMllmUEhvcUFhSjdLbnpHUy1HanI?oc=5": {
 "khung": "2025-12-01",
