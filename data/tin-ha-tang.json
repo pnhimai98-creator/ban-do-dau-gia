@@ -1,5 +1,5 @@
 {
- "cap_nhat": "2026-11-26T00:31:54Z",
+ "cap_nhat": "2026-11-27T00:36:07Z",
  "muc": {
   "Cầu Trần Hưng Đạo": {
    "tu_khoa": [
@@ -469,6 +469,13 @@
      "ngay": "2026-11-23"
     },
     {
+     "tieu_de": "Giao thông Hà Nội sáng 9.11: Xe tải đâm cột camera ở cầu Thăng Long",
+     "link": "https://news.google.com/rss/articles/CBMilwFBVV95cUxPVElLLVhjNmRId0dSekFVTVJWbl9Wb1ZMdWMwU0tyS2JOTkh0Y2x3ZU1zbkEzODhvUkFNcXVRLWxGMHROREtwQWtRM0lta0dGSmtFZGhCNUZCb2lJUkVkNjhNaUtWRHliejlob0ZzOWFJZ3VtV0xDZGFhdnRqLUN1VWxkeFFoRkRfS1RSZnlzSnZxTXk1ZU1j?oc=5",
+     "nguon": "Báo Văn Hóa",
+     "web": "https://baovanhoa.vn",
+     "ngay": "2026-11-09"
+    },
+    {
      "tieu_de": "Giao thông Hà Nội sáng 5.11: Cầu Thăng Long ùn dài, cầu Nhật Tân có xe gặp sự cố",
      "link": "https://news.google.com/rss/articles/CBMipwFBVV95cUxOQUd3ZDJfZ3hxQXYwLThIbkttZmY0WTQ5MUtkbWoxRHZWLW5oTFF0WHJibUpnbDRfWWwwWVhkSE9HcWhNOFZPbDVjN1drZHJkWFJabFZPZFBzbTBPR2E4ZUhWeEt3NUdvQ0UtZXJfMzBRbmNQRm1oWHVNejJseDhIWW5HblpTOFp3NE1PSkIweGtpR2NrTUZRRnBJOXpfbVJsaHdLeWtvQQ?oc=5",
      "nguon": "Báo Văn Hóa",
@@ -502,13 +509,6 @@
      "nguon": "Báo Nhân Dân điện tử",
      "web": "https://nhandan.vn",
      "ngay": "2026-10-29"
-    },
-    {
-     "tieu_de": "Cầu Thăng Long thông thoáng sau khi dỡ rào chắn thi công",
-     "link": "https://news.google.com/rss/articles/CBMilwFBVV95cUxPNHpfcnVPY1FBdFlpRHh6NUcwVVQ4bURQWnNGNUVBUVAyWHJ3dC1nUktrR3ZGLVdLa0RpZ3Q2N0Z5TzlVd19uVEdjZnBXeG9JQTV5eTRPdDF4Z1FYdVBpd3RBeUxRNDhDLVl2YkhrbWJFMVR1S2FyS2ZnY0ZqS0dEZzhPd3pkdDdlUDdJc3VGVDR1WVZsc3R3?oc=5",
-     "nguon": "Báo Công Luận",
-     "web": "https://congluan.vn",
-     "ngay": "2026-10-29"
     }
    ],
    "tim_them": "https://news.google.com/search?q=c%E1%BA%A7u+Th%C4%83ng+Long&hl=vi&gl=VN&ceid=VN%3Avi"
@@ -519,6 +519,13 @@
     "đường Vành đai 4"
    ],
    "tin": [
+    {
+     "tieu_de": "Hoàn thiện, đảm bảo ATGT trên đường song hành Vành đai 4",
+     "link": "https://news.google.com/rss/articles/CBMioAFBVV95cUxNOGQ1Z3FhSE92RzNVeUQ5dF83U2JUUUlsc2xoNXpLakxfSUt2cC1Ddy0xSW9OUFdmMTkyR0cyWTJ0MHZKanB4Q19WX0JCblJHRkFlOE1xWFUtc29YUzl4SDl6WERHZzkxOXhXc0ZoMXRoMXloYlRMZU15MUJ3QnpyQ3JHV0JDeGdieFpyTUtRUy1OOVJzYkpYRC0xRkNIbk9C?oc=5",
+     "nguon": "Báo và Phát thanh Truyền hình Hà Nội",
+     "web": "https://hanoionline.vn",
+     "ngay": "2026-11-26"
+    },
     {
      "tieu_de": "Dự án Vành đai 4 TPHCM qua Đồng Nai có 4 gói thầu đang thi công",
      "link": "https://news.google.com/rss/articles/CBMiowFBVV95cUxNM1p1Z0pMZ1huR0J5X0lKazY1MVJiSWJHQzdDcFRqQ0VQZGZ1cVlzdi1IUTE5OGh0WloteTViWXpWTThzSGFHQllaMjdGODhxZnowaVFJcjlGcUk3ZkhRSTI2aXdjUVdKRDZwaXhNLWFBaS02X1A5VGZhY1Z0bDlTYlB4T2xaRXp3YTk2enN2WE9GTkJOSzdiQ2ZramMtb2tDLUQ0?oc=5",
@@ -567,13 +574,6 @@
      "nguon": "Việt Nam Mới",
      "web": "https://vietnammoi.vn",
      "ngay": "2026-11-19"
-    },
-    {
-     "tieu_de": "Hà Nội Quyết tâm tháo gỡ điểm nghẽn đường Vành đai 4, tạo động lực triển khai đường Vành đai 5",
-     "link": "https://news.google.com/rss/articles/CBMizgFBVV95cUxOVmV4SEtETWhRcnpWejM4Q1UyNHJjZWpzNkpnZ0xwYVVhZFBVZy1XekhORWRXbHZadjNib1Y1Q1R2TDNvU2dsQzVQZXFRYmlxVE5CZFluQXFaaFBlNnhtcjlNRERDWFdtSmk2TEN6X1c5bUIxbEZ3VEdqaFFZWVB4Ymg4NS1jWktmTWdhYUpxM0xHbVliN0ZHVkowZVp1cXZZOWQ1OUdHWFN2TlY4ejVGUTJCNXlNNXJ3SVhiajFvZlFweWkzYzVMZE9VZFNodw?oc=5",
-     "nguon": "Báo Đại biểu Nhân dân",
-     "web": "https://daibieunhandan.vn",
-     "ngay": "2026-11-18"
     }
    ],
    "tim_them": "https://news.google.com/search?q=v%C3%A0nh+%C4%91ai+4&hl=vi&gl=VN&ceid=VN%3Avi"
@@ -650,6 +650,27 @@
    ],
    "tin": [
     {
+     "tieu_de": "Đường Vành đai 2,5 đoạn Ngụy Như Kon Tum - Nguyễn Trãi tăng tốc về đích",
+     "link": "https://news.google.com/rss/articles/CBMitAFBVV95cUxQLWJJeS1Kcnl2cnZseGpaZTdLcFp6dm5DZUNrb2ZhcjI5UEl0X2hhdjJjN2hWMVNUMWFvS2I5UmV0c0dGZnNJT29Dd3VhV3h4d25wQVVHaDJSZVIzckFvSkE3amVOelE4dFVnNVItRmhrUmpPUUJSQjNrLW5odUZVM1RQZVVxS0dKR1NPU21JSHExY3hUdmdUM0VVN0k1TW5Cbm1Sd3ZfcU9BUmdTdTV2d2RFS3U?oc=5",
+     "nguon": "Báo và Phát thanh Truyền hình Hà Nội",
+     "web": "https://hanoionline.vn",
+     "ngay": "2026-11-26"
+    },
+    {
+     "tieu_de": "Đường Vành đai 2,5 đoạn Vũ Phạm Hàm – Trần Duy Hưng tăng tốc về đích",
+     "link": "https://news.google.com/rss/articles/CBMisAFBVV95cUxQMS0zaWNCVWNERlkzd2M1VUI0bUhWOGl6eXRKbHBJYm9pbmszQXJBX3ppUDgwR3l1cUZpYTcyZWhqWS1ucTU0ZUZzZGZqWUg2WEFhY3lHTVF1dms0QTY4MjdnaHdiWk9qaFR3TG1KZkEycmtlWW9aaDFvN2Y1cUc1VnJZYXk3djNxTV9DR0RxN3Mxanp5STc1cGdnU2cxT05XSGJkaUFYWTMtSW9od3B0OQ?oc=5",
+     "nguon": "Báo và Phát thanh Truyền hình Hà Nội",
+     "web": "https://hanoionline.vn",
+     "ngay": "2026-11-26"
+    },
+    {
+     "tieu_de": "Vành đai 2,5 Hà Nội tăng tốc thi công, gỡ điểm nghẽn ùn tắc",
+     "link": "https://news.google.com/rss/articles/CBMimwFBVV95cUxQdmtOd0xiby1Nc0kxV2hVdEQ0M25LU0pncFU0cElSckx2NHFPdmU5M2tYRXVkb0lvaUNIS2lTTVRqanlJQXN1NWUxd2FFQVpzOGcwUmNKck5tVzZxNWlTbWtxNTBlRlJuX3NWOU1fSkdSSUx1aURkUFhXTE82REZ2Uzl4M3pMU0t2TmlDYXRiTUNrZnZxdjVYOG1Edw?oc=5",
+     "nguon": "Báo Tin tức và Dân tộc - TTXVN",
+     "web": "https://baotintuc.vn",
+     "ngay": "2026-11-26"
+    },
+    {
      "tieu_de": "Những người bền bỉ góp sức mở đường Vành đai 2,5",
      "link": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxOekJXT04wZE1mVFdnTXBnUVVKajFRM2s1WHpiaU1GYmdzYlZRUmxEeUF4ZHRhVUVrTkVpQmdIOGNYWFpndnJ4b3BhX0JYQzNyejNCSF9SUlRJaEowMTNjYjBrWi1nUFNnM2xxWUNtYndYSjdtLWhHcGdKS3ZhbjkwNFFpMWtORGlK?oc=5",
      "nguon": "Báo Hànộimới",
@@ -682,27 +703,6 @@
      "link": "https://news.google.com/rss/articles/CBMiugFBVV95cUxOMGVtci05ZnJHMHZMWmZWNnEzU0F5d29GUmxEZEtrY1NwOS0tSE5UR2hXVkZValY3bVpMaXNSQUNDUkctRldzRmU5SmxzUHNCZDU1ZTFGY1VJUzZXS2hGalZJV1ZHcTdsd2hPRkczeGNlVlpnZVpUdWNCaTNvSkcyMkJoSTVhLXpDcmNab2UteFFXUS1ESjFidFYzZzB5dlprejMybnprcy1TdzRiRVZGVW1PaDVnSW14eVE?oc=5",
      "nguon": "Vietnam+ (VietnamPlus)",
      "web": "https://www.vietnamplus.vn",
-     "ngay": "2026-11-21"
-    },
-    {
-     "tieu_de": "Điều khiển phương tiện qua nút giao Trương Định - Vành đai 2,5 cần chú ý điều này",
-     "link": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxPeXp3UjBMTUhnNldzM3M3MnlTSmdORWlnQUtiWHRzMlRQYTFBamdjRUx6SlJPcTlFUUNtb0xVV2xXUUw3Y0wyTnVOZTVSR2F5cHJ3aEo5RmhRZThEaFo2a0c3NWNrVTBhbE45a0x5aTQtZlVsOHpTM2RYX1lzWm8zalRKbVY1d2R0cmZSdm9lRDkzWU9vM3V3VTRmS1VwemtoU1BuSDEwOTk?oc=5",
-     "nguon": "Báo Văn Hóa",
-     "web": "https://baovanhoa.vn",
-     "ngay": "2026-11-21"
-    },
-    {
-     "tieu_de": "Hà Nội phân luồng lại giao thông nút giao Trương Định - Vành đai 2,5",
-     "link": "https://news.google.com/rss/articles/CBMitAFBVV95cUxOcUZvYjVucWYwR1VJUWhTVk14bVRNWlNQbEVGbFR2UFFpWXZxd0poN3lHY1RYcUg4QzhuT1o1UHZQZGJUOHZzbnpxZU9BQ205MDdBWUl3VjlEOVYwVUlvYTFQUlJxTHg5eURyMHBWMVdOS19EY0JqcjFIZVVNdUZjSld5d01PcF9hS21FanA5WDBleWRrUGpuOXVrOFJVU3lsMU1XZFZ3RnVJZ01qVUVGdXBkRVg?oc=5",
-     "nguon": "Báo Bảo vệ pháp luật",
-     "web": "https://baovephapluat.vn",
-     "ngay": "2026-11-21"
-    },
-    {
-     "tieu_de": "Hà Nội cấm ô tô rẽ trái tại nút giao Trương Định - Vành đai 2,5 giờ cao điểm",
-     "link": "https://news.google.com/rss/articles/CBMizwFBVV95cUxQX21ZX29YVTd6Sm5OUmRzOHdOdmhPTDhJZFNRTXEzM2lTZ1J1bUJqeEtCWGNLUElMd3kydnJaeEFnYVJxTnRhQ3N5S21vZHRIWjk4RlpFZDhnRGxHZG5nOUxJN1ZsbFFHeFprSld2S0VjbTFNd0ZUTmJwaFpPTzNKcmM2OUh1ZkVFS1FEdHE0VUlfNWFkX3N4Z3FQQ1lVcFhldlcwdlFHR1F2N3hFdDN5amxRQmZIUFRUU2plTUFPTW5kaFkyY3dJUi0zbkotaFU?oc=5",
-     "nguon": "dangcongsan.vn",
-     "web": "https://dangcongsan.org.vn",
      "ngay": "2026-11-21"
     }
    ],
@@ -923,6 +923,20 @@
      "ngay": "2026-11-24"
     },
     {
+     "tieu_de": "Hà Nội sắp có thêm tuyến đường 6 làn xe kết nối với Đại lộ Thăng Long",
+     "link": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxOdUhWNFBsbmNnZ2wyWWw5NGE0bnF1ZHM5ZmgxQ1ZCd01EUkFoR21KX3AyTWxYdFN0QlZmc1NWRFZfX2tjT05XVWg4OWlqcnBEMW8wN2p1WFJ1eWJfMHgzMG5HT2UteElIM0tzelNNWVlHM0F0bzBDVEZudHV0RWpLUmdFNkZLc3FUM21uZE0yOVVOdmpRQ1MwX3Y3SkpOWWx3VDVFOE5LRFI?oc=5",
+     "nguon": "nguoiquansat.vn",
+     "web": "https://nguoiquansat.vn",
+     "ngay": "2026-11-24"
+    },
+    {
+     "tieu_de": "Hà Nội chốt vị trí trục đại lộ cảnh quan Hữu Hồng dài hơn 44km, rộng tối đa 73,5m do liên danh Đại Quang Minh - Hòa Phát - THACO triển khai: Đi qua 9 xã phường, có đoạn bán hầm gần cầu Long Biên",
+     "link": "https://news.google.com/rss/articles/CBMizAJBVV95cUxPb280R0t1YWhQNmtNeTN4dWsyc3A4dEdXRENyS3QwWkE5UThvTEtaQnhwVmdDUnlmZlRMZmlnQzFJQmNoa0FCNjVXRnNiNEpxSm5LUUlzOG5oN19TRmZKamVmUms4ZERvaFBiWlNuZV9fZTNNYlZWMlNRVFJpLXFqSWlmSGJXVDRvckNoaUUxOTg1dVRlbzVOTW1VaVE5ejNtWnBEQ2twZUpvRWVKOUVtenRjcHItXzRKQUIzSDg0Z1NjYWgyX2drQUdFNXNwVm14RUY3NkpsQlhnMlFxa1pvZG13Um1sUFpyMEY5ZGRUcUdtM0FWN0pieWRxcnhyZzBwT3p2eGhna2hfczlrbGpIbHNZTU80OElxR1RSRkIxM3N4al9YYWVOU0tVMzM1LTlxTUZvRTUxWThGMFZHQnlvNFFMdllqUDRSSjFfcQ?oc=5",
+     "nguon": "CafeBiz",
+     "web": "https://cafebiz.vn",
+     "ngay": "2026-11-24"
+    },
+    {
      "tieu_de": "Giải phóng mặt bằng nút giao Vành đai 3,5 - Đại lộ Thăng Long vướng mắc từ giá đất và tái định cư",
      "link": "https://news.google.com/rss/articles/CBMi1wFBVV95cUxPNHVtMkJ6X19QTzBlZUlkczdMYnhudG9tdXZFa1puTklpd1IxcVhxT1lSdENNdi1vYkE2dFlDdnZRUVZUNG1TUDZVTWIzdkZrSlQwcnNxUEFkRDh0aUR0Q2UybmExZ0wtZHNGREV0OW1rV0JjV0NYVkJZU0xQSGRmbFVYLUtTU09GaGR3dWtBY2R1cTFWak5vZGlxcUtWSkhCcDF3bTRtMkJ6cUVZZGNyVXhxTnJQWUIwczh2cUQ3cEFqOVVqR3NnTXliQWpkMjRMOTFVYm5qMA?oc=5",
      "nguon": "Báo và Phát thanh Truyền hình Hà Nội",
@@ -949,20 +963,6 @@
      "nguon": "Báo và Phát thanh Truyền hình Hà Nội",
      "web": "https://hanoionline.vn",
      "ngay": "2026-11-15"
-    },
-    {
-     "tieu_de": "Lộ diện hình dáng \"siêu nút giao\" gần 2.400 tỷ đồng trên Đại lộ Thăng Long",
-     "link": "https://news.google.com/rss/articles/CBMitAFBVV95cUxQYm1jMDNlRHE2TldZVVd2amU4cTZpbDB1aEU5OUtQSEtHQUp1TEtsYjg5aXU1NjVsMGw5ZHVaeTczTU1CbUNOT21JVXV5bXZzV1dVTWt2WG9Db05aYTVvdHUzOXFMcGgxQ2ZXaWxOSVRHT3cyZ2hONzgxdXhadlpCSTJIbmJXR2kzZ3BMaE0tZW5NOGVLT2EyeEY3N0p5cjJpUG9zN0FDMF9ZYjNPQWZmeDFrZ0Q?oc=5",
-     "nguon": "Vietnam+ (VietnamPlus)",
-     "web": "https://www.vietnamplus.vn",
-     "ngay": "2026-10-28"
-    },
-    {
-     "tieu_de": "Hầm chui Đại Lộ Thăng Long ngập rác thải",
-     "link": "https://news.google.com/rss/articles/CBMijwFBVV95cUxPRERkbkgta0lYRnJVV0oxek12NEtYTWlnVWtKZG53YzhRcURLTE16eENtWElDZ1pCUVdBZS1Hc3A1bWE1RzFuMEpPbDh1U0tqcmp5OTFYaTVBUkR0bC1ZZHBacGlpOTItU05OSWVFMFlrUklYZFRZREFZclBFbjlDQnI0TzdBZXYxVElQZVViZw?oc=5",
-     "nguon": "Báo và Phát thanh Truyền hình Hà Nội",
-     "web": "https://hanoionline.vn",
-     "ngay": "2026-10-27"
     }
    ],
    "tim_them": "https://news.google.com/search?q=%C4%90%E1%BA%A1i+l%E1%BB%99+Th%C4%83ng+Long&hl=vi&gl=VN&ceid=VN%3Avi"
@@ -1037,10 +1037,52 @@
    ],
    "tin": [
     {
+     "tieu_de": "Diện mạo sân bay Gia Bình sau hơn 1 năm khởi công",
+     "link": "https://news.google.com/rss/articles/CBMimAFBVV95cUxNNVlPcmRGUDVQTlZlNVFWODBWdU1NNEI3OTZHU1hCLVd5TjlLMU53TG5kWk1BcDNSLXVzcnlESE9XZk5PcjBkUmdZMU12eWY0QlJqOGdjMGhXUndxbjd5M1A0Y29vcURGRTZ4LUZTcF9DZ1B2NDhXVEZIMzM0cURSNjVMYS1PdFFMUFVrSm10dm92MHRlXzM1Rg?oc=5",
+     "nguon": "Báo Thanh Niên",
+     "web": "https://thanhnien.vn",
+     "ngay": "2026-11-26"
+    },
+    {
+     "tieu_de": "Thêm bước chuẩn bị cho hoạt động khai thác sân bay Gia Bình",
+     "link": "https://news.google.com/rss/articles/CBMimAFBVV95cUxQZ2t3RzV5U25WTlV0SVFXb3RzS0l6YzV4bmU4ajVtMThYOTMzSDAwYmg4VGJRR3lPQnZJa1F5V3hzcUpJVjdWWnduelJ6VG5VTEp6WnY2dENCUDdPM2hwOEQyZ0xGTUt3VDRqSDVSUmgtcGVuTi1fX1lCdl9mZkU4NklDakw3dUJqdTNQZnlGZVo1c2c0aEFpTg?oc=5",
+     "nguon": "Mekong ASEAN",
+     "web": "https://mekongasean.vn",
+     "ngay": "2026-11-26"
+    },
+    {
+     "tieu_de": "ATTECH hoàn thành chuyến bay kiểm tra hiệu chuẩn đầu tiên cho hệ thống dẫn đường sân bay Gia Bình",
+     "link": "https://news.google.com/rss/articles/CBMiugFBVV95cUxQR3VITGN2Y0JJYXM5Q3UyRElIR1h6RTVzQWVMR1V3bXZIdm9fT25RaTZDd0lQdi12NFA5bXpsdmI4QzZzaUVudGEzSUlSb3pYNk5iZnNuOEtwS05wVHNIb1lMTHFKUWN3UDJtZ0ZhZDlaU3ExSUdKRW1tek8yZEsyeUtqMmpMYjN2Q1B5TEJEMzhUek5tTDRPQlA0SlFMMjM4VmlCaEZLUFgwM2s1WDhCOGExVmZuWDRWSGc?oc=5",
+     "nguon": "VATM",
+     "web": "https://vatm.vn",
+     "ngay": "2026-11-26"
+    },
+    {
+     "tieu_de": "NÓNG: Sân bay Gia Bình vừa đón chuyến bay hiệu chuẩn đầu tiên",
+     "link": "https://news.google.com/rss/articles/CBMilgFBVV95cUxPNmFJYXlsSmc4bkNRLWFxY3BfdU5Pdzc5Ulg0c1RTYVdfbjdnTmtKNGlSNlp1SVBIUFhCbGNlN29qOHYzaGVfYWZneGF5VHI0NGNjUElPR2RwWEVlU0JMbUFYV2xhZ2VOVS1oSjYtMlNWVld6cWhTN2U4MXhjVEQ1SnpnbFNpdkhld1cydkdNS2VRczRiQ1E?oc=5",
+     "nguon": "nguoiquansat.vn",
+     "web": "https://nguoiquansat.vn",
+     "ngay": "2026-11-26"
+    },
+    {
      "tieu_de": "Sân bay Gia Bình mở rộng kết nối: Tiếp cận 65 hãng bay, hợp tác với 20 sân bay quốc tế",
      "link": "https://news.google.com/rss/articles/CBMi1gFBVV95cUxQVDJmYUloNGtZU0lpMzBRMzBRbThNbHJhUEhHTzJvSkpLQVpZSGtlOGI3ZmxPWjJ4NlB2Z3JWUDMyYlhwOTd0VUhxUUdFY3pKaVg0QkZRTEdWbE15RVo3dGU0bURVQkJ6NzlfTzJSNlYwX1dTcTBxX3ozaXZYam1mRFJsR2FER3VoX2tfUC1idHFCOFN5UVF6TnV2ck15Z3BfLU5yNHBiSDJCRGJGTzZJOENvNkc2QkE5S0JxVHhDVnB6TXZqVllxWFl2UWN2NkQyM01zTFVR?oc=5",
      "nguon": "Báo Dân trí",
      "web": "https://dantri.com.vn",
+     "ngay": "2026-11-25"
+    },
+    {
+     "tieu_de": "Đại công trường xây dựng sân bay quốc tế Gia Bình: Các hạng mục quan trọng thành hình",
+     "link": "https://news.google.com/rss/articles/CBMi1gFBVV95cUxPUTh3eEpfM0NMN01sQXk0dkdEVU56ZF8weDFUU0xJdkxzTWVZOWZaeklqMkFhYTBScjNnLUFvMnhvMmp1VXRiVlRwUk5wMFcwWVRKZm1MbHBBRTVEVEUwNDNjd1J1OUN2aDh2YURpTDBzYklSdTdvUF9qenoxdW1ENldsc19pQ3VTc3FWWm1iSFF5bFJndExGZFV0dFQ3bDR6T19GWmFnYUVobUFqak1lQXBIQ0RpTmNDby1jbUZaMWp4SUhmcF9ISm12bURKVENPdU9wZG1R?oc=5",
+     "nguon": "Báo Dân trí",
+     "web": "https://dantri.com.vn",
+     "ngay": "2026-11-25"
+    },
+    {
+     "tieu_de": "CHKQT Gia Bình triển khai bay kiểm tra, hiệu chuẩn hệ thống dẫn đường hàng không",
+     "link": "https://news.google.com/rss/articles/CBMizgFBVV95cUxPSF9jYmNCNkJvd2wxeWRpb3F3Vm9DSlJFZEpfSjdoMndFMHJockR6Z0swdkhnVkFFbngtdGNHLW9vcDZ3cGtMWWJlQWh6OUdDT1ZiZFY3SjMxU0VucUplSFFBSzh6TDdrUWJRRmRvTHRIQkxzeDBVZm1maTc3Vm9aY1hyX0JMOEw5N2ltZEItNkpDZE1laE1RZS1aV0ZfOG15NjZGQ1hKM3FpUXpIRTVhUlZQYXpsQnFFcTc5a2FaSnpNSTc2SEhDZzZwRzE4Zw?oc=5",
+     "nguon": "Laodong.vn",
+     "web": "https://laodong.vn",
      "ngay": "2026-11-25"
     },
     {
@@ -1049,48 +1091,6 @@
      "nguon": "Thuonghieucongluan.com.vn",
      "web": "https://thuonghieucongluan.com.vn",
      "ngay": "2026-11-25"
-    },
-    {
-     "tieu_de": "Sân bay Gia Bình đón chuyến bay kỹ thuật đầu tiên",
-     "link": "https://news.google.com/rss/articles/CBMinAFBVV95cUxOVkNmNW9JZm9Sclh4TFNYQmJTbktqVGw0Z1FCVmlneGUtSlRmbzg0NVhfUk5XYjl2T2xIenpNZlNXempsQ21YS0lOaXBldFJKckRvSTlhbThOcnQ5MDRUR19FaEtsNDJ3YW0wa3ZZd2tQcXpLbUV3Ym8xTXlhYXVFY1lQNVRHdFR4V2JBQlRackE5QkJFNm53bVVWMEk?oc=5",
-     "nguon": "Thuonghieucongluan.com.vn",
-     "web": "https://thuonghieucongluan.com.vn",
-     "ngay": "2026-11-25"
-    },
-    {
-     "tieu_de": "Triển khai bay kiểm tra, hiệu chuẩn tại sân bay Gia Bình",
-     "link": "https://news.google.com/rss/articles/CBMimAFBVV95cUxPM3pFUktjSXd6NmNrUk1PWm5weG95UDRjUFRCQlR3dEt4ZWZ0dUFOdUN5eGt3MjRjajBLaHhMWHpBWnFPSzB2S3NCeXc3a3JpLVBZck9TeWUwdndjYktmQjI5eHZCM3JtelBRS1RURVF6b1ZnQnpnU0JTbUVHQUVodlhqdWhRZFU5cHFEb2szWDQ0cTBpTmxrcw?oc=5",
-     "nguon": "VTV.vn",
-     "web": "https://vtv.vn",
-     "ngay": "2026-11-25"
-    },
-    {
-     "tieu_de": "Sân bay Gia Bình xúc tiến hợp tác 65 hãng hàng không quốc tế",
-     "link": "https://news.google.com/rss/articles/CBMimwFBVV95cUxNWkJicm5Sd3EtZGs5TmJKeWl1VlgyWE9wRkJEdnlzNjNUN2JmWU84ZVRObnl6aTFieU4wZVhORFFwM2pFVS1TdE9zRXZiYVJuZllDWWVJU0R0TFhWWTZRdmw1ZFNpTUw1TDNQcEFXTEQyUHhxS3hOX3lmR0ZGNUJzVldsVjVLOWcyR01EanVuRWw4b0NVWEp1RFdyQQ?oc=5",
-     "nguon": "VnExpress",
-     "web": "https://vnexpress.net",
-     "ngay": "2026-11-23"
-    },
-    {
-     "tieu_de": "Phấn đấu bàn giao 100% mặt bằng tuyến đường kết nối sân bay Gia Bình với thủ đô Hà Nội xong trước ngày 25/11/2026",
-     "link": "https://news.google.com/rss/articles/CBMi1gFBVV95cUxONlYxVUFXck96VlVnZUhQdHd1NjluajhrdnpqQjFFMFlSVG51cEhaenRnaVA3cDF0ajF2ampzdWNDdVFFaHR0T3VidHpNa01yaHk3aUYzOGRiME1meElCa3JRQjVwX1BjMUktalZ4N2NwblhjbmI1VlI0WjZPOHhmdGNhdElBUnByNzNGQUhZQlBaWE5tR3J1dFgyMldzTDlja2VNSDhFcVBRUnlHaDVra3VMRldDdFBhMkR6VE9IQzdCMFpha21sTFB2NkVmbHpKRktWQ0hB?oc=5",
-     "nguon": "Báo và Phát thanh, Truyền hình Bắc Ninh",
-     "web": "https://bacninhtv.vn",
-     "ngay": "2026-11-23"
-    },
-    {
-     "tieu_de": "Cổ phiếu ACV thấp nhất 6 năm: Bài toán nợ xấu và 'nỗi lo' sân bay Long Thành, Gia Bình",
-     "link": "https://news.google.com/rss/articles/CBMiugFBVV95cUxQSm1FcUF3OGhfNmlpckdSYi00NTBUb2lrX19EV21maUhlOVE5ZnZ6RGdNdU54bHpYVkV5cG9sc3ozbWg2MFZJWU81cEJZQ1ZJOGlmNlNLM3FWNm5PcjVDUkkwd1Zob3RpRkwzZFNBTHZmZ3c2SW5XWmxLWDVKMFNPWDgtOHRmbTJVRVBnSUc2WGx0Y040M1FjNmJQMEhtNTRQTF9jdGZtQWxBQ0xoMmV3RVhTM1k1NjdvRlE?oc=5",
-     "nguon": "nguoiquansat.vn",
-     "web": "https://nguoiquansat.vn",
-     "ngay": "2026-11-22"
-    },
-    {
-     "tieu_de": "Sân bay Gia Bình 196.000 tỷ đồng trở thành biến số lớn với ACV",
-     "link": "https://news.google.com/rss/articles/CBMinwFBVV95cUxOcUhVMlBLakZLM1EwT3JQajZLV2xQRmgzLVpNQk9kOXFYcm1EaUtGSEZta0MzYTlfcmUxUThNWmVZd2dGV1ZaOHVGbzA4TWlNSEpNQm9qbnUxTVRFY3RmZHI3aklUeDVXUDlUQ0pZSHNsaThBMC1tU1A5OTFFVzFJVUcxSTRDVTNEOWtiWFRUeHhiX2JoSnBpTExZcWF2WjQ?oc=5",
-     "nguon": "nguoiquansat.vn",
-     "web": "https://nguoiquansat.vn",
-     "ngay": "2026-11-21"
     }
    ],
    "tim_them": "https://news.google.com/search?q=s%C3%A2n+bay+Gia+B%C3%ACnh&hl=vi&gl=VN&ceid=VN%3Avi"
@@ -1124,6 +1124,13 @@
    ],
    "tin": [
     {
+     "tieu_de": "Cảnh tượng hiếm có tại nhà ga T2 sân bay Nội Bài",
+     "link": "https://news.google.com/rss/articles/CBMijwFBVV95cUxQV0NKTFJaSkdmMjY0aFJxT05LTF9XWUFhdTZBSXpXWTZJOHE3bGxxUEE0WXlHMnZyTy00N2lmSlJiNVIwM0twREx4Ql9zX2FXaXExU0liRFdLNUwyazk2ZFlIUUpYN0lxZlhWejBYb3R4OXl4T2I1VEJ6ZFM4N284VHZHMFE2N1M4TEs4cXJ6MA?oc=5",
+     "nguon": "SOHA",
+     "web": "https://soha.vn",
+     "ngay": "2026-11-26"
+    },
+    {
      "tieu_de": "Phát hiện một máy bay đặc biệt hạ cánh tại siêu sân bay lớn nhất miền Bắc: dự án gấp 1,3 lần sân bay Nội Bài, cách Hà Nội 40km, vốn 206.000 tỷ đồng",
      "link": "https://news.google.com/rss/articles/CBMijwJBVV95cUxNR244bFZBWTJDQjNnNkVsREdyT0lMb09DNmpuWTdhZXI2VVIxNGx5WFNXWmsyYXNxVEZOeWpUb2luZGFUdVJUeGpWaWM2QlRhZ1UyZEF5OWtfLWxvY1QtY0hmMzNLRHZ6SUFyV0xMYUMxVjZCdkNtbW92czFYUUJBcFZDMU8tZ1Q5MFlKVElHcFpTZm1WX3F5UGhnSmtINmlKRThrQ1ZzNG56WXhfc3BqaXNueXRJYWZIekdQbG8yN0R1c3ZXbUVMR24zaUJQYU5VXzBJLXkzNzVFalVycVRzeEowdnhXWEw2dnNGOXloMGZqRlY3RnRQTWRXZVhhd2JIVG9NV2dqel9zTFNPT3Jz?oc=5",
      "nguon": "CafeF",
@@ -1145,6 +1152,13 @@
      "ngay": "2026-11-25"
     },
     {
+     "tieu_de": "Sân bay Nội Bài kích hoạt phương án khẩn vì diều thả gần đường hạ cánh",
+     "link": "https://news.google.com/rss/articles/CBMipwFBVV95cUxPdl9hbHVqTTIxZXJpMFlOWDZFeW82NGNoLW94Mm9McW96bV9qWHktcXlqUHczVS1wMUotaHNHcUQ4bWdoZldrVjhPNHdxTVY2Vks4azkxREY3Ulprd1FfRGlyOTB6NXVGRWZUa0E3cmJjN2RnczF0Z21hY3FaeG5mMDNuS2kyd3lNalZLZjF5SFRRaVVpYzN4WHFJQWg2d0RPczhzZnRONA?oc=5",
+     "nguon": "Znews",
+     "web": "https://znews.vn",
+     "ngay": "2026-11-25"
+    },
+    {
      "tieu_de": "Ba chuyến bay phải chuyển hướng do diều gần sân bay Nội Bài",
      "link": "https://news.google.com/rss/articles/CBMingFBVV95cUxOaENxMTQwX2hOQ0JZYXNMVmpBY25TRnR4YjVxMnpoT0NrRV9hWmVYakhMTHdLdUZ4Q19qNng1WVNURzItOXJqeER6bW8ydzZpak1wMFBfYjh0NTZfbEFLOEhpcGVvN2NVVFkzRmN2QzFBZnQtRm5WWmx6cmNMQ0pJM09jNWVYZWJkZlpLZENGLVhnaTExV3JyTUNQbDNRZw?oc=5",
      "nguon": "VTV.vn",
@@ -1163,20 +1177,6 @@
      "link": "https://news.google.com/rss/articles/CBMitAFBVV95cUxOUE9FZ3ZQSkFhS0FmVFgweGhPZUlxNUxtSHdiNlc2bmZPdEhISXcwdGdiQkl2d3Ridk92UzdRUlZySHBtUUZyamN0OUdmQlR4ZTRjT0VwUW55WTFHWmk5UldvV2ZZdUtYalh1WmFEdjkyRjJ0blBCNWFUa0d2Um54Q3JCZi13ajN1dmd1MEU3bkl6NjdscWlaOTBUekJ6S2tOSzhkdF94ZDc5alcydkh0al9UMzk?oc=5",
      "nguon": "Báo Tin tức và Dân tộc - TTXVN",
      "web": "https://baotintuc.vn",
-     "ngay": "2026-11-25"
-    },
-    {
-     "tieu_de": "Nhiều chuyến bay bị ảnh hưởng do thả diều gần sân bay Nội Bài",
-     "link": "https://news.google.com/rss/articles/CBMiogFBVV95cUxOakhVTkhRVEQwZkhwR1Aza2o0U1RhaHlSVGgxUXBWUEtSNmwyaEhSOWs0OVlkVTJOT0hTaEN6eDJwR25mN0p4LVZjWVd0SERJSVV4Q0dBT0xDU0Jxd2p2UUlMenVtX05LNVhxR3VKV2F6aEdDMnZPeHdsZ0NQQXhpNG16cWg4RnZPR29TajRLS0F5RHZmcWNBQklDVW9VQTFlSnc?oc=5",
-     "nguon": "Báo Điện tử An ninh Thủ đô",
-     "web": "https://anninhthudo.vn",
-     "ngay": "2026-11-25"
-    },
-    {
-     "tieu_de": "Vật thể bay xuất hiện gần đường hạ cánh, Nội Bài kích hoạt tình huống khẩn",
-     "link": "https://news.google.com/rss/articles/CBMisgFBVV95cUxNZDF3WkV4Zkw0UDVSdnhfQlY4TElWb0IzSzY1Ukc3NWtWZmNrOE1vbV9JaXctTzdJWnNrWHVHX09sRllZRURmaTBjd181amh2VUgxcUVfOUZIXzZKSS1SYkgwZTktOXpPQmV5UmstSEVWV3JiVEpFWG53VlpUTHhLREpSX3daQ1Y5TFFXa24xd0kzZ1VmZExpY0ctM0NybkxFd1F4U0pvbWxQUUhhaTNUVmJB?oc=5",
-     "nguon": "Tạp chí Hàng không",
-     "web": "https://tapchihangkhong.vn",
      "ngay": "2026-11-25"
     }
    ],
@@ -1254,6 +1254,13 @@
    ],
    "tin": [
     {
+     "tieu_de": "Hà Nội tăng tốc mở rộng Quốc lộ 6 đoạn Ba La - Xuân Mai",
+     "link": "https://news.google.com/rss/articles/CBMilgFBVV95cUxPUTJnV3dPWWtRVnR1VlB1R2lXS3gtWFBWZHJmNk9CZ3ZZS2lNZVdJUkZCa3lCMDhYQnlLZGFWMUU5Wi1vYUE0OTJRa0pFZzFXLURkd0NTaVBGeGw3YUVxOE1COVViNlhXUk5tbXpCcTJ5UXdMQk1UX0ZiRUdYUlhPX3ZORHYtemR4dHlKRzJjcVdJOWEtOGc?oc=5",
+     "nguon": "Báo Tin tức và Dân tộc - TTXVN",
+     "web": "https://baotintuc.vn",
+     "ngay": "2026-11-26"
+    },
+    {
      "tieu_de": "Quốc lộ 6 đoạn Ba La - Xuân Mai: Mặt bằng cơ bản hoàn thành, tập trung tăng tốc thi công",
      "link": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxQUE1vSEdINk1jbTNWYWl3SWc5SHc2dnBRbEZXOTBNUHVfTS13VzhaaTYyVnBmc0ljMk9IS0NwQUJGbUxEdVg1SG9tM0x5eVBIdUNqLUJFc09XV0doaVBhOXRVTFNEZXByVENSTzNNcEo3SkJUYVhvTGFrdGE3ZUlWM1VsWHVUR3UxNHpWNEgyc3lPaG9wbmxnODNkNlFhWG1hNmVxcm44c0pVN1dUUjFmUy13dFpZb0Q1VlNpeTVVWlNWUQ?oc=5",
      "nguon": "CafeF",
@@ -1301,13 +1308,6 @@
      "nguon": "chinhsachcuocsong.vnanet.vn",
      "web": "https://chinhsachcuocsong.vnanet.vn",
      "ngay": "2026-11-13"
-    },
-    {
-     "tieu_de": "Quy hoạch Khu du lịch quốc gia hồ Hòa Bình gắn với Cao tốc Hà Nội - Mộc Châu và Quốc lộ 6",
-     "link": "https://news.google.com/rss/articles/CBMiyAFBVV95cUxPczdZQU92V1JtOWRBVjJ2ZzdkbzZoSmxSd2RKdGJZaDRGVk5sVlE3WnY2UWRCeVZnUzBOR2FKN3ZSRG5kRklGMXRlR09pejR2LWNZbzRIbzFXbnVmVTBmaE9aTmJ6Wjk5SzBueFJkVHE1LXFEWGxBNmZzQ1B2NW1pZnVITVMwakVndDRSdDNKb3hzdkxrREozOFFNMldCb2hCSjlEbGtUaTVkNWtWRXU1Tzk1M1dNekpUUWZsc1NwcnRlY2FfZkhENQ?oc=5",
-     "nguon": "Việt Nam Mới",
-     "web": "https://vietnammoi.vn",
-     "ngay": "2026-11-11"
     }
    ],
    "tim_them": "https://news.google.com/search?q=qu%E1%BB%91c+l%E1%BB%99+6&hl=vi&gl=VN&ceid=VN%3Avi"
@@ -1318,6 +1318,13 @@
     "QL32"
    ],
    "tin": [
+    {
+     "tieu_de": "Bán đất thổ cư: 61,3m Trục chính Cựu Quán Đức Thượng sau KĐT Tân Việt QL32 Chỉ| Vị trí bản đồ & khu vực xung quanh",
+     "link": "https://news.google.com/rss/articles/CBMixwFBVV95cUxNLU1ocWFJTXlLemlRdEp3OHptLXNaZVlZMGVPSldFaWx0V19UQUw0Q3ltejdJMHR6cmZqcTRYTGloMm5NQVJ6Rk1iWUJOSVFDcVd6UTJPa0lxN2RYMV9ZSC02d2hLVWNpSXJVZ1hjZmxNMTdxQlRfb0x1NFY3cWYtQkhZbGRNVG5yS2VvUTdFX0p4akNVdHRsanR1SVJLZXVhWXJXb1hBQTBYTnRWUjdnSlRPbklkdmlYa3JaS3p2d2M4dDAxcUl3?oc=5",
+     "nguon": "cafeland.vn",
+     "web": "https://cafeland.vn",
+     "ngay": "2026-11-22"
+    },
     {
      "tieu_de": "Trạm dừng nghỉ Đức Anh trên Quốc lộ 32 phục vụ hành khách chu đáo",
      "link": "https://news.google.com/rss/articles/CBMipwFBVV95cUxPcF9GeTdEVnBRd2YzdDZmaFBvRTZJYmZTQmd6aVI2M3d6a3p2Z0hJTTZlcmlyaUlObXhPR0NxazE3Yjh6WDh4YWF1OWlBS2EwMC0xaGZEUEhWeFlpUzczZGdoN2hxdGwxZS1VTTVrZ1VqRTdkYVQ4SFE4SzU4NVVDdnBPdXdXdWNIMEpWTXBtZC1mX0VQVWpnSmRQYmtrQjVtZ0tzQlM2QQ?oc=5",
@@ -1366,13 +1373,6 @@
      "nguon": "Laodong.vn",
      "web": "https://laodong.vn",
      "ngay": "2026-10-14"
-    },
-    {
-     "tieu_de": "Cần sớm có phương án khắc phục tình trạng sạt lở trên tuyến đường nối Quốc lộ 32 với Tỉnh lộ 174",
-     "link": "https://news.google.com/rss/articles/CBMizgFBVV95cUxPZ0NKQzZuazNIcDJ3enkxeHdvTUJWbnUwZ0dNTmdBZVViSGtXNHFBa1lTbERjT3MycmxpZFpSWTBzWXR0dkhhcUpJM0JoNWVrNmlzelY5MDNfeTRDMWRkcnQtVkFMdkFjZUtnZjhJMU9SQ1gzRnZSQTl5SnR3TlA5MDVUbFhVYVhldjRtOFM0RVZCbF9GSFZGUDdpOGlpMUtrSkJKN1Zqa2tfR2pXR0VwQThBNUxobGdaamh4UXpvRnNGMk1pTHlGVFhlMV82dw?oc=5",
-     "nguon": "Báo Lào Cai điện tử",
-     "web": "https://baolaocai.vn",
-     "ngay": "2026-10-11"
     }
    ],
    "tim_them": "https://news.google.com/search?q=qu%E1%BB%91c+l%E1%BB%99+32&hl=vi&gl=VN&ceid=VN%3Avi"
@@ -1653,6 +1653,13 @@
    ],
    "tin": [
     {
+     "tieu_de": "Mở 'cánh cửa' kết nối từ cao tốc Hải Phòng - Ninh Bình",
+     "link": "https://news.google.com/rss/articles/CBMifkFVX3lxTFBRcnI1cGk2bnFfWm5nTzVUSW8ydFVrZGhZbEZCMElMckpQQ243RjZoSjRiNW9RQmxIdFBULVhna3pIQlcwdmxRc3pYd1VTUDlzWEFhTUlpMXlFOVk1UlpHckhzSG5HSzBoeDZ5M3BMVEpKU1RrODFKSnZKRlM5UQ?oc=5",
+     "nguon": "Vietnam.vn",
+     "web": "https://www.vietnam.vn",
+     "ngay": "2026-11-26"
+    },
+    {
      "tieu_de": "Diễn tập xử lý sự cố tắc đường trên tuyến cao tốc Hà Nội - Hải Phòng",
      "link": "https://news.google.com/rss/articles/CBMirgFBVV95cUxOQXVuS3huSUhueWd4OEU0bzZEVWtVSDEtWkxPSl93V1VYYTNDSGxCZm5peURvbWdoWV9RV0VfQXlJZWpKSklXMDBwMGhlWXR0UlFLb2ltNmg4MXV2MGZPVnZUa3FTVlhaamNodTRvaloyd1FSYmtwc0lVd2U0OHVEUkpFYnBJOVRpc1hSai12dXZFWXBYUmVvcmx3aldpd0J2cTZ6bUxoTnhFZnk1T3c?oc=5",
      "nguon": "Báo Quân đội nhân dân",
@@ -1700,13 +1707,6 @@
      "nguon": "Laodong.vn",
      "web": "https://laodong.vn",
      "ngay": "2026-11-07"
-    },
-    {
-     "tieu_de": "Hưng Yên chi hơn 5.700 tỷ đồng làm đường nối cao tốc Hà Nội - Hải Phòng với Vành đai 5",
-     "link": "https://news.google.com/rss/articles/CBMiwAFBVV95cUxQLVItS1M2OGVwVlNHejlpODZtMTdubVlIdGJhc0N0X0tUbkxZRHVjMTdjZlk5ZWpjZUdxZk9nWHF4TkVMSkpheDhvU0lJbFJiOGxnNXgySkZuRjhYVzd0RWhzMW85NDBBeWxfZ01NdGtSQk90bDNUdkdUc2RFNWJzU2xTSGh1VnpmTUJKS0hwNXdmWjlTWHpkNnNmeDlxeFhKSkRoREVGaGRsUnRjNWV2SnlKN2Q4NU5RVEhxN3ZjS3o?oc=5",
-     "nguon": "CafeLand",
-     "web": "https://cafeland.vn",
-     "ngay": "2026-11-06"
     }
    ],
    "tim_them": "https://news.google.com/search?q=cao+t%E1%BB%91c+H%C3%A0+N%E1%BB%99i+-+H%E1%BA%A3i+Ph%C3%B2ng&hl=vi&gl=VN&ceid=VN%3Avi"
@@ -1845,6 +1845,48 @@
    ],
    "tin": [
     {
+     "tieu_de": "Yêu cầu triển khai ngay 4 nhiệm vụ với đường sắt tốc độ cao Bắc - Nam",
+     "link": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxNUjktWVd2Z0lfR1NLQWNXbG1fVXc0SHV1cW9yeGFKWG9NT0xhTld1R0pYSy11MXEyMEdNVXNaM1Z6TVJHc1JtSUNaNUZyM3pmNk5tRHFMdnV6UV83d19jMC1IZ05nejVzRFdnazVFa1h5Q1BpckVFNU1KOFpzdWRkRnFYbE1kNUtmckkwa2dQSld4RXAyclRfbFZ4emhIS2I4U01kUFRVQ1N2QU0?oc=5",
+     "nguon": "CafeF",
+     "web": "https://cafef.vn",
+     "ngay": "2026-11-26"
+    },
+    {
+     "tieu_de": "Bộ Xây dựng chính thức 'chốt' tư vấn dự án đường sắt tốc độ cao Bắc Nam",
+     "link": "https://news.google.com/rss/articles/CBMiswFBVV95cUxPOUVVd1BtVVVSZkxwSUJtNTdNclVhcEQydEJLTHZ2eXduVFZsaGFqM3ZtVWxiWXQ2azBybWlDNmNlcTNHdXlhakgxZ0VqTnpOUHNFN0J6Q0twV0stZUpHX1c4MV83aGVPamdWb2dTQXdoUDNzWHBkNVg4T045ZnhjdlZJSFJycmhLY19BMWJDbG1RM0RnTmc0RlUyalBWTVR4S2s5VTM5b1N2Qkd6bzRPTHFmWQ?oc=5",
+     "nguon": "Báo Thanh Niên",
+     "web": "https://thanhnien.vn",
+     "ngay": "2026-11-26"
+    },
+    {
+     "tieu_de": "Chính thức ký gói thầu tư vấn quan trọng nhất Dự án đường sắt tốc độ cao Bắc – Nam",
+     "link": "https://news.google.com/rss/articles/CBMivAFBVV95cUxOcFZfQk5kQzJZV2ktNHNHRGJHdE5hYkVTLTJ2VjEzTWdXZGJOV1d2c2VFRzZzLUcxUGJmcGNEemg0NmZkTnFKZnF6RGdLUDhqNEdTX1pxNE1fVEJyVVdBak1JSHVmR2tIZEV0dnY0ZXpFaU5zeWI0a2RUQXdjc2oxbTdubVZJTUc2b0pkMEpwQXFaMDJ2SEo3X3U4a21xT29NbVVITm55bXhWbEYxLXdjR2VBU19EblE1a2NjWg?oc=5",
+     "nguon": "Báo Đại biểu Nhân dân",
+     "web": "https://daibieunhandan.vn",
+     "ngay": "2026-11-26"
+    },
+    {
+     "tieu_de": "Chân dung nhà thầu Việt Nam trúng gói thầu tư vấn đường sắt tốc độ cao Bắc - Nam",
+     "link": "https://news.google.com/rss/articles/CBMiswFBVV95cUxNOHItOTdzNS0xVTRyeVNkNHI5Tng1TXo5OXlYcTc0SlRCcVZuSWJILVNfQTIwMlU2czlRcjloNmpad0FmSmt5LUc5c1M0MERVdlpYMVp4S01KTUlycWxibnVOVE9jOXVzOHlTZXFOaXdELUg1SWVXUHZ1N0VHWHFFT1o4amM3Z0QtSzk2MW1wR3FfaHUxQmZDdUN6cE1mYy1XSlpkOV9IaE1SSDViMFdCMXN5Zw?oc=5",
+     "nguon": "baodautu",
+     "web": "https://baodautu.vn",
+     "ngay": "2026-11-26"
+    },
+    {
+     "tieu_de": "Đà Nẵng đầu tư hơn 121 tỉ đồng xây khu tái định cư phục vụ dự án đường sắt tốc độ cao Bắc - Nam",
+     "link": "https://news.google.com/rss/articles/CBMizgFBVV95cUxQbzY0NFRXOFNRa016VW1NU0tzYXZKNjFhWWkwR1BscnE0TVhSN2h5eDRzbEVMdmMxTE1SdEZXTHpzWWtSRi1USEVKYldVWjR2ZlVsQTdBUTRsNHlhOS10NmZHeDlMdWFHU2RBbllxNVE3aGRUMTRmTVdabkxSSDdnT1NaTlpocTAzVm9vWk9ua0ZyeVdIR0VheEF2RV85d3VMVTdEbURzdVBzTmRSMUI0alpOaUNmZUl5RzBrY0JlM0dIMlY2WUgxd0NuVVlDZw?oc=5",
+     "nguon": "Báo Dân Việt",
+     "web": "https://etime.danviet.vn",
+     "ngay": "2026-11-26"
+    },
+    {
+     "tieu_de": "Đà Nẵng chi hơn 121 tỷ làm hai khu tái định cư 10ha phục vụ đường sắt tốc độ cao Bắc - Nam",
+     "link": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxPa3N0YmFVeDBmWEh0TWJyS1ViSUpxWHJXSUNydk9OOV9jRzNtclRPWGJCeW9qc0pLWk1yZjcxaFd5VHdOdGc0Q1NJYnN0SlN4MW5Fejd0bkFfREtqelYtUUpNVGt4eC04ZUdnWk5tbV9nQmNEMXRQMXEwbjJmUktpSl9uc1pYNTZJdUduVDRLMUZRcy1GR3FSZXJ0TUtYdTBuckdObExKbGxBcjdtZU1XVDRqZF9DOWExRTk5aG1JOVd3QQ?oc=5",
+     "nguon": "nguoiquansat.vn",
+     "web": "https://nguoiquansat.vn",
+     "ngay": "2026-11-26"
+    },
+    {
      "tieu_de": "Dự kiến khởi công đường sắt tốc độ cao Bắc Nam cuối năm 2028",
      "link": "https://news.google.com/rss/articles/CBMimwFBVV95cUxPRmRwVFFNMFBRMmZtclJUZG1oeUdvRjRYZ1VxZFFSSDdSSUNzbVRhRWRjOEpLY0VkVm1jd3UzamhMQzBwSlNhdTMwUTJpZG1yUjBLUlVaM0ZINDR5WmxmbmJfUndPeGRZNENjX2E2UWR2NnBaZmNLNTdtOUVmUEZtdWV2SHhWcFEwbUFTazF5WmdhQWIydXRLRVB6WQ?oc=5",
      "nguon": "VnExpress",
@@ -1857,48 +1899,6 @@
      "nguon": "Báo Nhân Dân điện tử",
      "web": "https://nhandan.vn",
      "ngay": "2026-11-25"
-    },
-    {
-     "tieu_de": "Đường sắt tốc độ cao Bắc - Nam: Kết hợp kinh nghiệm quốc tế và năng lực Việt Nam",
-     "link": "https://news.google.com/rss/articles/CBMitwFBVV95cUxQV0I4UVdDRUc4OXgzUkxzTnF3Y2laQ1FJbzNidkhBRElTMHgxdmh4THdlUWRkeHRNaFNoWWlUd0Z4RmVXaGdzUGFYMkhKVEl1cTVSX0gyUWE5WDVWX3M1N1QxaE85SU9NT1VBVU5pRF9yYldvWXhtTHFzRjVSRkFEUlFFT2ZzakVNODBaMnA5c3ZKZDVKSTByUVdjbmwybWt2MDJjcnh6NHJ0WWRPeGt3Y2wwczJ2TVE?oc=5",
-     "nguon": "CafeF",
-     "web": "https://cafef.vn",
-     "ngay": "2026-11-25"
-    },
-    {
-     "tieu_de": "Dự kiến khởi công đường sắt tốc độ cao Bắc – Nam vào cuối năm 2028",
-     "link": "https://news.google.com/rss/articles/CBMirwFBVV95cUxOdGZzaXpIVnJTckxoaGJ3X05oSTRiSjFTOXRxazJwZ1dQTk82eXFIMW1vYzBCVW1JbmNvOExMcEVGSmNZbXctRUFUbWxDYkZJNmxjY05tS0hkSzdvYk1NczVrWDE1M3pENFlRVFk3UVlDdDhBU2FXQjFVcWZsOFFNWUNjcHFBazJlQ0dvMDJ0Ukdvc3dmUlR3cnJGakhySGJXVzhxcTJyRTlUZ25VbDl3?oc=5",
-     "nguon": "Báo và Phát thanh Truyền hình Hà Nội",
-     "web": "https://hanoionline.vn",
-     "ngay": "2026-11-25"
-    },
-    {
-     "tieu_de": "Đường sắt tốc độ cao Bắc - Nam: Hé lộ các mốc tiến độ quan trọng",
-     "link": "https://news.google.com/rss/articles/CBMiugFBVV95cUxQMlYwb2ktTEJmQVhoXy1mQjRMdlozSXY1dkNOX05SendTcWh5OGpnSU95Q0ZfTnc3X3BPSHF5ZEFNWjRxLVB5Q3Z6Uzhxd0Q4b05LVUlJdndIczFEcldNeC11akJMSVhTdkd4Q2FJd2NxODUxUHlOc0lEcUJmaWgtcWQ1eHRQMlhjdTFnMnQwQXFVNGdHVFNkcFRzSWNZT2xDRG5LWVJtYU03T3duTmk3ZEYtbjFZMTA5eGc?oc=5",
-     "nguon": "Báo Dân trí",
-     "web": "https://dantri.com.vn",
-     "ngay": "2026-11-25"
-    },
-    {
-     "tieu_de": "Dự kiến khởi công đường sắt tốc độ cao Bắc - Nam năm 2028",
-     "link": "https://news.google.com/rss/articles/CBMimwFBVV95cUxOamtHS0FRNHFOWV9aT0psZ3pNelBvY0xyOXlqajNzYWRJaHkzVkNzaDF3LW9sQWtRVWZpVld2OGE2Z0xybFZ2ZHZSSmlVZ3RCVWhuSHBFd2FSVXRZcnp3a2JaMXl4MmtuQ082MEg0OUxJX3pNczl4TnlUOWVWcEdVcHRpTS1pREUyUEc5ZVQ0ZjRlSmo0OUxqV28tSQ?oc=5",
-     "nguon": "CafeF",
-     "web": "https://cafef.vn",
-     "ngay": "2026-11-25"
-    },
-    {
-     "tieu_de": "Ký kết hợp đồng gói thầu tư vấn đường sắt tốc độ cao Bắc - Nam",
-     "link": "https://news.google.com/rss/articles/CBMipAFBVV95cUxNaFpyeXRDY3NFZno5dmZQd1BidkNqd2tEaHB6WWZPVllqOTdTVDhzdWhZZDB4R0hpeFJ3amdpNXVnM3hUdWxmWGJWdmVwSWJIU3BIRlJibFIwT0FLZjlmWnJZZzhYRHJKUV9VcUF2OXJfT2FldGJzanR6VFFpNkFiS19fMUd6c2hCekVmV0FTcmlIYWhkMVpna19UQmtzU0pKUUJzSw?oc=5",
-     "nguon": "Báo Tuổi Trẻ",
-     "web": "https://tuoitre.vn",
-     "ngay": "2026-11-25"
-    },
-    {
-     "tieu_de": "Ký kết hợp đồng tư vấn lập báo cáo nghiên cứu khả thi đường sắt tốc độ cao Bắc - Nam",
-     "link": "https://news.google.com/rss/articles/CBMixwFBVV95cUxNcDNVN25GWEtiZ3BXd0o4MGNZU2V0aG5CWGdWT3ltY1g4QjZ6SW80V0J1VWZPZzRYUkNtVW9JVFJ1S1pocTVaZ0R3WUhuWXpZM0lkTXNNcjc1dG1tNkllTXdFLTlMVzZXUmg3UXI1a3NuVkJzdGlKck40QldiSEpOODJBRThJR3pYYm5mbllzTzA2ajNjaDZhMmpBRW9IQjVmMnBtSnh6OGFkN21sVGExWDI1MG5kUHVJakJZNjVUeEJZQ2RvQkY4?oc=5",
-     "nguon": "baochinhphu.vn",
-     "web": "https://baochinhphu.vn",
-     "ngay": "2026-11-25"
     }
    ],
    "tim_them": "https://news.google.com/search?q=%C4%91%C6%B0%E1%BB%9Dng+s%E1%BA%AFt+t%E1%BB%91c+%C4%91%E1%BB%99+cao+B%E1%BA%AFc+-+Nam&hl=vi&gl=VN&ceid=VN%3Avi"
@@ -1908,6 +1908,13 @@
     "đường sắt Lào Cai - Hà Nội - Hải Phòng"
    ],
    "tin": [
+    {
+     "tieu_de": "Chậm giải phóng mặt bằng dự án đường sắt Lào Cai - Hà Nội - Hải Phòng",
+     "link": "https://news.google.com/rss/articles/CBMipwFBVV95cUxNRE9YOW9Cdl9zNURoT0IxVGtrLWpUZlZXellicTZlWHRPd0t1cWJYZ28xdklwaHJBU1BIRmNmV0tvZHJ3dUIzYkRla1dJU0R0OVlxWTFUSTVoTjN4VmlBWk9WelFYanNJNVpYendvWVFhc1J1RDVGYXk3d2FqVF9JcXN5dXZkRDVzQUhJWVZLckpyV3B4TDVPc1BqRXNlNEhPaGpKWnBNRQ?oc=5",
+     "nguon": "CafeF",
+     "web": "https://cafef.vn",
+     "ngay": "2026-11-26"
+    },
     {
      "tieu_de": "Bứt tốc tiến độ giải phóng mặt bằng, giải ngân dự án đường sắt Lào Cai đi Hải Phòng",
      "link": "https://news.google.com/rss/articles/CBMiugFBVV95cUxPZXlkc1pVYS1hSkxBYzlMallmNm5MX0VHVlVoalBZVHhhNXItYVM2bXFueThpd1BrZUhWVnRFenkzTUpOQUJ3dTIwbDhOcDRtUmJGemlJTndhNkdlVlYzNGxVQTh2eUhzbS1iSGwzR0t1dnUzYkZ0MDJGU0VEbXktZHZ0VW9WMjR2Rjl2dzRFenU5dDcwdWJkOEx3MUdqZ3ZMbWswWTVLbjF2X2VXd0ZHeFpQNUtWZmZ5cnc?oc=5",
@@ -1955,13 +1962,6 @@
      "link": "https://news.google.com/rss/articles/CBMizAFBVV95cUxOTWdUNWk5OWJtR1IwOEo4TUFiT3h1OGtld2ZYUWNNVVVEMkE0ZnFEUnJEV1FfX216T01YQ3N3Uzc4NXRqZ0lUaXM3VDRhME5fWDItU3Fkc1FZVW1ReUxtZmZuMzB4LWQ3V1EtNEI0NnJUMnZoMjFOdkdENDBwTXp0LUtvV29YUjZYdmlUcnRhSFktU3l5LTV6eU5fS2Y2eXMtMHZpOVZKc21SRG5KY3hJR0NLRzRNWVAwU1dzcGpPMi16WjhpanYyWmZ3c2E?oc=5",
      "nguon": "Báo Dân Việt",
      "web": "https://danviet.vn",
-     "ngay": "2026-11-23"
-    },
-    {
-     "tieu_de": "Đường sắt Lào Cai – Hà Nội – Hải Phòng: Mới bàn giao 5,18% mặt bằng cần thu hồi",
-     "link": "https://news.google.com/rss/articles/CBMiwwFBVV95cUxQcU0tSVpGbHJ2eGdrSW1NVWtLelJrTlJUZ3gtM1lrVXY4UzhVZjF6bkVjT2I5aFk3aUw0XzJvWnZyeDRla2FhRExTaGRhbS16T2NXWDhlMWhqbl9Xb1QyekxudTdXeXFOTEx0SHpMQ1JLR1R0VVhKTWxTdVdvMWpnYlpUcHpJWExwdjk4X1lnSTFodmZvNmtRU1hGZGpRX1NEclFiVWtEWXhEWUx4d3l3czRoeXlLUnFCMG1HTHFOT09jWjDSAcgBQVVfeXFMTW1iM1J5bHFZdlNvMDFvMld4dzNHb3BLT0VQb0NtNUdiSjU5cVRMUUpyUTJHQzdkclNiNjE1a0dGOWRsajJmekhWcUJ5NHNvTVluSXdVM2NDQ1N2Z2ZwLTNFUlV2RTFnTFBRT0gyempZbXNKMnJvN1VFZERDczBkdkxaMHE2MDNxQXpGRkhFZmd4UTMtaDhtTmNzdGlWR3E5SUIxUk8yX3lLZi11TTVMTUJkbm9WMVBSSVZvVWhQVFpwUUhsLU83Rzk?oc=5",
-     "nguon": "Trí Thức VN",
-     "web": "https://trithucvn2.net",
      "ngay": "2026-11-23"
     }
    ],
@@ -2172,6 +2172,41 @@
    ],
    "tin": [
     {
+     "tieu_de": "Xén dải phân cách dưới gầm cầu cạn Vành đai 3, mở rộng mặt đường xe chạy",
+     "link": "https://news.google.com/rss/articles/CBMirgFBVV95cUxQVW1hNGwwdG9mbkZlTXItd0pqN3EyUWlDYkMtMnQ0QU1hNlMxdENLcjJTbGxNQWNIcElmOF85b2RtdDBweXFxcXhVX044eFh4Y3ZYRUhOcVVsTzN6amt2Ykp3RHdBdGp5ODBlc3hZeXRYMzVQSV9Ed3NJaklFd1hmUEloWUNmY3dGVFZ4aUpOUzN0ZkNiOHgtSDAybzVJVGZTd0ZNX1h4YVZSajBYUVE?oc=5",
+     "nguon": "Laodong.vn",
+     "web": "https://laodong.vn",
+     "ngay": "2026-11-27"
+    },
+    {
+     "tieu_de": "Giao thông Hà Nội sáng 27.11: Cầu Vĩnh Tuy, vành đai 3 ùn dài",
+     "link": "https://news.google.com/rss/articles/CBMijgFBVV95cUxPdGRsZVl0T1k3ZUo5SzFDbmhyXzloWW1aS3FsMUdIMDdGWmJHM09LcTI5YVcwQUhsX1lhUUZjbFp2d2ljV1BuOFV1aC1EV1R5TEl5aFNvNGgtS1JXS2lhTzMwZ0hSMWYtV3Q4dVdQZEdOVEQwdzJLeko5bTNFaTJJX182ZFo3akx2UzZmbjln?oc=5",
+     "nguon": "Báo Văn Hóa",
+     "web": "https://baovanhoa.vn",
+     "ngay": "2026-11-27"
+    },
+    {
+     "tieu_de": "Vành đai 3 TPHCM có kịp thông xe vào cuối năm nay?",
+     "link": "https://news.google.com/rss/articles/CBMiowFBVV95cUxOVHlQeDliamM5dkw2ZWZ1aXBPRmpnSGxSSzREVFF0RFVUMURJZVl1NllwNXFjdXZ0Z280MWdzNXItdk9mS01rZGNqZTJfc3V5Yk84WFJ6aHFHREEyZjNSRTl3aE1fQnpYQTg3SlBIX2NUSDRVTk1VSFhVTkc3X3ZTRWFvNlIxc3JJRWs4eUVjd1BfY2J3TTRmUzVyYmNvamVGMUFv?oc=5",
+     "nguon": "Báo Dân trí",
+     "web": "https://dantri.com.vn",
+     "ngay": "2026-11-26"
+    },
+    {
+     "tieu_de": "TP.HCM sắp thông xe loạt công trình giao thông lớn, có Vành đai 3, nút giao An Phú",
+     "link": "https://news.google.com/rss/articles/CBMiwAFBVV95cUxNNzNKdl9SRGttX21oN2xha29vbUdzaC1tdmRCclhwZ1ZsejN4bFdDd3ZEODhybWxjZnU4RkUwZ2ZjUERDYjhvODFCNHpCM0hOaVE4VWp2TmdCSEFmMlJHVEEza0x2dXljaXF6Um5td2tzVnFOMXlqS1FrTENiMDdrZWQ0V2FQb0NJUV9VYzJJdHZNMXd6TkZmQnpaMXZ4aXpxLTV3Q1RmVFdFQmhmNVlIaUQ3dzc1alpUaGlJbDJpNE8?oc=5",
+     "nguon": "Báo Thanh Niên",
+     "web": "https://thanhnien.vn",
+     "ngay": "2026-11-26"
+    },
+    {
+     "tieu_de": "Ghi hình, xử lý loạt phương tiện cố tình đi vào làn dừng khẩn cấp Vành đai 3 trên cao",
+     "link": "https://news.google.com/rss/articles/CBMiwAFBVV95cUxNbnFwTmppOEZIN3NGUkFsZFZuS1hRbms0VjZJYXQycG94VjByMGloT2NVQ2NfMUxwQ1NyTEZVVnlBY0dqMkNVUmhDb090Y3Y5V1Z4cldpazNxcG1Fak9yQ2g1V0pQNXJ1U2k0S1BUOERvam9RRjhfR0hGOEtHSVdhdzd5LXFxM3dvcjhRSGpydHotOTlUeWl5MXEtSzd3anpFamlLTTZwOVZBb2tUS0xVQ2ltcVVtWlFwNHVYSG9teDA?oc=5",
+     "nguon": "Báo Điện tử An ninh Thủ đô",
+     "web": "https://anninhthudo.vn",
+     "ngay": "2026-11-26"
+    },
+    {
      "tieu_de": "Hà Nội: Mỗi phường trong Vành đai 3 khởi công ít nhất 2 bãi đỗ xe trong năm 2027",
      "link": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxPWWNVQ2RBeTBvMlNfSUNwRGtYSmhDMzRWcVpyTE1qTXVXNmdldnhfVVh5Mm9tZnBkOHd5MmVSVGpsVWloelZ0YkFwM2FHYzFBTmxDOXZEangyeERKRDh4d19XemdsQ1k5TnNlQ1ItdVZfRXY4U2RPU3lva1NORzNYLTYzdXRIc3BkMXhfNk1scC1uZnBHeTRLUnZOMzZBR2txT3dkRXVIMjJJWlVMWGVLeGxoQkdFZzBqbkZj?oc=5",
      "nguon": "CafeF",
@@ -2191,41 +2226,6 @@
      "nguon": "Báo Công Luận",
      "web": "https://congluan.vn",
      "ngay": "2026-11-25"
-    },
-    {
-     "tieu_de": "Hà Nội mở rộng đường Khuất Duy Tiến dưới gầm cầu cạn Vành đai 3",
-     "link": "https://news.google.com/rss/articles/CBMirAFBVV95cUxPa2MyaVBTdjZuU0laTmx5OWF4Y3dkZV9ILV9Jc3BKanZvTHdSV2s2MUVfb1FwT0lwZmVjNWU2a3hpTl9zUzJzQXdINm80R3p5S0VrdWtYSWhyYngwc0ttVzRFcGZ4Qno3UkpYV3BZTlNlczFpN2VUenZmbTdIZ1VVdDdZMjVCQjd5bjNxenZ3UUxFZy1mbW5ZbHIwODhnZXE5MzI3YkRLQW1GZmFP?oc=5",
-     "nguon": "Tạp chí Doanh nghiệp & Kinh tế xanh",
-     "web": "https://doanhnghiepkinhtexanh.vn",
-     "ngay": "2026-11-25"
-    },
-    {
-     "tieu_de": "Phấn đấu 30/11 hoàn thành 17km Vành đai 3 phía đông",
-     "link": "https://news.google.com/rss/articles/CBMijwFBVV95cUxNc0tfX2M3SDRyaGVJQzhTMDFHUG9fNldHRDZUWlhqTU81bWhyVGctTEg0eHowOFZSYUM3QjE2ZzdvVUEyRUlQWXk0a2NwLXd0WDNwdE1NN2JhMm5rcnMyYThnLTVSbkk0Wi1ZdWxpRVR0a01xeDFjNzJLWTlLbFU0WHIyY3pHekk4ZU05b19rdw?oc=5",
-     "nguon": "Báo Nhân Dân điện tử",
-     "web": "https://nhandan.vn",
-     "ngay": "2026-11-24"
-    },
-    {
-     "tieu_de": "Vành đai 3 TP.HCM: Tăng tốc thi công, áp lực về đích năm 2026",
-     "link": "https://news.google.com/rss/articles/CBMiigFBVV95cUxQeXpvellVOU1HdG1BSWhqUkp5WmZ4Tmhjd1ktMGlJT0NQT2V2S1BiUUVoNkRRSlVONlhhY3hNell4dE10Q3NTMm4xMzQ1dzRKNXB2dU1jV0xOSWRzMXduOXZlekdMblhZZWpjN2FSUWJqWDh0YkNxd0NOLTk3WVRNVGNwVEVrZ0xQdFE?oc=5",
-     "nguon": "Vietnam.vn",
-     "web": "https://www.vietnam.vn",
-     "ngay": "2026-11-24"
-    },
-    {
-     "tieu_de": "Ngày đêm trên công trường Vành đai 3 trước ngày thông xe",
-     "link": "https://news.google.com/rss/articles/CBMimAFBVV95cUxNbmh5Y3pzTjVYMmpobjJBZXFFVFQ0eWhnM1NYdEh1Z0dUYmw5RTg5NEpzU2M0N1hOMmYtNUZMbTJFR2p5NEtoSHoydXdtWnNONklYdE5qaGhBeVNXa1dEV2VJb25POTBabWFXdUl0dlhFMF9CQ0pENU5xV0Y0RGRZeTBDVkpreUo3YUhJTjZaVDdnUVdkUjhCUw?oc=5",
-     "nguon": "Báo Tiền Phong",
-     "web": "https://tienphong.vn",
-     "ngay": "2026-11-23"
-    },
-    {
-     "tieu_de": "CSGT trực tiếp ghi hình tài xế đi vào làn khẩn cấp đường Vành đai 3",
-     "link": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxOWmZSaEFQSGQ1WE9xTUptVmd0TmV5bTNpZVBuLUtPTGdIUWtNMy1KRzhSVGlaTUhHRFJqd0wwTkhxN0FTSzJJSGNUQmwwQnpJQnh5bEp4cmktNk95bDg3dFNHWWQzQXFQR1ItZ21wRDlXUFppRGRWSXVPYWpWQkUxeFdyd0c5ZHQwY3ZfY0o1NmczMEM2UXlkbTc2djJfOVNhc0xfV2NmTlQ1cXlIc1llbVl4RkhNVHpDYnRv?oc=5",
-     "nguon": "Báo Dân trí",
-     "web": "https://dantri.com.vn",
-     "ngay": "2026-11-23"
     }
    ],
    "tim_them": "https://news.google.com/search?q=v%C3%A0nh+%C4%91ai+3&hl=vi&gl=VN&ceid=VN%3Avi"
@@ -2242,6 +2242,20 @@
     "đường 70"
    ],
    "tin": [
+    {
+     "tieu_de": "Hà Nội xén dải phân cách, rào chắn đường Phạm Tu hướng đi đường 70, thi công cầu vượt",
+     "link": "https://news.google.com/rss/articles/CBMiwwFBVV95cUxOeWUwM3dRaUFNVDBFRHp6ZnJSUEI4OUhvMzFQUFpELWhFNFhXdllYVGR2c2xEUDVZd0ZhZzRlTXFGRmZfU05zQ2tWV19MMG52blNyOWlpaFJFY3U1aDdJZXhnMmdxSC1uaHM4UnljeURGTnpZYXhmeVBCT203WERkVDhzaDM2aDU5YVpPTVoxUnlRQWdZaUY3aEtQUXg1RmNmSjJYUFd1aDlQbVZqU0Zwck1LYzJVeTB0RVJ6d1YzSHRiclU?oc=5",
+     "nguon": "Báo Tuổi Trẻ",
+     "web": "https://tuoitre.vn",
+     "ngay": "2026-11-26"
+    },
+    {
+     "tieu_de": "Hà Nội: Phân luồng, tổ chức giao thông tại nút giao đường Phạm Tu với đường 70",
+     "link": "https://news.google.com/rss/articles/CBMitAFBVV95cUxORnItX2w3ZWFPYWRBR3NIQkRRamdIV0REVkppclNYdmRrT01mWURuWl9mamNVM2ljSzJaNzlyQlE1X3k0ZUJJNEFfZ0dfTHBoSk1sYlNjQzFsUHRfbkVnTHJkdkRRTlcyTF9ycDlMNWNjQ09aRmIwNUZrOERiSVJaV25YUVhVeTZpQjZuRTUtQkFwU09NbS1kU241S0hnZlRlTGVQUW5MUFVLdFFld2NPOWFLYmo?oc=5",
+     "nguon": "Báo Tin tức và Dân tộc - TTXVN",
+     "web": "https://baotintuc.vn",
+     "ngay": "2026-11-26"
+    },
     {
      "tieu_de": "[Ảnh] Hà Nội: Cầu vượt Phạm Tu-Đường 70 thành hình sau nhiều năm đình trệ",
      "link": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxQdFk5djJ0QUVubzZicWIzX3AtRWg2TnN4ZENjWGw5REFYOURrRmVNOVF5bkpydDNrZ19xMjVFbXRyUlNYelJLOG5MM1JuU2NuMnZIZzRwSUM5OGZFbkNBSVhUajBkUUlBamxKclRzQy0wRjI1YmRRSHBXYWY4ekRMMXNCT3ZHNGxVY19WX0F4Q2ktbElMM0k3WEFZSXZmMmM2aDJidXlTRWgtQQ?oc=5",
@@ -2283,20 +2297,6 @@
      "nguon": "Báo và Phát thanh Truyền hình Hà Nội",
      "web": "https://hanoionline.vn",
      "ngay": "2026-11-08"
-    },
-    {
-     "tieu_de": "Tăng tốc GPMB, bảo đảm tiến độ dự án đường 70",
-     "link": "https://news.google.com/rss/articles/CBMilAFBVV95cUxNeTgtSkljMGhPWElBLWw2OUZDbkFJc1QyVG5hYk9KLWNXYXZJSlJjZDZFNVRLOTZIU0RSUDlLc2Y1OGdqdm1VX1I1ZjF6VzJfODRQeWY3cXowVEJZLU85Q3dhSnhwS3hpX1Q4eDJFaGJtYXZRVTBUTjFtY0RENUZkV2xUX1hJaFJRTndiVlM5UlYwZkxz?oc=5",
-     "nguon": "Báo và Phát thanh Truyền hình Hà Nội",
-     "web": "https://hanoionline.vn",
-     "ngay": "2026-11-07"
-    },
-    {
-     "tieu_de": "Hà Nội thúc tiến độ dự án nâng cấp quốc lộ 6 và đường 70",
-     "link": "https://news.google.com/rss/articles/CBMiowFBVV95cUxQNE4xa2hUaXlOXy1nLXlaSURGTVlNQk1xVEI5c3Juc0NBczZaQjRYNUhlaV9aczk1Q19CSzFzZHhvX1dudlZabjkzNy1CSlhSSUhHRm41SFBmZVJsU2RYRHNfWmVhU0NmUXBIMnB1ZUlQdU1pWDBMYVhKeFh1QV92STJQWXA2SmhHdGVvLV9uZS1nOXdQdnk3YVB6TThHekZIT2JJ?oc=5",
-     "nguon": "Báo Xây dựng",
-     "web": "https://baoxaydung.vn",
-     "ngay": "2026-11-07"
     }
    ],
    "tim_them": "https://news.google.com/search?q=%C4%91%C6%B0%E1%BB%9Dng+70&hl=vi&gl=VN&ceid=VN%3Avi"
@@ -2463,60 +2463,60 @@
    ],
    "tin": [
     {
+     "tieu_de": "Trường Đại học Đại Nam đón gần 100 sinh viên y khoa quốc tế khóa 2",
+     "link": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxPejB2bmhrRGxmN0NzWV9HdGYxaUw4ZHhqWllzYWpfdjU4aWNZU3A4czB3Y1BkSDRFWFZLMnVXOW94QnlOWUo3Tlo0cko1SEhxNWE1N3RpRXhhNGNUOHBGdGZrX1FVQjVheGpVTFlQTGRrYVVfTU1hZ05rdnMyUDZXWFlxSlpjRTVXV0IyRmVwUW51ejdoNmRhQmRMUHFzQTBPeW9BbzU0TUg1NGVVYXNmVGVIOS15cEt1WHBz?oc=5",
+     "nguon": "Báo Dân trí",
+     "web": "https://dantri.com.vn",
+     "ngay": "2026-11-26"
+    },
+    {
+     "tieu_de": "Sinh viên Trường Đại học Công nghệ chinh phục NASA Space Apps Challenge 2026 bằng dự án tìm điểm hạ cánh trên Mặt Trăng - Trường Đại học Công Nghệ - Đại học Quốc Gia Hà Nội",
+     "link": "https://news.google.com/rss/articles/CBMi6AFBVV95cUxPZHF6UG1tY0t1T3NLWHQ1emtHYUd6QWNHRjVuRHVWMjdQT3J4WVQtaXpvRW5DTnVTQ25CWTBxSlh6WFpxWnIyT1AzZ01MUUpiLWlxNnRHQjVWUnMwOXhOb3pIRlU2YnNtcTBkOWZsMXJzV25ySU56SEwzSHVzRU1zVlFKVUh4QlZzUlRSQjNoX1RtY2pLV1IxUXJhT3BydHlQVUIyRGJGUEdyU1gxY24tV1RVZy00bEZiZWhyenhEQTB5V0RzemhLY0VZUGlZTDdfVUhRdFFvRXluODNheEM1T3JrRTFiMExk?oc=5",
+     "nguon": "vnu.edu.vn",
+     "web": "https://vnu.edu.vn",
+     "ngay": "2026-11-26"
+    },
+    {
+     "tieu_de": "Trường ĐH KHXH&NV hợp tác với Đại học Deakin (Australia): Thúc đẩy quốc tế hóa các chương trình đào tạo",
+     "link": "https://news.google.com/rss/articles/CBMiwAFBVV95cUxNNWc3cnlpRnJQU1ljM2tsb1lLeERoUHRPblYxQ1N2cDlaU19VMlc5WngyaGJwNTM5UGsycGVUTTFaVGVHOHFfYm8teFc2R21yUHBia0tOMmJqUG4yTlZ1Z2tqMDFUT2E5Q1ZCZDVqQ21IWmFIc0hJU1U1QjJZY3ZMb1B4UEtwOVdOYmxXTmI3RE9ZOE5OcDNFMWtVdzN5eEFueVpJLVhfd0daaHFEVVpOMF9CZjBueW5rWlRKbEN2Umc?oc=5",
+     "nguon": "Vietnam.vn",
+     "web": "https://www.vietnam.vn",
+     "ngay": "2026-11-26"
+    },
+    {
+     "tieu_de": "Thông báo chương trình giao lưu dành cho HS-SV tại Trường Đại học Sư phạm Hoa Đông, Trung Quốc",
+     "link": "https://news.google.com/rss/articles/CBMi3wFBVV95cUxOdGNZNlZ0QzU3MnNFejdGQVE4NnFZMTFWTkpVRkx3MlEwN2FFLUhDSDZoU2VEZzhjbm4xZ0MwRWJLT0oxSjdVQUo3azItdTI0MkJGVTByc0lVSnZTeUk5X2l2NHRSbmE4QVhmSlJDaU1PYUp5ZDFPYksyNndKakJfaC1aaGFnSEFoZ0VaT1JVQUl6ZGIySWVQTlluMU4tazdQUi1pQ19peWRvZzk5N1RKR0V0NE9Ecl9wZ0pFT1JEeUlPdXF3ZFFkMDZMVkVjazA2UVBIeEJYUFp5UlZUWERZ?oc=5",
+     "nguon": "vnu.edu.vn",
+     "web": "https://ussh.vnu.edu.vn",
+     "ngay": "2026-11-25"
+    },
+    {
+     "tieu_de": "Chia sẻ kinh nghiệm nghiên cứu khảo cổ học và tiếp cận liên ngành với sinh viên Trường Đại học Khoa Học Xã hội và Nhân văn, Đại học quốc gia Thành hố Hồ Chí Minh",
+     "link": "https://news.google.com/rss/articles/CBMi7wFBVV95cUxNMUdMXzgxTmZ2UVVsaUFWYWJhc2szaWJzdHNaaldtUHVoZDMxUU0xd1FNMEhhMEZCOTJ4SDRjRGc2S2RCSXVoaVVtUjFEMWpCdFM4WUJuNnVCOVcwT0o3UUhRei1fN3RhWVBlaTlDTG5uVFZMY2RZc2o2RkxxMHI4YW9Na2xTRS1sWFFOT2hYODM3QV90SGRTQ1Bpdm10MWhRNWdfMFcwZGlEMVJJbDBpWWNaZG5SU2tSMGJzcXR4dUZzSkpUZFBaaXpHUlZoUElqLUJPQ0dBREFXVjR5ZVpDajNUVEE4YU00ak5zOXJZYw?oc=5",
+     "nguon": "Viện Hàn lâm Khoa học xã hội Việt Nam",
+     "web": "https://vass.gov.vn",
+     "ngay": "2026-11-25"
+    },
+    {
+     "tieu_de": "Hàn Quốc thưởng tới 500 triệu won cho người tố giác gian lận thi đại học",
+     "link": "https://news.google.com/rss/articles/CBMiswFBVV95cUxPd0tqRE53eHFtYjlUUnlzanNqdzNaWG1xd2lIbzRzSFJfdUlva0VmRHREZXpfZUFJVFZSSXF2aEFueVdHZjlheEp1bWVYR2RmbE5qeEVldHhjc3Q3UE9mb0syekFrN0hTeTVrdG4yRDlUcVFuQnRxMy1HYTlPaU5OOGpsMW5tYVczX0dGNTl3YTFXX2pCd3BxWGUxaUk5ckJYZWZpbFYxWl9HbFZhdjJyOF9PMA?oc=5",
+     "nguon": "Báo Tuổi Trẻ",
+     "web": "https://tuoitre.vn",
+     "ngay": "2026-11-24"
+    },
+    {
+     "tieu_de": "Hàn Quốc thưởng cho người tố giác gian lận thi đại học",
+     "link": "https://news.google.com/rss/articles/CBMilwFBVV95cUxOY1pHVnZVaVdvNE03ZlJvQlFRTVU3ZF9tNENSZlEtM0xaRnBXbFNVRThlZU90TW8yUUI0ZjQ4S2xDd3M4N2JDX01jeGdUYmNYcEw1WFRuVFREX0o4bm40b2tGWDl6dzBLM3ZSN0FVZ3BfeFBSeVg2cmg3LUszcUgwbVZ2VnZzV1k4TnRiOG53NS0yQlFqTlN3?oc=5",
+     "nguon": "VTV.vn",
+     "web": "https://vtv.vn",
+     "ngay": "2026-11-24"
+    },
+    {
      "tieu_de": "Bộ trưởng Bộ Giáo dục Hàn Quốc đệ đơn từ chức sau lùm xùm kỳ thi đại học",
      "link": "https://news.google.com/rss/articles/CBMisgFBVV95cUxQQ2xHUFp5MmdUd0hoSXVzbTRGWUhfX2ctYklWaDFKQ1lPSjZFRFc3enlZZUJTZVRYYXVmUEZpcFhzcHBxc3Fjd0JhckFwODE1OUtTX19BOTNHZzRDc2FHdEdGRlZ1Q2R0U3FQZUJyWnpYUjU4TVBfSnVCUzU0dFB1NEJJSnBmLWZhcTJLUG5IS21RQkhrUlBjcWsybW9Ga0Rjb1plSExoRGZnRnRuVlRiN3dn?oc=5",
      "nguon": "Laodong.vn",
      "web": "https://laodong.vn",
      "ngay": "2026-11-22"
-    },
-    {
-     "tieu_de": "Bộ trưởng Giáo dục Hàn Quốc Choi Kyo-jin xin từ chức sau kỳ thi đại học",
-     "link": "https://news.google.com/rss/articles/CBMitgFBVV95cUxNR184Mm5tbWdKT0hoQW9QZVkwTXZVYncyMlVLdDNnVTl2TlU4NlNialhndzIwQTdBNnRlM0lYZXZYWVhMOWt1a1c4RmQ3cXJEOTNERW1aQURka1lNektvV1BhNGppN05ZOXRQdWVrNXJaX0pjcXQ1OEdQZElHb0V4ZExBZDVJcmQtX091TktfLUZCV3NUS3BCZzNMWGo5NEE2WnlNOUhSd3VfVTZ1cUVkUDlldWljQQ?oc=5",
-     "nguon": "Thanh Niên",
-     "web": "https://thanhnien.vn",
-     "ngay": "2026-11-22"
-    },
-    {
-     "tieu_de": "Liên hoan âm nhạc tôn vinh tài năng, sức trẻ của sinh viên Đại học Quốc gia TP Hồ Chí Minh",
-     "link": "https://news.google.com/rss/articles/CBMixgFBVV95cUxPYm1uLXR3OW5makItUlp3SEVJOERxNFZXRlhLNm81V3Y0bUZJdHN2ek9wTDl0dEF2MkJ3Z0xPTFdQenh1MnF5RGpnNWdqbnJxY0p6M2lZNjg1R3VkUzJmYlB4MFR4YnJSN0hmNURkaUtYY1d2TjZ5RkdLaWk5azE1d3pGbnFyeGtUYWVzd1JORTlPdG5mTVgwSXRLZFpZcTVLZkhPa2plRGJ0Wkk0cV9YTmRYYm1IUGxjeF9KOWlyWElpaFI3V0E?oc=5",
-     "nguon": "VTV.vn",
-     "web": "https://vtv.vn",
-     "ngay": "2026-11-22"
-    },
-    {
-     "tieu_de": "AI xử gọn đề thi đại học Hàn Quốc trong 5 phút",
-     "link": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxPY1ZjbTlmY1VreWcwOTZzRFI2OVQ0VlhKam90azduaXcycjg3T3lKMnV1U0hUVzdZakN5a3pyY05TMzN3VEVuSC1CR0Mwa1FnVGRjdEZDc3lidll5M3RmTmd5bmFFUUFZTnJHWGZwZGFhQUV2bV81a25nTlJGV3M0a3FGOU9IOTVT?oc=5",
-     "nguon": "Báo VietNamNet",
-     "web": "https://vietnamnet.vn",
-     "ngay": "2026-11-21"
-    },
-    {
-     "tieu_de": "Việt Nam có vị giáo sư lớn lên trong gia đình chỉ có hai mẹ con, từng phải đi bốc vác kiếm sống: Nay giảng dạy tại đại học danh tiếng ở Mỹ, tham gia loạt dự án triệu USD",
-     "link": "https://news.google.com/rss/articles/CBMirwJBVV95cUxONzJGY1d2MnNjNjZ5NjhFSUdrQmNzUjdqQzc3UDVjQzVxTDR4UFQ1R3daNEI4Z1IwaHlla2JVVHg5ZEU1ZzQydWF2RzItNGFKdTQ3cWJWT3FEczZBaktMRG5kWXN4bkp5LVFqSGNnaFZuVUFjRVFFZzV2QlpQX1BzTFhZempLRXdTNjVRVkZUUjEtLUtwSkdoWnl5WjhvcGVvcWZnREdHNTdPWGZoM0diUjZZOFlic1B6N2k3RDBtRE11bHh4X2VmQ2w1aml5dDlWOWlBTXQ5eS1PMENDa0ZnS1Jkc195ZTFRMHhlNTFJTTVvQTFxbldIVjIxSlh5Sk1aLXBzOFVaeVhiYU93MXpMeHRJSWVoUjNTd1JwQlk5UEE2MnFkakhqamVpd2d5UzA?oc=5",
-     "nguon": "CafeF",
-     "web": "https://cafef.vn",
-     "ngay": "2026-11-21"
-    },
-    {
-     "tieu_de": "Hiệu trưởng Trường Đại học Khoa học, Đại học Huế được vinh danh Nhà giáo tiêu biểu toàn quốc",
-     "link": "https://news.google.com/rss/articles/CBMizAFBVV95cUxQMDRtWTVCZUFqaGtYWGdNdmtrcWdkdW00LXZiRXZhNUU5cTM1b2pLXzMxQkxJUDFKdUJzSUJ6YnJyZ0FwSlI3Mm5hZlNMVDYtRWlHREZoMGZQNUljcmpiWEl6OVBsTVZUcEVvdTFVU1RXNVVid0ZWR20zSEtuRjgyWGdPdWZhNEJYQzZtbG1iZmkzM21HYnMyXzQ0UXZYSjd2ZEFCVnlPeUx0dzRvaFVQRTdXeFdxQllQT2hqZWpVeHAxT0VkVWltR0NxN0s?oc=5",
-     "nguon": "Sở hữu Trí tuệ và Sáng tạo",
-     "web": "https://sohuutritue.net.vn",
-     "ngay": "2026-11-20"
-    },
-    {
-     "tieu_de": "VinFuture 2026: Chuyên gia quốc tế tìm hướng đi mới cho tương lai đại dương",
-     "link": "https://news.google.com/rss/articles/CBMirgFBVV95cUxOVWVlUzZnRS04Y2lMRlM5TC1QY2x0Y0dNQjBJUmNzcS1sTXVXejZNOTJWMGtVUjZvRG9zd3lNbDN4Y0tkaTg4UWZmY2lHOVhJd3NMaXhDZ2U2NUE2ZDVVM0NUWlo5RVNaNGloMEZGbmJUc3Q5V21scnNNQ3JheGN0RUwyY2VpaVFZc0MyM3RTeXVxc1R4TmhROWZkdUNhUU9hUnhFdDZrV1NTY1lPU3c?oc=5",
-     "nguon": "Báo VietNamNet",
-     "web": "https://vietnamnet.vn",
-     "ngay": "2026-11-19"
-    },
-    {
-     "tieu_de": "Phó Giáo sư quê Hà Tĩnh làm Giám đốc Đại học Quốc gia Hà Nội",
-     "link": "https://news.google.com/rss/articles/CBMimgFBVV95cUxORzNzb2lJbW9TRVp0cGVnTkVSSDBYRXl1VEdHS2pmMEFfb3dDYnVMdGRzMko2R1lXc2xURlE3Y2NYMFkyTVdoRExCWXV1QjctbDlPeEo4YlVzcjRHTWxjU1VmRjdIbm5OZ1JyRkpvUWpfQTZxS3VoQnBfSUlNeVZJYl91a2FjYzJOdldDYjJ5Zm9JcTFjSzE4VlV3?oc=5",
-     "nguon": "Cổng thông tin điện tử tỉnh Hà Tĩnh",
-     "web": "https://hatinh.gov.vn",
-     "ngay": "2026-11-19"
     }
    ],
    "tim_them": "https://news.google.com/search?q=%C4%90%E1%BA%A1i+h%E1%BB%8Dc+Qu%E1%BB%91c+gia&hl=vi&gl=VN&ceid=VN%3Avi"
@@ -2761,17 +2761,17 @@
      "ngay": "2026-11-13"
     },
     {
+     "tieu_de": "Đường Nguyễn Thị Minh Khai ở TP.HCM đổi chiều, xe máy vẫn đi ngược chiều đối đầu ô tô",
+     "link": "https://news.google.com/rss/articles/CBMixgFBVV95cUxQdTBsWlFNQ01FVktWSkltdVh3SkRpbzJUdDdVdFk5THRkOTZlWnc5NC1iUk5raF9zbjE2MTkxUzh4YVE2a1gzekhwalViN1ZYMVdLSXR6SngxMjBFN05ZalI5TjBpcmUwZ1NjMTgtZk1wM3Z0OEZ3Z0lBUU9hSktKQXlNNE0zRlFlM21IQ2FiQWpEanRCeDUwYkZPcUduYmRVTHNQck1Zdm1xWkpkUG13NDA3SzA3LWFMV3JxdTB1WFdqRngzaGc?oc=5",
+     "nguon": "Báo Thanh Niên",
+     "web": "https://thanhnien.vn",
+     "ngay": "2026-11-13"
+    },
+    {
      "tieu_de": "TP. Hồ Chí Minh khai thác thế mạnh công nghiệp để phát triển du lịch",
      "link": "https://news.google.com/rss/articles/CBMisAFBVV95cUxNZjhlN1BlZDFhUmxySHoxbUxZaDFFUTBicmN6R0tCWks4cWpwNVRWQ2FRVmtaSmN1QW83aHNYQWJlQ2NkZ3VQaVd2bTRnUkM0VHUybnFpTkV4MWpPMVg2a29GaVduTUNHWk5xN1QxWkR1MmlLcDhIU21NX2tZYzBqaFNISWtkb0dJMFhseWhLVWZ6cVVPdkRLN0cyN2tBZlUzdF9pTGgxUjRtQVdoWmJ5bQ?oc=5",
      "nguon": "Tạp chí Kinh tế - Tài chính Online",
      "web": "https://tapchikinhtetaichinh.vn",
-     "ngay": "2026-11-13"
-    },
-    {
-     "tieu_de": "TP Hồ Chí Minh khai mạc tuần lễ hoạt động nhà sáng tạo nội dung số",
-     "link": "https://news.google.com/rss/articles/CBMitwFBVV95cUxNUnRrbkRGRjNCVU9WZ1pMS1diTUhzOThSZ1F0dXBkWkt6NVlVbzVMdnV1clpNb2w3TXVXRmRHS1lIbHNCYU1YY2hsUEFQTVdRNVRuaWtZTWQ3QnRWaXhSYUhrczE5Zy1xWTlxOVFCMXlvMS05V0FDbUY5NjJNWm9Pdk1XMURDbm5QWGJWN1RFRlpNSHg1SWhqam5mVE5XbTVHV2N6WDd6T2R4LWVLTVFDeUtIM0I5Vkk?oc=5",
-     "nguon": "Báo Quân đội nhân dân",
-     "web": "https://www.qdnd.vn",
      "ngay": "2026-11-13"
     }
    ],
@@ -3039,6 +3039,41 @@
    ],
    "tin": [
     {
+     "tieu_de": "Tạm dừng lắp đặt dàn nóng điều hòa sát ban công chung cư tại dự án 59 Láng Hạ",
+     "link": "https://news.google.com/rss/articles/CBMivgFBVV95cUxOY2FQMTZYRFBSY2hhTnlRbTg1RW9xVllWUVZKWmpTMWdHUlNPS09PLUtwdzZaOUJ6UVFNNm10Z0Q0SDg2cUdKWnJ6U3UxdURzc0NYNGdxREYzSUZPbkd1bXA1SkwzVmRLa0o1UlVaWFJFYjZtSjZfdTdQSWc3TE10UkMzMWY4TFZRdW55ZHlBejFEX2FQdzhBc1dpMjdPMlZWdnVwTFZiUzUxRmhleDBDbXVPS1Ata2xVNzB0c0lB?oc=5",
+     "nguon": "Laodong.vn",
+     "web": "https://laodong.vn",
+     "ngay": "2026-11-26"
+    },
+    {
+     "tieu_de": "Đại biểu Công an phường Láng Tròn lắng nghe, ghi nhận kiến nghị của cử tri .CÔNG AN BẠC LIÊU",
+     "link": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxNMml0cDNuM3g5bTI1R3VUNWNFeWN3SlBjZ2o5S1oycWdFSkpUdDh6bWhfa0JPN2pLWVBEYjl1WjY5ZU92NW04REY5NU9xdmR4c1NaakhIUnAwTERqTGx4alFQNTlVYjZjUG9uZERjV0hVWWtkTGVrOHVOZTJxYVM2NXQtbVV0Y25Ecy1oUVVlcXZlcGFCNGxFOF80bG5NNGdyM2ltWjRIRkgwbW1qLUR1bFB1UDNaZXFo?oc=5",
+     "nguon": "CÔNG AN TỈNH CÀ MAU",
+     "web": "https://congan.camau.gov.vn",
+     "ngay": "2026-11-26"
+    },
+    {
+     "tieu_de": "Cuối năm nay, công chức nước láng giềng được thưởng chưa tới 2 tháng lương",
+     "link": "https://news.google.com/rss/articles/CBMisgFBVV95cUxPZ0NFR1Q1VDh2VW5uV0lMOUZGS2xyX3JjOVRXTHJ2U0hjSEhQRExyeFNDV2RDSklNZmgzclo0OGZkLUFnOWpEejdqMHJpWXJTNm9SYzczdVBBQzRoYW9ZQ3lqOVhkRkpoTFNBajRyLUlfOUl4Y0JyTE40algycDRfR1RCdG9jR3REYXBobFBmYy03b2d0NHpFR05UY2N0MVFsSEZjQ3Z2OXdVZy1JWmpiUldR?oc=5",
+     "nguon": "SOHA",
+     "web": "https://soha.vn",
+     "ngay": "2026-11-26"
+    },
+    {
+     "tieu_de": "7-Eleven bất ngờ rút khỏi một quốc gia láng giềng Việt Nam, đóng cửa toàn bộ cửa hàng",
+     "link": "https://news.google.com/rss/articles/CBMivAFBVV95cUxORGpaNzV6dllFNEV4VGlsaE5vMnUybHBuN1VtekpsZDBCUks5WDh3MjBaMmd6RUZISjlzUEJVYlh2N19mRWlrMGFnZFZsNW03STU0R0dpMmVlWlpoUExSUGtsVmN5bHFsaFI0TjhodjFCM0w1R3cwWFBoSTBkaE1FaWZUX2V2UTdma1F5SHV5LXAzd0ttdDU5bVJ4YjEwMlV6QjBmZ042dzhUZllCZ2Rxdl96b2hyZjlKbjdKdA?oc=5",
+     "nguon": "nguoiquansat.vn",
+     "web": "https://nguoiquansat.vn",
+     "ngay": "2026-11-26"
+    },
+    {
+     "tieu_de": "Trung Quốc sẽ xây 10 thành phố thông minh trị giá 50 tỷ USD tại nước láng giềng Việt Nam",
+     "link": "https://news.google.com/rss/articles/CBMixgFBVV95cUxPbGg5aGdPZjktUDVxMDFvcEVTcWdKMGRGbG9fN0ZBM0RCdVM0SGpfU0ZzY1lyeHNwSERCRHVxcDktc3NPSHJzMHJPa19ZUTFVU1laSXhzdExXeV9tbDdHcVZPc0JuMlBaWWlNZWxiWjlGb2Y1d1lZYXBvWUZwOF9kUHBGOHR3RUxzZzIwMUgyOHdMVm1HdU1Pbk5JT25Vc2luTnE0MEM4cThfM2VVZlhaTEdPbk5GSHY4c1U4cklxaThrSjRiNVE?oc=5",
+     "nguon": "SOHA",
+     "web": "https://soha.vn",
+     "ngay": "2026-11-26"
+    },
+    {
      "tieu_de": "Cư dân phản đối dàn nóng điều hòa \"đeo balô\" tại dự án 59 Láng Hạ, đề nghị dừng thi công",
      "link": "https://news.google.com/rss/articles/CBMiyAFBVV95cUxPeUpNTy05cXFya3htVGhpQkhvNEQ2bmhmRlpEMm9mWDJrU2NEZ2ZXc1lwNm8tRHptRXIyWEpIXzZVUVZ4S2Y2UmxqZHMxNVVJRHRDdHBkWldtZ3NBQ0s4Q0hfSHlPTkdpM0c1QjhRZF91by1RMHhVTFg5YkROOUFxYUVTOXowQ2lBVFAxVE55OGFpbUhHY09VXzNQSUV1TXlZY3QwbUNBSjNvaDFtRDR5VG94N00tSHg3bHp4Q1NBT3lnSW5YRHVsLQ?oc=5",
      "nguon": "Laodong.vn",
@@ -3058,41 +3093,6 @@
      "nguon": "Báo An Giang Online",
      "web": "https://baoangiang.com.vn",
      "ngay": "2026-11-25"
-    },
-    {
-     "tieu_de": "Gần 2.440 lượt người dân xã Tà Xi Láng được tuyên truyền, phổ biến, giáo dục pháp luật",
-     "link": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxOVktmQzJMWHdSZHZfVGtBalU1TDNyVzAtN3IwSk9aOS1aemhQTmt5ZWpYVThhWmNTTUlqcWk1b2VfNGtmaGotUDdYOUJwaUpmVXZ5UUZqM3VpR1ZFeGY1R3VkQmlzSG5NM3lNekc0M2Y4X0txVmkxTERtenlKUlpVQ2tockJyQ2J0SURlemh3a0o1TmxrVFBnVDN5X05sMnR0V3A2WHFfejRVUlk?oc=5",
-     "nguon": "Vietnam.vn",
-     "web": "https://www.vietnam.vn",
-     "ngay": "2026-11-25"
-    },
-    {
-     "tieu_de": "Bầu Đức đích thân tham dự lễ khởi công sân vận động 2.000 chỗ đạt chuẩn quốc tế mà Hoàng Anh Gia Lai tặng nước láng giềng",
-     "link": "https://news.google.com/rss/articles/CBMi7gFBVV95cUxPUlYtdzMxSU9uNmZPcUZaNHpJSUtDSGRVTmJHV2FfRTVyTFptWGMxd1hrd01ocUQ2cDNYOFFnVHNxaTVXV2V0MzdaaGtPLUFEYUpGTXJrSFA3enU3ekg4Nk9PRGZ2akItTzJKTW9HNFM0cGltVm9qMzNzOVhYWnA1TmZVemhzNWdFUlFQbXk3VXRGTnZfOU9IbGNXajhya29HbWFXdmtpZnVFeFhUbWotVHhRcUJWTG5EWmZZX1JBMDZOcGdMQkNyU3JsV2E5aXBjMDBKMGxaSXRDZ1N6djF4MEZqZTNrRTBPOVVGNjZB?oc=5",
-     "nguon": "nguoiquansat.vn",
-     "web": "https://nguoiquansat.vn",
-     "ngay": "2026-11-25"
-    },
-    {
-     "tieu_de": "7-Eleven chấm dứt hoàn toàn hoạt động tại một quốc gia láng giềng Việt Nam",
-     "link": "https://news.google.com/rss/articles/CBMitgFBVV95cUxNZDJJZ3JXSUpBV0hpcUNONHpZa29TLVBNVW1JakhPQzFrelhVMjhPUkJvY1Q0aUNYc2laaXU1MGlJWlVScFRsYzVkT0pLVGltNXRuRms5ZDFuS19hRGtZWFlYOFl0aGZ3WEpnYTlHcWJuaWxPcmFpMUoxR1h1MUozbVRXM29ManFpaEFQTVNwQl94WDBLVm51MEdUdndDcEVZY29vVjV3T1BZYldWSEItcDY3d21IQQ?oc=5",
-     "nguon": "Kenh14.vn",
-     "web": "https://kenh14.vn",
-     "ngay": "2026-11-25"
-    },
-    {
-     "tieu_de": "Việt Nam rót hơn 24.000 tỷ đồng xây 'kho điện' tại nước láng giềng: siêu dự án nằm trên độ cao gần 2.000m, hoàn thành chỉ sau 17 tháng",
-     "link": "https://news.google.com/rss/articles/CBMiggJBVV95cUxQSVBwZTR6bHNxSW92TGRYZXpfWGlqM19uSy0xVVkxM2FyYlhxM1gzU3NnNmNtaUlTTW9ZTEtLaUIwX2hoNFVXRGVnMFNmWVgwR0ZnOTM2VDU5TzROY2JpWGtXV0MzeFpiYnJFWGdjaG9XQXZfNTZETmdQam54aWF2SE5zdlNwcm5ULVZ0UF9NZ3A5djFUekNCMjJsQW1rVEZPM08xNXlMQjlLQ0VYQXV6R04tMkZrelZIQWNqMk9zVFpFa3ppTG1ZYm41RnRpSUI1bFVCb2ZQeXNQSzNPaHNTeC1NXzFjNVktT0hmS3dRaWd4UWMxRUZlTG9uYXFmci1waXc?oc=5",
-     "nguon": "Doanh nghiệp Cuộc sống",
-     "web": "https://doanhnghiepcuocsong.vn",
-     "ngay": "2026-11-24"
-    },
-    {
-     "tieu_de": "Nga đón tin vui 60 tỷ USD từ nước láng giềng Việt Nam",
-     "link": "https://news.google.com/rss/articles/CBMimAFBVV95cUxNQ285MzZLRF9GTHBpdXRiQktvWEVzNnBoeDJnSmNMWE52RkJySFdiSm5hakprbFhsNFQwRm9RRUFwS2FDbWEzenVERHo3SUV5aV9obFA5Vm8wN3hHZ3hIMjBYdVRvX2VTZHpka0N6NlJnb2h3bENjdHk3dDJVSnhvTHJPUWVxWWVmclRBNW96VURXRkNVR2Nvdg?oc=5",
-     "nguon": "CafeF",
-     "web": "https://cafef.vn",
-     "ngay": "2026-11-23"
     }
    ],
    "tim_them": "https://news.google.com/search?q=L%C3%A1ng&hl=vi&gl=VN&ceid=VN%3Avi"
@@ -3131,6 +3131,13 @@
      "ngay": "2026-09-20"
     },
     {
+     "tieu_de": "Giầy Thượng Đình thay Tổng Giám đốc, đón nhân sự mới từ Vinaconex",
+     "link": "https://news.google.com/rss/articles/CBMirwFBVV95cUxPcDBHbExNakNfLVdUV2tqTGRKWXlvZXRrVEZYQWU0djVna3IwdjF1OTVEZmYyQlg1R2xFYk94Ymx1NTNOVllVaFhwTkh3TE5IZFRzUjN4cXdKODdZZGlrQTBxY1Y2NVB5SWRNRUtZWmgtcm5ZWklEYVVwbUVqMmZXN1E0NWNfSmJJUHJ6LVRBSW9FMTRZcjRaNS1mYjE5NGU4WC13S1p2bXEwN3BaNXdF?oc=5",
+     "nguon": "Cộng đồng Kinh doanh Việt Nam",
+     "web": "https://vietnambusinessinsider.vn",
+     "ngay": "2026-09-20"
+    },
+    {
      "tieu_de": "Giầy Thượng Đình bổ nhiệm Tổng giám đốc mới SN 1977 trước đợt tăng vốn gấp 23 lần",
      "link": "https://news.google.com/rss/articles/CBMivgFBVV95cUxQSHNmZ1hHMUZpUjhoWnlBUHl6a2lRVmEwZDlSMTk5X1h3bU1LSjZNZnVRdnF4Z2E1dkdyN3NQUjVxbUtESzExUDFNaXlMSWxRR2Z4b3p6WFEyVU9SUl94SXdrbXVkVXRSR0N2YkNIRGNNTlhPOU9YQzRUeXRJVDRpY01pblktbFA3enRCMTZVOGdsM2JYZ2hILWxvWEdlel9WSXJmYUhvS3ZqWVdURVNPWXNVaUpObm4wZE1fYjlB?oc=5",
      "nguon": "CafeF",
@@ -3150,13 +3157,6 @@
      "nguon": "Tạp chí Bóng đá",
      "web": "https://bongdaplus.vn",
      "ngay": "2026-09-19"
-    },
-    {
-     "tieu_de": "Giầy Thượng Đình thay Tổng giám đốc",
-     "link": "https://news.google.com/rss/articles/CBMib0FVX3lxTE5Pd0hWTDBZRDJDdXZuajN6TEdYZS0xcWRvY1oyYUctT2ZEMEp6Njg4QVo0QjVSc0NNZF9tX29tUDRYalprbFc3X3Zybl85WW81cWRNemtXVTQ2cVQ2ci11dElvMFVMdDk4eUlvX2V2cw?oc=5",
-     "nguon": "MoneyF",
-     "web": "https://moneyf.vn",
-     "ngay": "2026-09-19"
     }
    ],
    "tim_them": "https://news.google.com/search?q=Th%C6%B0%E1%BB%A3ng+%C4%90%C3%ACnh&hl=vi&gl=VN&ceid=VN%3Avi"
@@ -3166,6 +3166,13 @@
     "Vành Đai 3"
    ],
    "tin": [
+    {
+     "tieu_de": "Vành đai 3 TPHCM có kịp thông xe vào cuối năm nay?",
+     "link": "https://news.google.com/rss/articles/CBMiowFBVV95cUxOVHlQeDliamM5dkw2ZWZ1aXBPRmpnSGxSSzREVFF0RFVUMURJZVl1NllwNXFjdXZ0Z280MWdzNXItdk9mS01rZGNqZTJfc3V5Yk84WFJ6aHFHREEyZjNSRTl3aE1fQnpYQTg3SlBIX2NUSDRVTk1VSFhVTkc3X3ZTRWFvNlIxc3JJRWs4eUVjd1BfY2J3TTRmUzVyYmNvamVGMUFv?oc=5",
+     "nguon": "Báo Dân trí",
+     "web": "https://dantri.com.vn",
+     "ngay": "2026-11-26"
+    },
     {
      "tieu_de": "Phấn đấu 30/11 hoàn thành 17km Vành đai 3 phía đông",
      "link": "https://news.google.com/rss/articles/CBMijwFBVV95cUxNc0tfX2M3SDRyaGVJQzhTMDFHUG9fNldHRDZUWlhqTU81bWhyVGctTEg0eHowOFZSYUM3QjE2ZzdvVUEyRUlQWXk0a2NwLXd0WDNwdE1NN2JhMm5rcnMyYThnLTVSbkk0Wi1ZdWxpRVR0a01xeDFjNzJLWTlLbFU0WHIyY3pHekk4ZU05b19rdw?oc=5",
@@ -3214,13 +3221,6 @@
      "nguon": "Vietnam.vn",
      "web": "https://www.vietnam.vn",
      "ngay": "2026-11-23"
-    },
-    {
-     "tieu_de": "Vành đai 3,5: Tập trung tháo gỡ điểm nghẽn, thúc đẩy tiến độ các dự án thành phần",
-     "link": "https://news.google.com/rss/articles/CBMiugFBVV95cUxQaG1pSkNwSUVMT2NOYlFDSlo0MzN4ODlQa1FhbFVOb0djNzFtVGU3VjZGenZzN0ZzR1IwWHUtdnBOQ2diQ2ZoYksxZWUtaXhXQlN3R1Fqa3M4WDMyRklpN2F6bm1lSloxSGVScFh1TDZmOS1GME9iYjgwX3IzbWd2amtmSFVUdGt3Z0VEM1d6R1BqbExmdm5uRklabHN0V2lTVlRfYnBMUnpKSlFoRFZ2TDFEOERGMzRETkE?oc=5",
-     "nguon": "CafeF",
-     "web": "https://cafef.vn",
-     "ngay": "2026-11-22"
     }
    ],
    "tim_them": "https://news.google.com/search?q=V%C3%A0nh+%C4%90ai+3&hl=vi&gl=VN&ceid=VN%3Avi"
@@ -3230,6 +3230,13 @@
     "Phùng Khoang"
    ],
    "tin": [
+    {
+     "tieu_de": "Hội đồng Mục vụ Giáo xứ Phùng Khoang lần đầu tiên mừng kính thánh quan thầy Mác-ti-nô Thọ",
+     "link": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxPWVM0ZDdxd2NLeHVRcmtYelNCcDJrcGNaZjMzemdQQzh3TnhQSkd3RDVIN1NzNmlrWjMxbkRzRE1FWGQ1RWlmOGhwU2lwenM1cjZsNXRTcG82NFhHbDBJY29SejEwWWpBMHZOTU9vTklZeFJJeWZoaWVELW1TODhGWERuQ0Q5WDBfdW5GZ19BdGlMN1pJc0hnZGwwYlA2UElJNHU5dHZDc0taYjhYWDhkZXdfbkk0RzhkRWdmZXFkcGZ0dw?oc=5",
+     "nguon": "Tổng Giáo Phận Hà Nội",
+     "web": "https://www.tonggiaophanhanoi.org",
+     "ngay": "2026-10-30"
+    },
     {
      "tieu_de": "Hiện trường vụ cháy tại Phùng Khoang: Xung quanh có gì?",
      "link": "https://news.google.com/rss/articles/CBMipAFBVV95cUxOUDhXOHdIR0g2ZkRmcUQ1bG1tZmNtaURWaG9LX2VkYUlUYlpPc0pVUlI1Q2MwTnhCTWRIVHJUQjZFTkRYdFZHUl8wRjZneDBnR2xLZXpHSk55RzI1SmZpMEViamRrNUNMTFpHWFh3M2dua1RCVVZXUmNMMlYwbVIwZ3NwUDlmNUtQT0VKMFlfUHlvaWtsWHBUSUlKTll2Rnk4S3RrYQ?oc=5",
@@ -3277,13 +3284,6 @@
      "link": "https://news.google.com/rss/articles/CBMingFBVV95cUxNY2lmNmZLRmhCVEM5ZEcwZ19melBJUWtyNTBXQlg2S3o1NnRMd0hCTzhubGdlZWx3WTVwNlNnRE5EdUV1RWt5bFpJaC1wXzhvTWVEblIwbUppRE9QTkNoYjhjeDdCdGE2S21sWE1FT1RGcEZEZmRIMi1fRXE2T2Z5a2Z5cTVaX0lRWjQzUm9uMlJYVU1IUkJQcFBqY1hDdw?oc=5",
      "nguon": "Báo Đại Đoàn Kết",
      "web": "https://daidoanket.vn",
-     "ngay": "2026-10-19"
-    },
-    {
-     "tieu_de": "Dãy nhà trọ ở Phùng Khoang bốc cháy dữ dội",
-     "link": "https://news.google.com/rss/articles/CBMihgFBVV95cUxPYTBYSVpKTFJYZHVmaGpPWHpaS3ltZjFHdElZTVpIZmNPaE9jdXJ2eVV1WDF6cEZPVTVleGE1elhvWGZLdXQydUtNUGJyUEhJX29HSVI3N0RUTmdZeWhsYkwtMlVWQlcwNmhqZkh6RGxIc1Mxa0JFemVKZzhZaG5EYmhTWHRqUQ?oc=5",
-     "nguon": "SOHA",
-     "web": "https://soha.vn",
      "ngay": "2026-10-19"
     }
    ],
@@ -3537,6 +3537,13 @@
    ],
    "tin": [
     {
+     "tieu_de": "Cần đảm bảo chất lượng môi trường xung quanh ga Yên Nghĩa",
+     "link": "https://news.google.com/rss/articles/CBMipgFBVV95cUxOVlI3RFY2X1NweDNacF9peTlTaHlqZEd5X1htY0d0aEczSW5MWl9SSlZ2VkRqU1RHZmRzNi0yZjNHY2JmcDNWX0F1ejJteXhGdUoxdzF5SExyb3NMSFp3ZmRZcVE4ZktDMWJHNWlrNXFhUkFfU3BGQzRwdk1MUjNsT21GR0xTOFZvNVhnMFB6SF9FdUhNaEkwZG9kWDRZa2FsQzAtQjdR?oc=5",
+     "nguon": "Báo và Phát thanh Truyền hình Hà Nội",
+     "web": "https://hanoionline.vn",
+     "ngay": "2026-11-25"
+    },
+    {
      "tieu_de": "Phường Yên Nghĩa đẩy mạnh số hóa hồ sơ đảng viên, lấy chất lượng dữ liệu làm trọng tâm",
      "link": "https://news.google.com/rss/articles/CBMi3AFBVV95cUxQRWxwS01ybGVvM3Vxa0hmRk9VMnVXbzk4VTNMTzlYNFF5azFnbFlXb3pxWkNNT3lMbEdaSWt1aGVEbVFBTV83WDNYQzRkMzNyYlI5NjM5VGVodWxaT1NkUW1YaDE3WHV3WFNLR2RMN0FBWEJiTXR3UEtaTEhyR0t2U25HeWxlZXhrSk5jblAzUk5GeW96bkU4WXVURm02MzE0d2RSSTNDd3ZTTEM4TUlTRzhLR0o5X2lIZUphSUdqTWFodV93UHZfcVdVM2JwdmYwb3pNN2ZGWWZUX0lj?oc=5",
      "nguon": "Thành ủy Hà Nội",
@@ -3565,6 +3572,13 @@
      "ngay": "2026-11-18"
     },
     {
+     "tieu_de": "Yên Nghĩa, Hà Đông: trung tâm thương mại 83.000 m² sàn cách ga 250 m, đất giao từ 2003, giờ mới lên?",
+     "link": "https://news.google.com/rss/articles/CBMiQkFVX3lxTE50MUE0WHowQWJKN0N6VXlMM2RZTUF2YXpKSjVGay1qR2haYjlYdmRGRUx6aUlqZE93TjkwWF9RbHBPdw?oc=5",
+     "nguon": "YouTube",
+     "web": "https://youtu.be",
+     "ngay": "2026-11-18"
+    },
+    {
      "tieu_de": "Nhà riêng tại phường Hà Đông, Dương Nội, Yên Nghĩa, Kiến Hưng và Phú Lương hạ giá sâu, có căn giảm 5 tỷ đồng",
      "link": "https://news.google.com/rss/articles/CBMi7AFBVV95cUxOZVFGTDhRNkRyRnYzZENnRGEzMHptX3BRLUI2dGU0R2RsNlR5cjlmendzUzltc0t6bEcwaDlCTnhsQWNHN1N0MFZ4Ql9VMEdpWjJLVU9vcGZxTTk3YVRPbUYzQ3ZZaV9nT1o2THkyVXdiVzBOZG5uMElUSHlfYjhSYUZUVVJLVzVOS0Q5VC1pUzVoaUlxV29pNWlSWlR3eW84NGZPNlhwdzlUSDhIQ01nX2E2anB5UGVNcFV0TldSYzNnMGxxYUNucGlsZ2lxRmszSzNPUVJjVFlSWUJYTmRzSDZCTEVZQVlVSS0tZQ?oc=5",
      "nguon": "Tin tức 24h",
@@ -3577,20 +3591,6 @@
      "nguon": "Thành ủy Hà Nội",
      "web": "https://thanhuyhanoi.vn",
      "ngay": "2026-11-17"
-    },
-    {
-     "tieu_de": "Cử tri phường Yên Nghĩa kiến nghị tháo gỡ vướng mắc về đất đai, hạ tầng đô thị và các vấn đề dân sinh",
-     "link": "https://news.google.com/rss/articles/CBMi9gFBVV95cUxOZXlwZGdncGdEeDBFMjdNaFV0ZDYyakQwX2VQbFJIbE05eU9UOWx5bmZKbFFzUWl4dm44Q2ZmUC1oem5lOURfbVJmc1FCNGZhcTlkckRkbU8xTDVTdXBUQ1c3Z0NrLU5hRVNPRXVSOUU4amZCY2hYYWlCT2JVWXpaenFYNkVkb3hxaVVrRUhMcWZfX29hWHdRNmdhbk5nZ3VLQk1mSE9zbzgxRGxXTjJTUjI3X01BeVNycnRTZTdwMjBVRE1HbFZVem5oaVZHTEJIbTFORXg3RF9qRDdXSjVDWDEydC1JaVl4QXN5dlFWa1RrNnVuT0E?oc=5",
-     "nguon": "Thành ủy Hà Nội",
-     "web": "https://thanhuyhanoi.vn",
-     "ngay": "2026-11-17"
-    },
-    {
-     "tieu_de": "Ninh Bình: Không có đối thủ, Xây dựng Đình Văn trúng gói thầu hạ tầng kỹ thuật khu tái định cư Yên Nghĩa 52,571 tỷ đồng",
-     "link": "https://news.google.com/rss/articles/CBMi6gFBVV95cUxQLXZrbFMwV2pab2theW9NMTFYd0k2dThpN1ZkM004R3pSNFRsT3Yyejh3ZGpDdUlPZU4zREk3RU5ueUZ0czREX3dSMjNHNlJqVHZOM3Z4N2E5S2NMSGNNdE9SbEhMV2FQZ0tNaDVjS2M0bVptdmdvZ3Q4TW5LVFlCZjVnQTQxMVdWVEtfZDRmSUFLUjdyODFYQ3FxUnh6LXgyVGc0Q0RIZUlMNDdXTlpUOWxTSmNVTGNxbTlidThNWTlIck1tN0FrVm9yZ1RKektGUVA1QnBPTzRrejBvSy00bWl1Z3B2SE44aHc?oc=5",
-     "nguon": "Báo Đấu thầu",
-     "web": "https://baodauthau.vn",
-     "ngay": "2026-11-13"
     }
    ],
    "tim_them": "https://news.google.com/search?q=Y%C3%AAn+Ngh%C4%A9a&hl=vi&gl=VN&ceid=VN%3Avi"
@@ -3600,6 +3600,48 @@
     "Sân bay Gia Lâm"
    ],
    "tin": [
+    {
+     "tieu_de": "Sắc màu Triển lãm Quốc phòng quốc tế dần lộ diện tại sân bay Gia Lâm",
+     "link": "https://news.google.com/rss/articles/CBMivAFBVV95cUxQZ3ozT3FYQ2hDSHBzWVJ6X0tCRW9wWHY3cHN3R2dCN19GNWxrbVN2dF9vWjNoNWJFbFU5Y25SSTZSSUF5X0hYanI5OUFXdzE0a3BlVTE5NHd2dWFiazVOb1RJRFI5RHRENHpsMVVhaTN4ZWYzd1dkLVJWYWlhYnItS0puc3huTUdwSjNSdm5ZYU5zVXRsaEV5cjN3R0lCSWNCNkZFY2VXeXFpX3l0V3BXQ1Y0bzl2M0pfd25hVg?oc=5",
+     "nguon": "Báo Dân trí",
+     "web": "https://dantri.com.vn",
+     "ngay": "2026-11-26"
+    },
+    {
+     "tieu_de": "Video trực thăng kéo cờ Tổ quốc trong buổi hợp luyện tại sân bay Gia Lâm",
+     "link": "https://news.google.com/rss/articles/CBMirAFBVV95cUxNcmF5ZnVLc24tSkdYRDRZMEFIS0NxNVU2dEJDZEdZLUU0aTB5VFVTZDB0Z0ZKanMteFhBcGJGMUtGMmk0OFlITG12X1Q5N0UybG84QnRndVZMUUoydkEtZjYtMk9FMTF4bGNFaXZ5VnlVNlAxemtNM1IyVGJwNU5rbWN3MEltT0QzdFZTOTI3dUI2elluV1pFMTJsWEhuOFJkU1gxd2VEMVhneGE2?oc=5",
+     "nguon": "Báo Tuổi Trẻ",
+     "web": "https://tuoitre.vn",
+     "ngay": "2026-11-26"
+    },
+    {
+     "tieu_de": "Ba trung đoàn không quân hợp luyện kéo cờ từ sân bay Hòa Lạc tới Gia Lâm",
+     "link": "https://news.google.com/rss/articles/CBMirgFBVV95cUxOWk45N1UtOFZ3WXluWjZvdXlYNGdUaF9JdFJMalFSdFUzX1JfclFIRmFDc3Znb2tMSGo2aEVCbVVVU3BxNms1cXBPczQ2TEhRNVpLOTZ3Ym92WnZmb2tscnBxSXlSWHBwd2FidXdxa2FtTHR2dlBaNHB3OHVfc0J0NkwydTNKMWc1ZHI3Q0tsc19vTkM1elRfbXdva1JWdXllV0JzVmw4UVd1ZkdyR1E?oc=5",
+     "nguon": "Báo Tiền Phong",
+     "web": "https://tienphong.vn",
+     "ngay": "2026-11-26"
+    },
+    {
+     "tieu_de": "7 trực thăng bay mang cờ Tổ quốc, đặc công và các biên đội UAV hợp luyện ở sân bay Gia Lâm",
+     "link": "https://news.google.com/rss/articles/CBMiywFBVV95cUxQYU5MODNLd3c5U1RPWUtpZG54SFp4UXB3LVNQTEpJMUtLcVNZREJmVk9sUGN3ZXFYd0hNYlNwaS1mX29ISE5sUVRidzNjZTdRQzdGYlY0Ynl5d2VNRFpVRTBVQkRsX2xlY2pjRmFfVC1IaE9JdG8zS0l5eDV6R1RwRWFSTWZETTN4RXJVYWxRbDNCVkhYeDNodnB3cmlTbWY1OWxZSEdNenVyS2xOejN2RUh6Q21vTlBnY0ZXVVltYl91UGs5TVhuZDNFQQ?oc=5",
+     "nguon": "Báo Tuổi Trẻ",
+     "web": "https://tuoitre.vn",
+     "ngay": "2026-11-26"
+    },
+    {
+     "tieu_de": "Bản tin 30s nóng: Không quân và đặc công hợp luyện ở sân bay Gia Lâm; Nổ kho dầu tại Thái Lan",
+     "link": "https://news.google.com/rss/articles/CBMixgFBVV95cUxNMHpiOWR4eTlqbHlqSGJWZU9CYzd1RGNFZVEtRjVoZWpiWWMxb0ItNFVOTkVJS0o2UGw4ZjF0RWdtR054UTB0WnpzdGVubVI3UnpEZnVZa191Yk1uMDdiaFNlVWZjc0FEeXY2aDFpZW84UFF0Y19TbmJOYjNNVEtUSDhyeVRnZDBiUjF4R21iWVpkaGFvUXA5dEJCcU9PbWxvS2pGR25famxYRWtoTnFDRWhwNmVRamhPUXdncWpRSlExRnR2Mnc?oc=5",
+     "nguon": "Báo Tuổi Trẻ",
+     "web": "https://tuoitre.vn",
+     "ngay": "2026-11-26"
+    },
+    {
+     "tieu_de": "318 đầu mối, công ty từ 37 quốc gia đăng ký trưng bày tại Triển lãm Quốc phòng 2026",
+     "link": "https://news.google.com/rss/articles/CBMivgFBVV95cUxNSzB4a0J0RzA0c05tVjJOeTFDeXp0ajFQaW9xUllSRGpGdkVieGtoUV9fYURIZHoyV3lwYnpWOWMwVW5sc0NFTXhySGoyLTlJMXhRLXg2bzFFUTBLZHRDVUpwNlJxbzJDMjlzZ1BMcmloSHZiemo5a2pEVFNtc1BWbU11NHFxSzVpVXBQRFJTM2ZJM2FuQmFBU2xhZ2ZOVnJPRS1teDEyR1NCVTdoc0F3aklSR0J0ZjRRbXE0dmZ3?oc=5",
+     "nguon": "Laodong.vn",
+     "web": "https://laodong.vn",
+     "ngay": "2026-11-26"
+    },
     {
      "tieu_de": "Nhà máy Z113 sẽ đưa UAV lưỡng dụng và đạn pháo Hải quân tới sân bay Gia Lâm",
      "link": "https://news.google.com/rss/articles/CBMisgFBVV95cUxQalNuQlZZOW54V21rM2MwYjJRV0xBdlpwdkRSTUVyQTh4VVR5cUMwaXNtajd6NXFhUzFaTWdUR0VwTUxpX2ZkaFJha0J2TWMyZGdWcnNBN29XbEoxeXNQS21YNjBaY1N0ZXFBVWt4SXFfdXlWMEhpYTdJR0JMc3UwLXpwZnFucGIyR1hpQUxnUVMwOWVmcWh0MV92dkZmRUdRZlpqdU9zUk1HSEIxYUdzYy13?oc=5",
@@ -3613,48 +3655,6 @@
      "nguon": "VATM",
      "web": "https://vatm.vn",
      "ngay": "2026-11-20"
-    },
-    {
-     "tieu_de": "Đặc công luyện ngày đêm cho màn võ thuật đặc biệt tại sân bay Gia Lâm",
-     "link": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxQUnVqQ1V2YmZWeE5xR0tIWlotdkF3RXY3UDZtYVNEU3VUb21TMXRGYzUxVlVPV29nS2plWUhxdGxrbGpBckxoenNoSUVYckI2M0JiYlRQUVk5dTRNRUttNnlCNVZmRDd2Rnh3dHRZSUE2YUhHZF82T21hMGdCUFdZSE1TMk9XSkVCWkxIcWtWTXY1a2JqVVhvbDNIRXlsY1FZS2lmaFEwSmdZZw?oc=5",
-     "nguon": "Báo Tiền Phong",
-     "web": "https://tienphong.vn",
-     "ngay": "2026-11-11"
-    },
-    {
-     "tieu_de": "Đưa tinh hoa ẩm thực ba miền đến với bạn bè quốc tế tại sân bay Gia Lâm",
-     "link": "https://news.google.com/rss/articles/CBMirwFBVV95cUxNQnlmdEx1U3EwNklJMzF0T0xOMlJfY0h0TzZrZkFTMDVsSmJsMkQ4TmlDdms4VmZzOXlIM0gwcHp5b2trVm1YLXVscTM4aW9zUENsS0k2al9iVW5PaU9XR3NFTjRKdGhCdXVCaC1zZ096bEV4RERQclJaVUsxYjlvSWhpVzRKMUJkZHlrLU1mVGlGbi1xZ3hTY2VUTjROQ1hPU21namlMSHJYWlowbmhN?oc=5",
-     "nguon": "Tạp chí Hàng không",
-     "web": "https://tapchihangkhong.vn",
-     "ngay": "2026-11-02"
-    },
-    {
-     "tieu_de": "Đúng sáng nay - 21/10, sân bay Gia Lâm ghi nhận một máy bay vận tải quân sự của Việt Nam thực hiện sứ mệnh thiêng liêng hạ cánh",
-     "link": "https://news.google.com/rss/articles/CBMi-AFBVV95cUxOUTRsclpDQWR1TTZqQmxhMC1ZMHZJcFJSd0tqeWN5czA1QlJ6X2hBSDUzTTBFNlFGaU5jTE5Rdk5GeHM5UDVyN0NkSEJINE9QVVZiNWp0RVphVE5EbjFwOTBNWGljSVRpZ0VfVWV0NVZMVTZQOVk4ZzZvVHluZjg0cWlpYk5GMTRWWFRRRHhRaVVKVDZZRC0za0lCZG5aTzdJUk1qRGZzT2hmdUlFNGZqN1ZUV0tMVHVtSGlycWpsdm44TXIwYlBoa25KYVI2akx0d083TTBCcHVFeVlhb3lBS2hsejJkdmdmamJPLUtVODJjcW5NT2xNRg?oc=5",
-     "nguon": "Kenh14.vn",
-     "web": "https://kenh14.vn",
-     "ngay": "2026-10-21"
-    },
-    {
-     "tieu_de": "Triển lãm Quốc phòng quốc tế Việt Nam 2026 sẽ diễn ra từ ngày 10 đến 13/12/2026 tại Sân bay Gia Lâm",
-     "link": "https://news.google.com/rss/articles/CBMi1wFBVV95cUxQNk5oZTdIWUoyeExHWXg5a1NYdlBEdTR3NUw0aTUxZ2VSZUhDM0EwMTd5OVBadjVybzc0MzlyVUNsS2M4dk91bGxDTTl3SGQxQTBOOGNCRVMybUpvVTlWcFRRc1FYSVhJblRZZEtvcjNBLTlHTGFJbkZwSlYwbFkycC1Ua09IMDU5Umdwd2ROZ2J3SW5jVFpyalFMWE82R2NldWt2RjRoeENrRXF4c2dNOVd0ZWdXNDkyLVJsYnRSUTB5UXJodUxCXzRFX2RRY1ZBSXpWd056aw?oc=5",
-     "nguon": "Pháp Luật Plus",
-     "web": "https://phapluatplus.baophapluat.vn",
-     "ngay": "2026-10-21"
-    },
-    {
-     "tieu_de": "Trang trọng lễ dâng hương, vận chuyển, bàn giao mẫu sinh phẩm hài cốt liệt sĩ tại sân bay Gia Lâm",
-     "link": "https://news.google.com/rss/articles/CBMi_gFBVV95cUxPei1yekFqZ2VSVk1NQUxrQTN2VXJ6SWl1bExhVGZNQURGcThRMmZxcEhpZTBtdnM0Q1RWS2tfYnQtTjdTcDloU25jZGhtTmZtVzJNZG8zTmlQMWU1V3g4aGx2X2xUVUdicHlqT0Ffc094em10bEpVdXhGbkVVU3BEN0YxUDF2enFMQzZJZFEya3ExTTlidXdsZ1EyaTJGLTVOSDhnZVN4SUI2bHkyVmdrWlR6b09VNDV3bVhuN2hhQ2psVEFrdUZDNHNtUjJxeFZEckdlczZ1R3FrMkFwTl9URGZzWFJ2TjVHaVJiaWhUeUdCajdzN2Z4NHQ3bUp5QQ?oc=5",
-     "nguon": "Báo Quân đội nhân dân",
-     "web": "https://www.qdnd.vn",
-     "ngay": "2026-10-21"
-    },
-    {
-     "tieu_de": "Triển lãm Quốc phòng quốc tế Việt Nam 2026 sẽ diễn ra 4 ngày tại sân bay Gia Lâm",
-     "link": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxQOUlaNTdzR0twV0ZpZVZjNTBNTkEyTWt1R3gtVnRUV2hsSUFaRGxvNjI5Uzh3SV92MjVoM3d6Nkx3NnZBdXNjMTR3czZTcUFSS0xJb00xYzJTdVR1OVNpVDRmMkhvUnNCR2V6bVRDZmN0QWZ1YUVhaG9qV3liRE1zR3g0RTZNV1ZjSkpWbUUxYWdWbDF6X1EyYmNYaWRPbkU1M0ZSaWxxd0tLQzJDWmh4VWhqQ1ZFeE5DYVhJ?oc=5",
-     "nguon": "Laodong.vn",
-     "web": "https://laodong.vn",
-     "ngay": "2026-10-20"
     }
    ],
    "tim_them": "https://news.google.com/search?q=S%C3%A2n+bay+Gia+L%C3%A2m&hl=vi&gl=VN&ceid=VN%3Avi"
@@ -3783,6 +3783,13 @@
      "link": "https://news.google.com/rss/articles/CBMinAFBVV95cUxPVEF1VDFrVzVfTjg0TGhQXzVsajVZd3N1WVNNZWRkMWN1bUFhdGx2VGhlcVNHaEMzdGZTZmpDakFxaDltRUFnSFpvRkxSZHQyUGlnY0ExVEU2aGZzV3EtZ0E0cU1QZ1NyMzJVNDR5dFFCcVZ0REEwdWhGNkFza1NvUkllZXNKeER5S1VJZ29LeWhicDNKV0ZZUklYTV8?oc=5",
      "nguon": "Znews",
      "web": "https://znews.vn",
+     "ngay": "2026-09-06"
+    },
+    {
+     "tieu_de": "Xử lý an toàn 2 quả bom được phát hiện dưới sông Hồng, gần cầu Chương Dương",
+     "link": "https://news.google.com/rss/articles/CBMisAFBVV95cUxPM3YzV3VGOG5RUzdBbHRvMXNzRFVENTlKSW9zWlB6ajRfQTdYa3NIZUk3RlBUQ01tN0pMaWtrczAzWFF3ZS1DMHRQeURoOUhMVUxTN1d3T1FQX2Vua2ttOENDUEdHNU9RdVl5cHhhMk5jNnh5UFR0TDlFTWVkXzRGOVBCYmJwZWtpR1FlMVZBUDdrazR3MzByRzFXQlNzUTcwTndJTERaSUduSGRlNnc3MA?oc=5",
+     "nguon": "Báo Tiền Phong",
+     "web": "https://tienphong.vn",
      "ngay": "2026-09-06"
     },
     {
@@ -4021,6 +4028,13 @@
    ],
    "tin": [
     {
+     "tieu_de": "Giao thông Hà Nội sáng 27.11: Cầu Vĩnh Tuy, vành đai 3 ùn dài",
+     "link": "https://news.google.com/rss/articles/CBMijgFBVV95cUxPdGRsZVl0T1k3ZUo5SzFDbmhyXzloWW1aS3FsMUdIMDdGWmJHM09LcTI5YVcwQUhsX1lhUUZjbFp2d2ljV1BuOFV1aC1EV1R5TEl5aFNvNGgtS1JXS2lhTzMwZ0hSMWYtV3Q4dVdQZEdOVEQwdzJLeko5bTNFaTJJX182ZFo3akx2UzZmbjln?oc=5",
+     "nguon": "Báo Văn Hóa",
+     "web": "https://baovanhoa.vn",
+     "ngay": "2026-11-27"
+    },
+    {
      "tieu_de": "Hà Nội: Người đàn ông bỏ lại xe máy trên cầu Vĩnh Tuy rồi nhảy xuống sông",
      "link": "https://news.google.com/rss/articles/CBMirgFBVV95cUxQQy13R3lIV25WaTllVVpoMV9rU0d3elhuaXJHMnE5bno2cFBJZGc0b1MtM1pmUlpSZnFrbXJocWN1VFRQbE1EZjc1cWV1SWdTRnZwWlJKR255TUhOOGhrdDBtcjFwUzdWbkRLSnl5a3Y2NFZWdHNaUjduM0hBdEZRLVBqSWdKd2VTSVB2YW1nRGZtaDF5T0tJM1VMaVlrVWNKbnRIamRYNU5TRk84UGc?oc=5",
      "nguon": "Báo Tiền Phong",
@@ -4068,13 +4082,6 @@
      "nguon": "Báo Dân Việt",
      "web": "https://danviet.vn",
      "ngay": "2026-10-30"
-    },
-    {
-     "tieu_de": "Xây đường Cổ Linh trên cao, kết nối với cầu Vĩnh Tuy và cao tốc Hà Nội- Hải Phòng",
-     "link": "https://news.google.com/rss/articles/CBMi1AFBVV95cUxQMklyU2UyQzV6TFFUbWVzOGhGaGRXbE80ZzByNl9yb083QUcxUWd1WHdpMnNUZHVVVkJtM1dJdFdUcW90RWZQU1lrZHFnYW1Bel85b3JGUHFDZ1FzcHIzYkJ6VlFkaVBsTGN4SkYxUV9ZUnJScEFGMk1EYnZYWlJYbTZzYTc2UVNJWGttdWR2RnY0cmxnaS1abVhENGVpeTF0b2RWSFdrU1FBU1kwaVJYX3FnMnYzUTlRejlKaGFfMnFLRnRKUTg2QldrSDc5dUk5VmFCcA?oc=5",
-     "nguon": "Tin tức 24h",
-     "web": "https://www.24h.com.vn",
-     "ngay": "2026-10-27"
     }
    ],
    "tim_them": "https://news.google.com/search?q=C%E1%BA%A7u+V%C4%A9nh+Tuy&hl=vi&gl=VN&ceid=VN%3Avi"
@@ -4185,6 +4192,13 @@
      "ngay": "2026-11-17"
     },
     {
+     "tieu_de": "Hà Nội đẩy nhanh tiến độ xử lý nước thải sông Cầu Bây",
+     "link": "https://news.google.com/rss/articles/CBMikgFBVV95cUxNZldQSVZXYjAxdGEtTXdvRkhoNl92NURGLU9wTjAwTWdHZUIwWjhWeVEwV1NLUHR1TzBISklTdmZ2Q0plOWpMMFpBZHZQV3dUdXMyLUdiT0ljbmRIZVNoUWY4NnZUZ0g4X3Z5b05BTjR1Rk9Qd2p0cjJucHdMdFA5SWp5UnNORmt0ZnE5VE8xM00wQQ?oc=5",
+     "nguon": "Báo VietNamNet",
+     "web": "https://vietnamnet.vn",
+     "ngay": "2026-11-17"
+    },
+    {
      "tieu_de": "Phấn đấu hoàn thành 5 nhà máy xử lý nước thải sông Cầu Bây trong năm 2027",
      "link": "https://news.google.com/rss/articles/CBMixAFBVV95cUxPR2pBT3ZFRlQ1bXFuZzdBMjI1V0dmem91MnRtdTM3S1pub3JTRE0yaUJkYUJGOFVtcE05ODljX2ZpWDE2MjA5S2xKcVlfMFYwN0xPWFRmaVdWSVJiUFhBWFQ1TGVvbmFTcFVUOURreVJmMllZbzlZd1RHaGl6ZlI5dGN5WWtYeDI3SHF2cjd1b2Qzb2FGLXJnRlpkQUp4YWZGaDJkUzZJZlVUTVNnSXZyZG95eXhJTmtGLWtLdXNBeWs4RlYw?oc=5",
      "nguon": "thanglong.chinhphu.vn",
@@ -4211,13 +4225,6 @@
      "nguon": "VTV.vn",
      "web": "https://vtv.vn",
      "ngay": "2026-11-14"
-    },
-    {
-     "tieu_de": "Xây dựng 5 nhà máy xử lý nước thải, cải thiện chất lượng sông Cầu Bây",
-     "link": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxPZ1BHaWg1dnpNNkNHMUNJVGtEZnZXd05qbE9raFBoTDZubFNCR3dQYnBPZWk5UGJZWWFiZ1pPRmwzMUw2RWppQWZvaWs5VzkxZ3Vncm9zZV9JNXZIUlhVRVUtOXE4Qm42MWRUNjhMNnRueWU4b3RIcjhwcy12YlhXc09YZWdsZVVpNWxDbmNJWXlNN2R0YjZmT00ydDRHRnFXRTRraTJkUS13Zw?oc=5",
-     "nguon": "VTV.vn",
-     "web": "https://vtv.vn",
-     "ngay": "2026-11-07"
     }
    ],
    "tim_them": "https://news.google.com/search?q=C%E1%BA%A7u+B%C3%A2y&hl=vi&gl=VN&ceid=VN%3Avi"
@@ -4935,6 +4942,20 @@
    ],
    "tin": [
     {
+     "tieu_de": "Quy mô tuyến đường sắt đô thị Hà Nội số 1 qua các con số",
+     "link": "https://news.google.com/rss/articles/CBMimwFBVV95cUxQXzBWLTJpS1ZFTTFpbGNTVlJ5WnRGenMyY3hpamktT29Cb1FPZ25FVktRbVpvQkxOandYa3IwRmNWb0Y5dDVKQmN6NmFBMW5aQVl5M2IyQmFUbmlkTkstSHBRRFV1eEllZi1hd0l0ekpqaVpxeUdSdUlDU3JVbjRNaUpob0NDSE1UZ0dHRTV2Q2RpeG9Jc19MbHlfaw?oc=5",
+     "nguon": "VietnamFinance",
+     "web": "https://vietnamfinance.vn",
+     "ngay": "2026-11-26"
+    },
+    {
+     "tieu_de": "​​​​​​​Không gian thương mại dịch vụ ngầm: Khai thác kinh tế gắn với mạng lưới đường sắt đô thị theo định hướng TOD trên địa bàn TP. Hồ Chí Minh",
+     "link": "https://news.google.com/rss/articles/CBMimAJBVV95cUxQZ3NVRlhJWUQ4OWFCczBpckI4MWx3bkxqQy1rbkM2NEktOVl2aXozcVIwYksyUi1UcnhpbTdKc1hWS3F1TGpNRHB3QWYwZFo2TVlSSWcySTZ0Q19WM2RzRWN0TS05Sm9pRk14aXBxQmVlZThYVWVUM0xnQ0I4ZE9Gc2VpN3pOZU1EY2dsa1Z3alJ0Z2xSRW9uRlZ5dU5EeVNIT3hsMDY1aDdIcGtoc0J6d0Y5U0lEWE5saGtqa2pVdjBZVE9VT0wtTjUySEd6SEN1eWZOaE1wZTExei1aM1lhN2F6clVfS0U5c1RFRzFMQkQ0OFhkU1llVVhwMVUwQlZ0WVgyaHN0cHdWYmdpTmFMMElveGY4TFhK?oc=5",
+     "nguon": "Nghiên cứu Kinh tế-Tài chính",
+     "web": "https://nghiencuu.tapchikinhtetaichinh.vn",
+     "ngay": "2026-11-26"
+    },
+    {
      "tieu_de": "Hà Nội hợp tác với thành phố Saint Petersburg phát triển đường sắt đô thị",
      "link": "https://news.google.com/rss/articles/CBMiswFBVV95cUxQaFdMcWt4MXBEVV9janM4bDBmODladW5faUp6WHhpQjc5dnJkU0JzS0JwSnNYazI4cHVQY1dfZHNWWUM5NEZLX1hnTnNvZ29JTHJGSFJTOFdMTk5rYXQ0aVYtbm1pOHc1ZVRjRF9IaS00czNhZU1uaXJ2czd3RzJtXzJWaTNDTzlsRWlhRTRRQkhFaVVuc1ZITkEycFR0dkZlbUQ1b1dBazYtb2hvNVI1ejBkdw?oc=5",
      "nguon": "Báo Đại biểu Nhân dân",
@@ -4975,20 +4996,6 @@
      "nguon": "LuatVietnam",
      "web": "https://luatvietnam.vn",
      "ngay": "2026-11-25"
-    },
-    {
-     "tieu_de": "Tổng Bí thư, Chủ tịch nước Tô Lâm: Không thể làm đường sắt tốc độ cao rồi phụ thuộc nước ngoài",
-     "link": "https://news.google.com/rss/articles/CBMi1gFBVV95cUxPNHlsMzgyZlNNVnVDeUpJaHNqMkdvazByVzB5czJjRTJETC0zejNmekpEdTN5UjFJU1hjbjJOc2pSMjBJR3NKWmh0bS1jU09Kb1kyV0JLZUQ4NmNIQjh3LWN3b29BMk9ZYlE4dTdibDl6THc5VVlDNEs3SjR6cTRlX0p0aUpxUnQ1Zm53QnVBZnpZcjZIVWZTRy1Pd2dwdDNZUFViZU5qQWYxRTVKd21FQm9XRnNFbmlkMmIxMy1mVjRKR0FiUGgtaEdPWU9jdWtYMllWRUp3?oc=5",
-     "nguon": "Tạp chí Tài chính Doanh nghiệp",
-     "web": "https://taichinhdoanhnghiep.net.vn",
-     "ngay": "2026-11-25"
-    },
-    {
-     "tieu_de": "Hà Nội miễn vé xe buýt, đường sắt đô thị ngày Văn hoá Việt Nam",
-     "link": "https://news.google.com/rss/articles/CBMiowFBVV95cUxQNTg3bHp0VUNwSWFhOHc0T2d2bmpjS0U1cTJfRlBYMzhCRmtJWVVPcjZQR0lST0czcnE0eWdWcnZfWWt5N3MzS2dnWHdJTVFXangxVUZaZU5GYU1xVTZrSWdnQk9nUWpyWnp5Ul9qTU9scHM4UTJTSU00ZDkycEtpbEVVY2liWFdubjF6WW11eVlSTjJsNl9FZmxXck5HZndtTFpR?oc=5",
-     "nguon": "Báo Đại biểu Nhân dân",
-     "web": "https://daibieunhandan.vn",
-     "ngay": "2026-11-24"
     }
    ],
    "tim_them": "https://news.google.com/search?q=%C4%90%C6%B0%E1%BB%9Dng+s%E1%BA%AFt+%C4%91%C3%B4+th%E1%BB%8B&hl=vi&gl=VN&ceid=VN%3Avi"
@@ -5363,7 +5370,15 @@
    "tu_khoa": [
     "Cầu Lãm Khê"
    ],
-   "tin": [],
+   "tin": [
+    {
+     "tieu_de": "Từ 29/8, cấm phương tiện lưu thông trên đường gom cầu Lãm Khê",
+     "link": "https://news.google.com/rss/articles/CBMimwFBVV95cUxQSzlLeUVCRG41Qm5jZk1IdnNMZUpGdmk4UHUxV0dHbjJwT2ZuUkluQnkySExrY09WRGpHOGRuMURtWG5HLVBiM0hrLW8wR00zdkxOWXBWTXIyQXR3aVZTeFlJdzAwdVVqMjBpSUoxRUJhYUo5cmVTWXlHaEFPTWgzczNXVFFMaHBSZHpfQXlFbE5ITms0MUJ2enRDdw?oc=5",
+     "nguon": "Báo Hải Phòng",
+     "web": "https://baohaiphong.vn",
+     "ngay": "2026-08-28"
+    }
+   ],
    "tim_them": "https://news.google.com/search?q=C%E1%BA%A7u+L%C3%A3m+Kh%C3%AA&hl=vi&gl=VN&ceid=VN%3Avi"
   },
   "Cầu Linh Đàm": {
@@ -5443,6 +5458,13 @@
      "ngay": "2026-11-26"
     },
     {
+     "tieu_de": "Giao thông Hà Nội sáng 26.11: Ô tô lao vào dải phân cách cầu Thanh Trì",
+     "link": "https://news.google.com/rss/articles/CBMilwFBVV95cUxPeUZFTlRXWFZ6QVdaOGZ3ZDVqQWNKekRWakowRnE0dUxYRnhEMlVSQmIwVFFPUUkyaVZCSjBodmktQWZ0ZzZNS1g2blN4RzlIUmVEZ0h3RlRiRk9KZENBdWVBVFltWm9NRFRnUEZNOFVFc2ZkU0ZtVUgxNmpMNUVaaEhZV3B1cUxMcUdaWnRLZVdiMUUzaUln?oc=5",
+     "nguon": "Vietnam.vn",
+     "web": "https://www.vietnam.vn",
+     "ngay": "2026-11-26"
+    },
+    {
      "tieu_de": "Giao thông Hà Nội sáng 11.11: Xe đầu kéo gặp va chạm giữa cầu Thanh Trì",
      "link": "https://news.google.com/rss/articles/CBMimAFBVV95cUxPeE51bjJZbzdaYWFIdjJLOEZFeWx5M1ZkbFNwMVlKU0M5X2ZBN3Y5d1U1Rm5OWW15S0dPUVcwbkF6TkxQNnA3VnIxUF9XSmlnem9DVVZaM3dWSmZ1ZnJzdVp0TGFpai1QOFltbEZ1OV9zMmxuWG9Oay1RM0NpSUdudk1NeU5QeWoyX3cwNmY4THpza3pOR1gtbw?oc=5",
      "nguon": "Vietnam.vn",
@@ -5471,25 +5493,18 @@
      "ngay": "2026-10-13"
     },
     {
+     "tieu_de": "Hà Nội đang thay thế dải phân cách trên cầu Thanh Trì",
+     "link": "https://news.google.com/rss/articles/CBMioAFBVV95cUxQRFdmRVphMUstY052UGluaDNfdGRpdDAwRkJmRnZvb1JZbEM3M2wyZGNpVG1wYW0xRGpZLWhUUDUtRWNlR1J1bDZ5bUFXbDhYLVNRMzdGd2Y2RmpaT2s2Nm8xSmRSaFAzRnEzYmk3cFB4UURfTU80UmNDalp4T3hMWEdFb1RqU1pTRXRocVc2YVRScTc0T1pKMHlZZ2lkaDRH?oc=5",
+     "nguon": "Báo và Phát thanh Truyền hình Hà Nội",
+     "web": "https://hanoionline.vn",
+     "ngay": "2026-10-13"
+    },
+    {
      "tieu_de": "Giao thông Hà Nội sáng 9/10: Nhiều sự cố trên cầu Thanh Trì",
      "link": "https://news.google.com/rss/articles/CBMilAFBVV95cUxPaVJ1ZHNENTRhNzNCa2hoaTZNc3VLWGtUWURyMlRYWTRGRUVVZ29Dc0lFRUJMdXE3QUF0dGZzM04xUUhSZ1Voc3dWUXhxajJLck56Wl9WM3RNV2llTHhQdkFoNFJ4N2pXaExwWG1pM3VBWmF2TEtsTzNpSllkSmFtWWJsZDJkVjNTeDJmVHVibkR5NVpB?oc=5",
      "nguon": "Báo Văn Hóa",
      "web": "https://baovanhoa.vn",
      "ngay": "2026-10-09"
-    },
-    {
-     "tieu_de": "Hà Nội điều chỉnh giao thông cầu Thanh Trì",
-     "link": "https://news.google.com/rss/articles/CBMigAFBVV95cUxQUW9ULTYxS3c5Uzh2LTZSbUxVUHZHcDhvTUItYjg2dFZ2UHI2eko4dFl0TXlYaUMwTWVWNWNhTlJmNW5Ud3ZjcU9nM0ZiZFZZcTFwRzZsaWlOMkh4R3VsOW8xODlLSjlEc2g1ZUs2OFU1NkJzMWVEMXRZaTk0bktrbw?oc=5",
-     "nguon": "Tintucvietnam",
-     "web": "https://tintucvietnam.vn",
-     "ngay": "2026-10-03"
-    },
-    {
-     "tieu_de": "Hà Nội giảm tốc độ, điều chỉnh phân làn trên cầu Thanh Trì gần 3 tháng",
-     "link": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxPOGZZbGo3MVVrWl9SbXNEM0JuTkQ1NEhSS3djOWV1SVBOZ0RrUURsWkhXR1haOUdWZmFGTGNndnk5R3M5dnN1UmI1OXNDalNfdkNoaF9aTVJBcUNUcEUySXZ0QmFFcWhLVmJrWVZHb2tKbWdsMU5IQjJsdVp0X18wSnM0VzJ5TWo5T2I2X0R2VlhxZjNBUkhCTWdGZnA5cl81ZHg3SGdOMzBFUQ?oc=5",
-     "nguon": "Báo Tiền Phong",
-     "web": "https://tienphong.vn",
-     "ngay": "2026-10-02"
     }
    ],
    "tim_them": "https://news.google.com/search?q=C%E1%BA%A7u+Thanh+Tr%C3%AC&hl=vi&gl=VN&ceid=VN%3Avi"
@@ -5706,6 +5721,27 @@
    ],
    "tin": [
     {
+     "tieu_de": "Hợp long nhịp chính cầu Hải Thành thuộc Dự án đường Vành đai 2, đoạn tuyến Tân Vũ - Hưng Đạo - đường Bùi Viện",
+     "link": "https://news.google.com/rss/articles/CBMi0wFBVV95cUxPLVpFcThOWm1NZUdIWjlDX2xhTjhBV2JsU2hpcWhQY19VQU1OT2JsandCWVZmOHpDNGIxRjlsU005Mi1Ma00zOFhBRzczc3R6MDhwbHE5MkFhOTh2b3BuRFk5Qkl1d3FaUExoaG13QUdVeW5pdXBJd2FreTR3YVZIVU5vX0NzX1AzaFhSYXp3TWhNMnJRRVJCdHBJMHRkeWU5ZlhwWXg2TWhaeUNVeUF1MUVZaUNjRXVfOFphMTJrRzg0TVlqOUU4TGZYX0pHWjUyNkcw?oc=5",
+     "nguon": "An ninh Hải Phòng",
+     "web": "https://anhp.vn",
+     "ngay": "2026-11-26"
+    },
+    {
+     "tieu_de": "Hợp long cầu Hải Thành rộng nhất thành phố Hải Phòng",
+     "link": "https://news.google.com/rss/articles/CBMigAFBVV95cUxQMmU4TG94ZGJYXzk2TWZSMVNxMGVUUDFnZHBBbFZSX2dCaFdHUmNLNWlfbzItOExaeWVDWTBhZ3Nfd3g1enZfRWpTMWYxNzdnLVhxVDBUc3RkT0NFNVQ1OU5rdHJzRlN6Y0tZUkIzaE9BUTlXS21RbnA3R25wNjR3cA?oc=5",
+     "nguon": "Vietnam.vn",
+     "web": "https://www.vietnam.vn",
+     "ngay": "2026-11-26"
+    },
+    {
+     "tieu_de": "Hải Phòng: Hợp long cầu Hải Thành",
+     "link": "https://news.google.com/rss/articles/CBMia0FVX3lxTE85OVJQdUFQcE5ybk53WmJDX0p1bGg5ckNSSGx0NGNDMWNtX3h5cE05MWlKcW9IblFsRnpSbUJZWWZxWkpKZVlhSEJXZ252Wms4YlM1QnhIY045cFhYMUFtWlFveF9YcFlGd2l3?oc=5",
+     "nguon": "Báo Đại Đoàn Kết",
+     "web": "https://daidoanket.vn",
+     "ngay": "2026-11-26"
+    },
+    {
      "tieu_de": "Hải Phòng: Diện mạo cầu Hải Thành hơn 2.500 tỷ đồng trước ngày hợp long",
      "link": "https://news.google.com/rss/articles/CBMirgFBVV95cUxNaU1TbUhRLUpTTHZnUGY3eW14LUM0YVhGMjM4UktlUGtwVWd5Yjh1eVJXMmZqLTd4WGx2M2pKc3VkUDFhM0FOOGhGUXF5T1lGdlA5dm9Od3pmdUJSMkdJWjRqMzdhLW9HM0JicmtETVEyMllTTzJ1Smc0T1ZsSDdJMnNiSzFzTnF6UVhIVHIwQTVlZEE4anZoRDlENEFXcnQtSXEwYnZBcGxpVDhpYVE?oc=5",
      "nguon": "CafeF",
@@ -5792,6 +5828,13 @@
    ],
    "tin": [
     {
+     "tieu_de": "Mở 'cánh cửa' kết nối từ cao tốc Hải Phòng - Ninh Bình",
+     "link": "https://news.google.com/rss/articles/CBMifkFVX3lxTFBRcnI1cGk2bnFfWm5nTzVUSW8ydFVrZGhZbEZCMElMckpQQ243RjZoSjRiNW9RQmxIdFBULVhna3pIQlcwdmxRc3pYd1VTUDlzWEFhTUlpMXlFOVk1UlpHckhzSG5HSzBoeDZ5M3BMVEpKU1RrODFKSnZKRlM5UQ?oc=5",
+     "nguon": "Vietnam.vn",
+     "web": "https://www.vietnam.vn",
+     "ngay": "2026-11-26"
+    },
+    {
      "tieu_de": "Ninh Bình phân bổ hơn 88,5 tỷ đồng đầu tư cao tốc Ninh Bình - Hải Phòng",
      "link": "https://news.google.com/rss/articles/CBMitwFBVV95cUxQdnVtRG1KakR4S2F4VkJpakJ5NmtHTll5dFJMU3Q5cndEWXZZSV9KTlJJeTQxak0wdGgtdkE2cHBVaUJaOEVBSVdUOG1uX2lBdEtIdGZINFhJRWlZYktJX1VBQURFRVZsc2pWMXdkSkt5WllQQlpGUlZoQ1BiS1lXZmFycE0wYnJXazJJSVlVQlBJalNTSnZpc1hpQmlzckN5aUFhUWRpRHRGNVNIbnBBUTYtQUprM2M?oc=5",
      "nguon": "Thuonghieucongluan.com.vn",
@@ -5839,13 +5882,6 @@
      "nguon": "VnEconomy",
      "web": "https://vneconomy.vn",
      "ngay": "2026-09-28"
-    },
-    {
-     "tieu_de": "Hải Phòng đầu tư 8.228 tỷ đồng cho cao tốc Ninh Bình - Hải Phòng",
-     "link": "https://news.google.com/rss/articles/CBMingFBVV95cUxQb3Zjd3daV2xiWWw1YXVNQmNyalA2MnFaSXhXOVBhaldnSnhzdkRmTWQyZGtrZDN0ZHFNVUctMzg2eUVNS0J4cUVkYzE0aHZWMVZmSG80OERxaE1vQ21ucVFUVFRLYzB1OVFrX1Ixc3JMSno1M3lQZVhTSENiS3JpdEI1N3hFYzdtSlhkaW5icE1aMHlUXzlQSGhIX2JnQQ?oc=5",
-     "nguon": "Báo Hải Phòng",
-     "web": "https://baohaiphong.vn",
-     "ngay": "2026-09-25"
     }
    ],
    "tim_them": "https://news.google.com/search?q=%C4%90%C6%B0%E1%BB%9Dng+cao+t%E1%BB%91c+Ninh+B%C3%ACnh+-+H%E1%BA%A3i+Ph%C3%B2ng&hl=vi&gl=VN&ceid=VN%3Avi"
