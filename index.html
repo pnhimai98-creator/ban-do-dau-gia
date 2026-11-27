@@ -83,10 +83,13 @@ footer{padding:16px max(3vw,14px);font-size:13px;color:var(--mute);border-top:1p
 .achip i{width:10px;height:10px;border-radius:50%;background:var(--line);flex:none}
 .achip.on{border-color:var(--ink);font-weight:600}
 .achip small{color:var(--mute);font-weight:400}
+/* xóa đường kẻ trắng giữa các ô bản đồ khi trình duyệt phóng to/thu nhỏ (zoom 90%, 125%…): cho mỗi ô chồng lên nhau nửa điểm ảnh */
+.leaflet-tile-container img.leaflet-tile{width:256.5px!important;height:256.5px!important}
 .chartbox{position:relative;border:1px solid var(--line);border-radius:12px;padding:8px 8px 4px;background:var(--card)}
 .chartbox svg{display:block;width:100%;height:auto;overflow:visible}
 .chartbox .grid line{stroke:var(--line);stroke-width:1}
-.chartbox .ax text{fill:var(--mute);font-size:11px}
+.chartbox svg text{font-family:"Be Vietnam Pro",system-ui,sans-serif;font-variant-numeric:tabular-nums}
+.chartbox .ax text{fill:var(--mute);font-size:10.5px;letter-spacing:-.1px}
 .chartbox .lbl{font-size:11.5px;fill:var(--ink);font-weight:600}
 .chartbox .pt{stroke:var(--card);stroke-width:2;cursor:pointer}
 .chartbox .pt:hover{stroke:var(--ink)}
@@ -337,7 +340,7 @@ const T = {
   legendTitle: "Giá trúng cao nhất (tr/m²)",
   pDate: "Ngày", pOld: "Địa danh cũ", pArea: "Khu", pType: "Loại đất", pPlots: "Số thửa", pStart: "Giá khởi điểm", pWin: "Giá trúng", pTotal: "Tổng tiền", pPeople: "Người tham gia", pNote: "Ghi chú", pLoc: "Vị trí", pSrc: "Nguồn", seeArticle: "xem bài",
   approx: "gần đúng (trung tâm xã)", exact: "chính xác",
-  baseOSM: "OpenStreetMap", baseHOT: "OSM Nhân đạo (HOT)", baseEsri: "Bản đồ đường (Esri)", baseSat: "Ảnh vệ tinh (Esri)",
+  baseCarto: "Bản đồ sáng (CARTO)", baseOSM: "OpenStreetMap", baseHOT: "OSM Nhân đạo (HOT)", baseEsri: "Bản đồ đường (Esri)", baseSat: "Ảnh vệ tinh (Esri)",
   footer: "<b>Nguồn & lưu ý.</b> Dữ liệu tổng hợp từ thông báo đấu giá và báo chí công khai; mỗi phiên có link nguồn để đối chiếu. Giá tính bằng <b>triệu đồng/m²</b>. “Đã đấu giá” là kết quả tại phiên; người trúng có thể chưa nộp tiền hoặc bỏ cọc. Vị trí “gần đúng” đặt tại trung tâm xã. Trang chỉ để tham khảo, không phải lời khuyên đầu tư và không đăng thông tin cá nhân người trúng đấu giá.",
   report: "Phát hiện sai sót hoặc có phiên mới?", formLink: "Gửi qua form góp tin ↗", formNone: "Gửi qua form góp tin.",
   anaTitle: "Phân tích giá", anaSub: "Theo bộ lọc tỉnh, loại đất, ngày và ô tìm kiếm ở trên; chỉ tính các phiên đã có giá trúng. Bấm vào tên khu vực để thêm/bớt đường trên biểu đồ (tối đa 8).",
@@ -388,7 +391,7 @@ const T = {
   legendTitle: "Highest winning bid ({u})",
   pDate: "Date", pOld: "Former name", pArea: "Site", pType: "Land type", pPlots: "Plots", pStart: "Starting price", pWin: "Winning bids", pTotal: "Total value", pPeople: "Participants", pNote: "Note", pLoc: "Location", pSrc: "Source", seeArticle: "view article",
   approx: "approximate (commune centre)", exact: "exact",
-  baseOSM: "OpenStreetMap", baseHOT: "OSM Humanitarian (HOT)", baseEsri: "Street map (Esri)", baseSat: "Satellite (Esri)",
+  baseCarto: "Light map (CARTO)", baseOSM: "OpenStreetMap", baseHOT: "OSM Humanitarian (HOT)", baseEsri: "Street map (Esri)", baseSat: "Satellite (Esri)",
   footer: "<b>Sources & notes.</b> Data compiled from official auction notices and public news reports; every auction links to its source. Prices are shown in <b>US dollars per m²</b>, converted from the original <b>million VND per m²</b> at the Vietcombank rate below. “Auctioned” means the result at the session; winners may not yet have paid or may forfeit their deposit. “Approximate” locations are placed at the commune centre. For reference only — not investment advice. No personal data of winning bidders is published.",
   rateLine: (r, d) => `1 USD = ${r} VND (Vietcombank transfer buying rate, ${d}; updated daily). USD figures are indicative conversions.`, noRate: "USD conversion unavailable — prices shown in VND.", report: "Spotted an error or a new auction?", formLink: "Send it via the submission form ↗", formNone: "Send it via the submission form.",
   anaTitle: "Price analysis", anaSub: "Follows the province, land type, date and search filters above; only auctions with a winning bid are counted. Click an area to add/remove its line (up to 8).",
@@ -744,6 +747,9 @@ const stLabel = s => s === "dang_xay" ? t("stBuild") : s === "quy_hoach" ? t("st
 const fold = s => String(s || "").normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/đ/gi, "d").toLowerCase()
   .replace(/^(xa|phuong|thi tran|dac khu)\s+/, "").replace(/\s+/g, " ").trim();
 const sameName = (a, b) => fold(a) === fold(b);
+/* ô Xã/phường có thể ghi NHIỀU xã khi khu đấu giá nằm trên 2 xã: "Tích Lộc, Trạch Mỹ Lộc" (nhận cả ; / và) */
+const xaList = s => String(s ?? "").split(/\s*[,;/]\s*|\s+và\s+/).map(x => x.trim()).filter(Boolean);
+const sameXa = (a, b, f) => { const B = xaList(b).map(f); return xaList(a).some(x => B.includes(f(x))); };
 /* tìm không phân biệt dấu, hoa/thường: "dong anh" = "Đông Anh" */
 const qfold = s => String(s || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/đ/gi, "d").toLowerCase().replace(/\s+/g, " ").trim();
 function inRing(x, y, ring) { let ins = false;
@@ -874,7 +880,7 @@ function linkRelated(rows) {
   rows.forEach(d => [d.lien_quan, d.phien_truoc, d.phien_sau].join(" ").split(/[;, ]+/).forEach(id => { if (byId[id] && id !== d.id) add(d, byId[id]); }));   /* + cột Phiên trước / Phiên sau */
   const T = rows.map(toks);
   for (let i = 0; i < rows.length; i++) for (let j = i + 1; j < rows.length; j++) {
-    const a = rows[i], b = rows[j]; if (!a.xa || qfold(a.xa) !== qfold(b.xa) || a.tinh !== b.tinh) continue;
+    const a = rows[i], b = rows[j]; if (!a.xa || !sameXa(a.xa, b.xa, qfold) || a.tinh !== b.tinh) continue;
     const A = T[i], B = T[j]; if (!A.size || !B.size) continue;
     const inter = [...A].filter(w => B.has(w)).length;
     if (inter >= 2 && inter / Math.min(A.size, B.size) >= 0.5) add(a, b);
@@ -977,7 +983,7 @@ function initProjFind() {
 function projDistOf(d) {
   if (d.tinh !== "Hà Nội" || !Object.keys(PROJD).length) return null;
   const s = d.dia_danh_cu || "", m = [...s.matchAll(/(?:huyện|quận|thị xã)\s+([^,;()]+)/gi)].pop();
-  for (const c of [m && m[1], d.xa]) { const k = c && hkey(c); if (k && PROJD[k]) return k; }
+  for (const c of [m && m[1], ...xaList(d.xa)]) { const k = c && hkey(c); if (k && PROJD[k]) return k; }
   return null;
 }
 /* giá trúng đại diện của một phiên: trung bình min–max (chỉ có max thì dùng max) */
@@ -1049,7 +1055,7 @@ function popup(d) {
   if (needMT(d, "khu")) rows.forEach(r => { if (r[0] === t("pArea")) r[2] = true; });
   /* điểm nằm trong ranh giới xã nào (nếu đã có lớp ranh giới) */
   const bn = boundaryAt(d.lat, d.lng);
-  if (bn) rows.push([t("pBound"), bn + (d.xa && !sameName(bn, d.xa) ? ` ⚠ ${t("boundDiff")}` : "")]);
+  if (bn) rows.push([t("pBound"), bn + (d.xa && !xaList(d.xa).some(x => sameName(bn, x)) ? ` ⚠ ${t("boundDiff")}` : "")]);
   const dn = districtAt(d.lat, d.lng); if (dn) rows.push([t("pDist"), dn]);
   projCompareRows(d).forEach(r => rows.push(r));   /* so với giá dự án cùng huyện */
   const afterTag = d.sau_dau_gia ? `<span class="tag ${BAD_AFTER.includes(d.sau_dau_gia) ? "bad" : d.sau_dau_gia === "Đã nộp đủ tiền" ? "ok" : ""}" style="margin:0 0 6px 4px">${esc(tv("after", d.sau_dau_gia))}</span>` : "";
@@ -1105,7 +1111,7 @@ const ana = {by: "xa", sel: [], slot: {}, touched: false};
 const SLOTS = 8;
 const huyenOf = d => { const s = d.dia_danh_cu || ""; const m = [...s.matchAll(/(huyện|quận|thị xã|thành phố|TP\.?)\s+([^,;()]+)/gi)].pop();
   return m ? (m[1].toLowerCase().startsWith("tp") ? "thành phố" : m[1].toLowerCase()) + " " + m[2].trim() : (s.trim() || t("other")); };
-const areaOf = d => ana.by === "xa" ? (d.xa || t("other")) : huyenOf(d);
+const areaOf = d => ana.by === "xa" ? (xaList(d.xa)[0] || t("other")) : huyenOf(d);   /* khu trên 2 xã → tính vào xã ghi đầu tiên, không đếm 2 lần */
 const pv = v => useUSD() ? usdM2(v) : v;          // giá trị vẽ (tr/m² hoặc USD/m²)
 function anaBase() {
   const tn = $("#fTinh").value, l = $("#fLoai").value, f = $("#fFrom").value, to = $("#fTo").value, q = qfold($("#fQ").value);
@@ -1144,10 +1150,13 @@ function renderAna() {
     /* vạch tháng */
     const months = []; const dd = new Date(x0); dd.setUTCDate(1); dd.setUTCHours(0, 0, 0, 0); if (+dd < x0) dd.setUTCMonth(dd.getUTCMonth() + 1);
     for (; +dd <= x1; dd.setUTCMonth(dd.getUTCMonth() + 1)) months.push(+dd);
-    const mlab = v => { const z = new Date(v); return lang === "en" ? MON[z.getUTCMonth()] + " " + z.getUTCFullYear() : "T" + (z.getUTCMonth() + 1) + "/" + z.getUTCFullYear(); };
+    /* nhãn ngắn: T4/'25 (EN: Apr '25); thưa nhãn để không chồng chữ – tối đa ~1 nhãn / 60px */
+    const yy = z => "'" + String(z.getUTCFullYear()).slice(-2);
+    const mlab = v => { const z = new Date(v); return lang === "en" ? MON[z.getUTCMonth()] + " " + yy(z) : "T" + (z.getUTCMonth() + 1) + "/" + yy(z); };
+    const mstep = Math.max(1, Math.ceil(months.length / Math.floor((W - L0 - R0) / 60))), mshow = months.filter((v, i) => i % mstep === 0);
     let svg = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(t("chartY"))}"><g class="grid">${yt.map(v => `<line x1="${L0}" x2="${W - R0}" y1="${Y(v)}" y2="${Y(v)}"/>`).join("")}</g>
       <g class="ax">${yt.map(v => `<text x="${L0 - 8}" y="${Y(v) + 4}" text-anchor="end">${useUSD() ? "$" + v.toLocaleString("en-US") : fmt(v)}</text>`).join("")}
-      ${months.map(v => `<text x="${X(v)}" y="${H - 10}" text-anchor="middle">${mlab(v)}</text>`).join("")}
+      ${mshow.map(v => `<line x1="${X(v)}" x2="${X(v)}" y1="${H - B0}" y2="${H - B0 + 4}" stroke="var(--line)"/><text x="${X(v)}" y="${H - 12}" text-anchor="middle">${mlab(v)}</text>`).join("")}
       <text x="${L0}" y="${T0 - 2}" class="ax" style="font-size:11px">${esc(t("chartY"))} (${UN()})</text></g>`;
     const ends = [];
     ana.sel.forEach(a => { const g = groups[a].slice().sort((p, q) => p.ngay.localeCompare(q.ngay));
@@ -1246,7 +1255,7 @@ function applyLang() {
   if (map) {
     /* nút chọn nền & chú giải dựng lại theo ngôn ngữ */
     if (layerCtl) layerCtl.remove();
-    const named = {}; [["baseOSM", "osm"], ["baseHOT", "hot"], ["baseEsri", "esri"], ["baseSat", "sat"]].forEach(([k, id]) => named[t(k)] = bases[id]);
+    const named = {}; [["baseCarto", "carto"], ["baseOSM", "osm"], ["baseHOT", "hot"], ["baseEsri", "esri"], ["baseSat", "sat"]].forEach(([k, id]) => named[t(k)] = bases[id]);
     const ov = {}; Object.keys(decvGroups).forEach(k => { const f = decvGroups[k].getLayers()[0]; const c = (f && f.feature.properties.color) || "#7c3aed";
       ov[`<i style="display:inline-block;width:10px;height:10px;border-radius:2px;background:${c};margin:0 5px 0 2px;vertical-align:-1px"></i>${esc(t("decv"))} · ${esc(k)}`] = decvGroups[k]; });
     const sw = (c, line, dash) => `<i style="display:inline-block;width:20px;height:${line ? 0 : 12}px;${line ? `border-top:${line}px ${dash ? "dashed" : "solid"} ${c}` : `background:${c}`};border-radius:2px;margin:0 6px 0 2px;vertical-align:${line ? 4 : -1}px"></i>`;
@@ -1286,13 +1295,15 @@ async function init() {
     map = L.map("map", {scrollWheelZoom: true}).setView(CONFIG.CENTER, CONFIG.ZOOM);
     const OSM_ATTR = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
     bases = {
+      /* nền mặc định: CARTO Voyager (miễn phí, dữ liệu OSM, kết xuất đồng đều – không bị mảng rừng xanh vuông vức do ô OSM kết xuất lệch thời điểm) */
+      carto: L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png", {maxZoom: 20, subdomains: "abcd", attribution: OSM_ATTR + ' &copy; <a href="https://carto.com/attributions">CARTO</a>'}),
       osm: L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {maxZoom: 19, attribution: OSM_ATTR}),
       hot: L.tileLayer("https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png", {maxZoom: 19, subdomains: "abc", attribution: OSM_ATTR + ', tiles &copy; <a href="https://www.hotosm.org/">HOT</a>'}),
       esri: L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}", {maxZoom: 19, attribution: "Tiles &copy; Esri, HERE, Garmin, OpenStreetMap contributors"}),
       sat: L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}", {maxZoom: 19, attribution: "Tiles &copy; Esri, Maxar, Earthstar Geographics"})
     };
     /* OpenStreetMap chặn trang mở trực tiếp từ ổ đĩa (file://) → khi mở file trên máy dùng nền Esri, khi lên web dùng OpenStreetMap */
-    (location.protocol.startsWith("http") ? bases.osm : bases.esri).addTo(map);
+    (location.protocol.startsWith("http") ? bases.carto : bases.esri).addTo(map);
     layer = L.layerGroup().addTo(map);
     map.on("zoomend", spreadMarkers);
     map.on("popupopen", e => { const el = e.popup.getElement(); translatePopup(el);
