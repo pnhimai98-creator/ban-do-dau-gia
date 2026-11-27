@@ -16,7 +16,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: ghi-repo
+  group: fetch-news         # chung nhóm với các workflow dùng Gemini → không gọi Gemini cùng lúc, không ghi đè nhau
   cancel-in-progress: false
 
 jobs:
@@ -28,13 +28,16 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Gom tin
+      - name: Gom tin (chỉ hạ tầng đang xây / quy hoạch) và lọc bằng Gemini
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}   # có → Gemini (miễn phí) lọc tin; không có → lọc bằng quy tắc
+          MAX_GEMINI: "150"
         run: python scripts/tin_ha_tang.py
       - name: Lưu lên repo
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898699+github-actions[bot]@users.noreply.github.com"
-          git add data/tin-ha-tang.json
+          git add data/tin-ha-tang.json data/tin-ha-tang-loc.json
           if git diff --cached --quiet; then echo "Không có tin mới"; exit 0; fi
           git commit -m "Cập nhật tin hạ tầng $(date -u +%F)"
           for i in 1 2 3; do git pull --rebase && git push && exit 0; sleep 5; done
