@@ -5,8 +5,10 @@ Tìm kết quả cho các phiên đã qua ngày  /  Find results for auctions wh
 Chạy hằng ngày trong workflow "Tìm kết quả đấu giá" (.github/workflows/tim-ket-qua.yml):
     python scripts/tim_ket_qua.py
 
+0. Phiên "Sắp đấu giá" đã qua ngày → GHI THẲNG "Chờ kết quả" vào data.csv (chỉ đổi cột trang_thai,
+   không cần duyệt vì chỉ dựa vào ngày).
 1. Lấy trong data.csv các phiên "Chờ kết quả" (hoặc "Sắp đấu giá" nhưng đã qua ngày) chưa có giá trúng,
-   trong vòng 120 ngày gần đây.
+   trong vòng 240 ngày gần đây. Phiên lâu chưa được tìm nhất được tìm trước (xoay vòng).
 2. Với mỗi phiên, tìm bài báo trên Google News theo tên xã (mới và cũ) + khu, đăng sau ngày phiên.
    Link Google News được giải ra link báo gốc.
 3. Đọc bài, bóc số liệu (scripts/dien_tin_cho_duyet.py). Chỉ nhận bài khi:
@@ -34,7 +36,9 @@ TODAY = datetime.now(timezone(timedelta(hours=7))).date()
 MAX_SESSIONS = int(os.environ.get("MAX_SESSIONS", "25"))
 BUDGET_MIN = float(os.environ.get("TIME_BUDGET_MIN", "15"))   # dừng êm sau 15 phút để kịp lưu, lần sau chạy tiếp
 T0 = time.monotonic()
-MAX_DAYS = 120
+MAX_DAYS = int(os.environ.get("MAX_DAYS", "240"))
+SENTENCE_RESULT = r"dau gia thanh cong|trung dau gia|ket qua dau gia|gia trung|nguoi trung"
+SENTENCE_AFTER = r"bo coc|huy (bo )?ket qua|khong nop (du )?tien|nop du tien trung|mat (tien )?coc"
 GN = "https://news.google.com/rss/search?hl=vi&gl=VN&ceid=VN:vi&q="
 RESULT_KEYS = ["so_thua_trung", "gia_trung_min", "gia_trung_max", "tong_tien_ty", "nguoi_tham_gia"]
 MAX_AFTER = int(os.environ.get("MAX_AFTER", "20"))     # số phiên "Đã đấu giá" kiểm tra bỏ cọc mỗi lần
@@ -86,31 +90,53 @@ def search(q):
         print(f"    tìm lỗi: {ex}"); return []
 
 
-def matches(r, ex, text, sess_date):
-    """Bài có đúng là kết quả của phiên r không? Trả về điểm (0 = không khớp)."""
+def near(ft, names, pat, win=400):
+    """Tên xã và cụm từ khóa xuất hiện gần nhau (trong ~400 ký tự) – tránh bài tổng hợp nhắc xã ở chỗ khác."""
+    for n in names:
+        n = fold(n)
+        if not n: continue
+        for m in re.finditer(re.escape(n), ft):
+            if re.search(pat, ft[max(0, m.start() - win): m.end() + win]): return True
+    return False
+
+
+def matches(r, ex, text, sess_date, pat=SENTENCE_RESULT):
+    """Bài có đúng là kết quả của phiên r không? Trả về điểm (0 = không khớp).
+    Bắt buộc: (1) có tên xã (mới/cũ) GẦN cụm từ kết quả; (2) có thêm ít nhất 1 dấu hiệu riêng của phiên:
+    trùng tên khu/thôn, hoặc đúng ngày phiên, hoặc đúng giá khởi điểm."""
     ft = fold(text)
-    has_result = ex.get("gia_trung_max") or ex.get("so_thua_trung") or re.search(r"dau gia thanh cong|trung dau gia|ket qua dau gia", ft)
-    if not has_result: return 0
     names = [r.get("xa")] + old_communes(r)
-    if not any(n and fold(n) in ft for n in names): return 0
-    score = 1
+    if not near(ft, names, pat): return 0
+    if pat == SENTENCE_RESULT and not (ex.get("gia_trung_max") or ex.get("so_thua_trung") or re.search(r"dau gia thanh cong|trung dau gia", ft)): return 0
+    score, strong = 1, False
     kt = toks(r.get("khu"), r.get("xa"))
-    if kt and len(kt & toks(text)) >= min(2, len(kt)): score += 2
+    if kt and len(kt & toks(text)) >= min(2, len(kt)): score += 2; strong = True
     d = ex.get("ngay")
     if d:
         try:
             gap = abs((date.fromisoformat(d) - sess_date).days)
-            if gap <= 3: score += 2
+            if gap <= 3: score += 2; strong = True
             elif gap > 20: return 0          # bài nói về phiên khác ngày
         except Exception: pass
-    dm = f"{sess_date.day}/{sess_date.month}"
-    if re.search(rf"(?<!\d){sess_date.day}\s*/\s*0?{sess_date.month}(?!\d)", text): score += 1
+    if re.search(rf"(?<!\d){sess_date.day}\s*/\s*0?{sess_date.month}(?!\d)", text): score += 1; strong = True
     if r.get("so_thua") and ex.get("so_thua") == r.get("so_thua"): score += 1
     if ex.get("gia_khoi_diem") and r.get("gia_khoi_diem"):
         try:
-            if abs(float(ex["gia_khoi_diem"]) - float(r["gia_khoi_diem"])) < 0.01: score += 2
+            if abs(float(ex["gia_khoi_diem"]) - float(r["gia_khoi_diem"])) < 0.01: score += 2; strong = True
         except Exception: pass
-    return score if score >= 3 else 0
+    return score if (strong and score >= 3) else 0
+
+
+def chuyen_qua_ngay(drows):
+    """'Sắp đấu giá' mà ngày phiên đã qua → 'Chờ kết quả' (ghi thẳng data.csv)."""
+    out = []
+    for r in drows:
+        if r.get("trang_thai") != "Sắp đấu giá": continue
+        try: d = date.fromisoformat((r.get("ngay") or "")[:10])
+        except Exception: continue               # chưa có ngày → để nguyên
+        if d < TODAY:
+            r["trang_thai"] = "Chờ kết quả"; out.append(r.get("id") or r.get("xa"))
+    return out
 
 
 def check_after(drows, dhead, prows, seen, waiting):
@@ -150,9 +176,9 @@ def check_after(drows, dhead, prows, seen, waiting):
             ex, how = D.extract_best(raw, {**r, "_tieu_de": title, "link": link})
             if ex.get("_khong_khop") or not ex.get("sau_dau_gia"): print(f"    · {title[:80]}"); continue
             text = title + " " + D.body(raw, title)
-            sc = matches(r, {**ex, "gia_trung_max": ex.get("gia_trung_max") or "1"}, text, d)
+            sc = matches(r, ex, text, d, pat=SENTENCE_AFTER)   # tên xã phải đứng gần chữ "bỏ cọc / hủy kết quả…"
             if how == D.AI_NAME and not sc: sc = 3
-            if r.get("gia_trung_max") and r["gia_trung_max"].replace(".", ",") in text: sc += 2   # bài nhắc đúng giá trúng của phiên
+            if sc and r.get("gia_trung_max") and r["gia_trung_max"].replace(".", ",") in text: sc += 2   # bài nhắc đúng giá trúng của phiên
             print(f"    {'✓' if sc else '·'} {sc} {ex.get('sau_dau_gia')} – {title[:70]}")
             if sc > best[0]: best = (sc, link, ex, title)
             time.sleep(1.5)
@@ -177,7 +203,13 @@ def main():
     phead, prows = read_csv(PEND)
     try: seen = json.load(open(SEEN, encoding="utf-8"))
     except Exception: seen = {}
-    seen = {k: v for k, v in seen.items() if v >= (TODAY - timedelta(days=200)).isoformat()}
+    seen = {k: v for k, v in seen.items() if v >= (TODAY - timedelta(days=260)).isoformat()}
+    if not D.AI_KEY:
+        print("⚠ CHƯA CÓ GEMINI_API_KEY (Settings → Secrets and variables → Actions). Đang dùng quy tắc – dễ sót/nhầm kết quả.")
+    moved = chuyen_qua_ngay(drows)
+    if moved:
+        write_csv(DATA, dhead, drows)
+        print(f"Đã chuyển {len(moved)} phiên quá ngày 'Sắp đấu giá' → 'Chờ kết quả': {', '.join(moved)}")
     waiting = {p.get("_cap_nhat_id") for p in prows if p.get("_cap_nhat_id")}
     todo = []
     for r in drows:
@@ -188,7 +220,10 @@ def main():
         if not (st == "Chờ kết quả" or (st == "Sắp đấu giá" and d < TODAY)): continue
         if not (0 <= (TODAY - d).days <= MAX_DAYS): continue
         todo.append((d, r))
+    # Xoay vòng: phiên lâu chưa tìm nhất lên trước; cùng lần tìm thì phiên mới hơn lên trước
+    last = lambda r: seen.get(f"{r.get('id')}|_lan_tim", "")
     todo.sort(key=lambda x: x[0], reverse=True)
+    todo.sort(key=lambda x: last(x[1]))
     print(f"Phiên đã qua ngày chưa có kết quả: {len(todo)} (xử lý tối đa {MAX_SESSIONS})")
     found, LINKS, TEXTS = 0, {}, {}
     for d, r in todo[:MAX_SESSIONS]:
@@ -201,6 +236,7 @@ def main():
               f'"{xa}" "trúng đấu giá" after:{after} before:{before}']
         qs += [f'"{o}" "đấu giá" {kt} after:{after} before:{before}' for o in old_communes(r)[:2]]
         print(f"• {r.get('id')} {xa} {d.isoformat()} – {r.get('khu', '')[:50]}")
+        seen[f"{r.get('id')}|_lan_tim"] = TODAY.isoformat()
         cands, best = [], (0, None, None, None)
         sk = lambda u: f"{r.get('id')}|{u}"          # đã xem bài này CHO PHIÊN NÀY (một bài tổng hợp có thể khớp phiên khác)
         for q in qs:
