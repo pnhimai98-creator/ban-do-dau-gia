@@ -332,7 +332,7 @@ const T = {
   search: "Tìm xã, khu, địa danh cũ", searchPh: "VD: Đông Anh, Thanh Oai, thôn Văn Quán",
   stDone: "phiên có kết quả", stWon: "thửa trúng", stMax: "giá trúng cao nhất (tr/m²)", stMed: "trung vị giá mỗi phiên (tr/m²)", stUp: "phiên sắp tới / chờ KQ", stNext: "sắp đấu giá + đấu giá lại", stWait: "chờ kết quả",
   newsTitle: "Kết quả mới nhất", newsLine: (d, x, p) => `${d} — ${x}: trúng cao nhất ${p}`, newsLine2: (d, x, n) => `${d} — ${x}: đấu giá thành công${n ? " " + n + " thửa" : ""}, chưa công bố giá trúng`, newsGo: "Xem trên bản đồ", none: "Chưa có",
-  empty: "Không có phiên nào khớp bộ lọc.", mapErr: "Không tải được thư viện bản đồ. Kiểm tra kết nối mạng.", mapLabel: "Bản đồ các phiên đấu giá", statusGroup: "Trạng thái",
+  empty: "Không có phiên nào khớp bộ lọc.", offMap: "ngoài 6 tháng", offMapT: "Phiên cũ hơn 6 tháng – không hiện trên bản đồ, vẫn tính trong thống kê và phân tích giá", mapErr: "Không tải được thư viện bản đồ. Kiểm tra kết nối mạng.", mapLabel: "Bản đồ các phiên đấu giá", statusGroup: "Trạng thái",
   topWin: "trúng cao nhất", startP: "khởi điểm", plots: "thửa", unit: "tr/m²", bn: "tỷ", won: "trúng", highest: "cao nhất",
   legendTitle: "Giá trúng cao nhất (tr/m²)",
   pDate: "Ngày", pOld: "Địa danh cũ", pArea: "Khu", pType: "Loại đất", pPlots: "Số thửa", pStart: "Giá khởi điểm", pWin: "Giá trúng", pTotal: "Tổng tiền", pPeople: "Người tham gia", pNote: "Ghi chú", pLoc: "Vị trí", pSrc: "Nguồn", seeArticle: "xem bài",
@@ -383,7 +383,7 @@ const T = {
   search: "Search commune, site, former place name", searchPh: "e.g. Đông Anh, Thanh Oai, Văn Quán village",
   stDone: "auctions with results", stWon: "plots sold", stMax: "highest winning bid ({u})", stMed: "median price per auction ({u})", stUp: "upcoming / awaiting results", stNext: "upcoming + re-auctioned", stWait: "awaiting results",
   newsTitle: "Latest results", newsLine: (d, x, p) => `${d} — ${x}: top bid ${p}`, newsLine2: (d, x, n) => `${d} — ${x}: ${n ? n + " plots " : ""}sold, winning bids not yet published`, newsGo: "Show on map", none: "None yet",
-  empty: "No auctions match the filters.", mapErr: "Could not load the map library. Please check your connection.", mapLabel: "Map of land auctions", statusGroup: "Status",
+  empty: "No auctions match the filters.", offMap: "older than 6 months", offMapT: "Auction older than 6 months – not shown on the map, still counted in statistics and price analysis", mapErr: "Could not load the map library. Please check your connection.", mapLabel: "Map of land auctions", statusGroup: "Status",
   topWin: "top bid", startP: "starting price", plots: "plots", unit: "M VND/m²", bn: "bn VND", won: "sold", highest: "highest",
   legendTitle: "Highest winning bid ({u})",
   pDate: "Date", pOld: "Former name", pArea: "Site", pType: "Land type", pPlots: "Plots", pStart: "Starting price", pWin: "Winning bids", pTotal: "Total value", pPeople: "Participants", pNote: "Note", pLoc: "Location", pSrc: "Source", seeArticle: "view article",
@@ -1063,6 +1063,11 @@ function popup(d) {
    ${d.link_sau_dau_gia ? `<p style="margin:2px 0 0;font-size:13px"><a href="${esc(d.link_sau_dau_gia)}" target="_blank" rel="noopener">${t("pAfterSrc")} ↗</a></p>` : ""}</div>`;
 }
 
+/* bản đồ chỉ vẽ hình tròn cho phiên trong 6 tháng gần nhất (tính theo ngày đấu giá, giờ VN); phiên sắp tới luôn hiện.
+   Danh sách bên phải, thống kê và phân tích giá vẫn dùng toàn bộ dữ liệu theo bộ lọc. */
+const MAP_MONTHS = 6;
+const mapFrom = () => { const d = new Date(Date.now() + 7 * 3600e3); d.setUTCMonth(d.getUTCMonth() - MAP_MONTHS); return d.toISOString().slice(0, 10); };
+const onMap = d => d.ngay ? d.ngay >= mapFrom() : HOLLOW.includes(d.trang_thai);
 function render() {
   const list = filtered();
   const done = list.filter(d => d.trang_thai === "Đã đấu giá" || d.trang_thai === "Đã nộp tiền");
@@ -1075,7 +1080,7 @@ function render() {
   if (map) {
     layer.clearLayers(); markers = {};
     const pts = [];
-    list.forEach(d => { if (d.lat == null || d.lng == null) return;
+    list.forEach(d => { if (d.lat == null || d.lng == null || !onMap(d)) return;
       const up = HOLLOW.includes(d.trang_thai);
       const r = d.max != null ? 7 + Math.min(10, (d.won || d.lots || 5) / 6) : 8;
       const m = L.circleMarker([d.lat, d.lng], {radius: r, color: up ? markColor(d) : "#0006", weight: up ? 3 : 1, fillColor: markColor(d), fillOpacity: up ? 0.15 : 0.85, dashArray: up ? "4 3" : null})
@@ -1086,7 +1091,7 @@ function render() {
   }
   $("#list").innerHTML = list.length ? list.map(d => `<div class="item" data-id="${esc(d.id)}" tabindex="0">
     <span class="dot" style="background:${markColor(d)}"></span>
-    <div><b>${esc(d.xa)}</b><span class="tag">${esc(tv("status", d.trang_thai))}</span>${d.round > 1 ? `<span class="tag" title="${esc(t("reAucT"))}">↻ ${esc(t("reAuc"))} · ${t("round")} ${d.round}</span>` : ""}${d.sau_dau_gia ? `<span class="tag ${BAD_AFTER.includes(d.sau_dau_gia) ? "bad" : d.sau_dau_gia === "Đã nộp đủ tiền" ? "ok" : ""}">${esc(tv("after", d.sau_dau_gia))}</span>` : ""}<div class="m">${fdate(d.ngay)} · ${esc(tv("prov", d.tinh))}${d.dia_danh_cu ? " · " + esc(d.dia_danh_cu) : ""}</div>
+    <div><b>${esc(d.xa)}</b><span class="tag">${esc(tv("status", d.trang_thai))}</span>${onMap(d) ? "" : `<span class="tag" title="${esc(t("offMapT"))}">${esc(t("offMap"))}</span>`}${d.round > 1 ? `<span class="tag" title="${esc(t("reAucT"))}">↻ ${esc(t("reAuc"))} · ${t("round")} ${d.round}</span>` : ""}${d.sau_dau_gia ? `<span class="tag ${BAD_AFTER.includes(d.sau_dau_gia) ? "bad" : d.sau_dau_gia === "Đã nộp đủ tiền" ? "ok" : ""}">${esc(tv("after", d.sau_dau_gia))}</span>` : ""}<div class="m">${fdate(d.ngay)} · ${esc(tv("prov", d.tinh))}${d.dia_danh_cu ? " · " + esc(d.dia_danh_cu) : ""}</div>
     <div class="m">${esc(pick(d, "khu") || "")}${d.lots != null ? ` · ${d.won != null ? d.won + "/" : ""}${d.lots} ${plotsWord(d.lots)}` : ""}</div></div>
     <div class="price">${d.max != null ? P(d.max) : d.start != null ? P(d.start) : "—"}<small>${d.max != null ? t("topWin") : d.start != null ? t("startP") : ""}${d.max != null || d.start != null ? " · " + UN() : ""}</small></div></div>`).join("")
     : `<div class="empty">${t("empty")}</div>`;
